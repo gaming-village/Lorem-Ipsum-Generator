@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/gaming-village/Lorem-Ipsum-Generator/static/css/main.e81cd457.chunk.css",
-    "main.js": "/gaming-village/Lorem-Ipsum-Generator/static/js/main.f86b07a6.chunk.js",
-    "main.js.map": "/gaming-village/Lorem-Ipsum-Generator/static/js/main.f86b07a6.chunk.js.map",
-    "runtime-main.js": "/gaming-village/Lorem-Ipsum-Generator/static/js/runtime-main.fc3f5597.js",
-    "runtime-main.js.map": "/gaming-village/Lorem-Ipsum-Generator/static/js/runtime-main.fc3f5597.js.map",
-    "static/js/2.72a3b890.chunk.js": "/gaming-village/Lorem-Ipsum-Generator/static/js/2.72a3b890.chunk.js",
-    "static/js/2.72a3b890.chunk.js.map": "/gaming-village/Lorem-Ipsum-Generator/static/js/2.72a3b890.chunk.js.map",
-    "static/js/3.c790afcb.chunk.js": "/gaming-village/Lorem-Ipsum-Generator/static/js/3.c790afcb.chunk.js",
-    "static/js/3.c790afcb.chunk.js.map": "/gaming-village/Lorem-Ipsum-Generator/static/js/3.c790afcb.chunk.js.map",
-    "index.html": "/gaming-village/Lorem-Ipsum-Generator/index.html",
-    "static/css/main.e81cd457.chunk.css.map": "/gaming-village/Lorem-Ipsum-Generator/static/css/main.e81cd457.chunk.css.map",
-    "static/js/2.72a3b890.chunk.js.LICENSE.txt": "/gaming-village/Lorem-Ipsum-Generator/static/js/2.72a3b890.chunk.js.LICENSE.txt"
+    "main.css": "/Lorem-Ipsum-Generator/static/css/main.e81cd457.chunk.css",
+    "main.js": "/Lorem-Ipsum-Generator/static/js/main.f86b07a6.chunk.js",
+    "main.js.map": "/Lorem-Ipsum-Generator/static/js/main.f86b07a6.chunk.js.map",
+    "runtime-main.js": "/Lorem-Ipsum-Generator/static/js/runtime-main.3def0070.js",
+    "runtime-main.js.map": "/Lorem-Ipsum-Generator/static/js/runtime-main.3def0070.js.map",
+    "static/js/2.72a3b890.chunk.js": "/Lorem-Ipsum-Generator/static/js/2.72a3b890.chunk.js",
+    "static/js/2.72a3b890.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/2.72a3b890.chunk.js.map",
+    "static/js/3.c790afcb.chunk.js": "/Lorem-Ipsum-Generator/static/js/3.c790afcb.chunk.js",
+    "static/js/3.c790afcb.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/3.c790afcb.chunk.js.map",
+    "index.html": "/Lorem-Ipsum-Generator/index.html",
+    "static/css/main.e81cd457.chunk.css.map": "/Lorem-Ipsum-Generator/static/css/main.e81cd457.chunk.css.map",
+    "static/js/2.72a3b890.chunk.js.LICENSE.txt": "/Lorem-Ipsum-Generator/static/js/2.72a3b890.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.fc3f5597.js",
+    "static/js/runtime-main.3def0070.js",
     "static/js/2.72a3b890.chunk.js",
     "static/css/main.e81cd457.chunk.css",
     "static/js/main.f86b07a6.chunk.js"
