@@ -3,7 +3,7 @@ import { updateSave } from "./save";
 
 const Game = {
    ticks: 0 as number,
-   tps: 10,
+   tps: 10 as number,
    // TODO: set this to lorem num when the game loads
    previousLorem: 0 as number,
    tick: function() {
@@ -29,7 +29,7 @@ const Game = {
       this._lorem = value;
    },
    updateLorem: function() {
-      const loremCounterText = getElem("lorem-counter").querySelector("span");
+      const loremCounterText = getElem("lorem-counter")?.querySelector("span");
       if (loremCounterText) loremCounterText.innerHTML = roundNum(this.lorem, 2).toString();
    },
    displayLoremChange: function(loremDiff: number) {

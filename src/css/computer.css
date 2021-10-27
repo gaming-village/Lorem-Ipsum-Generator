@@ -1,3 +1,13 @@
 #computer {
    background-color: green;
 }
+
+#lorem-container {
+   width: 50%;
+   min-height: 4rem;
+   background-color: yellow;
+   position: absolute;
+   top: 1rem;
+   left: 50%;
+   transform: translateX(-50%);
+}
