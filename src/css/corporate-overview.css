@@ -1,0 +1,17 @@
+#corporate-overview .left-bar {
+   min-width: 15rem;
+   height: 100%;
+   background-color: #ccc;
+   padding: 0 1rem 0 0.5rem;
+   border-right: 2px solid #000;
+   float: left;
+   box-shadow: 6px 0 10px 3px rgba(0, 0, 0, 0.2);
+}
+#corporate-overview .left-bar p {
+   margin: 0 0 0 0.5rem;
+}
+#corporate-overview .left-bar h2 {
+   font-size: 1.25rem;
+   text-decoration: underline;
+   margin: 1rem 0 0.5rem 0;
+}

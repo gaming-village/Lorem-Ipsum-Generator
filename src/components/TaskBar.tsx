@@ -1,5 +1,6 @@
 import React from "react";
 import "../css/taskbar.css";
+// import StartIcon from "../images/start-icon.png";
 import StartIcon from "../images/start-icon.png";
 
 const TaskBar = () => {

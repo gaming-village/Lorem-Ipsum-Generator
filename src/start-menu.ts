@@ -1,4 +1,5 @@
-import { getElem } from "./utils";
+import { closeProgram, openProgram, programIsOpen } from "./programs";
+import { elemExists, getElem } from "./utils";
 
 
 interface PanelData {
@@ -50,7 +51,7 @@ const startMenuTree = {
    preferences: {
       name: "Preferences",
       imgSrc: "/images/icons/save.png",
-      tree: "menu-preferences"
+      tree: "preferences"
    },
    help: {
       name: "Help",
@@ -78,8 +79,13 @@ const startMenuTree = {
 const createPanel = (panelData: PanelData, panelContainer: HTMLElement) => {
    const panel = document.createElement("div");
    panel.className = "panel";
+   // panel.innerHTML = `
+   // <img src="${panelData.imgSrc}" alt="" />
+   // <p>${panelData.name}</p>`;
+   const imgSrc = require("." + panelData.imgSrc).default;
+   console.log(imgSrc);
    panel.innerHTML = `
-   <img src="${panelData.imgSrc}" alt="" />
+   <img src=${imgSrc} alt="" />
    <p>${panelData.name}</p>`;
 
    panelContainer.appendChild(panel);
@@ -136,7 +142,8 @@ const populatePanelContainer = (panelContainer: HTMLElement, panelContainerTree:
       const panel = createPanel(panelData[1], panelContainer);
 
       // If the panel opens another panel container
-      if (typeof panelData[1].tree === "object") {
+      const treeType: string = panelData[1].tree;
+      if (typeof treeType === "object") {
          // Create the opening arrow icon
          createOpeningArrow(panel);
 
@@ -149,17 +156,23 @@ const populatePanelContainer = (panelContainer: HTMLElement, panelContainerTree:
                // Remove any other panel containers
                const panelDataParent = findPanelParent(panelData[1]);
                for (const name of Object.keys(panelDataParent)) {
-                  const potentialPanelContainer = getElem("start-menu-" + name);
-                  if (potentialPanelContainer) potentialPanelContainer.remove();
+                  if (elemExists(`start-menu-${name}`)) {
+                     getElem(`start-menu-${name}`).remove();
+                  }
                }
 
                const newPanelContainer = createPanelContainer(panelData[0], panelContainer, panel);
-               populatePanelContainer(newPanelContainer, panelData[1].tree);
+               populatePanelContainer(newPanelContainer, treeType);
             } else {
                panel.classList.remove("opened");
 
                getElem("start-menu-" + panelData[0])?.remove();
             }
+         });
+      } else if (typeof treeType === "string") {
+         panel.addEventListener("click", () => {
+            // Close program if opened, open if closed
+            programIsOpen(treeType) ? closeProgram(treeType) : openProgram(treeType);
          });
       }
    }
@@ -175,8 +188,7 @@ const populatePanelContainer = (panelContainer: HTMLElement, panelContainerTree:
 }
 
 const startMenuIsOpen = (): boolean => {
-   console.log(getElem("start-menu"));
-   return getElem("start-menu") !== undefined;
+   return elemExists("start-menu");
 }
 const closeStartMenu = () => {
    getElem("start-menu")?.remove();

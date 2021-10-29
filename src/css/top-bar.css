@@ -1,5 +1,6 @@
 #top-bar {
-   background-color: red;
+   background-color: #555;
+   border-bottom: 2px solid #aaa;
    padding: 4px 0;
 }
 #top-bar .container {

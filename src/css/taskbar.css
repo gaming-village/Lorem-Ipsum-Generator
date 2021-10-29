@@ -43,7 +43,7 @@
 #taskbar .start-icon .text {
    font-family: "MS Sans Serif";
    font-weight: bold;
-   margin-left: 0.2rem;
+   margin: 0 0.2rem;
    float: right;
 }
 
@@ -90,7 +90,7 @@
 }
 .taskbar-application.opened {
    background-color: #fafafa;
-   background-image: url(../images/dotted-bg.png);
+   background-image: url("../images/dotted-bg.png");
    background-size: 26px 26px;
    border-top-color: #999;
    border-left-color: #999;
@@ -118,7 +118,7 @@
    --size: 28px;
    width: var(--size);
    height: var(--size);
-   background-image: url(../images/program.png);
+   background-image: url("../images/program.png");
    background-size: var(--size) var(--size);
    position: absolute;
    top: 50%;

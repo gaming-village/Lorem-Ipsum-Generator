@@ -1,4 +1,5 @@
 import React from "react";
+import MinimizeButton from "../images/ui/minimize.png";
 
 interface TitleBarProps {
    title: string;
@@ -9,7 +10,7 @@ const TitleBar = (props: TitleBarProps) => {
    return (
       <div className="title-bar">
          {props.title}
-         {props.hasMinimizeButton ? <img className="minimize" alt="" /> : ""}
+         {props.hasMinimizeButton ? <img src={MinimizeButton} draggable="false" className="minimize" alt="" /> : ""}
       </div>
    )
 }

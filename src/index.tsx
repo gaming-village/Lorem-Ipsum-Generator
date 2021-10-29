@@ -9,6 +9,7 @@ import { getElem } from "./utils";
 import { getCurrentSave, getDefaultSave } from "./save";
 import { setupApplications } from "./applications";
 import { setupStartMenu } from "./start-menu";
+import { programs, initialisePrograms, setupPrograms } from "./programs";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,6 +22,30 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+const viewNames: string[] = ["computer", "mail", "corporate-overview", "settings"];
+const setupViews = (): void => {
+   // Hide all views except the computer and setup the buttons
+   for (const name of viewNames) {
+      const button = getElem(`${name}-button`);
+      button.addEventListener("click", () => switchView(name));
+
+      if (name === "computer") continue;
+
+      getElem(name).classList.add("hidden");
+      button.classList.add("dark");
+   }
+}
+function switchView(viewName: string): void {
+   const previouslyShownView = document.querySelector(".view:not(.hidden)");
+   if (previouslyShownView) previouslyShownView.classList.add("hidden");
+
+   const previouslySelectedButton = document.querySelector(".view-button:not(.dark)");
+   if (previouslySelectedButton) previouslySelectedButton.classList.add("dark");
+
+   getElem(viewName).classList.remove("hidden");
+   getElem(`${viewName}-button`).classList.remove("dark");
+}
 
 const loadSave = () => {
    let saveData = getCurrentSave();
@@ -39,6 +64,24 @@ const loadSave = () => {
             const parts: string[] = section.split("_");
 
             Game.lorem = Number(parts[0]);
+            break;
+         } case 1: {
+            // Opened applications
+
+            break;
+         } case 2: {
+            // Miscellaneous
+            const parts: string[] = section.split("_");
+
+            // Current background image
+            const indexes: string[] = parts[0].split("-");
+            let newIndexArray: number[] = [];
+            for (const index of indexes) {
+               newIndexArray.push(Number(index));
+            }
+            programs.preferences.currentBackgroundIndexes = newIndexArray;
+
+            break;
          }
       }
    }
@@ -51,6 +94,8 @@ const updateViewSizes = () => {
    }
 };
 window.onload = () => {
+   initialisePrograms();
+
    // Load any saved games. If there aren't any, use the default save
    loadSave();
 
@@ -68,15 +113,25 @@ window.onload = () => {
    setupApplications();
 
    setupStartMenu();
+
+   setupPrograms();
+
+   // Hide all views other than the computer
+   setupViews();
 };
 
 let keysDown: number[] = [];
 let currentLoremIndex: number = 0;
 const typeLorem = (key: string) => {
+   const loremContainer = getElem("lorem-container");
+
+   if (currentLoremIndex === 0) {
+      loremContainer.innerHTML = "";
+   }
+
    const loremTemplate: string = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores, aliquid! Officia amet adipisci porro repellat deserunt vero quos ad id sint dolore iure odio reprehenderit dolores sed, molestias vitae dicta! ";
    const currentLetter = loremTemplate[currentLoremIndex++ % loremTemplate.length];
 
-   const loremContainer = getElem("lorem-container");
    if (loremContainer) loremContainer.innerHTML += currentLetter;
 
    Game.lorem += 0.05;
@@ -84,8 +139,13 @@ const typeLorem = (key: string) => {
 document.addEventListener("keydown", event => {
    const keyCode: number = event.keyCode;
 
-   // When any letter key is pressed
-   if (keyCode >= 65 && keyCode <= 90 && !keysDown.includes(keyCode)) {
+   // If the input is a number from 1-9 (keycodes 49-57) and the command key isn't held and the view exists
+   if (keyCode >= 49 && keyCode <= 57 && !event.metaKey && keyCode - 49 < viewNames.length) {
+      switchView(viewNames[keyCode - 49]);
+   }
+
+   // When any letter key or the space bar is pressed
+   if (((keyCode >= 65 && keyCode <= 90) || keyCode === 32) && !keysDown.includes(keyCode)) {
       keysDown.push(keyCode)
       const key = String.fromCharCode(keyCode)
       typeLorem(key);

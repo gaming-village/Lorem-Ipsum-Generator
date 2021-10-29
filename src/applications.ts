@@ -1,4 +1,4 @@
-import { getElem } from "./utils";
+import { dragElem, getElem } from "./utils";
 
 interface Application {
    isOpened: boolean;
@@ -47,6 +47,11 @@ export function setupApplications() {
       if (application.isOpened) {
          openApplication(application);
       }
+
+      // Drag functionality
+      const element: HTMLElement = getElem(application.containerID);
+      const titleBar: HTMLElement = (element.querySelector(".title-bar") as HTMLElement);
+      dragElem(element, titleBar);
    }
 }
 export function openApplication(application: Application) {
