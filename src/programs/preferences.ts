@@ -44,27 +44,17 @@ const preferences = {
       ] as Array<Background>,
       "corporate-overview": [
          {
-            content: "triangles.png",
-            type: "image",
-            name: "Garden",
-            isTileable: true
-         },
-         {
             content: "carved-stone.png",
             type: "image",
             name: "Carved Stone",
             isTileable: true
+         },
+         {
+            content: "triangles.png",
+            type: "image",
+            name: "Garden",
+            isTileable: true
          }
-         // TODO: ADD THE NEW THING!!!
-         // TODO: ADD THE NEW THING!!!
-         // TODO: ADD THE NEW THING!!!
-         // TODO: ADD THE NEW THING!!!
-         // TODO: ADD THE NEW THING!!!
-         // TODO: ADD THE NEW THING!!!
-         // TODO: ADD THE NEW THING!!!
-         // TODO: ADD THE NEW THING!!!
-         // TODO: ADD THE NEW THING!!!
-         // TODO: ADD THE NEW THING!!!
       ]
    },
    setup: function(): void {

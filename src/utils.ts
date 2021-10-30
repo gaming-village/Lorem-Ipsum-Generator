@@ -45,3 +45,7 @@ export function dragElem(element: HTMLElement, target: HTMLElement): void {
       previousY = event.clientY;
    }
 }
+
+export function wait(delay: number) {
+   return new Promise(resolve => setTimeout(resolve, delay));
+}

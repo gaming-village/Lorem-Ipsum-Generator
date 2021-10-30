@@ -1,8 +1,9 @@
 import { applications } from "./applications";
 import { programs } from "./programs";
 import Game from "./Game";
+import { loremCorp } from "./corporate-overview";
 
-const getCookie = (cname: string) => {
+const getCookie = (cname: string): string | null => {
    var name = cname + "=";
    var decodedCookie = decodeURIComponent(document.cookie);
    var ca = decodedCookie.split(";");
@@ -18,7 +19,7 @@ const getCookie = (cname: string) => {
    return null;
 }
 
-function setCookie(name: string, value: string, exdays?: number) {
+function setCookie(name: string, value: string, exdays?: number): void {
    let expires: string;
    if (exdays) {
       var d = new Date();
@@ -30,7 +31,7 @@ function setCookie(name: string, value: string, exdays?: number) {
    document.cookie = `${name}=${value};${expires};path=/`;
 }
 
-export function updateSave() {
+export function updateSave(): void {
    // Adapted from Cookie Clicker's system: https://cookieclicker.fandom.com/wiki/Save
 
    // Each save is organised into the sections outlined below.
@@ -39,6 +40,7 @@ export function updateSave() {
 
    // Lorem count
    // Opened applications
+   // Corporate Overview
    // Miscellaneous
 
    const saveName: string = "save1";
@@ -56,6 +58,11 @@ export function updateSave() {
    }
    saveData += openedApplicationsTotal.toString() + "|";
 
+   // Corporate Overview
+
+   const jobIndex = loremCorp.allJobs.indexOf(loremCorp.job);
+   saveData += jobIndex.toString() + "|";
+
    // Miscellaneous
 
    let currentBackgroundIndexResult: string = "";
@@ -71,14 +78,14 @@ export function updateSave() {
    setCookie(saveName, saveData);
 }
 
-export function getCurrentSave() {
+const getCurrentSave = (): string => {
    const saveName: string = "save1";
-   const saveData = getCookie(saveName);
+   const saveData: string = (getCookie(saveName) as string);
    console.log(saveData);
    return saveData;
 }
 
-export function getDefaultSave() {
+const getDefaultSave = (): string => {
    // Lorem count
 
    let saveData: string = "0|";
@@ -91,6 +98,11 @@ export function getDefaultSave() {
       if (application.isOpened) openedApplicationsTotal += Math.pow(2, i++);
    }
    saveData += openedApplicationsTotal.toString() + "|";
+
+   // Corporate Overview
+
+   // Job
+   saveData += "0|";
 
    // Miscellaneous
 
@@ -107,3 +119,52 @@ export function getDefaultSave() {
 
    return saveData;
 }
+
+export function loadSave(): void {
+   let saveData = getCurrentSave();
+   if (saveData === null) {
+      saveData = getDefaultSave();
+   }
+
+   const sections: string[] = saveData.split("|");
+   for (let i: number = 0; i < sections.length; i++) {
+      const section: string = sections[i];
+
+      switch (i) {
+         case 0: {
+            // Lorem count
+
+            const parts: string[] = section.split("_");
+
+            Game.lorem = Number(parts[0]);
+
+            break;
+         } case 1: {
+            // Opened applications
+
+            break;
+         } case 2: {
+            // Corporate Overview
+
+            const parts: string[] = section.split("_");
+
+            loremCorp.job = loremCorp.allJobs[Number(parts[0])];
+
+            break;
+         } case 3: {
+            // Miscellaneous
+            const parts: string[] = section.split("_");
+
+            // Current background image
+            const indexes: string[] = parts[0].split("-");
+            let newIndexArray: number[] = [];
+            for (const index of indexes) {
+               newIndexArray.push(Number(index));
+            }
+            programs.preferences.currentBackgroundIndexes = newIndexArray;
+
+            break;
+         }
+      }
+   }
+};

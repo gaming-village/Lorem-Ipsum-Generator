@@ -32,6 +32,7 @@ body {
    cursor: pointer;
    white-space: nowrap;
    position: relative;
+   outline: none;
    box-shadow: 0 0 0 2px #000;
 }
 .button:hover {

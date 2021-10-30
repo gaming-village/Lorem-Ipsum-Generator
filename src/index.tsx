@@ -6,16 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 
 import Game from "./Game";
 import { getElem } from "./utils";
-import { getCurrentSave, getDefaultSave } from "./save";
+import { loadSave } from "./save";
 import { setupApplications } from "./applications";
 import { setupStartMenu } from "./start-menu";
-import { programs, initialisePrograms, setupPrograms } from "./programs";
+import { initialisePrograms, setupPrograms } from "./programs";
+import { setupCorporateOverview } from "./corporate-overview";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+   <React.StrictMode>
+      <App />
+   </React.StrictMode>,
+   document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
@@ -47,45 +48,6 @@ function switchView(viewName: string): void {
    getElem(`${viewName}-button`).classList.remove("dark");
 }
 
-const loadSave = () => {
-   let saveData = getCurrentSave();
-   if (saveData === null) {
-      saveData = getDefaultSave();
-   }
-
-   const sections: string[] = saveData.split("|");
-   for (let i: number = 0; i < sections.length; i++) {
-      const section: string = sections[i];
-
-      switch (i) {
-         case 0: {
-            // Lorem count
-
-            const parts: string[] = section.split("_");
-
-            Game.lorem = Number(parts[0]);
-            break;
-         } case 1: {
-            // Opened applications
-
-            break;
-         } case 2: {
-            // Miscellaneous
-            const parts: string[] = section.split("_");
-
-            // Current background image
-            const indexes: string[] = parts[0].split("-");
-            let newIndexArray: number[] = [];
-            for (const index of indexes) {
-               newIndexArray.push(Number(index));
-            }
-            programs.preferences.currentBackgroundIndexes = newIndexArray;
-
-            break;
-         }
-      }
-   }
-};
 const updateViewSizes = () => {
    const views: HTMLElement[] = Array.from(document.getElementsByClassName("view") as HTMLCollectionOf<HTMLElement>);
    const height = window.innerHeight - (getElem("top-bar") as HTMLElement).offsetHeight;
@@ -118,6 +80,9 @@ window.onload = () => {
 
    // Hide all views other than the computer
    setupViews();
+
+   // Setup the corporate overview
+   setupCorporateOverview();
 };
 
 let keysDown: number[] = [];

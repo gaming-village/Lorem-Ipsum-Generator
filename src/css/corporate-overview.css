@@ -1,10 +1,12 @@
 #corporate-overview .left-bar {
-   min-width: 15rem;
+   width: 15rem;
    height: 100%;
    background-color: #ccc;
    padding: 0 1rem 0 0.5rem;
    border-right: 2px solid #000;
-   float: left;
+   position: absolute;
+   top: 0;
+   left: 0;
    box-shadow: 6px 0 10px 3px rgba(0, 0, 0, 0.2);
 }
 #corporate-overview .left-bar p {
@@ -14,4 +16,24 @@
    font-size: 1.25rem;
    text-decoration: underline;
    margin: 1rem 0 0.5rem 0;
+}
+#corporate-overview .right-bar {
+   width: calc(100% - 15rem - 26px);
+   height: 100%;
+   position: absolute;
+   top: 0;
+   right: 0;
+}
+
+#corporate-overview .panel-container {
+   width: calc(100% - 15rem - 26px);
+   height: 100%;
+   margin: 5rem 0 0 calc(7.5rem + 13px);
+   position: absolute;
+}
+#corporate-overview .panel {
+   min-width: 30%;
+   max-width: 50%;
+   margin-left: 50%;
+   transform: translateX(-50%);
 }
