@@ -41,6 +41,7 @@
    float: left;
 }
 #taskbar .start-icon .text {
+   line-height: calc(2rem - 8px);
    font-family: "MS Sans Serif";
    font-weight: bold;
    margin: 0 0.2rem;

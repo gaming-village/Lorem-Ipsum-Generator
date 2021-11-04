@@ -8,6 +8,10 @@ import Settings from "./components/Settings";
 function App() {
    return (
       <>
+         <div id="mask" className="hidden"></div>
+
+         <div id="notification-container"></div>
+
          <TopBar />
          <Computer />
          <CorporateOverview />

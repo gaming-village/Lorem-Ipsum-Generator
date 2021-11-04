@@ -11,6 +11,8 @@ import { setupApplications } from "./applications";
 import { setupStartMenu } from "./start-menu";
 import { initialisePrograms, setupPrograms } from "./programs";
 import { setupCorporateOverview } from "./corporate-overview";
+import { createNotification, NotificationInfo } from "./notifications";
+import { setupMail } from "./mail";
 
 ReactDOM.render(
    <React.StrictMode>
@@ -38,6 +40,8 @@ const setupViews = (): void => {
    }
 }
 function switchView(viewName: string): void {
+   if (Game.isInFocus) return;
+
    const previouslyShownView = document.querySelector(".view:not(.hidden)");
    if (previouslyShownView) previouslyShownView.classList.add("hidden");
 
@@ -81,8 +85,22 @@ window.onload = () => {
    // Hide all views other than the computer
    setupViews();
 
+   // Setup mail
+   setupMail();
+
    // Setup the corporate overview
    setupCorporateOverview();
+
+   const notificationInfo: NotificationInfo = {
+      iconSrc: "scroll.png",
+      title: "Test notification",
+      description: "This is a test...",
+      caption: "I am a caption"
+   }
+   createNotification(notificationInfo);
+
+   // Sets up the mask click event handler
+   Game.setupMask();
 };
 
 let keysDown: number[] = [];

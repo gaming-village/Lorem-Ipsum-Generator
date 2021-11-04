@@ -1,14 +1,16 @@
-import React from "react"
+import React, { MouseEventHandler } from "react"
 
 interface ButtonProps {
    id?: string;
    className?: string;
+   onClick?: MouseEventHandler;
+   isCentered?: boolean;
    text: string;
 }
 
 const Button = (props: ButtonProps) => {
    return (
-      <button id={props.id} className={`button ${props.className}`}>
+      <button onClick={props.onClick} id={props.id} className={`button ${props.className} ${props.isCentered ? "centered" : ""}`}>
          {props.text}
       </button>
    )

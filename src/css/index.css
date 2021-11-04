@@ -1,11 +1,22 @@
 body {
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+   --win95-bg-colour: #c3c7cb;
+   margin: 0;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
 }
 
 .hidden {
    display: none !important;
+}
+
+#mask {
+   background-color: rgba(0, 0, 0, 0.4);
+   position: absolute;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   z-index: 2;
 }
 
 .view {
@@ -62,6 +73,10 @@ body {
    border-right-color: #444;
    background-color: #a0a0a0;
 }
+.button.centered {
+   margin-left: 50%;
+   transform: translateX(-50%);
+}
 
 .windows-program {
    max-width: 50%;
@@ -81,9 +96,20 @@ body {
    color: #fff;
    background-color: rgb(7, 30, 129);
    padding: 0.2rem 0;
-   font-weight: bold;
-   text-align: center;
    position: relative;
+}
+.windows-program .title-bar img {
+   width: 22px;
+   height: 22px;
+   position: absolute;
+   top: 50%;
+   left: 0.2rem;
+   transform: translateY(-50%);
+}
+.windows-program .title-bar img + span {
+   margin-left: calc(0.4rem + 22px);
+}
+.windows-program .title-bar.draggable {
    cursor: pointer;
 }
 .windows-program .minimize {
@@ -113,4 +139,155 @@ body {
 }
 .windows-program p {
    margin: 1rem 2px;
+}
+.windows-program .text-box {
+   width: 100%;
+   background-color: #fff;
+   border: 2px solid;
+   border-top-color: #000;
+   border-right-color: #fff;
+   border-bottom-color: #fff;
+   border-left-color: #000;
+   position: relative;
+}
+.windows-program .text-box > :first-child {
+   margin-top: 0.2rem;
+}
+.windows-program .text-box > :last-child {
+   margin-bottom: 0.2rem;
+}
+
+.ui-button {
+   width: 20px;
+   height: 20px;
+   position: absolute;
+   top: 2px;
+   right: 2px;
+   opacity: 0.85;
+   cursor: pointer;
+}
+.ui-button:hover {
+   opacity: 1;
+}
+.ui-button:active {
+   opacity: 0.75;
+}
+.ui-button.unclickable, .ui-button.unclickable:hover, .ui-button.unclickable:active {
+   opacity: 0.4;
+   cursor: default;
+}
+
+.progress-bar-container {
+   width: 90%;
+   height: 1rem;
+   border: 1px solid #333;
+   border-radius: 0.25rem;
+   background-color: #fff;
+   padding: 2px;
+   margin-top: 0.5rem;
+   margin-left: 50%;
+   transform: translateX(-50%);
+   box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.3) inset;
+   position: relative;
+}
+.progress-bar {
+   width: 0%;
+   max-width: 100%;
+   height: 100%;
+   border-radius: 0.25rem;
+   background-color: rgb(43, 82, 255);
+   background-size: 30px 30px;
+   background-image: linear-gradient( 135deg, #fff 25%, transparent 25%, transparent 50%, #fff 50%, #fff 75%, transparent 75%, transparent);
+   animation: stripe-transform 3s forwards infinite linear;
+}
+
+ul:not(.bullet-points) {
+   list-style-type: none;
+}
+
+#notification-container {
+   position: absolute;
+   left: 50%;
+   bottom: 2.5rem;
+   display: inline-block;
+   transform: translate(-50%);
+   z-index: 1;
+}
+.notification {
+   font: normal 1rem "MS Sans Serif";
+   background-color: #ddd;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   padding: 0.2rem;
+   margin-left: 50%;
+   margin-top: 0.4rem;
+   display: table;
+   position: relative;
+   transform: translateX(-50%);
+   white-space: nowrap;
+   box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.4);
+}
+.notification .top {
+   height: 2rem;
+   margin-bottom: 0.4rem;
+   display: flex;
+}
+.notification img {
+   width: 32px;
+   height: 32px;
+}
+.notification .title {
+   line-height: 2rem;
+   font-size: 0.95rem;
+   font-weight: bold;
+   margin: 0 1.8rem 0 0.2rem;
+}
+.notification .description {
+   color: #333;
+   font-size: 0.9rem;
+   font-style: italic;
+   margin: 0;
+}
+.notification .seperator {
+   width: 100%;
+   height: 2px;
+   background-color: #000;
+   margin: 0.5rem 0 0.2rem;
+   box-shadow: 0 2px 0 0 #fff;
+}
+.notification .caption {
+   text-align: center;
+   color: #888;
+   font-weight: bold;
+   font-size: 0.9rem;
+   margin: 0;
+}
+.notification.clickable .caption:hover {
+   color: #000;
+   background-color: #e5e5e5;
+   cursor: pointer;
+}
+.notification.clickable .caption:active {
+   color: #555;
+   background-color: #e0e0e0;
+   cursor: pointer;
+}
+.notification .close-icon {
+   width: 22px;
+   height: 22px;
+   position: absolute;
+   top: 3px;
+   right: 3px;
+   opacity: 0.9;
+   cursor: pointer;
+   user-select: none;
+}
+.notification .close-icon:hover {
+   opacity: 1;
+}
+.notification .close-icon:active {
+   opacity: 0.85;
 }

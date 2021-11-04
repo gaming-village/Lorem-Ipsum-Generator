@@ -2,6 +2,7 @@ import { applications } from "./applications";
 import { programs } from "./programs";
 import Game from "./Game";
 import { loremCorp } from "./corporate-overview";
+import { randInt } from "./utils";
 
 const getCookie = (cname: string): string | null => {
    var name = cname + "=";
@@ -24,11 +25,18 @@ function setCookie(name: string, value: string, exdays?: number): void {
    if (exdays) {
       var d = new Date();
       d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-      expires = 'expires=' + d.toUTCString();
+      expires = "expires=" + d.toUTCString();
    } else {
       expires = "";
    }
    document.cookie = `${name}=${value};${expires};path=/`;
+}
+
+const getCurrentSave = (): string => {
+   const saveName: string = "save1";
+   const saveData: string = (getCookie(saveName) as string);
+   console.log(saveData);
+   return saveData;
 }
 
 export function updateSave(): void {
@@ -60,8 +68,17 @@ export function updateSave(): void {
 
    // Corporate Overview
 
-   const jobIndex = loremCorp.allJobs.indexOf(loremCorp.job);
-   saveData += jobIndex.toString() + "|";
+   // Worker number
+   saveData += loremCorp.workerNumber + "_";
+
+   // Job position
+   saveData += loremCorp.jobIndex.toString() + "_";
+
+   // Workers
+   loremCorp.workers.forEach((count, i) => {
+      saveData += count.toString();
+      saveData += i + 1 < loremCorp.workers.length ? "-" : "|";
+   });
 
    // Miscellaneous
 
@@ -76,13 +93,6 @@ export function updateSave(): void {
 
    console.log(saveData);
    setCookie(saveName, saveData);
-}
-
-const getCurrentSave = (): string => {
-   const saveName: string = "save1";
-   const saveData: string = (getCookie(saveName) as string);
-   console.log(saveData);
-   return saveData;
 }
 
 const getDefaultSave = (): string => {
@@ -101,8 +111,17 @@ const getDefaultSave = (): string => {
 
    // Corporate Overview
 
-   // Job
-   saveData += "0|";
+   // Worker number
+   saveData += randInt(10000, 1000000) + "_";
+
+   // Job position
+   saveData += "0_";
+
+   // Workers
+   loremCorp.jobs.forEach((_job, i) => {
+      saveData += "0";
+      i + 1 < loremCorp.jobs.length ? saveData += "-" : saveData += "|";
+   });
 
    // Miscellaneous
 
@@ -148,7 +167,19 @@ export function loadSave(): void {
 
             const parts: string[] = section.split("_");
 
-            loremCorp.job = loremCorp.allJobs[Number(parts[0])];
+            loremCorp.workerNumber = Number(parts[0]);
+
+            // Job
+            const jobIndex = Number(parts[1]);
+            loremCorp.job = loremCorp.jobs[jobIndex];
+            loremCorp.jobIndex = jobIndex;
+            loremCorp.nextJob = loremCorp.jobs[jobIndex + 1];
+
+            // Worker counts
+            const workerCounts = parts[2];
+            loremCorp.workers = workerCounts.split("-").map(count => {
+               return Number(count);
+            });
 
             break;
          } case 3: {

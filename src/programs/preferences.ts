@@ -30,12 +30,6 @@ const preferences = {
             isTileable: true
          },
          {
-            content: "triangles.png",
-            type: "image",
-            name: "Infinity",
-            isTileable: true
-         },
-         {
             content: "garden.png",
             type: "image",
             name: "Garden",

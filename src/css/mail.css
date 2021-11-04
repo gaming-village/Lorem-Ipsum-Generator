@@ -1,0 +1,178 @@
+#mail-opener {
+   cursor: pointer;
+}
+
+#mail-container {
+   position: absolute; 
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   z-index: 3;
+   pointer-events: none;
+}
+
+#inbox {
+   min-width: 10rem;
+   padding: 0.2rem 0.4rem 0.2rem 0.2rem;
+   position: absolute;
+   top: 50%;
+   left: 25%;
+   display: inline-block;
+   transform: translate(-50%, -50%);
+   overflow: visible;
+   pointer-events: all;
+}
+#inbox .letter {
+   width: 100%;
+   background-color: #aaa;
+   margin-right: 1rem;
+   border: 2px solid;
+   border-top-color: #ddd;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #ddd;
+   display: block;
+   position: relative;
+   cursor: pointer;
+}
+#inbox .letter:hover {
+   background-color: #b3b3b3;
+}
+#inbox .letter:active {
+   background-color: #a5a5a5;
+}
+#inbox .letter:not(:last-child) {
+   margin-bottom: 0.3rem;
+}
+#inbox .letter.opened {
+   background-color: #ddd;
+   border-top-color: #fff;
+   border-left-color: #fff;
+}
+#inbox .letter.opened:hover {
+   background-color: #e5e5e5;
+}
+#inbox .letter.opened:active {
+   background-color: #d5d5d5;
+}
+
+#inbox .title {
+   font-size: 1.05rem;
+   font-weight: bold;
+   margin-left: 0.2rem;
+   margin-bottom: 0.2rem;
+   pointer-events: none;
+}
+#inbox .from {
+   font-size: 0.95rem;
+   margin-left: 0.5rem;
+   margin-bottom: 0.2rem;
+   pointer-events: none;
+}
+#inbox .from::before {
+   content: "- ";
+}
+
+#letter {
+   width: 30%;
+   padding: 0.3rem;
+   position: absolute;
+   top: 50%;
+   right: 25%;
+   transform: translate(50%, -50%);
+   pointer-events: all;
+}
+#letter table {
+   width: 100%;
+}
+#letter td {
+   width: 1px;
+}
+#letter td:last-child {
+   width: 100%;
+}
+
+#letter > .text-box {
+   width: calc(100% - 0.3rem);
+}
+
+#letter-body {
+   margin: 0.4rem 0;
+}
+#letter-body h1 {
+   font-size: 1.9rem;
+   text-align: center;
+   color: rgb(173, 30, 30);
+   margin: 0.2rem 0;
+}
+#letter-body h1 + * {
+   margin-top: 0.2rem;
+}
+
+#letter-body {
+   max-height: 10rem;
+   overflow: scroll;
+   overflow-x: hidden;
+   cursor: move;
+}
+#letter-body::-webkit-scrollbar {
+   width: 20px;
+   background-color: #ddd;
+   pointer-events: none;
+}
+#letter-body::-webkit-scrollbar-thumb {
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   background-color: #ccc;
+}
+#letter-body::-webkit-scrollbar-button:vertical:end:increment, #letter-body::-webkit-scrollbar-button:vertical:start:decrement {
+   height: 20px;
+   display: block;
+   background-color: #c3c7cb;
+   background-size: 20px 20px;
+   background-repeat: no-repeat;
+   background-position: center center;
+   box-shadow: inset 0 0 0 1px #c3c7cb, inset 2px 2px 0 0 #fff, inset -2px -2px 0 0 #000;
+}
+#letter-body::-webkit-scrollbar-button:vertical:end:increment {
+   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAQAAAD8fJRsAAAAF0lEQVQY02NgoBf4jwJxSOHQhcNAOgMAWWAP8Rv2U3UAAAAASUVORK5CYII=);
+}
+#letter-body::-webkit-scrollbar-button:vertical:start:decrement {
+   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGklEQVR4AWMYxuA/SYphmETFhDX9x4mHGQAAcL4P8dQiMq8AAAAASUVORK5CYII=);
+}
+
+#letter .reward-container.claimed {
+   background-color: #bbb;
+}
+#letter .reward {
+   height: 32px;
+   margin: 0 0.3rem 0.2rem;
+}
+#letter .icon-box {
+   width: 32px;
+   height: 32px;
+   background-color: var(--win95-bg-colour);
+   margin-top: -2px;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   float: left;
+}
+#letter .icon-box img {
+   width: 32px;
+   height: 32px;
+}
+#letter .reward .text {
+   line-height: 32px;
+   margin-left: 0.3rem;
+   float: left;
+}
+#letter .reward-container button {
+   margin-bottom: 0.5rem;
+}

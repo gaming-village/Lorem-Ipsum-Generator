@@ -12,7 +12,7 @@ const Computer = () => {
          </div>
 
          <Program title="lorem_counter.gov" hasMinimizeButton={false} id="lorem-counter" className="hidden">
-            <span></span>
+            <span className="lorem-count"></span>
          </Program>
 
          <Program title="Preferences" id="preferences" className="hidden">
