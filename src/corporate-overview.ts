@@ -1,5 +1,5 @@
 import Game from "./Game";
-import { getElem, wait } from "./utils";
+import { getElem, updateProgressBar, wait } from "./utils";
 
 export interface Job {
    name: string;
@@ -74,6 +74,13 @@ export const loremCorp = {
    addJobListener: function(func: Function): void {
       this.jobListeners.push(func);
    },
+   updatePromotionProgress: function(): void {
+      const progressBar = getElem("corporate-overview").querySelector(".home-panel .progress-bar-container") as HTMLElement;
+      if (progressBar) {
+         const progress = Game.lorem / (this.nextJob as Job).requirements.lorem * 100;
+         updateProgressBar(progressBar, progress);
+      }
+   },
    workers: [] as number[],
    attemptToBuyWorker: function(worker: Job): void {
       const workerCount: number = this.workers[this.jobs.indexOf(worker)];
@@ -114,15 +121,13 @@ export const loremCorp = {
    },
    getWorkerProduction: function(worker: Job): number {
       const workerCount = this.getWorkerCount(worker);
+      if (workerCount === undefined) return 0;
       return workerCount * worker.loremProduction;
    },
    setup: function(): void {
-      // this.job = this.jobs[1];
-      // this.nextJob = this.jobs[2];
-      // this.jobIndex = 1;
       this.jobListeners[0]();
    },
-   attemptToPromote: function() {
+   attemptToPromote: function(): void {
       if (this.canPromote()) {
          this.promote();
       }
@@ -133,8 +138,8 @@ export const loremCorp = {
    },
    promote: function(): void {
       this.job = (this.nextJob as Job);
+      this.nextJob = this.jobs[this.jobIndex + 1];
       this.jobIndex++;
-      this.nextJob = this.jobs[this.jobIndex];
       this.updateNextJob();
       this.jobListeners[0]();
    }

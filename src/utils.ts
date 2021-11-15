@@ -18,6 +18,20 @@ export function roundNum(num: number, dpp: number = 2): number {
    return Math.round((num + Number.EPSILON) * power) / power;
 }
 
+export function hashCode(str: string): number {
+   // Yoinked from here:
+   // https://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+   
+   let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash);
+}
+
 export function beautify(input: string, count: number | undefined = undefined): string {
    let output: string = input;
    // Capitalise
@@ -31,6 +45,11 @@ export function getPrefix(input: string): string {
    const vowels: string[] = ["a", "e", "i", "o", "u"];
    const prefix = vowels.includes(input.split("")[0].toLowerCase()) ? "an" : "a";
    return prefix;
+}
+
+export function getCurrentTime(): number {
+   const time = new Date().getTime();
+   return time;
 }
 
 export function dragElem(element: HTMLElement, target: HTMLElement): void {
@@ -67,4 +86,42 @@ export function dragElem(element: HTMLElement, target: HTMLElement): void {
 
 export function wait(delay: number) {
    return new Promise(resolve => setTimeout(resolve, delay));
+}
+
+interface Position {
+   x: number;
+   y: number;
+}
+
+function radiansBetweenPoints(startPos: Position, endPos: Position): number {
+   const changeInY = endPos.y - startPos.y;
+   const changeInX = endPos.x - startPos.x;
+   const theta = Math.atan2(changeInY, changeInX); // range (-PI, PI]
+   // theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+   //if (theta < 0) theta = 360 + theta; // range [0, 360)
+   return theta;
+}
+
+export function createLineTrail(container: HTMLElement, startPos: Position, endPos: Position): void {
+   const trail = document.createElement("div");
+   trail.classList.add("line-trail");
+   container.appendChild(trail);
+
+   const trailLength = Math.sqrt(Math.pow(startPos.x - endPos.x, 2) + Math.pow(startPos.y - endPos.y, 2));
+   trail.style.width = `${trailLength}px`;
+
+   const rotation = radiansBetweenPoints(startPos, endPos);
+   trail.style.transform = `rotate(${rotation}rad)`;
+
+   trail.style.left = `${startPos.x}px`;
+   trail.style.top = `${startPos.y}px`;
+}
+
+export function updateProgressBar(progressBarContainer: HTMLElement, progress: number): void {
+   const progressBar: HTMLElement = progressBarContainer.querySelector(".progress-bar") as HTMLElement;
+   progressBar.style.width = `${progress}%`;
+
+   const label = progressBarContainer.querySelector(".label") as HTMLElement;
+   label.innerHTML = `${roundNum(Math.min(progress, 100))}%`;
+   label.style.left = `${Math.min(progress, 100)}%`;
 }

@@ -37,12 +37,12 @@ const startMenuTree = {
       tree: {
          shop: {
             name: "Shop",
-            imgSrc: "/images/win95/folder-search.png",
-            tree: "menu-application-shop"
+            imgSrc: "/images/icons/search-folder.png",
+            tree: "application-shop"
          },
          status: {
             name: "Status",
-            imgSrc: "/images/win95/info.png",
+            imgSrc: "/images/icons/computer.png",
             tree: ""
          }
          // TODO: Manager/Management?
@@ -79,11 +79,8 @@ const startMenuTree = {
 const createPanel = (panelData: PanelData, panelContainer: HTMLElement) => {
    const panel = document.createElement("div");
    panel.className = "panel";
-   // panel.innerHTML = `
-   // <img src="${panelData.imgSrc}" alt="" />
-   // <p>${panelData.name}</p>`;
+   
    const imgSrc = require("." + panelData.imgSrc).default;
-   console.log(imgSrc);
    panel.innerHTML = `
    <img src=${imgSrc} alt="" />
    <p>${panelData.name}</p>`;

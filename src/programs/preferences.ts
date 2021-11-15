@@ -1,6 +1,6 @@
 import { getElem } from "../utils";
 
-interface Background {
+interface BackgroundInfo {
    content: string;
    type: string;
    name: string;
@@ -35,7 +35,21 @@ const preferences = {
             name: "Garden",
             isTileable: true
          }
-      ] as Array<Background>,
+      ] as BackgroundInfo[],
+      "mail": [
+         {
+            content: "straws.png",
+            type: "image",
+            name: "Straws",
+            isTileable: true
+         },
+         {
+            content: "tiles.png",
+            type: "image",
+            name: "Tiles",
+            isTileable: true
+         }
+      ] as BackgroundInfo[],
       "corporate-overview": [
          {
             content: "carved-stone.png",
@@ -49,7 +63,7 @@ const preferences = {
             name: "Garden",
             isTileable: true
          }
-      ]
+      ] as BackgroundInfo[]
    },
    setup: function(): void {
       // Show the current background image

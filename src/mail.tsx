@@ -1,8 +1,9 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import UIButton from "./components/UIButton";
 import Game from "./Game";
-import { getElem } from "./utils";
+import { createLineTrail, getElem, hashCode } from "./utils";
+import letters from "./data/letters";
+import { createNotification } from "./notifications";
+import { switchView } from ".";
 
 interface LetterReward {
    name: string;
@@ -11,66 +12,53 @@ interface LetterReward {
    isClaimed: boolean;
 }
 
-interface LetterInfo {
+export interface LetterInfo {
+   hashID: number;
    name: string;
    subject: string;
    from: string;
    body: JSX.Element;
+   folder: string;
    reward?: LetterReward;
    isCloseable: boolean;
+   isReceived: boolean;
+   isOpened: boolean;
 }
 
 export const mail = {
    currentLetter: undefined as unknown as LetterInfo,
+   receivedLetter: undefined as unknown as LetterInfo,
    updateMailEvent: undefined as unknown as Function,
-   letters: [
-      {
-         name: "test",
-         subject: "Test",
-         from: "obama",
-         body: <>
-            <p>Greetings from Australia.</p>
-            <p>I am gaming rn</p>
-         </>,
-         isCloseable: false
-      },
-      {
-         name: "aaaaa",
-         subject: "aaaa",
-         from: "test2",
-         body: <>
-            <p>test1</p>
-            <p>test2</p>
-            <p>test3 TEST3</p>
-         </>,
-         reward: {
-            name: "10 Lorem",
-            imgSrc: "icons/scroll.png",
-            rewardOnClaim: () => {
-               Game.lorem = 0;
-            },
-            isClaimed: false
-         },
-         isCloseable: true
-      },
-      {
-         name: "long",
-         subject: "looooong boi",
-         from: "tall chad",
-         body: <>
-            <p>HEAD</p>
-            <p>neck</p>
-            <p>neck</p>
-            <p>body</p>
-            <p>body</p>
-            <p>body</p>
-            <p>body</p>
-            <p>feet</p>
-         </>,
-         isCloseable: true
-      }
-   ] as LetterInfo[]
+   currentSelectedFolder: "inbox" as string
 }
+
+interface FolderInfo {
+   id: string;
+   name: string;
+   iconSrc: string;
+   isOpenByDefault: boolean;
+}
+
+const mailFolders = [
+   {
+      id: "inbox",
+      name: "Inbox",
+      iconSrc: "folder.png",
+      isOpenByDefault: true
+   },
+   {
+      id: "junkMail",
+      name: "Junk Mail",
+      iconSrc: "folder.png",
+      isOpenByDefault: false
+   },
+   {
+      id: "deletedItems",
+      name: "Deleted Items",
+      iconSrc: "folder.png",
+      isOpenByDefault: false
+   }
+] as FolderInfo[];
 
 export function claimReward(letterInfo: LetterInfo): void {
    const letterReward = letterInfo.reward as LetterReward;
@@ -89,58 +77,156 @@ const closeInbox = (): void => {
 }
 
 const openLetter = (letter: HTMLElement, letterInfo: LetterInfo): void => {
-   // Don't open the letter if the user clicked the close button
-   const e = (window.event as PointerEvent);
-   if (e.target !== letter) return;
-
-   if (letterIsAlreadyOpened(letter)) {
-      letter.classList.remove("opened");
+   if (!letterIsAlreadyOpened(letter)) {
       closeInbox();
       return;
    }
 
-   const previouslyOpenedLetter = getElem("inbox").querySelector(".letter.opened");
-   if (previouslyOpenedLetter) previouslyOpenedLetter.classList.remove("opened");
-
-   letter.classList.add("opened");
+   letterInfo.isOpened = true;
 
    mail.currentLetter = letterInfo;
    mail.updateMailEvent();
+
+   updateMailFolder(letterInfo.folder);
 }
 
-const closeLetter = (letter: HTMLElement): void => {
-   if (letterIsAlreadyOpened(letter)) {
-      closeInbox();
+const getLetter = (letterInfo: LetterInfo): HTMLElement => {
+   return getElem("inbox").querySelector(`.letter-${letterInfo.hashID}`) as HTMLElement;
+}
+const openInboxLetter = (letterInfo: LetterInfo, letterRef: HTMLElement | number): void => {
+   // const letter: HTMLElement = getElem("inbox").querySelector(`.letter-${letterNumber}`) as HTMLElement;
+   let letter: HTMLElement;
+   if (typeof letterRef === "number") {
+      letter = getElem("inbox").querySelector(`.letter-${letterRef}`) as HTMLElement;
+   } else {
+      letter = letterRef;
+   }
+   const previouslyOpenedLetter = getElem("inbox").querySelector(".letter.opened") as HTMLElement;
+
+   if (previouslyOpenedLetter === letter) {
+      letter?.classList.remove("opened");
+      openLetter(letter, letterInfo);
+      return;
+   }
+   
+   previouslyOpenedLetter?.classList.remove("opened");
+   letter.classList.remove("unopened");
+   letter.classList.add("opened");
+
+   openLetter(letter, letterInfo);
+}
+
+const createInboxLetter = (letterInfo: LetterInfo, letterNumber: number): JSX.Element => {
+   const letterClass = `letter letter-${letterNumber}${!letterInfo.isOpened ? " unopened" : ""}${letterInfo === mail.currentLetter ? " opened" : ""}`;
+   const imgSrc = require("./images/icons/letter.png").default;
+   const letter = <div onClick={() => openInboxLetter(letterInfo, letterNumber)} className={`${letterClass} letter-${letterInfo.hashID}`} key={letterNumber}>
+      <div className="icon-container">
+         <img src={imgSrc} alt="" />
+      </div>
+      <div>
+         <span>{letterInfo.from}</span>
+      </div>
+      <div>
+         <span>{letterInfo.subject}</span>
+      </div>
+   </div>;
+
+   return letter;
+}
+
+export function getInboxMail(): JSX.Element[] {
+   const inboxLetters: JSX.Element[] = [];
+   for (let i = 0; i < letters.length; i++) {
+      const letterInfo = letters[i];
+      if (letterInfo.folder === mail.currentSelectedFolder && letterInfo.isReceived) {
+         const inboxLetter = createInboxLetter(letterInfo, i);
+         inboxLetters.push(inboxLetter);
+      }
    }
 
-   letter.remove();
+   return inboxLetters;
 }
 
-const createLetter = (letterInfo: LetterInfo, inbox: HTMLElement): void => {
-   const letter = document.createElement("div");
-   letter.className = "letter";
-   inbox.appendChild(letter);
+let folderListener: Function;
+export function createFolderListener(func: Function): void {
+   folderListener = func;
+}
 
-   letter.innerHTML = `
-   <div class="close-button-container"></div>
-   <div class="title">${letterInfo.subject}</div>
-   <div class="from">${letterInfo.from}</div>`;
-
-   // Letter click event
-   letter.addEventListener("click", () => openLetter(letter, letterInfo));
-
-   // Close button
-   const clickEvent = () => {
-      if (letterInfo.isCloseable) closeLetter(letter);
+const getFolderInfo = (folderName: string): FolderInfo | undefined => {
+   for (const folderInfo of mailFolders) {
+      if (folderInfo.id === folderName) {
+         return folderInfo;
+      }
    }
-   const closeButton = <UIButton onClick={clickEvent} isClickable={!letterInfo.isCloseable} type="close" />;
-   ReactDOM.render(closeButton, letter.querySelector(".close-button-container"));
+}
+const getFolder = (folderName: string): HTMLElement => {
+   const folderInfo = getFolderInfo(folderName) as FolderInfo;
+   return getElem("inbox").querySelector(`.${folderInfo.id}-folder`) as HTMLElement;
+}
+const openFolder = (folderName: string): void => {
+   const folder = getFolder(folderName);
+   const folderInfo = getFolderInfo(folderName) as FolderInfo;
+   const previouslySelectedFolder = getElem("inbox").querySelector(".folder:not(.root-folder).opened");
+   if (previouslySelectedFolder === folder) return;
+   if (previouslySelectedFolder) previouslySelectedFolder.classList.remove("opened");
+   
+   folder.classList.add("opened");
+   mail.currentSelectedFolder = folderInfo.id;
+   folderListener();
 }
 
-const fillInbox = (): void => {
-   const inbox = getElem("inbox");
-   for (const letterInfo of mail.letters) {
-      createLetter(letterInfo, inbox);
+const mailFolderHasUnopened = (folderID: string): boolean => {
+   // Get the letters which belong to the folder
+   const folderLetters = letters.filter(letterInfo => letterInfo.folder === folderID);
+
+   for (const folder of folderLetters) {
+      if (folder.isReceived && !folder.isOpened) {
+         return true;
+      }
+   }
+   return false;
+}
+
+const updateMailFolder = (folderID: string): void => {
+   const hasUnopenedLetters = mailFolderHasUnopened(folderID);
+
+   const folder = getElem("inbox").querySelector(`.${folderID}-folder`) as HTMLElement;
+   if (hasUnopenedLetters) folder.classList.add("has-unopened-letters");
+   else folder.classList.remove("has-unopened-letters");
+}
+
+const createMailFolders = (): void => {
+   const folderContainer = getElem("inbox").querySelector(".folder-container");
+
+   // Main trail
+   createLineTrail(folderContainer as HTMLElement, { x: 10, y: 12 }, { x: 10, y: mailFolders.length * 24 + 12 });
+
+   for (let i = 0; i < mailFolders.length; i++) {
+      const folderInfo = mailFolders[i];
+
+      const hasUnopenedLetters = mailFolderHasUnopened(folderInfo.id);
+
+      const folder = document.createElement("div");
+      folder.className = `folder${folderInfo.isOpenByDefault ? " opened" : ""} ${folderInfo.id}-folder${hasUnopenedLetters ? " has-unopened-letters" : ""}`;
+      folder.innerHTML = `
+      <div class="icon"></div>
+      <span>${folderInfo.name}</span>`;
+      folderContainer?.appendChild(folder);
+
+      updateMailFolder(folderInfo.id);
+
+      folder.addEventListener("click", () => openFolder(folderInfo.id));
+
+      // Side trails
+      const startPos = {
+         x: 10,
+         y: i * 24 + 36
+      }
+      const endPos = {
+         x: 30,
+         y: i * 24 + 36
+      }
+      createLineTrail(folderContainer as HTMLElement, startPos, endPos);
    }
 }
 
@@ -151,7 +237,7 @@ const closeMail = (): void => {
    getElem("mail-container").classList.add("hidden");
 }
 
-const openMail = (): void => {
+export function openMail(): void {
    Game.isInFocus = true;
    Game.showMask();
    Game.maskClickEvent = closeMail;
@@ -159,8 +245,56 @@ const openMail = (): void => {
    getElem("mail-container").classList.remove("hidden");
 }
 
-export function setupMail(): void {
-   getElem("mail-opener").addEventListener("click", openMail);
+let receiveMailEvent: Function;
+export function createMailReceiveEvent(func: Function): void {
+   receiveMailEvent = func;
+}
+export function receiveMail(letterName: string): void {
+   let letterInfo: LetterInfo = undefined as unknown as LetterInfo;
+   for (const currentLetterInfo of letters) {
+      if (currentLetterInfo.name === letterName) {
+         letterInfo = currentLetterInfo;
+         break;
+      }
+   }
+   if (letterInfo.isReceived) return;
 
-   fillInbox();
+   const notificationInfo = {
+      iconSrc: "folder.png",
+      title: letterInfo.subject,
+      description: "You've got mail!",
+      caption: "Click to open"
+   };
+   const notificationClickEvent = (notification: HTMLElement) => {
+      notification.remove();
+      
+      switchView("mail");
+      openMail();
+
+      openFolder((getFolderInfo(letterInfo.folder) as FolderInfo).id);
+      openInboxLetter(letterInfo, getLetter(letterInfo));
+   }
+   createNotification(notificationInfo, true, true, notificationClickEvent);
+
+   letterInfo.isReceived = true;
+   createInboxLetter(letterInfo, 1);
+
+   updateMailFolder(letterInfo.folder);
+   
+   mail.receivedLetter = letterInfo;
+   if (receiveMailEvent) receiveMailEvent();
+}
+
+export function generateLetterHashes(): void {
+   for (const letterInfo of letters) {
+      const hash = hashCode(letterInfo.name);
+      letterInfo.hashID = hash;
+   }
+}
+
+export function setupMail(): void {
+   // Create the folder system for the inbox
+   createMailFolders();
+
+   folderListener();
 }

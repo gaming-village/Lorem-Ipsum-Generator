@@ -1,0 +1,31 @@
+#devtools {
+   min-width: 15rem;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   z-index: 3;
+}
+
+#devtools h2 {
+   position: relative;
+}
+#devtools h2:not(.opened) {
+   color: #444;
+   cursor: pointer;
+   text-decoration: underline;
+}
+#devtools h2:not(.opened):hover {
+   color: #000;
+}
+#devtools h2:not(.opened)::after {
+   content: "";
+   width: 4px;
+   height: 4px;
+   border-right: 2px solid #333;
+   border-bottom: 2px solid #333;
+   margin-left: 7px;
+   position: absolute;
+   top: 50%;
+   transform: rotate(45deg) translateY(-100%);
+}

@@ -12,13 +12,14 @@ import { setupStartMenu } from "./start-menu";
 import { initialisePrograms, setupPrograms } from "./programs";
 import { setupCorporateOverview } from "./corporate-overview";
 import { createNotification, NotificationInfo } from "./notifications";
-import { setupMail } from "./mail";
+import { generateLetterHashes, setupMail } from "./mail";
+import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from "./devtools";
 
 ReactDOM.render(
    <React.StrictMode>
       <App />
    </React.StrictMode>,
-   document.getElementById('root')
+   document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
@@ -39,7 +40,7 @@ const setupViews = (): void => {
       button.classList.add("dark");
    }
 }
-function switchView(viewName: string): void {
+export function switchView(viewName: string): void {
    if (Game.isInFocus) return;
 
    const previouslyShownView = document.querySelector(".view:not(.hidden)");
@@ -60,6 +61,9 @@ const updateViewSizes = () => {
    }
 };
 window.onload = () => {
+   // Generate unique letter ID's based on their names.
+   generateLetterHashes();
+
    initialisePrograms();
 
    // Load any saved games. If there aren't any, use the default save
@@ -101,6 +105,11 @@ window.onload = () => {
 
    // Sets up the mask click event handler
    Game.setupMask();
+
+   // Calculates the lorem made by workers while away and adds it to the lorem count
+   Game.calculateIdleProfits();
+
+   setupDevtools();
 };
 
 let keysDown: number[] = [];
@@ -117,10 +126,38 @@ const typeLorem = (key: string) => {
 
    if (loremContainer) loremContainer.innerHTML += currentLetter;
 
-   Game.lorem += 0.05;
+   const loremGainChances = [
+      {
+         amount: 0.05,
+         chance: 0.2
+      },
+      {
+         amount: 0.3,
+         chance: 0.1
+      },
+      {
+         amount: 2,
+         chance: 0.03
+      }
+   ]
+   for (const gainChance of loremGainChances) {
+      if (Math.random() <= gainChance.chance) {
+         Game.lorem += gainChance.amount;
+         break;
+      }
+   }
 }
 document.addEventListener("keydown", event => {
    const keyCode: number = event.keyCode;
+
+   // When ` is pressed, open the devtools
+   if (keyCode === 192 && process.env.NODE_ENV === "development") {
+      if (devtoolsIsOpen()) {
+         hideDevtools();
+      } else {
+         openDevtools();
+      }
+   }
 
    // If the input is a number from 1-9 (keycodes 49-57) and the command key isn't held and the view exists
    if (keyCode >= 49 && keyCode <= 57 && !event.metaKey && keyCode - 49 < viewNames.length) {

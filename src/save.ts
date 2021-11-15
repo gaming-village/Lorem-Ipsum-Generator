@@ -2,7 +2,8 @@ import { applications } from "./applications";
 import { programs } from "./programs";
 import Game from "./Game";
 import { loremCorp } from "./corporate-overview";
-import { randInt } from "./utils";
+import { getCurrentTime, randInt } from "./utils";
+import letters from "./data/letters"
 
 const getCookie = (cname: string): string | null => {
    var name = cname + "=";
@@ -46,16 +47,19 @@ export function updateSave(): void {
    // Each section is seperated by a "|" character.
    // In a section, each "part" of the section is seperated by a "_" character.
 
-   // Lorem count
+   // Lorem count, time
    // Opened applications
    // Corporate Overview
+   // Letter data
    // Miscellaneous
 
    const saveName: string = "save1";
 
-   // Lorem count
+   // Lorem count, time
 
-   let saveData: string = Game.lorem.toString() + "|";
+   let saveData: string = Game.lorem + "_";
+
+   saveData += getCurrentTime() + "|";
 
    // Owned applications
 
@@ -80,6 +84,25 @@ export function updateSave(): void {
       saveData += i + 1 < loremCorp.workers.length ? "-" : "|";
    });
 
+   // Letter data
+   // Format: hashID-(isReceived_isOpened_rewardIsClaimed from boolean to b10)
+   letters.forEach((letterInfo, idx) => {
+      const hash = letterInfo.hashID;
+
+      let infoTotal: number = 0;
+      if (letterInfo.isReceived) infoTotal += 1;
+      if (letterInfo.isOpened) infoTotal += 2;
+      if (letterInfo.reward && letterInfo.reward.isClaimed) infoTotal += 4;
+
+      saveData += `${hash}-${infoTotal}`;
+
+      if (idx < letters.length - 1) {
+         saveData += "_";
+      } else {
+         saveData += "|";
+      }
+   });
+
    // Miscellaneous
 
    let currentBackgroundIndexResult: string = "";
@@ -96,9 +119,11 @@ export function updateSave(): void {
 }
 
 const getDefaultSave = (): string => {
-   // Lorem count
+   // Lorem count, time
 
-   let saveData: string = "0|";
+   let saveData: string = "0_";
+
+   saveData += getCurrentTime() + "|";
 
    // Opened applications
 
@@ -123,6 +148,16 @@ const getDefaultSave = (): string => {
       i + 1 < loremCorp.jobs.length ? saveData += "-" : saveData += "|";
    });
 
+   // Claimed letter rewards
+   letters.forEach((letter, idx) => {
+      saveData += `${letter.hashID}-0`;
+      if (idx < letters.length - 1) {
+         saveData += "_";
+      } else {
+         saveData += "|";
+      }
+   });
+
    // Miscellaneous
 
    let currentBackgroundIndexesTotal: string = "";
@@ -140,7 +175,7 @@ const getDefaultSave = (): string => {
 }
 
 export function loadSave(): void {
-   let saveData = getCurrentSave();
+   let saveData: string = getCurrentSave();
    if (saveData === null) {
       saveData = getDefaultSave();
    }
@@ -151,11 +186,13 @@ export function loadSave(): void {
 
       switch (i) {
          case 0: {
-            // Lorem count
+            // Lorem count, time
 
             const parts: string[] = section.split("_");
 
             Game.lorem = Number(parts[0]);
+
+            Game.timeAtLastSave = Number(parts[1]);
 
             break;
          } case 1: {
@@ -183,6 +220,28 @@ export function loadSave(): void {
 
             break;
          } case 3: {
+            const allLetterData: string[] = section.split("_");
+
+            for (const letterData of allLetterData) {
+               const currentHash = Number(letterData.split("-")[0]);
+               let currentLetter;
+               for (const letter of letters) {
+                  if (letter.hashID === currentHash) {
+                     currentLetter = letter;
+                     break;
+                  }
+               }
+
+               const dataParts = Number(letterData.split("-")[1]).toString(2).split("").reverse();
+               if (currentLetter) {
+                  currentLetter.isReceived = !!Number(dataParts[0]);
+                  currentLetter.isOpened = !!Number(dataParts[1]);
+                  if (currentLetter.reward) currentLetter.reward.isClaimed = !!Number(dataParts[2]);
+               }
+            }
+
+            break;
+         } case 4: {
             // Miscellaneous
             const parts: string[] = section.split("_");
 

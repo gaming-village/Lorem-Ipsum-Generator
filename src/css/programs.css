@@ -1,5 +1,6 @@
 #preferences .thumbnail-container {
    display: flex;
+   justify-content: space-evenly;
 }
 #preferences .thumbnail {
    width: 100px;
@@ -41,4 +42,42 @@
    transform: translate(-50%, -50%);
    display: inline-block;
    white-space: nowrap;
+}
+
+#application-shop .application {
+   background-color: #ddd;
+   border: 2px solid;
+   border-top-color: #eee;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #eee;
+   margin: 0.5rem;
+   position: relative;
+}
+#application-shop .application.unlocked {
+   background-color: #bbb;
+   border-top-color: #000;
+   border-right-color: #eee;
+   border-bottom-color: #eee;
+   border-left-color: #000;
+}
+#application-shop .name {
+   font-size: 1.05rem;
+   font-weight: bold;
+   margin: 0 0 0.3rem 0.5rem;
+}
+#application-shop .description {
+   font-size: 0.95rem;
+   margin: 0 0 0 0.4rem;
+}
+#application-shop button {
+   min-width: unset;
+   position: absolute;
+   right: 5px;
+   top: 50%;
+   transform: translateY(-50%);
+   margin: 0;
+}
+#application-shop .application.unlocked button {
+   font-style: italic;
 }

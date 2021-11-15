@@ -1,28 +1,53 @@
 import { dragElem, getElem } from "./utils";
 
-interface Application {
-   isOpened: boolean;
-   isUnlocked: boolean;
-   isDefaultApplication: boolean;
+export interface ApplicationInfo {
    name: string;
+   description: string;
+   type: string;
+   cost: number;
+   isDefault: boolean;
+   isUnlocked: boolean;
+   isOpened: boolean;
    containerID: string;
    taskbarReference?: Element;
 }
 
 export const applications = {
    loremCounter: {
-      isOpened: true,
-      isUnlocked: true,
-      isDefaultApplication: true,
       name: "Lorem Counter",
+      description: "i count lorem",
+      type: "lifestyle",
+      cost: 0,
+      isDefault: true,
+      isUnlocked: true,
+      isOpened: true,
       containerID: "lorem-counter"
+   },
+   achievementTracker: {
+      name: "Achievement Tracker",
+      description: "Achieve",
+      type: "lifestyle",
+      cost: 0,
+      isDefault: true,
+      isUnlocked: true,
+      isOpened: false,
+      containerID: "achievement-tracker"
+   },
+   internEnhancementProgram: {
+      name: "Intern Enhancement Program",
+      description: "intern",
+      type: "utility",
+      cost: 1000,
+      isDefault: false,
+      isUnlocked: false,
+      isOpened: false,
+      containerID: "intern-enhancement-program"
    }
 };
 
-const createApplicationTaskbarReference = (application: Application) => {
+const createApplicationTaskbarReference = (application: ApplicationInfo) => {
    const reference = document.createElement("div");
    reference.className = "taskbar-application";
-   console.log(reference);
    getElem("taskbar")?.appendChild(reference);
 
    // TODO: Image src
@@ -54,12 +79,12 @@ export function setupApplications() {
       dragElem(element, titleBar);
    }
 }
-export function openApplication(application: Application) {
+export function openApplication(application: ApplicationInfo) {
    application.isOpened = true;
    application.taskbarReference?.classList.add("opened");
    getElem(application.containerID)?.classList.remove("hidden");
 }
-export function closeApplication(application: Application) {
+export function closeApplication(application: ApplicationInfo) {
    application.isOpened = false;
    application.taskbarReference?.classList.remove("opened");
    getElem(application.containerID)?.classList.add("hidden");

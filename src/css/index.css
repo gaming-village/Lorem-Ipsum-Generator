@@ -1,8 +1,10 @@
 body {
    --win95-bg-colour: #c3c7cb;
+   --win95-dark-blue: rgb(7, 30, 129);
    margin: 0;
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
+   overflow: hidden;
 }
 
 .hidden {
@@ -25,6 +27,13 @@ body {
    bottom: 0;
 }
 
+.button-container {
+   display: flex;
+   justify-content: center;
+}
+.button-container .button {
+   margin: 10px;
+}
 .button {
    min-width: 5rem;
    text-align: center;
@@ -97,8 +106,11 @@ body {
    background-color: rgb(7, 30, 129);
    padding: 0.2rem 0;
    position: relative;
+   overflow: hidden;
+   white-space: pre;
+   text-overflow: ellipsis;
 }
-.windows-program .title-bar img {
+.windows-program .title-bar img:not(.ui-button) {
    width: 22px;
    height: 22px;
    position: absolute;
@@ -141,12 +153,12 @@ body {
    margin: 1rem 2px;
 }
 .windows-program .text-box {
-   width: 100%;
+   width: calc(100% - 4px);
    background-color: #fff;
    border: 2px solid;
    border-top-color: #000;
-   border-right-color: #fff;
-   border-bottom-color: #fff;
+   border-right-color: #e5e5e5;
+   border-bottom-color: #e5e5e5;
    border-left-color: #000;
    position: relative;
 }
@@ -155,6 +167,27 @@ body {
 }
 .windows-program .text-box > :last-child {
    margin-bottom: 0.2rem;
+}
+
+.ui-section-container {
+   width: 100%;
+   border: 1px solid #000;
+   display: flex;
+}
+.ui-section {
+   background-color: var(--win95-bg-colour);
+   border: 1px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #aaa;
+   border-left-color: #fff;
+   box-shadow: 1px 1px 0 0 #e5e5e5 inset;
+}
+.ui-section span {
+   margin-left: 10px;
+}
+.ui-section.fill {
+   width: 100%;
 }
 
 .ui-button {
@@ -175,6 +208,55 @@ body {
 .ui-button.unclickable, .ui-button.unclickable:hover, .ui-button.unclickable:active {
    opacity: 0.4;
    cursor: default;
+}
+
+.left {
+   float: left;
+}
+.right {
+   float: right;
+}
+.left, .right {
+   width: 50%;
+}
+
+.scroll-area {
+   background-color: #fff;
+   overflow: scroll;
+}
+.scroll-area:not(.vertical) {
+   overflow-y: hidden;
+}
+.scroll-area:not(.horizontal) {
+   overflow-x: hidden;
+}
+.scroll-area::-webkit-scrollbar {
+   width: 20px;
+   background-color: #ddd;
+   pointer-events: none;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   background-color: #ccc;
+}
+.scroll-area::-webkit-scrollbar-button:vertical:end:increment, .scroll-area::-webkit-scrollbar-button:vertical:start:decrement {
+   height: 20px;
+   display: block;
+   background-color: #c3c7cb;
+   background-size: 20px 20px;
+   background-repeat: no-repeat;
+   background-position: center center;
+   box-shadow: inset 0 0 0 1px #c3c7cb, inset 2px 2px 0 0 #fff, inset -2px -2px 0 0 #000;
+}
+.scroll-area::-webkit-scrollbar-button:vertical:end:increment {
+   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAQAAAD8fJRsAAAAF0lEQVQY02NgoBf4jwJxSOHQhcNAOgMAWWAP8Rv2U3UAAAAASUVORK5CYII=);
+}
+.scroll-area::-webkit-scrollbar-button:vertical:start:decrement {
+   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGklEQVR4AWMYxuA/SYphmETFhDX9x4mHGQAAcL4P8dQiMq8AAAAASUVORK5CYII=);
 }
 
 .progress-bar-container {
@@ -198,7 +280,22 @@ body {
    background-color: rgb(43, 82, 255);
    background-size: 30px 30px;
    background-image: linear-gradient( 135deg, #fff 25%, transparent 25%, transparent 50%, #fff 50%, #fff 75%, transparent 75%, transparent);
-   animation: stripe-transform 3s forwards infinite linear;
+   animation: progressBarMove 1s forwards infinite linear;
+}
+@keyframes  progressBarMove {
+   0% {
+      background-position-x: 0px;
+   }
+   100% {
+      background-position-x: 30px;
+   }
+}
+.progress-bar-container .label {
+   font-weight: bold;
+   background-color: rgba(255, 255, 255, 0.5);
+   position: absolute;
+   top: 50%;
+   transform: translate(-50%, -150%);
 }
 
 ul:not(.bullet-points) {
@@ -235,7 +332,7 @@ ul:not(.bullet-points) {
    margin-bottom: 0.4rem;
    display: flex;
 }
-.notification img {
+.notification img:not(.ui-button) {
    width: 32px;
    height: 32px;
 }
@@ -290,4 +387,11 @@ ul:not(.bullet-points) {
 }
 .notification .close-icon:active {
    opacity: 0.85;
+}
+
+.line-trail {
+   height: 0;
+   border-top: 2px dotted var(--win95-bg-colour);
+   position: absolute;
+   transform-origin: top left;
 }

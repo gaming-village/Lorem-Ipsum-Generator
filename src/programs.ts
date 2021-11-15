@@ -1,7 +1,7 @@
 import { dragElem, getElem } from "./utils";
 
 export const programs: any = {};
-const programNames: string[] = ["preferences"];
+const programNames: string[] = ["preferences", "application-shop"];
 
 interface Program {
    elementID: string;
@@ -14,7 +14,7 @@ export function initialisePrograms() {
       programs[name] = program;
 
       const element = getElem(program.elementID);
-      element?.querySelector(".minimize")?.addEventListener("click", () => {
+      element?.querySelector(".ui-minimize")?.addEventListener("click", () => {
          closeProgram(name);
       });
 
@@ -41,7 +41,11 @@ export function programIsOpen(elementName: string): boolean {
 export function openProgram(name: string) {
    const program = programs[name];
 
-   getElem(program.elementID)?.classList.remove("hidden");
+   if (program !== undefined) {
+      getElem(program.elementID).classList.remove("hidden");
+   } else {
+      throw new Error(`Program '${name}' does not exist.`);
+   }
 }
 
 export function closeProgram(name: string) {

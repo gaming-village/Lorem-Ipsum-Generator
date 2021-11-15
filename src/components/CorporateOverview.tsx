@@ -6,6 +6,7 @@ import Program from "./Program";
 import { Job, loremCorp, switchJSXPanel } from "../corporate-overview";
 import { beautify, getPrefix, roundNum } from "../utils";
 import List from "./List";
+import ProgressBar from "./ProgressBar";
 
 const CorporateOverview = () => {
    const [job, setJob] = useState(loremCorp.jobs[0]);
@@ -24,7 +25,7 @@ const CorporateOverview = () => {
       })
    }, [forceUpdate]);
 
-   const totalLoremProduction = loremCorp.getTotalWorkerProduction();
+   const totalLoremProduction: number = loremCorp.getTotalWorkerProduction();
 
    // Create the worker buttons and panels
    const jobButtons: JSX.Element[] = [];
@@ -155,6 +156,7 @@ const CorporateOverview = () => {
                         loremCorp.jobIndex < loremCorp.jobs.length - 1 ?
                         <>
                            <p>You are currently {getPrefix(job.name) + " " + beautify(job.name)}. Your next position is as {getPrefix(loremCorp.jobs[loremCorp.jobIndex + 1].name) + " " + beautify(loremCorp.jobs[loremCorp.jobIndex + 1].name)}.</p>
+                           <ProgressBar />
                            <Button onClick={() => loremCorp.attemptToPromote()} isCentered={true} text="Promote" />
                         </> :
                         <p>You are {getPrefix(job.name) + " " + beautify(job.name)}.</p>

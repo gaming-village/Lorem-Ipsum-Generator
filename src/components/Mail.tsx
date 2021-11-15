@@ -1,32 +1,71 @@
 import React, { useEffect, useState } from "react";
 import "../css/mail.css";
-import { claimReward, mail } from "../mail";
+import { claimReward, createFolderListener, createMailReceiveEvent, getInboxMail, LetterInfo, mail, openMail } from "../mail";
 import Button from "./Button";
 import Program from "./Program";
+import ScrollArea from "./ScrollArea";
+import Section from "./Section";
+import SectionContainer from "./SectionContainer";
 
 const Mail = () => {
-   const [letter, setLetter] = useState(mail.letters[0]);
+   const [letter, setLetter] = useState(undefined as unknown as LetterInfo);
+   const [, setFolder] = useState("");
+   const [, setReceivedLetter] = useState(undefined as unknown as LetterInfo);
+
    const [rewardIsClaimed, setRewardClaimed] = useState(false);
 
    useEffect(() => {
       mail.updateMailEvent = () => {
-         console.log("Updating");
          setLetter(mail.currentLetter);
 
-         let newRewardIsClaimed = mail.currentLetter.reward ? mail.currentLetter.reward.isClaimed : false;
+         let newRewardIsClaimed = mail.currentLetter && mail.currentLetter.reward ? mail.currentLetter.reward.isClaimed : false;
          setRewardClaimed(newRewardIsClaimed);
       }
+
+      createFolderListener(() => {
+         setFolder(mail.currentSelectedFolder);
+      })
+
+      createMailReceiveEvent(() => {
+         setReceivedLetter(mail.receivedLetter);
+      })
    }, [])
 
    return (
       <div id="mail" className="view">
-         <div id="mail-opener">
-            mail opener!11!1
+         <div className="center-container">
+            <Button onClick={openMail} text="Open Mail" />
          </div>
-         <div id="mail-container" className="hidden">
-            <div id="inbox" className="windows-program">
 
-            </div>
+         <div id="mail-container" className="hidden">
+            <Program id="inbox" title="Inbox" isDraggable={false} hasMinimizeButton={false}>
+               <>
+               <div className="left">
+                  <div className="folder-container text-box">
+                     <div className="folder root-folder">
+                        <div className="icon"></div>
+                        <span>Microsoft Exchange</span>
+                     </div>
+                  </div>
+               </div>
+               <div className="right">
+                  <ScrollArea scrollType="vertical">
+                     <>
+                        <SectionContainer>
+                           <>
+                              <Section content={<img src={require("../images/icons/white-letter.png").default} alt="" />} fillType="shrink" />
+                              <Section content="From" fillType="fill" />
+                              <Section content="Subject" fillType="fill" />
+                           </>
+                        </SectionContainer>
+                        <div className="letter-container">
+                           {getInboxMail()}
+                        </div>
+                     </>
+                  </ScrollArea>
+               </div>
+               </>
+            </Program>
 
             {mail.currentLetter !== undefined ?
             <Program id="letter" title={`${letter.subject} - Microsoft Exchange`} titleStyle="bold" titleIconSrc={require("../images/icons/letter.png").default} hasMinimizeButton={false} isDraggable={false}>
@@ -52,6 +91,8 @@ const Mail = () => {
                      <h1>{letter.subject}</h1>
 
                      {letter.body}
+
+                     <p>- {letter.from}</p>
                   </div>
 
                   <div className={`reward-container text-box ${rewardIsClaimed ? "claimed" : ""}`}>
@@ -66,7 +107,6 @@ const Mail = () => {
                            <div className="text">{letter.reward.name}</div>
                         </div>
 
-                        {console.log(letter.reward.isClaimed ? "Already claimed" : "Claim")}
                         <Button onClick={() => claimReward(letter)} className={rewardIsClaimed ? "dark" : "no"} text={rewardIsClaimed ? "Already claimed" : "Claim"} isCentered={true} />
                      </>
                      :
