@@ -1,4 +1,5 @@
 import { dragElem, getElem } from "./utils";
+import "./css/applications.css";
 
 export interface ApplicationInfo {
    name: string;
@@ -27,9 +28,9 @@ export const applications = {
       name: "Achievement Tracker",
       description: "Achieve",
       type: "lifestyle",
-      cost: 0,
-      isDefault: true,
-      isUnlocked: true,
+      cost: 5,
+      isDefault: false,
+      isUnlocked: false,
       isOpened: false,
       containerID: "achievement-tracker"
    },
@@ -63,6 +64,14 @@ const createApplicationTaskbarReference = (application: ApplicationInfo) => {
 }
 export function setupApplications() {
    for (const application of Object.values(applications)) {
+      try {
+         const applicationScript = require(`./applications/${application.containerID}`).default;
+
+         if (applicationScript.hasOwnProperty("setup")) {
+            applicationScript.setup();
+         }
+      } catch {}
+
       // Create the taskbar application references
       if (application.isUnlocked) {
          createApplicationTaskbarReference(application);
@@ -88,4 +97,8 @@ export function closeApplication(application: ApplicationInfo) {
    application.isOpened = false;
    application.taskbarReference?.classList.remove("opened");
    getElem(application.containerID)?.classList.add("hidden");
+}
+
+export function unlockApplication(application: ApplicationInfo): void {
+   createApplicationTaskbarReference(application);
 }

@@ -49,9 +49,24 @@ const Computer = () => {
 
          <Program title="Achievement Tracker" id="achievement-tracker" className="hidden">
             <>
-               <p>achievement moment gaming.</p>
+               <div className="left-column">
+                  <h2>Overview</h2>
+                  <p>Achievements: 0/??? <i>(0%)</i></p>
 
-               <h2>REEE</h2>
+                  <h2>View Mode</h2>
+                  <p className="caption">How the achievements are displayed.</p>
+
+                  <h2>Filter</h2>
+                  <p className="caption">Filter your achievements based on certain criteria.</p>
+                  <div className="filter-container"></div>
+               </div>
+
+               <div className="seperator"></div>
+
+               <div className="right-column">
+                  <h1>Achievements</h1>
+                  <div className="achievement-container"></div>
+               </div>
             </>
          </Program>
 

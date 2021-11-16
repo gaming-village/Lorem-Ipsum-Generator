@@ -1,0 +1,101 @@
+#achievement-tracker .achievement {
+   background-color: #ddd;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   margin: 0.5rem;
+   display: flex;
+   align-items: center;
+   position: relative;
+}
+#achievement-tracker .achievement.locked {
+   color: #fff;
+   text-shadow: 0 0 1px #000, 0 0 2px #000, 0 0 3px #000;
+   border-top-color: #000;
+   border-right-color: #fff;
+   border-bottom-color: #fff;
+   border-left-color: #000;
+   background-color: #666;
+   background-image: url("../images/ui/stripes.png");
+   background-size: 64px 64px;
+   animation: bgSlide 7s infinite linear;
+   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.6) inset;
+}
+@keyframes bgSlide {
+   0% {
+      background-posiion-x: 0;
+   }
+   100% {
+      background-position-x: 64px;
+   }
+}
+#achievement-tracker h1 {
+   font-size: 1.7rem;
+   margin-bottom: 0;
+}
+#achievement-tracker h2 {
+   text-align: center;
+}
+#achievement-tracker .achievement * {
+   margin: 3px 5px;
+}
+#achievement-tracker .achievement .icon {
+   --size: 32px;
+   width: var(--size);
+   height: var(--size);
+   background-size: var(--size) var(--size);
+}
+#achievement-tracker .achievement .name {
+   font-weight: bold;
+   font-size: 1.1rem;
+   margin: 0;
+}
+#achievement-tracker .achievement .description {
+   font-size: 1.05rem;
+   margin: 0;
+}
+
+#achievement-tracker .filter-option {
+   height: 2rem;
+   line-height: 2rem;
+   margin: 1px 0;
+   cursor: pointer;
+}
+#achievement-tracker .filter-option:not(.selected):hover {
+   animation: filterOptionHover 0.1s ease-in-out forwards;
+}
+#achievement-tracker .filter-option:not(.selected):not(:hover) {
+   animation: filterOptionLeave 0.1s ease-in-out forwards;
+}
+#achievement-tracker .filter-option.selected {
+   font-size: 1.15rem;
+   font-weight: bold;
+   background-color: #e5e5e5;
+   padding-left: 10px;
+}
+@keyframes filterOptionHover {
+   0% {
+      font-size: 1rem;
+      background-color: transparent;
+      padding-left: 0;
+   }
+   100% {
+      font-size: 1.1rem;
+      background-color: #ddd;
+      padding-left: 10px;
+   }
+}
+@keyframes filterOptionLeave {
+   0% {
+      font-size: 1.1rem;
+      background-color: #ddd;
+      padding-left: 10px;
+   }
+   100% {
+      font-size: 1rem;
+      background-color: transparent;
+      padding-left: 0;
+   }
+}

@@ -63,12 +63,12 @@ export function updateSave(): void {
 
    // Owned applications
 
-   let openedApplicationsTotal: number = 0;
+   let ownedApplicationsTotal: number = 0;
    let i: number = 0;
    for (const application of Object.values(applications)) {
-      if (application.isOpened) openedApplicationsTotal += Math.pow(2, i++);
+      if (application.isUnlocked) ownedApplicationsTotal += Math.pow(2, i++);
    }
-   saveData += openedApplicationsTotal.toString() + "|";
+   saveData += ownedApplicationsTotal.toString() + "|";
 
    // Corporate Overview
 
@@ -125,14 +125,14 @@ const getDefaultSave = (): string => {
 
    saveData += getCurrentTime() + "|";
 
-   // Opened applications
+   // Owned applications
 
-   let openedApplicationsTotal: number = 0;
+   let ownedApplicationsTotal: number = 0;
    let i: number = 0;
    for (const application of Object.values(applications)) {
-      if (application.isOpened) openedApplicationsTotal += Math.pow(2, i++);
+      if (application.isUnlocked) ownedApplicationsTotal += Math.pow(2, i++);
    }
-   saveData += openedApplicationsTotal.toString() + "|";
+   saveData += ownedApplicationsTotal.toString() + "|";
 
    // Corporate Overview
 
@@ -196,7 +196,16 @@ export function loadSave(): void {
 
             break;
          } case 1: {
-            // Opened applications
+            // Owned applications
+
+            const parts: string[] = section.split("_");
+
+            const ownedApplicationBits = Number(parts[0]).toString(2).split("").reverse();
+            ownedApplicationBits.forEach((bit, i) => {
+               const application = Object.values(applications)[i];
+               if (bit === "1") application.isUnlocked = true;
+            })
+            console.log(ownedApplicationBits);
 
             break;
          } case 2: {

@@ -31,9 +31,16 @@ export function createNotification(info: NotificationInfo, isClickable: boolean 
    const notificationContainer = getElem("notification-container");
    notificationContainer.appendChild(wrapper);
 
+   const notificationClickEvent = () => {
+      if (clickEvent) {
+         const notification = getNotification(notificationCount);
+         if (notification) clickEvent(notification);
+      }
+   }
+
    const iconSrc = require(`./images/icons/${info.iconSrc}`).default;
    const notificationCount = generateNotificationID();
-   const notification = <div onClick={() => { if (clickEvent) clickEvent(getNotification(notificationCount)) }} className={`notification notification-${notificationCount}${isClickable ? " clickable" : ""}`}>
+   const notification = <div onClick={notificationClickEvent} className={`notification notification-${notificationCount}${isClickable ? " clickable" : ""}`}>
       <>
          <div className="top">
             <img src={iconSrc} alt="" />

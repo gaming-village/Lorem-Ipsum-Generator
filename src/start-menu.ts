@@ -79,15 +79,21 @@ const startMenuTree = {
 const createPanel = (panelData: PanelData, panelContainer: HTMLElement) => {
    const panel = document.createElement("div");
    panel.className = "panel";
+
+   let imgSrc: string = "";
+   try {
+      imgSrc = require("." + panelData.imgSrc).default;
+   } catch {
+      imgSrc = require("./images/icons/questionmark.png").default;
+   } finally {
+      panel.innerHTML = `
+      <img src=${imgSrc} alt="" />
+      <p>${panelData.name}</p>`;
    
-   const imgSrc = require("." + panelData.imgSrc).default;
-   panel.innerHTML = `
-   <img src=${imgSrc} alt="" />
-   <p>${panelData.name}</p>`;
-
-   panelContainer.appendChild(panel);
-
-   return panel;
+      panelContainer.appendChild(panel);
+   
+      return panel;
+   }
 }
 const createOpeningArrow = (panel: HTMLElement) => {
    const arrow = document.createElement("div");

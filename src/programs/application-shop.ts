@@ -1,4 +1,5 @@
-import { ApplicationInfo, applications } from "../applications";
+import { ApplicationInfo, applications, unlockApplication } from "../applications";
+import Game from "../Game";
 import { beautify, getElem } from "../utils";
 
 interface CategoryTypes {
@@ -30,6 +31,17 @@ const applicationShop = {
 
       return categoryContainers;
    },
+   canBuyApplication: function(info: ApplicationInfo): boolean {
+      if (info.isDefault || info.isUnlocked) return false;
+      return Game.lorem >= info.cost;
+   },
+   buyApplication: function(info: ApplicationInfo): void {
+      Game.lorem -= info.cost;
+      info.isUnlocked = true;
+      this.updateApplication(info);
+
+      unlockApplication(info);
+   },
    createApplication: function(info: ApplicationInfo, container: HTMLElement) {
       const application = document.createElement("div");
       application.className = "application";
@@ -39,6 +51,13 @@ const applicationShop = {
       <p class="name">${info.name}</p>
       <p class="description">${info.description}</p>
       <button class="button">${info.cost}</button>`;
+
+      const buyButton = application.querySelector("button")!;
+      buyButton.addEventListener("click", () => {
+         if (this.canBuyApplication(info)) {
+            this.buyApplication(info);
+         }
+      });
 
       this.applicationReferences[info.name] = application;
    },

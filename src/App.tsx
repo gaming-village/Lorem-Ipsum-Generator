@@ -42,7 +42,7 @@ function App() {
                <h2 className="data">Data</h2>
 
                <div className="data-tab">
-                  <Button text="Reset" className="reset-button" />
+                  <Button text="Reset" className="reset-button" isCentered={true} />
                </div>
             </>
          </Program>
