@@ -37,6 +37,7 @@ export function beautify(input: string, count: number | undefined = undefined): 
    // Capitalise
    output = output[0].toUpperCase() + output.substring(1, output.length);
 
+   // Make plural
    if (count !== undefined && count !== 1) output += "s";
 
    return output;
@@ -96,9 +97,7 @@ interface Position {
 function radiansBetweenPoints(startPos: Position, endPos: Position): number {
    const changeInY = endPos.y - startPos.y;
    const changeInX = endPos.x - startPos.x;
-   const theta = Math.atan2(changeInY, changeInX); // range (-PI, PI]
-   // theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-   //if (theta < 0) theta = 360 + theta; // range [0, 360)
+   const theta = Math.atan2(changeInY, changeInX);
    return theta;
 }
 

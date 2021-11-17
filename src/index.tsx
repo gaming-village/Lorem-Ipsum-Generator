@@ -11,7 +11,6 @@ import { setupApplications } from "./applications";
 import { setupStartMenu } from "./start-menu";
 import { initialisePrograms, setupPrograms } from "./programs";
 import { setupCorporateOverview } from "./corporate-overview";
-import { createNotification, NotificationInfo } from "./notifications";
 import { generateLetterHashes, setupMail } from "./mail";
 import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from "./devtools";
 
@@ -95,19 +94,13 @@ window.onload = () => {
    // Setup the corporate overview
    setupCorporateOverview();
 
-   const notificationInfo: NotificationInfo = {
-      iconSrc: "scroll.png",
-      title: "Test notification",
-      description: "This is a test...",
-      caption: "I am a caption"
-   }
-   createNotification(notificationInfo);
-
    // Sets up the mask click event handler
    Game.setupMask();
 
    // Calculates the lorem made by workers while away and adds it to the lorem count
    Game.calculateIdleProfits();
+
+   Game.loadLoremAchievements();
 
    setupDevtools();
 };

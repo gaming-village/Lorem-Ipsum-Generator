@@ -152,7 +152,7 @@ body {
 .windows-program p {
    margin: 1rem 2px;
 }
-.windows-program .text-box {
+.windows-program .text-box, .windows-program input[type=text] {
    width: calc(100% - 4px);
    background-color: #fff;
    border: 2px solid;
@@ -167,6 +167,10 @@ body {
 }
 .windows-program .text-box > :last-child {
    margin-bottom: 0.2rem;
+}
+.windows-program .caption {
+   font-style: italic;
+   margin-top: 0;
 }
 
 .ui-section-container {

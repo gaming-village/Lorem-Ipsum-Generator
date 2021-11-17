@@ -47,18 +47,18 @@
 #application-shop .application {
    background-color: #ddd;
    border: 2px solid;
-   border-top-color: #eee;
+   border-top-color: #fff;
    border-right-color: #000;
    border-bottom-color: #000;
-   border-left-color: #eee;
+   border-left-color: #fff;
    margin: 0.5rem;
    position: relative;
 }
 #application-shop .application.unlocked {
    background-color: #bbb;
    border-top-color: #000;
-   border-right-color: #eee;
-   border-bottom-color: #eee;
+   border-right-color: #ddd;
+   border-bottom-color: #ddd;
    border-left-color: #000;
 }
 #application-shop .name {

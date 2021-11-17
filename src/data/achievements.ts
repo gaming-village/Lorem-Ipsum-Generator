@@ -1,5 +1,6 @@
 interface AchievementRequirements {
    lorem?: number;
+   applications?: number;
 }
 
 export interface Achievement {
@@ -20,17 +21,27 @@ const achievements: Array<Achievement> = [
       type: "tiered",
       iconSrc: "picture.png",
       requirements: {
-         lorem: 10
+         lorem: 1
       }
    },
    {
       id: "GETTING_SOMEWHERE",
       name: "Getting somewhere",
-      description: "Generate 1000 lorem.",
+      description: "Generate 100 lorem.",
       type: "tiered",
       iconSrc: "save.png",
       requirements: {
-         lorem: 1000
+         lorem: 100
+      }
+   },
+   {
+      id: "MICRO_TRANSACTIONS",
+      name: "Micro Transactions",
+      description: "Buy your first application.",
+      type: "tiered",
+      iconSrc: "save.png",
+      requirements: {
+         applications: 1
       }
    },
    {

@@ -40,25 +40,23 @@ const Computer = () => {
          <Program title="Application Shop" id="application-shop" className="hidden">
             <>
                <p>Purchase applications to enchance your productivity here at Lorem Corp.</p>
-
-               <h2>test1</h2>
-
-               <p>test2</p>
             </>
          </Program>
 
          <Program title="Achievement Tracker" id="achievement-tracker" className="hidden">
-            <>
+            <div className="formatter">
                <div className="left-column">
                   <h2>Overview</h2>
-                  <p>Achievements: 0/??? <i>(0%)</i></p>
+                  <p className="achievement-count">Achievements: 0/??? <i>(0%)</i></p>
 
                   <h2>View Mode</h2>
                   <p className="caption">How the achievements are displayed.</p>
+                  <div className="view-options-container"></div>
 
                   <h2>Filter</h2>
                   <p className="caption">Filter your achievements based on certain criteria.</p>
                   <div className="filter-container"></div>
+                  <input className="search-achievements hidden" type="text" placeholder="Search achievements..." />
                </div>
 
                <div className="seperator"></div>
@@ -67,7 +65,7 @@ const Computer = () => {
                   <h1>Achievements</h1>
                   <div className="achievement-container"></div>
                </div>
-            </>
+            </div>
          </Program>
 
          <Program title="Intern Enhancement Program" id="intern-enhancement-program" className="hidden">

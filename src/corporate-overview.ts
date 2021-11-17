@@ -97,7 +97,6 @@ export const loremCorp = {
       return cost;
    },
    canAffordWorker: function(cost: number): boolean {
-      Game.lorem += cost;
       return Game.lorem >= cost;
    },
    buyWorker: function(worker: Job, cost: number): void {

@@ -4,6 +4,7 @@ import Game from "./Game";
 import { loremCorp } from "./corporate-overview";
 import { getCurrentTime, randInt } from "./utils";
 import letters from "./data/letters"
+import achievements from "./data/achievements";
 
 const getCookie = (cname: string): string | null => {
    var name = cname + "=";
@@ -52,6 +53,7 @@ export function updateSave(): void {
    // Corporate Overview
    // Letter data
    // Miscellaneous
+   // Achievements
 
    const saveName: string = "save1";
 
@@ -112,7 +114,15 @@ export function updateSave(): void {
       if (i < programs.preferences.currentBackgroundIndexes.length - 1) currentBackgroundIndexResult += "-";
    }
 
-   saveData += currentBackgroundIndexResult;
+   saveData += currentBackgroundIndexResult + "|";
+
+   // Achievements
+
+   let unlockedAchievementTotal: number = 0;
+   achievements.forEach((achievement, i) => {
+      if (achievement.isUnlocked) unlockedAchievementTotal += Math.pow(2, i);
+   });
+   saveData += unlockedAchievementTotal;
 
    console.log(saveData);
    setCookie(saveName, saveData);
@@ -169,7 +179,11 @@ const getDefaultSave = (): string => {
       }
    });
 
-   saveData += currentBackgroundIndexesTotal;
+   saveData += currentBackgroundIndexesTotal + "|";
+
+   // Achievements
+
+   saveData += "0"
 
    return saveData;
 }
@@ -262,6 +276,16 @@ export function loadSave(): void {
             }
             programs.preferences.currentBackgroundIndexes = newIndexArray;
 
+            break;
+         } case 5: {
+            // Achievements
+
+            const achievementBits = Number(section).toString(2).split("").reverse();
+
+            achievementBits.forEach((bit, i) => {
+               const achievement = achievements[i];
+               if (bit === "1") achievement.isUnlocked = true;
+            });
             break;
          }
       }

@@ -3,12 +3,15 @@ import { updateSave } from "./save";
 import { loremCorp } from "./corporate-overview";
 import { receiveMail } from "./mail";
 import { createNotification } from "./notifications";
+import achievements, { Achievement } from "./data/achievements";
+import { unlockAchievement } from "./applications/achievement-tracker";
 
 const Game = {
    ticks: 0 as number,
    tps: 10 as number,
    // TODO: set this to lorem num when the game loads
    previousLorem: 0 as number,
+   loremAchievements: [] as Array<Achievement>,
    tick: function(): void {
       this.ticks++;
 
@@ -48,6 +51,18 @@ const Game = {
             }
          }
 
+         for (const achievement of this.loremAchievements) {
+            if (this.lorem >= achievement.requirements.lorem! && !achievement.isUnlocked) {
+               unlockAchievement(achievement.id);
+               const notificationInfo = {
+                  iconSrc: "settings.png",
+                  title: achievement.name,
+                  description: achievement.description
+               };
+               createNotification(notificationInfo, false, true);
+            }
+         }
+
          this.updateLorem();
          this.displayLoremChange(loremDiff);
       }
@@ -55,6 +70,13 @@ const Game = {
       const SECONDS_BETWEEN_SAVES: number = 10;
       if (this.ticks % (this.tps * SECONDS_BETWEEN_SAVES) === 0) {
          updateSave();
+      }
+   },
+   loadLoremAchievements: function(): void {
+      for (const achievement of achievements) {
+         if (Object.keys(achievement.requirements).includes("lorem")) {
+            this.loremAchievements.push(achievement);
+         }
       }
    },
    timeAtLastSave: undefined as unknown as number,
