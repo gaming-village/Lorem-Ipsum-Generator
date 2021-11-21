@@ -1,16 +1,67 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+   --win95-bg-colour: #c3c7cb;
+   --win95-dark-blue: rgb(7, 30, 129);
+   margin: 0;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   overflow: hidden;
+}
+
+.hidden {
+   display: none !important;
+}
+
+.cf:before,
+.cf:after {
+  content: " ";
+  display: table;
+}
+.cf:after {
+  clear: both;
+}
+
+#mask {
+   background-color: rgba(0, 0, 0, 0.4);
+   position: absolute;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   z-index: 2;
 }
 
 .view {
    width: 100%;
+   position: absolute;
+   bottom: 0;
 }
 
+.tooltip {
+   background-color: rgb(255, 255, 225);
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #666;
+   border-bottom-color: #666;
+   border-left-color: #fff;
+   position: absolute;
+   pointer-events: none;
+   user-select: none;
+   box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 0.3);
+}
+.tooltip :first-child {
+   margin-top: 0;
+}
+.tooltip :last-child {
+   margin-bottom: 0;
+}
+
+.button-container {
+   display: flex;
+   justify-content: center;
+}
+.button-container .button {
+   margin: 10px;
+}
 .button {
    min-width: 5rem;
    text-align: center;
@@ -29,6 +80,7 @@ body {
    cursor: pointer;
    white-space: nowrap;
    position: relative;
+   outline: none;
    box-shadow: 0 0 0 2px #000;
 }
 .button:hover {
@@ -36,6 +88,31 @@ body {
 }
 .button:active {
    background-color: #c5c5c5;
+}
+.button.dark {
+   border-top-color: #bbb;
+   border-left-color: #bbb;
+   border-bottom-color: #444;
+   border-right-color: #444;
+   background-color: #999;
+}
+.button.dark:hover {
+   border-top-color: #ccc;
+   border-left-color: #ccc;
+   border-bottom-color: #555;
+   border-right-color: #555;
+   background-color: #a5a5a5;
+}
+.button.dark:active {
+   border-top-color: #c5c5c5;
+   border-left-color: #c5c5c5;
+   border-bottom-color: #444;
+   border-right-color: #444;
+   background-color: #a0a0a0;
+}
+.button.centered {
+   margin-left: 50%;
+   transform: translateX(-50%);
 }
 
 .windows-program {
@@ -56,15 +133,301 @@ body {
    color: #fff;
    background-color: rgb(7, 30, 129);
    padding: 0.2rem 0;
-   font-weight: bold;
-   text-align: center;
    position: relative;
+   overflow: hidden;
+   white-space: pre;
+   text-overflow: ellipsis;
 }
-.windows-program .minimize-button {
+.windows-program .title-bar span {
+   pointer-events: none;
+   user-select: none;
+}
+.windows-program .title-bar img:not(.ui-button) {
+   width: 22px;
+   height: 22px;
+   position: absolute;
+   top: 50%;
+   left: 0.2rem;
+   transform: translateY(-50%);
+}
+.windows-program .title-bar img + span {
+   margin-left: calc(0.4rem + 22px);
+}
+.windows-program .title-bar.draggable {
+   cursor: pointer;
+}
+.windows-program .minimize {
    height: calc(100% - 4px);
    position: absolute;
    top: 50%;
    right: 1px;
    transform: translateY(-50%);
    cursor: pointer;
+   opacity: 0.9;
+   user-select: none;
+}
+.windows-program .minimize:hover {
+   opacity: 1;
+}
+.windows-program .minimize:active {
+   opacity: 0.85;
+}
+.windows-program h2 {
+   font-size: 1.2rem;
+   margin: 1rem 2px 0.5rem;
+}
+.windows-program h3 {
+   text-align: center;
+   font-size: 1.1rem;
+   margin: 0.8rem 2px 0.4rem;
+}
+.windows-program p {
+   margin: 1rem 2px;
+}
+.windows-program .text-box, .windows-program input[type=text] {
+   width: calc(100% - 4px);
+   background-color: #fff;
+   border: 2px solid;
+   border-top-color: #000;
+   border-right-color: #e5e5e5;
+   border-bottom-color: #e5e5e5;
+   border-left-color: #000;
+   position: relative;
+}
+.windows-program .text-box > :first-child {
+   margin-top: 0.2rem;
+}
+.windows-program .text-box > :last-child {
+   margin-bottom: 0.2rem;
+}
+.windows-program .caption {
+   font-style: italic;
+   margin-top: 0;
+}
+
+.ui-section-container {
+   width: 100%;
+   border: 1px solid #000;
+   display: flex;
+}
+.ui-section {
+   background-color: var(--win95-bg-colour);
+   border: 1px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #aaa;
+   border-left-color: #fff;
+   box-shadow: 1px 1px 0 0 #e5e5e5 inset;
+}
+.ui-section span {
+   margin-left: 10px;
+}
+.ui-section.fill {
+   width: 100%;
+}
+
+.ui-button {
+   width: 20px;
+   height: 20px;
+   position: absolute;
+   top: 2px;
+   right: 2px;
+   opacity: 0.85;
+   cursor: pointer;
+}
+.ui-button:hover {
+   opacity: 1;
+}
+.ui-button:active {
+   opacity: 0.75;
+}
+.ui-button.unclickable, .ui-button.unclickable:hover, .ui-button.unclickable:active {
+   opacity: 0.4;
+   cursor: default;
+}
+
+.left {
+   float: left;
+}
+.right {
+   float: right;
+}
+.left, .right {
+   width: 50%;
+}
+
+.scroll-area {
+   background-color: #fff;
+   overflow: scroll;
+}
+.scroll-area:not(.vertical) {
+   overflow-y: hidden;
+}
+.scroll-area:not(.horizontal) {
+   overflow-x: hidden;
+}
+.scroll-area::-webkit-scrollbar {
+   width: 20px;
+   background-color: #ddd;
+   pointer-events: none;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   background-color: #ccc;
+}
+.scroll-area::-webkit-scrollbar-button:vertical:end:increment, .scroll-area::-webkit-scrollbar-button:vertical:start:decrement {
+   height: 20px;
+   display: block;
+   background-color: #c3c7cb;
+   background-size: 20px 20px;
+   background-repeat: no-repeat;
+   background-position: center center;
+   box-shadow: inset 0 0 0 1px #c3c7cb, inset 2px 2px 0 0 #fff, inset -2px -2px 0 0 #000;
+}
+.scroll-area::-webkit-scrollbar-button:vertical:end:increment {
+   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAQAAAD8fJRsAAAAF0lEQVQY02NgoBf4jwJxSOHQhcNAOgMAWWAP8Rv2U3UAAAAASUVORK5CYII=);
+}
+.scroll-area::-webkit-scrollbar-button:vertical:start:decrement {
+   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGklEQVR4AWMYxuA/SYphmETFhDX9x4mHGQAAcL4P8dQiMq8AAAAASUVORK5CYII=);
+}
+
+.progress-bar-container {
+   width: 90%;
+   height: 1rem;
+   border: 1px solid #333;
+   border-radius: 0.25rem;
+   background-color: #fff;
+   padding: 2px;
+   margin-top: 0.5rem;
+   margin-left: 50%;
+   transform: translateX(-50%);
+   box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.3) inset;
+   position: relative;
+}
+.progress-bar {
+   width: 0%;
+   max-width: 100%;
+   height: 100%;
+   border-radius: 0.25rem;
+   background-color: rgb(43, 82, 255);
+   background-size: 30px 30px;
+   background-image: linear-gradient( 135deg, #fff 25%, transparent 25%, transparent 50%, #fff 50%, #fff 75%, transparent 75%, transparent);
+   animation: progressBarMove 1s forwards infinite linear;
+}
+@keyframes  progressBarMove {
+   0% {
+      background-position-x: 0px;
+   }
+   100% {
+      background-position-x: 30px;
+   }
+}
+.progress-bar-container .label {
+   font-weight: bold;
+   background-color: rgba(255, 255, 255, 0.5);
+   position: absolute;
+   top: 50%;
+   transform: translate(-50%, -150%);
+}
+
+ul:not(.bullet-points) {
+   list-style-type: none;
+}
+
+#notification-container {
+   position: absolute;
+   left: 50%;
+   bottom: 2.5rem;
+   display: inline-block;
+   transform: translate(-50%);
+   z-index: 1;
+}
+.notification {
+   font: normal 1rem "MS Sans Serif";
+   background-color: #ddd;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   padding: 0.2rem;
+   margin-left: 50%;
+   margin-top: 0.4rem;
+   display: table;
+   position: relative;
+   transform: translateX(-50%);
+   white-space: nowrap;
+   box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.4);
+}
+.notification .top {
+   height: 2rem;
+   margin-bottom: 0.4rem;
+   display: flex;
+}
+.notification img:not(.ui-button) {
+   width: 32px;
+   height: 32px;
+}
+.notification .title {
+   line-height: 2rem;
+   font-size: 0.95rem;
+   font-weight: bold;
+   margin: 0 1.8rem 0 0.2rem;
+}
+.notification .description {
+   color: #333;
+   font-size: 0.9rem;
+   font-style: italic;
+   margin: 0;
+}
+.notification .seperator {
+   width: 100%;
+   height: 2px;
+   background-color: #000;
+   margin: 0.5rem 0 0.2rem;
+   box-shadow: 0 2px 0 0 #fff;
+}
+.notification .caption {
+   text-align: center;
+   color: #888;
+   font-weight: bold;
+   font-size: 0.9rem;
+   margin: 0;
+}
+.notification.clickable .caption:hover {
+   color: #000;
+   background-color: #e5e5e5;
+   cursor: pointer;
+}
+.notification.clickable .caption:active {
+   color: #555;
+   background-color: #e0e0e0;
+   cursor: pointer;
+}
+.notification .close-icon {
+   width: 22px;
+   height: 22px;
+   position: absolute;
+   top: 3px;
+   right: 3px;
+   opacity: 0.9;
+   cursor: pointer;
+   user-select: none;
+}
+.notification .close-icon:hover {
+   opacity: 1;
+}
+.notification .close-icon:active {
+   opacity: 0.85;
+}
+
+.line-trail {
+   height: 0;
+   border-top: 2px dotted var(--win95-bg-colour);
+   position: absolute;
+   transform-origin: top left;
 }

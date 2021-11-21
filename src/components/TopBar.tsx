@@ -6,10 +6,10 @@ const TopBar = () => {
    return (
       <div id="top-bar">
          <div className="container">
-            <Button text="Computer" />
-            <Button text="Mail" />
-            <Button text="Corporate Overview" />
-            <Button text="Settings" />
+            <Button id="computer-button" className="view-button" text="Computer" />
+            <Button id="mail-button" className="view-button" text="Mail" />
+            <Button id="corporate-overview-button" className="view-button" text="Corporate Overview" />
+            <Button id="settings-button" className="view-button" text="Settings" />
          </div>
       </div>
    )

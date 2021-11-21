@@ -1,0 +1,193 @@
+#achievement-tracker .right-column {
+   width: 100%;
+}
+#achievement-tracker .view-options-container {
+   margin: 1.5rem 0 1rem;
+   display: flex;
+   justify-content: space-evenly;
+}
+#achievement-tracker .view-option {
+   background-color: #bbb;
+   border: 2px solid;
+   border-top-color: #000;
+   border-right-color: #eee;
+   border-bottom-color: #eee;
+   border-left-color: #000;
+   padding: 1px 15px;
+   position: relative;
+   cursor: pointer;
+}
+#achievement-tracker .view-option.selected {
+   background-color: #ccc;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   cursor: default;
+}
+#achievement-tracker .view-option img {
+   width: 32px;
+   margin-bottom: -5px;
+}
+#achievement-tracker .view-option:not(.selected) img {
+   opacity: 0.6;
+}
+#achievement-tracker .view-option .display-name {
+   color: #555;
+   font-weight: normal;
+   font-style: italic;
+   position: absolute;
+   top: -2px;
+   left: 50%;
+   transform: translate(-50%, -100%);
+}
+#achievement-tracker .view-option.selected .display-name {
+   color: #444;
+   font-weight: bold;
+   font-style: normal;
+}
+#achievement-tracker .achievement-formatter {
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   background-color: #aaa;
+   padding: 4px;
+   margin: 2px;
+}
+#achievement-tracker .achievement {
+   background-color: #ddd;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   margin: 0.3rem 0;
+   display: flex;
+   align-items: center;
+   position: relative;
+}
+#achievement-tracker .achievement:first-child {
+   margin-top: 0;
+}
+#achievement-tracker .achievement:last-child {
+   margin-bottom: 0;
+}
+#achievement-tracker .achievement.locked {
+   color: #fff;
+   text-shadow: 0 0 1px #000, 0 0 2px #000, 0 0 3px #000;
+   border-top-color: #000;
+   border-right-color: #fff;
+   border-bottom-color: #fff;
+   border-left-color: #000;
+   background-color: #666;
+   background-image: url("../images/ui/stripes.png");
+   background-size: 64px 64px;
+   animation: bgSlide 7s infinite linear;
+   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.6) inset;
+}
+#achievement-tracker .achievement-container.compact .achievement-formatter {
+   padding: 0;
+}
+#achievement-tracker .achievement-container.compact .achievement {
+   width: 40px;
+   height: 40px;
+   display: inline-block;
+   margin: 5px 5px 0;
+}
+#achievement-tracker .achievement-container.compact .achievement :is(.name, .description) {
+   display: none;
+}
+@keyframes bgSlide {
+   0% {
+      background-posiion-x: 0;
+   }
+   100% {
+      background-position-x: 64px;
+   }
+}
+#achievement-tracker h1 {
+   font-size: 1.7rem;
+   margin-bottom: 0;
+}
+#achievement-tracker h2 {
+   text-align: center;
+}
+#achievement-tracker .achievement * {
+   margin: 3px 5px;
+}
+#achievement-tracker .achievement .icon {
+   --size: 32px;
+   width: var(--size);
+   height: var(--size);
+   background-size: var(--size) var(--size);
+}
+#achievement-tracker .achievement .name {
+   font-weight: bold;
+   font-size: 1.1rem;
+   margin: 0;
+}
+#achievement-tracker .achievement .description {
+   font-size: 1.05rem;
+   margin: 0;
+}
+
+#achievement-tracker .filter-option {
+   height: 2rem;
+   line-height: 2rem;
+   margin: 1px 0;
+   cursor: pointer;
+}
+#achievement-tracker .filter-option:not(.selected):hover {
+   animation: filterOptionHover 0.1s ease-in-out forwards;
+}
+#achievement-tracker .filter-option:not(.selected):not(:hover) {
+   animation: filterOptionLeave 0.1s ease-in-out forwards;
+}
+#achievement-tracker .filter-option.selected {
+   font-size: 1.15rem;
+   font-weight: bold;
+   background-color: #e5e5e5;
+   padding-left: 10px;
+}
+@keyframes filterOptionHover {
+   0% {
+      font-size: 1rem;
+      background-color: transparent;
+      padding-left: 0;
+   }
+   100% {
+      font-size: 1.1rem;
+      background-color: #ddd;
+      padding-left: 10px;
+   }
+}
+@keyframes filterOptionLeave {
+   0% {
+      font-size: 1.1rem;
+      background-color: #ddd;
+      padding-left: 10px;
+   }
+   100% {
+      font-size: 1rem;
+      background-color: transparent;
+      padding-left: 0;
+   }
+}
+
+@media screen and (min-width: 80rem) {
+   #achievement-tracker {
+      min-width: 60rem;
+   }
+   #achievement-tracker .formatter {
+      display: flex;
+   }
+   #achievement-tracker .seperator {
+      width: 2px;
+      /* height: 100%; */
+      background-color: #000;
+      margin: 5px 10px;
+      box-shadow: 2px 0 0 0 #fff;
+   }
+}
