@@ -11,6 +11,15 @@ body {
    display: none !important;
 }
 
+.cf:before,
+.cf:after {
+  content: " ";
+  display: table;
+}
+.cf:after {
+  clear: both;
+}
+
 #mask {
    background-color: rgba(0, 0, 0, 0.4);
    position: absolute;
@@ -25,6 +34,25 @@ body {
    width: 100%;
    position: absolute;
    bottom: 0;
+}
+
+.tooltip {
+   background-color: rgb(255, 255, 225);
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #666;
+   border-bottom-color: #666;
+   border-left-color: #fff;
+   position: absolute;
+   pointer-events: none;
+   user-select: none;
+   box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 0.3);
+}
+.tooltip :first-child {
+   margin-top: 0;
+}
+.tooltip :last-child {
+   margin-bottom: 0;
 }
 
 .button-container {
@@ -109,6 +137,10 @@ body {
    overflow: hidden;
    white-space: pre;
    text-overflow: ellipsis;
+}
+.windows-program .title-bar span {
+   pointer-events: none;
+   user-select: none;
 }
 .windows-program .title-bar img:not(.ui-button) {
    width: 22px;

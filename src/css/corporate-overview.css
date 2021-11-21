@@ -64,3 +64,129 @@
    margin-left: 50%;
    transform: translateX(-50%);
 }
+
+#corporate-overview .upgrade-row {
+   margin: 3rem 0;
+   display: flex;
+   justify-content: space-evenly;
+}
+#corporate-overview .upgrade {
+   margin: 0 1rem;
+   position: relative;
+   display: inline-block;
+   overflow: visible;
+   flex: 1;
+}
+#corporate-overview .upgrade.bought {
+   background-color: #bbb;
+   border-top-color: #eee;
+   border-left-color: #eee;
+}
+#corporate-overview .upgrade .requirements {
+   width: unset;
+   font-weight: bold;
+   padding: 0 10px;
+   margin-left: 50%;
+   display: inline-block;
+   transform: translateX(-50%);
+}
+#corporate-overview .upgrade.bought .requirements {
+   color: #444;
+   font-style: italic;
+   background-color: #bbb;
+   border-top-color: #000;
+   border-right-color: #e5e5e5;
+   border-bottom-color: #e5e5e5;
+   border-left-color: #000;
+}
+#corporate-overview .upgrade.bought button {
+   font-style: italic;
+}
+
+.lorem-packs-shop-panel .windows-program {
+   left: 50%;
+   top: 5rem;
+   transform: translateX(-50%);
+}
+.lorem-packs-shop-panel .windows-program .lorem-pack {
+   margin: 0 0.5rem;
+}
+.lorem-packs-shop-panel .windows-program .top-section {
+   margin-top: 1rem;
+   display: flex;
+   align-items: center;
+}
+.lorem-packs-shop-panel .windows-program .top-section img {
+   --size: 48px;
+   width: var(--size);
+   height: var(--size);
+   image-rendering: pixelated;
+   image-rendering: -moz-crisp-edges;
+   image-rendering: crisp-edges;
+}
+.lorem-packs-shop-panel .windows-program .top-section h2 {
+   margin: 0 0 0 0.5rem;
+}
+.lorem-packs-shop-panel .windows-program .text-box {
+   width: unset;
+   font-style: italic;
+   padding: 0 0.2rem;
+   display: inline-block;
+   margin-bottom: 0;
+}
+.lorem-packs-shop-panel .windows-program .list-caption {
+   text-decoration: underline;
+   margin-bottom: 0;
+}
+.lorem-packs-shop-panel .windows-program .caption {
+   margin: 0 0 0.1rem 50%;
+   display: inline-block;
+   transform: translateX(-50%);
+}
+.lorem-packs-shop-panel .lorem-pack:not(.bought) .caption {
+   animation: captionFlash 1.5s linear infinite;
+}
+@keyframes captionFlash {
+   0% {
+      background-color: transparent;
+   }
+   49% {
+      background-color: transparent;
+   }
+   50% {
+      background-color: yellow;
+   }
+   99% {
+      background-color: yellow;
+   }
+}
+.lorem-packs-shop-panel .windows-program .pack-preview-opener:hover {
+   background-color: #ddd;
+   cursor: help;
+}
+.lorem-packs-shop-panel .windows-program .open-icon {
+   margin-left: 50%;
+   animation: openIconSpin 10s linear infinite;
+}
+@keyframes openIconSpin {
+   0% {
+      transform: translateX(-50%) rotate(0deg);
+   }
+   100% {
+      transform: translateX(-50%) rotate(360deg);
+   }
+}
+.lorem-packs-shop-panel .windows-program .seperator {
+   width: 100%;
+   height: 2px;
+   background-color: #000;
+   box-shadow: 0 2px 0 0 #fff;
+}
+
+.lorem-tooltip {
+   padding: 0.1rem 0.3rem;
+   transform: translateY(-50%);
+}
+.lorem-tooltip table {
+   width: 100%;
+}

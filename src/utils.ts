@@ -2,6 +2,11 @@ export function randInt(min: number, max: number): number {
    return Math.floor(Math.random() * (max - min)) + min;
 }
 
+export function randItem(arr: Array<any> | ReadonlyArray<any>): any {
+   const itemIndex = randInt(0, arr.length);
+   return arr[itemIndex];
+}
+
 export function getElem(id: string): HTMLElement {
    const elem = document.getElementById(id);
    if (elem) return elem;
@@ -32,10 +37,13 @@ export function hashCode(str: string): number {
     return Math.abs(hash);
 }
 
+export function capitalise(input: string): string {
+   return input[0].toUpperCase() + input.substring(1, input.length);
+}
+
 export function beautify(input: string, count: number | undefined = undefined): string {
-   let output: string = input;
    // Capitalise
-   output = output[0].toUpperCase() + output.substring(1, output.length);
+   let output: string = capitalise(input);
 
    // Make plural
    if (count !== undefined && count !== 1) output += "s";

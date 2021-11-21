@@ -1,9 +1,28 @@
 import React from "react";
 import List from "../components/List";
 import Game from "../Game";
-import { LetterInfo } from "../mail";
 
-const letters = [
+export interface LetterReward {
+   readonly name: string;
+   readonly imgSrc: string;
+   readonly rewardOnClaim: Function;
+   isClaimed: boolean;
+}
+
+export interface LetterInfo {
+   readonly name: string;
+   readonly subject: string;
+   readonly from: string;
+   readonly body: JSX.Element;
+   readonly folder: string;
+   readonly reward?: LetterReward;
+   readonly isCloseable: boolean;
+   isReceived?: boolean;
+   isOpened?: boolean;
+   hashID?: number;
+}
+
+const LETTERS: ReadonlyArray<LetterInfo> = [
    {
       name: "introduction",
       subject: "Corporate Overview",
@@ -159,6 +178,6 @@ const letters = [
       folder: "deletedItems",
       isCloseable: true
    }
-] as LetterInfo[];
+];
 
-export default letters;
+export default LETTERS;

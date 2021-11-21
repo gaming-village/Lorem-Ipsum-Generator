@@ -1,4 +1,5 @@
-import achievements, { Achievement } from "../data/achievements";
+import achievements, { Achievement } from "../data/achievements-data";
+import { createNotification } from "../notifications";
 import { beautify, getElem, roundNum } from "../utils";
 
 interface AchievementReferences {
@@ -74,6 +75,14 @@ export function unlockAchievement(name: string): void {
 
    achievement.isUnlocked = true;
    achievementTracker.updateAchievements("normal");
+
+   const notificationInfo = {
+      iconSrc: "settings.png",
+      title: achievement.name,
+      description: achievement.description,
+      caption: "New achievement!"
+   };
+   createNotification(notificationInfo, false, true);
 }
 
 const achievementTracker = {
@@ -123,7 +132,7 @@ const achievementTracker = {
 
       switch (type) {
          case "default": {
-            return achievements;
+            return achievements.slice();
          }
          case "category": {
             const filteredAchievements: { [key: string]: Array<Achievement> } = {};

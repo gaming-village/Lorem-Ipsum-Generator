@@ -1,75 +1,17 @@
+import WORKERS, { Worker } from "./data/workers";
 import Game from "./Game";
 import { getElem, updateProgressBar, wait } from "./utils";
 
-export interface Job {
-   name: string;
-   salary: number;
-   requirements: {
-      lorem: number;
-   }
-   costs: {
-      lorem: number;
-      workforce: number;
-   },
-   loremProduction: number;
-}
-
 export const loremCorp = {
    workerNumber: 0 as number,
-   jobs: [
-      {
-         name: "intern",
-         salary: 0,
-         costs: {
-            lorem: 10,
-            workforce: 1
-         },
-         loremProduction: 0.01
-      },
-      {
-         name: "employee",
-         salary: 1000,
-         requirements: {
-            lorem: 50
-         },
-         costs: {
-            lorem: 50,
-            workforce: 2
-         },
-         loremProduction: 10
-      },
-      {
-         name: "manager",
-         salary: 50000,
-         requirements: {
-            lorem: 500
-         },
-         costs: {
-            lorem: 60,
-            workforce: 3
-         },
-         loremProduction: 10
-      },
-      {
-         name: "executive",
-         salary: 1000000,
-         requirements: {
-            lorem: 5000
-         },
-         costs: {
-            lorem: 70,
-            workforce: 4
-         },
-         loremProduction: 100
-      }
-   ] as Job[],
    jobIndex: 0 as number,
-   job: {} as Job,
-   nextJob: {} as Job | null,
+   job: {} as Worker,
+   nextJob: {} as Worker | null,
    jobListeners: [] as Function[],
+   updateCorporateOverview: undefined as unknown as Function,
    updateNextJob: function(): void {
-      if (this.jobIndex + 1 >= this.jobs.length) this.nextJob = null;
-      this.nextJob = this.jobs[this.jobIndex + 1];
+      if (this.jobIndex + 1 >= WORKERS.length) this.nextJob = null;
+      this.nextJob = WORKERS[this.jobIndex + 1];
    },
    addJobListener: function(func: Function): void {
       this.jobListeners.push(func);
@@ -77,19 +19,19 @@ export const loremCorp = {
    updatePromotionProgress: function(): void {
       const progressBar = getElem("corporate-overview").querySelector(".home-panel .progress-bar-container") as HTMLElement;
       if (progressBar) {
-         const progress = Game.lorem / (this.nextJob as Job).requirements.lorem * 100;
+         const progress = this.nextJob !== undefined ? Game.lorem / (this.nextJob as Worker).requirements.lorem * 100 : 100;
          updateProgressBar(progressBar, progress);
       }
    },
    workers: [] as number[],
-   attemptToBuyWorker: function(worker: Job): void {
-      const workerCount: number = this.workers[this.jobs.indexOf(worker)];
+   attemptToBuyWorker: function(worker: Worker): void {
+      const workerCount: number = this.workers[WORKERS.indexOf(worker)];
       const cost = this.getWorkerCost(worker, workerCount + 1);
       if (this.canAffordWorker(cost)) {
          this.buyWorker(worker, cost);
       }
    },
-   getWorkerCost: function(worker: Job, n: number): number {
+   getWorkerCost: function(worker: Worker, n: number): number {
       // $ = b * 1.1^n + (b/10 * n)
       // Gets the cost of the n-th worker
       const baseCost = worker.costs.lorem;
@@ -99,26 +41,22 @@ export const loremCorp = {
    canAffordWorker: function(cost: number): boolean {
       return Game.lorem >= cost;
    },
-   buyWorker: function(worker: Job, cost: number): void {
-      this.workers[this.jobs.indexOf(worker)]++;
+   buyWorker: function(worker: Worker, cost: number): void {
+      this.workers[WORKERS.indexOf(worker)]++;
       Game.lorem -= cost;
-      this.buyListeners[0]();
+      this.updateCorporateOverview();
    },
-   buyListeners: [] as Function[],
-   addBuyListener: function(func: Function): void {
-      this.buyListeners.push(func);
-   },
-   getWorkerCount: function(worker: Job): number {
-      return this.workers[this.jobs.indexOf(worker)];
+   getWorkerCount: function(worker: Worker): number {
+      return this.workers[WORKERS.indexOf(worker)];
    },
    getTotalWorkerProduction: function(): number {
       let total: number = 0;
-      for (const job of this.jobs) {
-         total += this.getWorkerProduction(job);
+      for (const worker of WORKERS) {
+         total += this.getWorkerProduction(worker);
       }
       return total;
    },
-   getWorkerProduction: function(worker: Job): number {
+   getWorkerProduction: function(worker: Worker): number {
       const workerCount = this.getWorkerCount(worker);
       if (workerCount === undefined) return 0;
       return workerCount * worker.loremProduction;
@@ -136,8 +74,8 @@ export const loremCorp = {
       return Game.lorem >= this.nextJob.requirements.lorem;
    },
    promote: function(): void {
-      this.job = (this.nextJob as Job);
-      this.nextJob = this.jobs[this.jobIndex + 1];
+      this.job = (this.nextJob as Worker);
+      this.nextJob = WORKERS[this.jobIndex + 1];
       this.jobIndex++;
       this.updateNextJob();
       this.jobListeners[0]();
@@ -201,6 +139,9 @@ export function setupCorporateOverview(): void {
 
    const upgradesButton: HTMLElement = (corporateOverview.querySelector(".upgrades-button") as HTMLElement);
    upgradesButton.addEventListener("click", () => switchPanel("upgrades-panel", upgradesButton));
+
+   const packsButton = corporateOverview.querySelector(".lorem-packs-shop-button") as HTMLElement;
+   packsButton.addEventListener("click", () => switchPanel("lorem-packs-shop-panel", packsButton));
 
    // Open the home panel by default
    switchPanel("home-panel", homeButton);

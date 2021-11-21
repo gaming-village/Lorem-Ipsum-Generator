@@ -1,29 +1,9 @@
 import React from "react";
 import Game from "./Game";
 import { createLineTrail, getElem, hashCode } from "./utils";
-import letters from "./data/letters";
+import LETTERS, { LetterInfo, LetterReward } from "./data/letters-data";
 import { createNotification } from "./notifications";
 import { switchView } from ".";
-
-interface LetterReward {
-   name: string;
-   imgSrc: string;
-   rewardOnClaim: Function;
-   isClaimed: boolean;
-}
-
-export interface LetterInfo {
-   hashID: number;
-   name: string;
-   subject: string;
-   from: string;
-   body: JSX.Element;
-   folder: string;
-   reward?: LetterReward;
-   isCloseable: boolean;
-   isReceived: boolean;
-   isOpened: boolean;
-}
 
 export const mail = {
    currentLetter: undefined as unknown as LetterInfo,
@@ -61,7 +41,12 @@ const mailFolders = [
 ] as FolderInfo[];
 
 export function claimReward(letterInfo: LetterInfo): void {
-   const letterReward = letterInfo.reward as LetterReward;
+   if (!letterInfo.reward) {
+      console.warn(`Letter '${letterInfo.subject}' does not have a reward.`);
+      return;
+   }
+
+   const letterReward: LetterReward = letterInfo.reward;
    letterReward.isClaimed = true;
 
    mail.updateMailEvent();
@@ -91,7 +76,13 @@ const openLetter = (letter: HTMLElement, letterInfo: LetterInfo): void => {
 }
 
 const getLetter = (letterInfo: LetterInfo): HTMLElement => {
-   return getElem("inbox").querySelector(`.letter-${letterInfo.hashID}`) as HTMLElement;
+   const letterNumber = LETTERS.indexOf(letterInfo);
+   const letter = getElem("inbox").querySelector(`.letter-${letterNumber}`);
+
+   if (letter !== null) {
+      return letter as HTMLElement;
+   }
+   throw new Error(`Couldn't find a letter with a class of '.letter-${letterNumber}'.`);
 }
 const openInboxLetter = (letterInfo: LetterInfo, letterRef: HTMLElement | number): void => {
    // const letter: HTMLElement = getElem("inbox").querySelector(`.letter-${letterNumber}`) as HTMLElement;
@@ -119,7 +110,8 @@ const openInboxLetter = (letterInfo: LetterInfo, letterRef: HTMLElement | number
 const createInboxLetter = (letterInfo: LetterInfo, letterNumber: number): JSX.Element => {
    const letterClass = `letter letter-${letterNumber}${!letterInfo.isOpened ? " unopened" : ""}${letterInfo === mail.currentLetter ? " opened" : ""}`;
    const imgSrc = require("./images/icons/letter.png").default;
-   const letter = <div onClick={() => openInboxLetter(letterInfo, letterNumber)} className={`${letterClass} letter-${letterInfo.hashID}`} key={letterNumber}>
+   
+   const letter = <div onClick={() => openInboxLetter(letterInfo, letterNumber)} className={letterClass} key={letterNumber}>
       <div className="icon-container">
          <img src={imgSrc} alt="" />
       </div>
@@ -136,8 +128,8 @@ const createInboxLetter = (letterInfo: LetterInfo, letterNumber: number): JSX.El
 
 export function getInboxMail(): JSX.Element[] {
    const inboxLetters: JSX.Element[] = [];
-   for (let i = 0; i < letters.length; i++) {
-      const letterInfo = letters[i];
+   for (let i = 0; i < LETTERS.length; i++) {
+      const letterInfo = LETTERS[i];
       if (letterInfo.folder === mail.currentSelectedFolder && letterInfo.isReceived) {
          const inboxLetter = createInboxLetter(letterInfo, i);
          inboxLetters.push(inboxLetter);
@@ -177,7 +169,7 @@ const openFolder = (folderName: string): void => {
 
 const mailFolderHasUnopened = (folderID: string): boolean => {
    // Get the letters which belong to the folder
-   const folderLetters = letters.filter(letterInfo => letterInfo.folder === folderID);
+   const folderLetters = LETTERS.filter(letterInfo => letterInfo.folder === folderID);
 
    for (const folder of folderLetters) {
       if (folder.isReceived && !folder.isOpened) {
@@ -251,7 +243,7 @@ export function createMailReceiveEvent(func: Function): void {
 }
 export function receiveMail(letterName: string): void {
    let letterInfo: LetterInfo = undefined as unknown as LetterInfo;
-   for (const currentLetterInfo of letters) {
+   for (const currentLetterInfo of LETTERS) {
       if (currentLetterInfo.name === letterName) {
          letterInfo = currentLetterInfo;
          break;
@@ -272,12 +264,20 @@ export function receiveMail(letterName: string): void {
       openMail();
 
       openFolder((getFolderInfo(letterInfo.folder) as FolderInfo).id);
-      openInboxLetter(letterInfo, getLetter(letterInfo));
+
+      // Without the settimeout, getLetter(letterInfo) returns undefined as the openFolder function above is async...
+      // Really fuckin shitty solution but it works?
+      setTimeout(() => {
+         openInboxLetter(letterInfo, getLetter(letterInfo));
+      }, 1);
    }
    createNotification(notificationInfo, true, true, notificationClickEvent);
 
+   // Find an available letter number
+   const letterNumber = LETTERS.indexOf(letterInfo);
+
    letterInfo.isReceived = true;
-   createInboxLetter(letterInfo, 1);
+   createInboxLetter(letterInfo, letterNumber);
 
    updateMailFolder(letterInfo.folder);
    
@@ -286,7 +286,7 @@ export function receiveMail(letterName: string): void {
 }
 
 export function generateLetterHashes(): void {
-   for (const letterInfo of letters) {
+   for (const letterInfo of LETTERS) {
       const hash = hashCode(letterInfo.name);
       letterInfo.hashID = hash;
    }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../css/mail.css";
-import { claimReward, createFolderListener, createMailReceiveEvent, getInboxMail, LetterInfo, mail, openMail } from "../mail";
+import { LetterInfo } from "../data/letters-data";
+import { claimReward, createFolderListener, createMailReceiveEvent, getInboxMail, mail, openMail } from "../mail";
 import Button from "./Button";
 import Program from "./Program";
 import ScrollArea from "./ScrollArea";

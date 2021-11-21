@@ -1,0 +1,36 @@
+#settings {
+   background-color: #008080;
+}
+
+#settings-main {
+   min-width: 25rem;
+   background-color: #ccc;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   padding: 0.3rem;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}
+#settings-main h1 {
+   font-size: 1.9rem;
+   color: #fff;
+   text-align: center;
+   background-color: var(--win95-dark-blue);
+   margin-top: 0;
+}
+#settings-main .setting {
+   background-color: #ddd;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+}
+#settings-main .setting:not(:last-child) {
+   margin: 10px 0;
+}

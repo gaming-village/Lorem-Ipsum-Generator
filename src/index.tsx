@@ -10,9 +10,10 @@ import { loadSave } from "./save";
 import { setupApplications } from "./applications";
 import { setupStartMenu } from "./start-menu";
 import { initialisePrograms, setupPrograms } from "./programs";
-import { setupCorporateOverview } from "./corporate-overview";
+import { loremCorp, setupCorporateOverview } from "./corporate-overview";
 import { generateLetterHashes, setupMail } from "./mail";
 import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from "./devtools";
+import { type } from "./lorem-production";
 
 ReactDOM.render(
    <React.StrictMode>
@@ -67,6 +68,7 @@ window.onload = () => {
 
    // Load any saved games. If there aren't any, use the default save
    loadSave();
+   loremCorp.updateCorporateOverview();
 
    updateViewSizes();
    window.addEventListener("resize", () => {
@@ -106,40 +108,6 @@ window.onload = () => {
 };
 
 let keysDown: number[] = [];
-let currentLoremIndex: number = 0;
-const typeLorem = (key: string) => {
-   const loremContainer = getElem("lorem-container");
-
-   if (currentLoremIndex === 0) {
-      loremContainer.innerHTML = "";
-   }
-
-   const loremTemplate: string = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores, aliquid! Officia amet adipisci porro repellat deserunt vero quos ad id sint dolore iure odio reprehenderit dolores sed, molestias vitae dicta! ";
-   const currentLetter = loremTemplate[currentLoremIndex++ % loremTemplate.length];
-
-   if (loremContainer) loremContainer.innerHTML += currentLetter;
-
-   const loremGainChances = [
-      {
-         amount: 0.05,
-         chance: 0.2
-      },
-      {
-         amount: 0.3,
-         chance: 0.1
-      },
-      {
-         amount: 2,
-         chance: 0.03
-      }
-   ]
-   for (const gainChance of loremGainChances) {
-      if (Math.random() <= gainChance.chance) {
-         Game.lorem += gainChance.amount;
-         break;
-      }
-   }
-}
 document.addEventListener("keydown", event => {
    const keyCode: number = event.keyCode;
 
@@ -161,7 +129,8 @@ document.addEventListener("keydown", event => {
    if (((keyCode >= 65 && keyCode <= 90) || keyCode === 32) && !keysDown.includes(keyCode)) {
       keysDown.push(keyCode)
       const key = String.fromCharCode(keyCode)
-      typeLorem(key);
+      // typeLorem(key);
+      type(key);
    }
 });
 document.addEventListener("keyup", function(event) {

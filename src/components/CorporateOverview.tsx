@@ -3,26 +3,27 @@ import "../css/corporate-overview.css";
 import Button from "./Button";
 import CorporatePanel from "./CorporatePanel";
 import Program from "./Program";
-import { Job, loremCorp, switchJSXPanel } from "../corporate-overview";
+import { loremCorp, switchJSXPanel } from "../corporate-overview";
 import { beautify, getPrefix, roundNum } from "../utils";
 import List from "./List";
 import ProgressBar from "./ProgressBar";
+import WORKERS, { Worker } from "../data/workers";
+import { getUpgrades } from "../upgrades";
+import { getPackElements } from "../lorem-production";
 
 const CorporateOverview = () => {
-   const [job, setJob] = useState(loremCorp.jobs[0]);
+   const [job, setJob] = useState(WORKERS[0]);
 
    // Very bad practice but I have no alternative... I think
-   // Used to force a re-render whenever a worker is bought.
+   // Used to force a re-render whenever a worker is bought/lorem pack is bought/etc.
    const [, updateState] = React.useState({});
    const forceUpdate = React.useCallback(() => updateState({}), []);
 
    useEffect(() => {
       loremCorp.addJobListener(() => {
-         setJob(loremCorp.job as Job);
-      })
-      loremCorp.addBuyListener(() => {
-         forceUpdate();
-      })
+         setJob(loremCorp.job as Worker);
+      });
+      loremCorp.updateCorporateOverview = () => forceUpdate();
    }, [forceUpdate]);
 
    const totalLoremProduction: number = loremCorp.getTotalWorkerProduction();
@@ -31,9 +32,9 @@ const CorporateOverview = () => {
    const jobButtons: JSX.Element[] = [];
    const jobPanels: JSX.Element[] = [];
    for (let i = 0; i < loremCorp.jobIndex; i++) {
-      const worker = loremCorp.jobs[i];
+      const worker = WORKERS[i];
 
-      const workerCount = loremCorp.workers[loremCorp.jobs.indexOf(worker)];
+      const workerCount = loremCorp.workers[WORKERS.indexOf(worker)];
       const workerProduction = loremCorp.getWorkerProduction(worker);
 
       const workerType: string = beautify(worker.name);
@@ -93,16 +94,23 @@ const CorporateOverview = () => {
    return (
       <div id="corporate-overview" className="view">
          <div className="left-bar">
+            <h2>Career Information</h2>
+            <p>Position: Intern</p>
+            <p>Salary: N/A</p>
+            <p id="words-typed">Words typed: 0</p>
+
+            <h2>Main</h2>
             <Button className="home-button dark" text="Home" />
             <Button className="upgrades-button dark" text="Upgrades" />
 
-            {jobButtons.length > 0 ? <h2>Subordinates</h2> : ""}
-            <div className="job-button-container"></div>
-            {jobButtons}
+            <h2>Lorem Packs</h2>
+            <Button className="lorem-packs-shop-button dark" text="Shop" />
+            <Button className="dictionary-button dark" text="Dictionary" />
 
-            <h2>Career</h2>
-            <p>Position: Intern</p>
-            <p>Salary: N/A</p>
+            {jobButtons.length > 0 ? <h2>Subordinates</h2> : ""}
+            <div className="job-button-container">
+               {jobButtons}
+            </div>
          </div>
 
          <div className="right-bar">
@@ -134,9 +142,9 @@ const CorporateOverview = () => {
                         {loremCorp.jobIndex > 0 ?
                         <List>
                            <>
-                           {loremCorp.jobs.reduce((result, currentJob, i) => {
+                           {WORKERS.reduce((result, currentJob, i) => {
                               if (i < loremCorp.jobIndex) {
-                                 const workerCount = loremCorp.workers[loremCorp.jobs.indexOf(currentJob)];
+                                 const workerCount = loremCorp.workers[WORKERS.indexOf(currentJob)];
                                  const listElem = <li key={i}>{workerCount} {beautify(currentJob.name, workerCount)}</li>;
                                  result.push(listElem);
                               }
@@ -153,9 +161,9 @@ const CorporateOverview = () => {
                   <Program className="panel" title="Promote" isDraggable={false} hasMinimizeButton={false}>
                      <>
                         {
-                        loremCorp.jobIndex < loremCorp.jobs.length - 1 ?
+                        loremCorp.jobIndex < WORKERS.length - 1 ?
                         <>
-                           <p>You are currently {getPrefix(job.name) + " " + beautify(job.name)}. Your next position is as {getPrefix(loremCorp.jobs[loremCorp.jobIndex + 1].name) + " " + beautify(loremCorp.jobs[loremCorp.jobIndex + 1].name)}.</p>
+                           <p>You are currently {getPrefix(job.name) + " " + beautify(job.name)}. Your next position is as {getPrefix(WORKERS[loremCorp.jobIndex + 1].name) + " " + beautify(WORKERS[loremCorp.jobIndex + 1].name)}.</p>
                            <ProgressBar />
                            <Button onClick={() => loremCorp.attemptToPromote()} isCentered={true} text="Promote" />
                         </> :
@@ -167,11 +175,25 @@ const CorporateOverview = () => {
             </CorporatePanel>
 
             <CorporatePanel className="upgrades-panel">
-               <Program className="panel" title="Upgrades" hasMinimizeButton={false}>
-                  <>
-                     <h2>Upgrades</h2>
+               <>
+                  <Program className="panel" title="Upgrades" hasMinimizeButton={false}>
+                     <>
+                        <h2>Information</h2>
 
-                     <p>This is a test paragraph</p>
+                        <p>Sacrifice your workers and precious lorem in exchange for powerful boosts.</p>
+
+                        <p>More tiers of upgrades are unlocked as you progress through Lorem Corp.</p>
+                     </>
+                  </Program>
+
+                  {getUpgrades(job)}
+               </>
+            </CorporatePanel>
+
+            <CorporatePanel className="lorem-packs-shop-panel">
+               <Program title="Shop" hasMinimizeButton={false} isDraggable={false}>
+                  <>
+                     {getPackElements()}
                   </>
                </Program>
             </CorporatePanel>

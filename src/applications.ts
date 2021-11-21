@@ -2,11 +2,11 @@ import { dragElem, getElem } from "./utils";
 import "./css/applications.css";
 
 export interface ApplicationInfo {
-   name: string;
-   description: string;
-   type: string;
-   cost: number;
-   isDefault: boolean;
+   readonly name: string;
+   readonly description: string;
+   readonly type: string;
+   readonly cost: number;
+   readonly isDefault: boolean;
    isUnlocked: boolean;
    isOpened: boolean;
    containerID: string;

@@ -1,19 +1,19 @@
 interface AchievementRequirements {
-   lorem?: number;
-   applications?: number;
+   readonly lorem?: number;
+   readonly applications?: number;
 }
 
 export interface Achievement {
-   id: string;
-   name: string;
-   description: string;
-   type: string;
-   iconSrc: string;
-   requirements: AchievementRequirements;
+   readonly id: string;
+   readonly name: string;
+   readonly description: string;
+   readonly type: string;
+   readonly iconSrc: string;
+   readonly requirements: AchievementRequirements;
    isUnlocked?: boolean;
 }
 
-const achievements: Array<Achievement> = [
+const ACHIEVEMENTS: ReadonlyArray<Achievement> = [
    {
       id: "SO_IT_BEGINS",
       name: "So it begins...",
@@ -62,4 +62,4 @@ const achievements: Array<Achievement> = [
    }
 ];
 
-export default achievements;
+export default ACHIEVEMENTS;

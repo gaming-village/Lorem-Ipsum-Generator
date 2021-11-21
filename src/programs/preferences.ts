@@ -7,6 +7,14 @@ interface BackgroundInfo {
    isTileable?: boolean;
 }
 
+interface PreferenceData {
+   backgroundIndexes: Array<number>
+}
+
+export const preferenceData: PreferenceData = {
+   backgroundIndexes: []
+}
+
 const preferences = {
    elementID: "preferences" as string,
    currentBackgroundIndexes: [0, 0] as number[],
@@ -92,12 +100,12 @@ const preferences = {
                image.style.backgroundImage = `url(${require("../images/backgrounds/" + background.content).default})`;
             }
 
-            if (this.currentBackgroundIndexes[i] === k) {
+            if (preferenceData.backgroundIndexes[i] === k) {
                this.selectThumbnail(thumbnail, backgroundType);
             }
 
             thumbnail.addEventListener("click", () => {
-               this.currentBackgroundIndexes[i] = k;
+               preferenceData.backgroundIndexes[i] = k;
 
                this.selectThumbnail(thumbnail, backgroundType);
                this.updateBackgrounds();
@@ -124,7 +132,7 @@ const preferences = {
    updateBackgrounds: function(): void {
       const backgroundContainerNames = Object.keys(this.backgrounds);
       for (let i = 0; i < backgroundContainerNames.length; i++) {
-         const background = Object.values(this.backgrounds)[i][this.currentBackgroundIndexes[i]];
+         const background = Object.values(this.backgrounds)[i][preferenceData.backgroundIndexes[i]];
 
          const backgroundContainer: HTMLElement = (getElem(backgroundContainerNames[i]) as HTMLElement);
 

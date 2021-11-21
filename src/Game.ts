@@ -3,14 +3,14 @@ import { updateSave } from "./save";
 import { loremCorp } from "./corporate-overview";
 import { receiveMail } from "./mail";
 import { createNotification } from "./notifications";
-import achievements, { Achievement } from "./data/achievements";
+import achievements, { Achievement } from "./data/achievements-data";
 import { unlockAchievement } from "./applications/achievement-tracker";
 
 const Game = {
-   ticks: 0 as number,
-   tps: 10 as number,
+   ticks: 0,
+   tps: 10,
    // TODO: set this to lorem num when the game loads
-   previousLorem: 0 as number,
+   previousLorem: 0,
    loremAchievements: [] as Array<Achievement>,
    tick: function(): void {
       this.ticks++;
@@ -30,19 +30,19 @@ const Game = {
             },
             {
                name: "freeIPhone",
-               requirement: 7
+               requirement: 8
             },
             {
                name: "introduction",
-               requirement: 10
-            },
-            {
-               name: "rumors",
                requirement: 15
             },
             {
-               name: "bomb",
+               name: "rumors",
                requirement: 20
+            },
+            {
+               name: "bomb",
+               requirement: 25
             }
          ];
          for (const letter of loremLetters) {
@@ -54,12 +54,6 @@ const Game = {
          for (const achievement of this.loremAchievements) {
             if (this.lorem >= achievement.requirements.lorem! && !achievement.isUnlocked) {
                unlockAchievement(achievement.id);
-               const notificationInfo = {
-                  iconSrc: "settings.png",
-                  title: achievement.name,
-                  description: achievement.description
-               };
-               createNotification(notificationInfo, false, true);
             }
          }
 
@@ -78,6 +72,15 @@ const Game = {
             this.loremAchievements.push(achievement);
          }
       }
+   },
+   _wordsTyped: 0,
+   get wordsTyped() {
+      return this._wordsTyped;
+   },
+   set wordsTyped(value) {
+      this._wordsTyped = value;
+
+      getElem("words-typed").innerHTML = `Words typed: ${this.wordsTyped}`;
    },
    timeAtLastSave: undefined as unknown as number,
    calculateIdleProfits: function(): void {
