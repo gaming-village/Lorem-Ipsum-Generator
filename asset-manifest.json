@@ -1,22 +1,28 @@
 {
   "files": {
-    "main.css": "/Lorem-Ipsum-Generator/static/css/main.e81cd457.chunk.css",
-    "main.js": "/Lorem-Ipsum-Generator/static/js/main.f86b07a6.chunk.js",
-    "main.js.map": "/Lorem-Ipsum-Generator/static/js/main.f86b07a6.chunk.js.map",
-    "runtime-main.js": "/Lorem-Ipsum-Generator/static/js/runtime-main.3def0070.js",
-    "runtime-main.js.map": "/Lorem-Ipsum-Generator/static/js/runtime-main.3def0070.js.map",
-    "static/js/2.72a3b890.chunk.js": "/Lorem-Ipsum-Generator/static/js/2.72a3b890.chunk.js",
-    "static/js/2.72a3b890.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/2.72a3b890.chunk.js.map",
-    "static/js/3.c790afcb.chunk.js": "/Lorem-Ipsum-Generator/static/js/3.c790afcb.chunk.js",
-    "static/js/3.c790afcb.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/3.c790afcb.chunk.js.map",
+    "main.css": "/Lorem-Ipsum-Generator/static/css/main.7db9a3d6.chunk.css",
+    "main.js": "/Lorem-Ipsum-Generator/static/js/main.245ec507.chunk.js",
+    "main.js.map": "/Lorem-Ipsum-Generator/static/js/main.245ec507.chunk.js.map",
+    "runtime-main.js": "/Lorem-Ipsum-Generator/static/js/runtime-main.03ba9638.js",
+    "runtime-main.js.map": "/Lorem-Ipsum-Generator/static/js/runtime-main.03ba9638.js.map",
+    "static/js/2.e1a4fd24.chunk.js": "/Lorem-Ipsum-Generator/static/js/2.e1a4fd24.chunk.js",
+    "static/js/2.e1a4fd24.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/2.e1a4fd24.chunk.js.map",
+    "static/js/3.2a6a3569.chunk.js": "/Lorem-Ipsum-Generator/static/js/3.2a6a3569.chunk.js",
+    "static/js/3.2a6a3569.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/3.2a6a3569.chunk.js.map",
     "index.html": "/Lorem-Ipsum-Generator/index.html",
-    "static/css/main.e81cd457.chunk.css.map": "/Lorem-Ipsum-Generator/static/css/main.e81cd457.chunk.css.map",
-    "static/js/2.72a3b890.chunk.js.LICENSE.txt": "/Lorem-Ipsum-Generator/static/js/2.72a3b890.chunk.js.LICENSE.txt"
+    "static/css/main.7db9a3d6.chunk.css.map": "/Lorem-Ipsum-Generator/static/css/main.7db9a3d6.chunk.css.map",
+    "static/js/2.e1a4fd24.chunk.js.LICENSE.txt": "/Lorem-Ipsum-Generator/static/js/2.e1a4fd24.chunk.js.LICENSE.txt",
+    "static/media/bliss.jpeg": "/Lorem-Ipsum-Generator/static/media/bliss.17ce657a.jpeg",
+    "static/media/bomb.jpeg": "/Lorem-Ipsum-Generator/static/media/bomb.d4116d80.jpeg",
+    "static/media/cubes.jpeg": "/Lorem-Ipsum-Generator/static/media/cubes.2b4a07f3.jpeg",
+    "static/media/garden.png": "/Lorem-Ipsum-Generator/static/media/garden.6f74bde7.png",
+    "static/media/honeycomb.jpeg": "/Lorem-Ipsum-Generator/static/media/honeycomb.31daa530.jpeg",
+    "static/media/start-icon.png": "/Lorem-Ipsum-Generator/static/media/start-icon.f8ea601f.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.3def0070.js",
-    "static/js/2.72a3b890.chunk.js",
-    "static/css/main.e81cd457.chunk.css",
-    "static/js/main.f86b07a6.chunk.js"
+    "static/js/runtime-main.03ba9638.js",
+    "static/js/2.e1a4fd24.chunk.js",
+    "static/css/main.7db9a3d6.chunk.css",
+    "static/js/main.245ec507.chunk.js"
   ]
 }
