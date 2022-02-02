@@ -35,6 +35,16 @@ const ACHIEVEMENTS: ReadonlyArray<Achievement> = [
       }
    },
    {
+      id: "MICRO_MANAGEMENT",
+      name: "Micro Management",
+      description: "Generate 10000 lorem.",
+      type: "tiered",
+      iconSrc: "save.png",
+      requirements: {
+         lorem: 10000
+      }
+   },
+   {
       id: "MICRO_TRANSACTIONS",
       name: "Micro Transactions",
       description: "Buy your first application.",

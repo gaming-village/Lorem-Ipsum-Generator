@@ -22,13 +22,53 @@ export interface LetterInfo {
    hashID?: number;
 }
 
+interface LoremLetter {
+   name: string;
+   requirement: number;
+}
+
+export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
+   {
+      name: "Tips with Lorem Corp",
+      requirement: 5
+   },
+   {
+      name: "Corporate Overview",
+      requirement: 10
+   },
+   {
+      name: "Steven Job - free An-Droid",
+      requirement: 15
+   },
+   {
+      name: "Addressing Rumors",
+      requirement: 30
+   },
+   {
+      name: "urgent Matters",
+      requirement: 75
+   },
+   {
+      name: "Social security issue !",
+      requirement: 200
+   },
+   {
+      name: "Order delivery",
+      requirement: 1000
+   },
+   {
+      name: "Government is here",
+      requirement: 3000
+   }
+];
+
 const LETTERS: ReadonlyArray<LetterInfo> = [
    {
       name: "introduction",
       subject: "Corporate Overview",
       from: "Lorem Corp",
       body: <>
-         <p>Greetings Worker #[[WORKER_NUMBER]].</p>
+         <p>Greetings Worker.</p>
          <p>By now you may have noticed the "Corporate Overview" button at the top of your virtual machine. Click it to see an overview of your position here at Lorem Corp, and your workers.</p>
          <p>Of course, being a worthless intern, you have no workers.</p>
          <p>May your lorem generation be filled with suffering.</p>
@@ -176,6 +216,46 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>feet</p>
       </>,
       folder: "deletedItems",
+      isCloseable: true
+   },
+   {
+      name: "socil",
+      subject: "Social security issue !",
+      from: "invalid.ASS.card@scamco.company.co",
+      body: <>
+         <p>Hello citezen,</p>
+         <p>your American Social Security (A.S.S) has expired and we will steal your lungs in 2-3 busines days.</p>
+         <p>To avoid this stealing, please give us your money.</p>
+         <p>I am apoligized for your inconvenience,,</p>
+      </>,
+      folder: "junkMail",
+      isCloseable: true
+   },
+   {
+      name: "aaa",
+      subject: "Order delivery",
+      from: "amzon.shipping@gmail.com",
+      body: <>
+         <p>Hello,</p>
+         <p>Amazon company has received 2 packages for you.</p>
+         <p><b>Order #25824823</b></p>
+         <p><b>Shipping method:</b> Death drones</p>
+         <p><b>Shipping preferences:</b> Throw my items at my door</p>
+         <p>If you believe that this order is an error, please give me your money.</p>
+      </>,
+      folder: "junkMail",
+      isCloseable: true
+   },
+   {
+      name: "aab",
+      subject: "Government is here",
+      from: "The Government",
+      body: <>
+         <p>Your fedral tax agreement <b>ID #1923829</b> has not been accepted.</p>
+         <p>If you don't not pay taxes, the IRS will eliminate you with Big gun.</p>
+         <p>Pelase cotnact this page if you are in a confusion.</p>
+      </>,
+      folder: "junkMail",
       isCloseable: true
    }
 ];

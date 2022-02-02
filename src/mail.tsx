@@ -1,7 +1,7 @@
 import React from "react";
 import Game from "./Game";
 import { createLineTrail, getElem, hashCode } from "./utils";
-import LETTERS, { LetterInfo, LetterReward } from "./data/letters-data";
+import LETTERS, { LetterInfo, LetterReward } from "./data/letter-data";
 import { createNotification } from "./notifications";
 import { switchView } from ".";
 
@@ -85,7 +85,6 @@ const getLetter = (letterInfo: LetterInfo): HTMLElement => {
    throw new Error(`Couldn't find a letter with a class of '.letter-${letterNumber}'.`);
 }
 const openInboxLetter = (letterInfo: LetterInfo, letterRef: HTMLElement | number): void => {
-   // const letter: HTMLElement = getElem("inbox").querySelector(`.letter-${letterNumber}`) as HTMLElement;
    let letter: HTMLElement;
    if (typeof letterRef === "number") {
       letter = getElem("inbox").querySelector(`.letter-${letterRef}`) as HTMLElement;
@@ -110,7 +109,7 @@ const openInboxLetter = (letterInfo: LetterInfo, letterRef: HTMLElement | number
 const createInboxLetter = (letterInfo: LetterInfo, letterNumber: number): JSX.Element => {
    const letterClass = `letter letter-${letterNumber}${!letterInfo.isOpened ? " unopened" : ""}${letterInfo === mail.currentLetter ? " opened" : ""}`;
    const imgSrc = require("./images/icons/letter.png").default;
-   
+
    const letter = <div onClick={() => openInboxLetter(letterInfo, letterNumber)} className={letterClass} key={letterNumber}>
       <div className="icon-container">
          <img src={imgSrc} alt="" />
@@ -241,10 +240,10 @@ let receiveMailEvent: Function;
 export function createMailReceiveEvent(func: Function): void {
    receiveMailEvent = func;
 }
-export function receiveMail(letterName: string): void {
+export function receiveMail(letterSubject: string): void {
    let letterInfo: LetterInfo = undefined as unknown as LetterInfo;
    for (const currentLetterInfo of LETTERS) {
-      if (currentLetterInfo.name === letterName) {
+      if (currentLetterInfo.subject === letterSubject) {
          letterInfo = currentLetterInfo;
          break;
       }
@@ -287,7 +286,7 @@ export function receiveMail(letterName: string): void {
 
 export function generateLetterHashes(): void {
    for (const letterInfo of LETTERS) {
-      const hash = hashCode(letterInfo.name);
+      const hash = hashCode(letterInfo.subject);
       letterInfo.hashID = hash;
    }
 }

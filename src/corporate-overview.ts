@@ -1,5 +1,6 @@
 import WORKERS, { Worker } from "./data/workers";
 import Game from "./Game";
+import { hasUpgrade } from "./upgrades";
 import { getElem, updateProgressBar, wait } from "./utils";
 
 export const loremCorp = {
@@ -31,6 +32,18 @@ export const loremCorp = {
          this.buyWorker(worker, cost);
       }
    },
+   buyMaxWorkers: function(worker: Worker): void {
+      let workerCount: number = this.getWorkerCount(worker);
+      while (true) {
+         const cost = this.getWorkerCost(worker, workerCount + 1);
+         if (this.canAffordWorker(cost)) {
+            this.buyWorker(worker, cost);
+            workerCount++;
+         } else {
+            break;
+         }
+      }
+   },
    getWorkerCost: function(worker: Worker, n: number): number {
       // $ = b * 1.1^n + (b/10 * n)
       // Gets the cost of the n-th worker
@@ -56,10 +69,43 @@ export const loremCorp = {
       }
       return total;
    },
+   getBaseWorkerProduction: function(worker: Worker): number {
+      let baseWorkerProduction = worker.loremProduction;
+
+      if (worker.name === "intern") {
+         if (hasUpgrade("Disciplinary Techniques")) {
+            let otherWorkerCount: number = 0;
+            this.workers.forEach((count, i) => {
+               const worker = WORKERS[i];
+               if (worker.name !== "intern") otherWorkerCount += count;
+            });
+   
+            baseWorkerProduction += 0.01 * otherWorkerCount;
+         }
+         
+         if (hasUpgrade("Intern Motivation")) {
+            baseWorkerProduction *= Game.motivation;
+         }
+      }
+
+      if (hasUpgrade("Corporate Heirarchy")) {
+         const workerIndex = WORKERS.indexOf(worker);
+         // If the worker is not the final worker
+         if (workerIndex < WORKERS.length - 1) {
+            const superiorCount = this.getWorkerCount(WORKERS[workerIndex + 1]);
+            baseWorkerProduction *= 1 + superiorCount * 0.1;
+         }
+      }
+
+      return baseWorkerProduction;
+   },
    getWorkerProduction: function(worker: Worker): number {
       const workerCount = this.getWorkerCount(worker);
       if (workerCount === undefined) return 0;
-      return workerCount * worker.loremProduction;
+
+      const totalWorkerProduction: number = workerCount * this.getBaseWorkerProduction(worker);
+
+      return totalWorkerProduction;
    },
    setup: function(): void {
       this.jobListeners[0]();
@@ -134,14 +180,17 @@ const switchPanel = async (name: string, button: HTMLElement) => {
 export function setupCorporateOverview(): void {
    const corporateOverview: HTMLElement = getElem("corporate-overview");
 
-   const homeButton: HTMLElement = (corporateOverview.querySelector(".home-button") as HTMLElement);
+   const homeButton: HTMLElement = corporateOverview.querySelector(".home-button") as HTMLElement;
    homeButton.addEventListener("click", () => switchPanel("home-panel", homeButton));
 
-   const upgradesButton: HTMLElement = (corporateOverview.querySelector(".upgrades-button") as HTMLElement);
+   const upgradesButton: HTMLElement = corporateOverview.querySelector(".upgrades-button") as HTMLElement;
    upgradesButton.addEventListener("click", () => switchPanel("upgrades-panel", upgradesButton));
 
    const packsButton = corporateOverview.querySelector(".lorem-packs-shop-button") as HTMLElement;
    packsButton.addEventListener("click", () => switchPanel("lorem-packs-shop-panel", packsButton));
+
+   const dictionaryButton = corporateOverview.querySelector(".dictionary-button") as HTMLElement;
+   dictionaryButton.addEventListener("click", () => switchPanel("dictionary-panel", dictionaryButton));
 
    // Open the home panel by default
    switchPanel("home-panel", homeButton);

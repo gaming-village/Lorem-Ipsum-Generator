@@ -4,7 +4,7 @@ import Game from "../Game";
 import preferences, { preferenceData } from "../programs/preferences";
 import { getCurrentTime, randInt } from "../utils";
 import ACHIEVEMENTS from "./achievements-data";
-import LETTERS, { LetterInfo } from "./letters-data";
+import LETTERS, { LetterInfo } from "./letter-data";
 import LOREM_PACKS from "./lorem-packs-data";
 import UPGRADES from "./upgrades-data";
 import WORKERS from "./workers";
@@ -144,7 +144,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
             const hash = Number(letterSaveData.split(":")[0]);
 
             // Find the letter info
-            let letterInfo: LetterInfo;
+            let letterInfo: LetterInfo = undefined as unknown as LetterInfo;
             for (const currentLetterInfo of LETTERS) {
                if (currentLetterInfo.hashID === hash) {
                   letterInfo = currentLetterInfo;
@@ -152,12 +152,15 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
                }
             }
 
-            const letterData = Number(letterSaveData.split(":")[1]).toString(2).split("").reverse();
-            if (letterInfo!) {
-               letterInfo.isReceived = !!Number(letterData[0]);
-               letterInfo.isOpened = !!Number(letterData[1]);
-               if (letterInfo.reward) {
-                  letterInfo.reward.isClaimed = !!Number(letterData[2]);
+            if (letterInfo) {
+               const letterData = Number(letterSaveData.split(":")[1]).toString(2).split("").reverse();
+               console.log(letterData);
+               if (letterInfo!) {
+                  letterInfo.isReceived = !!Number(letterData[0]);
+                  letterInfo.isOpened = !!Number(letterData[1]);
+                  if (letterInfo.reward) {
+                     letterInfo.reward.isClaimed = !!Number(letterData[2]);
+                  }
                }
             }
          }

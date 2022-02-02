@@ -40,7 +40,7 @@ const UPGRADES: ReadonlyArray<Upgrade> = [
    },
    {
       name: "Touch Typing",
-      description: "Increased chance to generate lorem when typing.",
+      description: "Chance to generate lorem when typing any character, not just words.",
       tier: 2,
       requirements: {
          lorem: 50,

@@ -27,6 +27,18 @@ const getWordFromCategory = (category: LoremCategory): string => {
    return randomWord.latin;
 }
 
+let currentSentenceStructure: SentenceStructure;
+let currentStructureReferences: { [key: number]: string } = {};
+
+const getWordWithName = (name: string): LoremWord => {
+   for (const pack of LOREM_PACKS) {
+      for (const word of pack.loremWords) {
+         if (word.latin === name) return word;
+      }
+   }
+   throw new Error(`Couldn't find a word by the name of '${name}'`);
+}
+
 const getRandomSentence = (): string => {
    // Get bought sentence structures
    const availablePacks = getAvailablePacks();
@@ -40,14 +52,25 @@ const getRandomSentence = (): string => {
    // Choose a random sentence structure
    const sentenceStructure = randItem(availableSentenceStructures);
 
+   currentSentenceStructure = sentenceStructure;
+
    // Fill the sentence structure
-   const sentence: string = sentenceStructure.reduce((previousValue: string, currentValue: string, i: number) => {
+   const sentence: string = sentenceStructure.structure.reduce((previousValue: string, currentValue: string, i: number) => {
+      const value = Object.entries(currentValue);
+
       let newWord: string;
-      if (Array.isArray(currentValue)) {
-         newWord = getWordFromCategory(currentValue[0]);
-      } else {
-         newWord = currentValue;
+      let wordMeaning: string;
+      if (Array.isArray(value[0][1])) {
+         newWord = getWordFromCategory(value[0][1][0] as unknown as LoremCategory);
+         wordMeaning = getWordWithName(newWord).meaning;
+   } else {
+         newWord = value[0][1];
+         wordMeaning = value[0][1];
+         wordMeaning = getWordWithName(newWord).meaning;
       }
+      
+      currentStructureReferences[Number(value[0][0])] = wordMeaning;
+
       if (i === 0) newWord = capitalise(newWord);
       return `${previousValue} ${newWord}`;
    }, "");
@@ -82,25 +105,68 @@ const findWord = (sentence: string, wordEndIndex: number): LoremWord => {
    throw new Error(`Could not find a reference to lorem word '${wordString}'`);
 }
 
+const getSentenceMeaning = (): string => {
+   const sentenceMeaning = currentSentenceStructure.meaning.reduce((previousValue, value) => {
+      let newValue: string;
+      if (!Number.isNaN(value)) {
+         // If a number
+         const word = currentStructureReferences[value as number];
+         newValue = word;
+      } else {
+         newValue = value as string;
+      }
+      return previousValue.concat(newValue as never);
+   }, []);
+
+   return sentenceMeaning.join(" ");
+}
+
+const createTextContainer = (): HTMLElement => {
+   const textContainer = document.createElement("span");
+   getElem("lorem-container").appendChild(textContainer);
+
+   
+
+   return textContainer as HTMLElement;
+}
+const createTextMeaning = (textContainer: HTMLElement, sentenceMeaning: string): void => {
+   // Create a tooltip containing the sentence's meaning on hover.
+   let tooltip: HTMLElement;
+   textContainer.addEventListener("mouseover", () => {
+      const bounds = textContainer.getBoundingClientRect();
+      const position = {
+         left: `${bounds.x}px`,
+         top: `${bounds.y}px`
+      };
+      tooltip = createTooltip(position, <p>{`${capitalise(sentenceMeaning)}.`}</p>);
+   });
+   textContainer.addEventListener("mouseout", () => {
+      if (tooltip) removeTooltip(tooltip);
+   });
+}
+
 let currentSentence: string = getRandomSentence();
+let currentTextContainer: HTMLElement; 
 let letterIndex = 0;
 let hasTyped: boolean = false;
 export function type(key: string): void {
-   // console.log(key);
    const loremContainer = getElem("lorem-container");
 
    if (!hasTyped) {
       loremContainer.innerHTML = "";
+      currentTextContainer = createTextContainer();
    }
    hasTyped = true;
 
    if (letterIndex >= currentSentence.length) {
+      createTextMeaning(currentTextContainer, getSentenceMeaning());
+      currentTextContainer = createTextContainer();
       currentSentence = getRandomSentence();
       letterIndex = 0;
    }
 
    const currentCharacter = currentSentence.split("")[letterIndex];
-   loremContainer.innerHTML += currentCharacter;
+   currentTextContainer.innerHTML += currentCharacter;
 
    const nextCharacter = currentSentence.split("")[letterIndex + 1];
    const NON_LETTER_CHARACTERS: ReadonlyArray<string> = [" ", "."];
@@ -114,8 +180,14 @@ export function type(key: string): void {
       Game.wordsTyped++;
    }
 
-   if (hasUpgrade("Mechanical Keyboard") && Math.random() < 0.1) {
-      const randomWorkerIndex = randInt(0, loremCorp.jobIndex + 1);
+   const RANDOM_LOREM_CHANCE: number = 0.3;
+   if (hasUpgrade("Touch Typing") && Math.random() < RANDOM_LOREM_CHANCE) {
+      Game.lorem += 0.15;
+   }
+
+   const WORKER_CREATION_CHANCE = 0.01;
+   if (hasUpgrade("Mechanical Keyboard") && Math.random() < WORKER_CREATION_CHANCE) {
+      const randomWorkerIndex = randInt(0, loremCorp.jobIndex);
       loremCorp.workers[randomWorkerIndex]++;
    }
 
@@ -149,7 +221,7 @@ const showPackPreview = (packInfo: LoremPack, pack: HTMLElement) => {
 
    let sentenceStructureList: Array<JSX.Element> = [];
    if (packInfo.sentenceStructures) sentenceStructureList = packInfo.sentenceStructures.map((sentenceStructure, i) => {
-      const template = sentenceStructure.reduce((previousValue, currentValue) => {
+      const template = sentenceStructure.structure.reduce((previousValue, currentValue) => {
          if (Array.isArray(currentValue)) return `${previousValue} [${currentValue.join("/")}]`;
          return `${previousValue} ${currentValue}`;
       }, "");
@@ -223,7 +295,7 @@ export function getPackElements(): ReadonlyArray<JSX.Element> {
       const pack = <div key={i} className={`lorem-pack lorem-pack-${i} ${packInfo.isBought ? "bought" : ""}`}>
          <div className="top-section">
             <img src={packImgSrc} alt="" />
-            <h2>{packInfo.name}</h2>
+            <h2>{packInfo.name} {packInfo.isBought ? <span>(UNLOCKED)</span> : ""}</h2>
          </div>
 
          {!packInfo.isBought ? <p className="text-box">Requires {packInfo.requirements.wordsTyped} words typed.</p> : ""}

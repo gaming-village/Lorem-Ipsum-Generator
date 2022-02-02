@@ -1,3 +1,9 @@
+#achievement-tracker .achievement-count {
+   margin-bottom: 0;
+}
+#achievement-tracker .motivation {
+   margin-top: 0;
+}
 #achievement-tracker .right-column {
    width: 100%;
 }

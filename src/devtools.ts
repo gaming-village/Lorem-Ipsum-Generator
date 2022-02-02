@@ -1,7 +1,7 @@
 import Game from "./Game";
 import "./css/devtools.css";
 import { getElem } from "./utils";
-import letters from "./data/letters-data";
+import letters from "./data/letter-data";
 import { receiveMail } from "./mail";
 
 const devtoolTabNames: string[] = ["resources", "mail", "data"];

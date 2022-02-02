@@ -63,9 +63,9 @@ const createApplicationTaskbarReference = (application: ApplicationInfo) => {
    });
 }
 export function setupApplications() {
-   for (const application of Object.values(applications)) {
+   for (const applicationInfo of Object.values(applications)) {
       try {
-         const applicationScript = require(`./applications/${application.containerID}`).default;
+         const applicationScript = require(`./applications/${applicationInfo.containerID}`).default;
 
          if (applicationScript.hasOwnProperty("setup")) {
             applicationScript.setup();
@@ -73,19 +73,23 @@ export function setupApplications() {
       } catch {}
 
       // Create the taskbar application references
-      if (application.isUnlocked) {
-         createApplicationTaskbarReference(application);
+      if (applicationInfo.isUnlocked) {
+         createApplicationTaskbarReference(applicationInfo);
       }
 
       // Opens all previously opened applications
-      if (application.isOpened) {
-         openApplication(application);
+      if (applicationInfo.isOpened) {
+         openApplication(applicationInfo);
       }
 
       // Drag functionality
-      const element: HTMLElement = getElem(application.containerID);
-      const titleBar: HTMLElement = (element.querySelector(".title-bar") as HTMLElement);
-      dragElem(element, titleBar);
+      const application: HTMLElement = getElem(applicationInfo.containerID);
+      const titleBar: HTMLElement = (application.querySelector(".title-bar") as HTMLElement);
+      dragElem(application, titleBar);
+
+      // Minimise button functionality
+      const minimiseButton = application.querySelector(".ui-minimize");
+      if (minimiseButton) minimiseButton.addEventListener("click", () => closeApplication(applicationInfo));
    }
 }
 export function openApplication(application: ApplicationInfo) {
