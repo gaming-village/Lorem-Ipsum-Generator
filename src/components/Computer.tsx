@@ -8,7 +8,7 @@ const Computer = () => {
    return (
       <div id="computer" className="view">
          <div id="lorem-container">
-            <span>(Type to generate lorem)</span>
+            <span className="instruction">(Type to generate lorem)</span>
          </div>
 
          <Program title="lorem_counter.gov" hasMinimizeButton={false} id="lorem-counter" className="hidden">
@@ -48,6 +48,7 @@ const Computer = () => {
                <div className="left-column">
                   <h2>Overview</h2>
                   <p className="achievement-count">Achievements: 0/??? <i>(0%)</i></p>
+                  <p className="motivation"></p>
 
                   <h2>View Mode</h2>
                   <p className="caption">How the achievements are displayed.</p>

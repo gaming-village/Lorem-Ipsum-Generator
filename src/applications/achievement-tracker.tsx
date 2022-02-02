@@ -1,4 +1,5 @@
-import achievements, { Achievement } from "../data/achievements-data";
+import ACHIEVEMENTS, { Achievement } from "../data/achievements-data";
+import Game from "../Game";
 import { createNotification } from "../notifications";
 import { beautify, getElem, roundNum } from "../utils";
 
@@ -49,19 +50,19 @@ const viewOptions: Array<ViewOption> = [
 
 const getAchievementCount = (): number => {
    let count = 0;
-   for (const achievement of achievements) {
+   for (const achievement of ACHIEVEMENTS) {
       if (achievement.isUnlocked) count++;
    }
    return count;
 }
 const updateAchievementCount = (): void => {
    const achievementCount = getAchievementCount();
-   const progress = roundNum(achievementCount / achievements.length * 100);
-   getElem("achievement-tracker").querySelector(".achievement-count")!.innerHTML = `Achievements: ${achievementCount}/${achievements.length} <i>(${progress}%)</i>`;
+   const progress = roundNum(achievementCount / ACHIEVEMENTS.length * 100);
+   getElem("achievement-tracker").querySelector(".achievement-count")!.innerHTML = `Achievements: ${achievementCount}/${ACHIEVEMENTS.length} <i>(${progress}%)</i>`;
 }
 
 const findAchievement = (name: string): Achievement | null => {
-   for (const achievement of achievements) {
+   for (const achievement of ACHIEVEMENTS) {
       if (achievement.id === name) return achievement;
    }
    return null;
@@ -76,6 +77,8 @@ export function unlockAchievement(name: string): void {
    achievement.isUnlocked = true;
    achievementTracker.updateAchievements("normal");
 
+   Game.motivation = ACHIEVEMENTS.filter(achievement => achievement.isUnlocked).length;
+
    const notificationInfo = {
       iconSrc: "settings.png",
       title: achievement.name,
@@ -83,6 +86,8 @@ export function unlockAchievement(name: string): void {
       caption: "New achievement!"
    };
    createNotification(notificationInfo, false, true);
+
+   Game.updateMotivation();
 }
 
 const achievementTracker = {
@@ -132,12 +137,12 @@ const achievementTracker = {
 
       switch (type) {
          case "default": {
-            return achievements.slice();
+            return ACHIEVEMENTS.slice();
          }
          case "category": {
             const filteredAchievements: { [key: string]: Array<Achievement> } = {};
 
-            for (const achievement of achievements) {
+            for (const achievement of ACHIEVEMENTS) {
                if (!filteredAchievements.hasOwnProperty(achievement.type)) {
                   filteredAchievements[achievement.type] = [ achievement ];
                } else {
@@ -164,7 +169,7 @@ const achievementTracker = {
                unlocked: [] as Array<Achievement>
             };
 
-            for (const achievement of achievements) {
+            for (const achievement of ACHIEVEMENTS) {
                filteredAchievements[achievement.isUnlocked ? "unlocked" : "locked"].push(achievement);
             }
 
@@ -193,7 +198,7 @@ const achievementTracker = {
       return displayArray;
    },
    updateAchievements: function(displayType: "compact" | "normal") {
-      for (const info of achievements) {
+      for (const info of ACHIEVEMENTS) {
          const achievement = achievementReferences[info.id];
          
          switch (displayType) {
@@ -238,7 +243,7 @@ const achievementTracker = {
       achievementReferences[info.id] = achievement;
    },
    createAchievements: function() {
-      for (const achievementInfo of achievements) {
+      for (const achievementInfo of ACHIEVEMENTS) {
          this.createAchievement(achievementInfo);
       }
    },
@@ -318,7 +323,7 @@ const achievementTracker = {
       searchField.addEventListener("input", () => {
          const value = searchField.value.toLowerCase();
 
-         const displayArray = achievements.filter(achievement => {
+         const displayArray = ACHIEVEMENTS.filter(achievement => {
             return achievement.name.toLowerCase().includes(value) || achievement.description.toLowerCase().includes(value);
          });
          this.displayAchievements(displayArray);
@@ -338,6 +343,8 @@ const achievementTracker = {
       this.setupSearchInput();
 
       updateAchievementCount();
+
+      Game.updateMotivation();
    }
 }
 

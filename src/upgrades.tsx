@@ -56,6 +56,10 @@ const buyUpgrade = (upgradeInfo: Upgrade, upgradeID: number): void => {
    const buyButton = upgrade.querySelector("button")!;
    buyButton.classList.add("dark");
    buyButton.innerHTML = "Bought";
+
+   if (upgradeInfo.name === "Intern Motivation") {
+      Game.updateMotivation();
+   }
 }
 
 const createRequirementsString = (upgradeInfo: Upgrade): string => { 

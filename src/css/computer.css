@@ -19,8 +19,11 @@
    left: 50%;
    transform: translateX(-50%);
 }
-#lorem-container span {
+#lorem-container .instruction {
    text-align: center;
    font-style: italic;
    display: block;
+}
+#lorem-container span:not(.instruction) {
+   cursor: help;
 }

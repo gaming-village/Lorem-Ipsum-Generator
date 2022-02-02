@@ -2,7 +2,7 @@ export type WORKER_NAMES = "intern" | "employee" | "manager" | "executive";
 
 export interface Worker {
    readonly name: WORKER_NAMES;
-   readonly salary: number;
+   readonly salary: number | string;
    readonly requirements: {
       readonly lorem: number;
    }
@@ -16,7 +16,7 @@ export interface Worker {
 const WORKERS: ReadonlyArray<Worker> = [
    {
       name: "intern",
-      salary: 0,
+      salary: "N/A",
       requirements: {
          lorem: 0
       },
@@ -36,19 +36,19 @@ const WORKERS: ReadonlyArray<Worker> = [
          lorem: 50,
          workforce: 2
       },
-      loremProduction: 10
+      loremProduction: 0.2
    },
    {
       name: "manager",
       salary: 50000,
       requirements: {
-         lorem: 500
+         lorem: 250
       },
       costs: {
          lorem: 60,
          workforce: 3
       },
-      loremProduction: 10
+      loremProduction: 1
    },
    {
       name: "executive",

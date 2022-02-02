@@ -63,30 +63,43 @@ const createApplicationTaskbarReference = (application: ApplicationInfo) => {
    });
 }
 export function setupApplications() {
-   for (const application of Object.values(applications)) {
-      try {
-         const applicationScript = require(`./applications/${application.containerID}`).default;
+   const applicationScriptNames: ReadonlyArray<string> = ["LoremCounter"];
 
-         if (applicationScript.hasOwnProperty("setup")) {
-            applicationScript.setup();
-         }
-      } catch {}
-
-      // Create the taskbar application references
-      if (application.isUnlocked) {
-         createApplicationTaskbarReference(application);
-      }
-
-      // Opens all previously opened applications
-      if (application.isOpened) {
-         openApplication(application);
-      }
-
-      // Drag functionality
-      const element: HTMLElement = getElem(application.containerID);
-      const titleBar: HTMLElement = (element.querySelector(".title-bar") as HTMLElement);
-      dragElem(element, titleBar);
+   for (const info of applicationScriptNames) {
+      const applicationClass = require("./classes/applications/" + info).default;
+      console.log(applicationClass);
+      const application = new applicationClass();
+      console.log(application);
    }
+
+   // for (const applicationInfo of Object.values(applications)) {
+   //    try {
+   //       const applicationScript = require(`./applications/${applicationInfo.containerID}`).default;
+
+   //       if (applicationScript.hasOwnProperty("setup")) {
+   //          applicationScript.setup();
+   //       }
+   //    } catch {}
+
+   //    // Create the taskbar application references
+   //    if (applicationInfo.isUnlocked) {
+   //       createApplicationTaskbarReference(applicationInfo);
+   //    }
+
+   //    // Opens all previously opened applications
+   //    if (applicationInfo.isOpened) {
+   //       openApplication(applicationInfo);
+   //    }
+
+   //    // Drag functionality
+   //    const application: HTMLElement = getElem(applicationInfo.containerID);
+   //    const titleBar: HTMLElement = (application.querySelector(".title-bar") as HTMLElement);
+   //    dragElem(application, titleBar);
+
+   //    // Minimise button functionality
+   //    const minimiseButton = application.querySelector(".ui-minimize");
+   //    if (minimiseButton) minimiseButton.addEventListener("click", () => closeApplication(applicationInfo));
+   // }
 }
 export function openApplication(application: ApplicationInfo) {
    application.isOpened = true;

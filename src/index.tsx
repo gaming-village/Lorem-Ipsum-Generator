@@ -107,12 +107,15 @@ window.onload = () => {
    setupDevtools();
 };
 
-let keysDown: number[] = [];
+let keysDown: Array<string> = [];
 document.addEventListener("keydown", event => {
-   const keyCode: number = event.keyCode;
+   const key = event.key;
+
+   const ALL_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+   const ALL_LOREM_CHARS = ALL_LETTERS.concat([" "]);
 
    // When ` is pressed, open the devtools
-   if (keyCode === 192 && process.env.NODE_ENV === "development") {
+   if (key === "`" && process.env.NODE_ENV === "development") {
       if (devtoolsIsOpen()) {
          hideDevtools();
       } else {
@@ -120,20 +123,24 @@ document.addEventListener("keydown", event => {
       }
    }
 
+   // Close focus when the Escape key is pressed
+   if (key === "Escape" && Game.isInFocus) {
+      Game.maskClickEvent!();
+   }
+
    // If the input is a number from 1-9 (keycodes 49-57) and the command key isn't held and the view exists
-   if (keyCode >= 49 && keyCode <= 57 && !event.metaKey && keyCode - 49 < viewNames.length) {
-      switchView(viewNames[keyCode - 49]);
+   const VIEW_NUMS = "123456789".split("");
+   if (VIEW_NUMS.includes(key) && Number(key) <= viewNames.length && !event.metaKey) {
+      switchView(viewNames[Number(key) - 1]);
    }
 
    // When any letter key or the space bar is pressed
-   if (((keyCode >= 65 && keyCode <= 90) || keyCode === 32) && !keysDown.includes(keyCode)) {
-      keysDown.push(keyCode)
-      const key = String.fromCharCode(keyCode)
-      // typeLorem(key);
+   if (ALL_LOREM_CHARS.includes(key) && !keysDown.includes(key)) {
+      keysDown.push(key)
       type(key);
    }
 });
 document.addEventListener("keyup", function(event) {
-   const keyCode: number = event.keyCode;
-   keysDown.splice(keysDown.indexOf(keyCode), 1);
+   const key = event.key;
+   keysDown.splice(keysDown.indexOf(key), 1);
 });

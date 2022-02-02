@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../css/corporate-overview.css";
 import Button from "./Button";
-import CorporatePanel from "./CorporatePanel";
 import Program from "./Program";
 import { loremCorp, switchJSXPanel } from "../corporate-overview";
 import { beautify, getPrefix, roundNum } from "../utils";
@@ -10,6 +9,19 @@ import ProgressBar from "./ProgressBar";
 import WORKERS, { Worker } from "../data/workers";
 import { getUpgrades } from "../upgrades";
 import { getPackElements } from "../lorem-production";
+import ButtonContainer from "./ButtonContainer";
+
+interface CorporatePanelProps {
+   className?: string;
+   children: JSX.Element;
+}
+const CorporatePanel = (props: CorporatePanelProps) => {
+   return (
+      <div className={`panel-container hidden ${props.className}`}>
+         {props.children}
+      </div>
+   )
+}
 
 const CorporateOverview = () => {
    const [job, setJob] = useState(WORKERS[0]);
@@ -36,6 +48,7 @@ const CorporateOverview = () => {
 
       const workerCount = loremCorp.workers[WORKERS.indexOf(worker)];
       const workerProduction = loremCorp.getWorkerProduction(worker);
+      const baseWorkerProduction = loremCorp.getBaseWorkerProduction(worker);
 
       const workerType: string = beautify(worker.name);
       const workerName: string = beautify(worker.name, workerCount);
@@ -49,7 +62,7 @@ const CorporateOverview = () => {
 
                   <p>You have {workerCount} {workerName} producing {roundNum(workerProduction)} lorem every second.</p>
 
-                  <p>Each {workerType} produces {worker.loremProduction} lorem.</p>
+                  <p>Each {workerType} produces {roundNum(baseWorkerProduction)} lorem.</p>
                </>
             </Program>
 
@@ -57,30 +70,37 @@ const CorporateOverview = () => {
                <>
                   <h2>Costs</h2>
 
-                  <div className="left">
-                     <List>
-                        <>
-                        {Object.keys(worker.costs).map((costType, i) => {
-                           return <li key={i}>{beautify(costType)}</li>
-                        })}
-                        </>
-                     </List>
-                  </div>
-                  <div className="right">
-                     <List hasBulletPoints={false}>
-                        <>
-                        {Object.values(worker.costs).map((cost, i) => {
-                           if (i === 0) {
-                              const workerCost = loremCorp.getWorkerCost(worker, workerCount + 1);
-                              return <li key={i}>{roundNum(workerCost)}</li>
-                           }
-                           return <li key={i}>{cost}</li>
-                        })}
-                        </>
-                     </List>
+                  <div className="cf">
+                     <div className="left">
+                        <List>
+                           <>
+                           {Object.keys(worker.costs).map((costType, i) => {
+                              return <li key={i}>{beautify(costType)}</li>
+                           })}
+                           </>
+                        </List>
+                     </div>
+                     <div className="right">
+                        <List hasBulletPoints={false}>
+                           <>
+                           {Object.values(worker.costs).map((cost, i) => {
+                              if (i === 0) {
+                                 const workerCost = loremCorp.getWorkerCost(worker, workerCount + 1);
+                                 return <li key={i}>{roundNum(workerCost)}</li>
+                              }
+                              return <li key={i}>{cost}</li>
+                           })}
+                           </>
+                        </List>
+                     </div>
                   </div>
 
-                  <Button onClick={() => loremCorp.attemptToBuyWorker(worker)} text="Buy" isCentered={true} />
+                  <ButtonContainer>
+                     <>
+                     <Button onClick={() => loremCorp.attemptToBuyWorker(worker)} text="Buy" />
+                     <Button onClick={() => loremCorp.buyMaxWorkers(worker)} text="Buy Max" />
+                     </>
+                  </ButtonContainer>
                </>
             </Program>
          </>
@@ -95,16 +115,18 @@ const CorporateOverview = () => {
       <div id="corporate-overview" className="view">
          <div className="left-bar">
             <h2>Career Information</h2>
-            <p>Position: Intern</p>
-            <p>Salary: N/A</p>
+            <p className="lorem-count">Lorem:</p>
+            <p>Lorem/s: {roundNum(loremCorp.getTotalWorkerProduction())}</p>
             <p id="words-typed">Words typed: 0</p>
+            <p>Position: Intern</p>
+            <p>Salary: {job.salary}</p>
 
             <h2>Main</h2>
             <Button className="home-button dark" text="Home" />
             <Button className="upgrades-button dark" text="Upgrades" />
 
             <h2>Lorem Packs</h2>
-            <Button className="lorem-packs-shop-button dark" text="Shop" />
+            <Button className="lorem-packs-shop-button dark" text="Browse" />
             <Button className="dictionary-button dark" text="Dictionary" />
 
             {jobButtons.length > 0 ? <h2>Subordinates</h2> : ""}
@@ -196,6 +218,10 @@ const CorporateOverview = () => {
                      {getPackElements()}
                   </>
                </Program>
+            </CorporatePanel>
+
+            <CorporatePanel className="dictionary-panel">
+               <p>Test</p>
             </CorporatePanel>
 
             {jobPanels}

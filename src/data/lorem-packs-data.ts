@@ -1,12 +1,21 @@
 export type LoremCategory = "noun" | "pronoun" | "verb" | "preposition" | "adjective";
 type LoremSubcategory = "place" | "person";
-export type SentenceStructure = ReadonlyArray<ReadonlyArray<LoremCategory | LoremSubcategory> | string>;
 
 export interface LoremWord {
    readonly latin: string;
    readonly category: LoremCategory;
+   readonly subcategory?: LoremSubcategory;
    readonly meaning: string;
    readonly value: number;
+}
+
+interface StructurePart {
+   [key: number]: string | Array<string>;
+}
+
+export interface SentenceStructure {
+   structure: ReadonlyArray<StructurePart>;
+   meaning: ReadonlyArray<number | string>;
 }
 
 interface PackRequirements {
@@ -43,7 +52,10 @@ const LOREM_PACKS: ReadonlyArray<LoremPack> = [
          }
       ],
       sentenceStructures: [
-         [["noun"], ["pronoun"]]
+         {
+            structure: [{1: ["noun"]}, {2: ["pronoun"]}],
+            meaning: [1, 2]
+         }
       ],
       requirements: {
          wordsTyped: 0
@@ -81,8 +93,14 @@ const LOREM_PACKS: ReadonlyArray<LoremPack> = [
          }
       ],
       sentenceStructures: [
-         [["noun"], ["adjective"], "est"],
-         [["noun"], "in", ["pronoun"], ["verb"]]
+         {
+            structure: [{1: ["noun"]}, {2: ["adjective"]}, {3: "est"}],
+            meaning: [1, 3, 2]
+         },
+         {
+            structure: [{1: ["pronoun"]}, {2: "in"}, {3: ["noun"]}, {4: ["verb"]}],
+            meaning: [1, "is", 4, 2, 3]
+         }
       ],
       requirements: {
          wordsTyped: 50
@@ -126,13 +144,13 @@ const LOREM_PACKS: ReadonlyArray<LoremPack> = [
          {
             latin: "laboro",
             category: "verb",
-            meaning: "I work",
+            meaning: "work",
             value: 0.5
          },
          {
             latin: "dormo",
             category: "verb",
-            meaning: "I sleep",
+            meaning: "sleep",
             value: 0.5
          }
       ],

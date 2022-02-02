@@ -5,13 +5,18 @@ import { receiveMail } from "./mail";
 import { createNotification } from "./notifications";
 import achievements, { Achievement } from "./data/achievements-data";
 import { unlockAchievement } from "./applications/achievement-tracker";
+import { LOREM_LETTERS } from "./data/letter-data";
+import ACHIEVEMENTS from "./data/achievements-data";
+import { hasUpgrade } from "./upgrades";
+import Application from "./classes/applications/Application";
 
 const Game = {
    ticks: 0,
    tps: 10,
    // TODO: set this to lorem num when the game loads
    previousLorem: 0,
-   loremAchievements: [] as Array<Achievement>,
+   loremAchievements: new Array<Achievement>(),
+   applications: new Array<Application>(),
    tick: function(): void {
       this.ticks++;
 
@@ -23,29 +28,7 @@ const Game = {
       if (this.previousLorem !== this.lorem) {
          const loremDiff: number = this.lorem - this.previousLorem;
 
-         const loremLetters: { name: string, requirement: number }[] = [
-            {
-               name: "loremTips",
-               requirement: 4
-            },
-            {
-               name: "freeIPhone",
-               requirement: 8
-            },
-            {
-               name: "introduction",
-               requirement: 15
-            },
-            {
-               name: "rumors",
-               requirement: 20
-            },
-            {
-               name: "bomb",
-               requirement: 25
-            }
-         ];
-         for (const letter of loremLetters) {
+         for (const letter of LOREM_LETTERS) {
             if (this.lorem >= letter.requirement) {
                receiveMail(letter.name);
             }
@@ -71,6 +54,15 @@ const Game = {
          if (Object.keys(achievement.requirements).includes("lorem")) {
             this.loremAchievements.push(achievement);
          }
+      }
+   },
+   motivation: 0,
+   updateMotivation: function(): void {
+      const unlockedAchievementCount = ACHIEVEMENTS.filter(achievement => achievement.isUnlocked).length;
+      this.motivation = Math.pow(unlockedAchievementCount, 0.8);
+
+      if (hasUpgrade("Intern Motivation")) {  
+         getElem("achievement-tracker").querySelector(".motivation")!.innerHTML = `Motivation: ${roundNum(this.motivation)}`;
       }
    },
    _wordsTyped: 0,
@@ -100,8 +92,13 @@ const Game = {
    },
    lorem: 0 as number,
    updateLorem: function(): void {
-      const loremCounterText = getElem("lorem-counter")?.querySelector(".lorem-count");
-      if (loremCounterText) loremCounterText.innerHTML = roundNum(this.lorem, 2).toString();
+      const loremCountDisplay = roundNum(this.lorem).toString();
+
+      const loremCounterText = getElem("lorem-counter").querySelector(".lorem-count");
+      if (loremCounterText) loremCounterText.innerHTML = loremCountDisplay;
+
+      const corporateOverviewCounter = getElem("corporate-overview").querySelector(".lorem-count");
+      if (corporateOverviewCounter) corporateOverviewCounter.innerHTML = `Lorem: ${loremCountDisplay}`;
 
       loremCorp.updatePromotionProgress();
    },
