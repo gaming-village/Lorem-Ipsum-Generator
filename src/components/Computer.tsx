@@ -15,7 +15,7 @@ const Computer = () => {
             <span className="lorem-count"></span>
          </Program>
 
-         <Program title="Preferences" id="preferences" className="hidden">
+         <Program title="Preferences" id="preferences" className="hidden" hasMinimizeButton={false}>
             <>
                <h2>Background Image</h2>
 
@@ -37,13 +37,13 @@ const Computer = () => {
             </>
          </Program>
 
-         <Program title="Application Shop" id="application-shop" className="hidden">
+         <Program title="Application Shop" id="application-shop" className="hidden" hasMinimizeButton={false}>
             <>
                <p>Purchase applications to enchance your productivity here at Lorem Corp.</p>
             </>
          </Program>
 
-         <Program title="Achievement Tracker" id="achievement-tracker" className="hidden">
+         <Program title="Achievement Tracker" id="achievement-tracker" className="hidden" hasMinimizeButton={false}>
             <div className="formatter">
                <div className="left-column">
                   <h2>Overview</h2>
@@ -69,7 +69,7 @@ const Computer = () => {
             </div>
          </Program>
 
-         <Program title="Intern Enhancement Program" id="intern-enhancement-program" className="hidden">
+         <Program title="Intern Enhancement Program" id="intern-enhancement-program" className="hidden" hasMinimizeButton={false}>
             <>
                <p>enhance ur interns here!11!1</p>
 

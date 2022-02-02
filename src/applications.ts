@@ -1,4 +1,4 @@
-import { dragElem, getElem } from "./utils";
+import { getElem } from "./utils";
 import "./css/applications.css";
 
 export interface ApplicationInfo {
@@ -62,14 +62,13 @@ const createApplicationTaskbarReference = (application: ApplicationInfo) => {
       application.isOpened ? closeApplication(application) : openApplication(application);
    });
 }
-export function setupApplications() {
-   const applicationScriptNames: ReadonlyArray<string> = ["LoremCounter"];
 
-   for (const info of applicationScriptNames) {
-      const applicationClass = require("./classes/applications/" + info).default;
-      console.log(applicationClass);
-      const application = new applicationClass();
-      console.log(application);
+export function setupApplications() {
+   const fileNames: ReadonlyArray<string> = ["LoremCounter", "AchievementTracker"];
+
+   for (const fileName of fileNames) {
+      const applicationClass = require("./classes/applications/" + fileName).default;
+      new applicationClass();
    }
 
    // for (const applicationInfo of Object.values(applications)) {

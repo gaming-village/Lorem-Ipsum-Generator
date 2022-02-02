@@ -5,8 +5,9 @@ interface ProgramProps {
    title: string;
    titleStyle?: string;
    titleIconSrc?: string;
-   hasMinimizeButton?: any;
-   isDraggable?: any;
+   hasMinimizeButton: boolean;
+   minimizeFunc?: () => void;
+   isDraggable?: boolean;
    id?: string;
    className?: string;
    children?: JSX.Element;
@@ -24,7 +25,7 @@ const defaultProps: ProgramProps = {
 const Program: React.FunctionComponent<ProgramProps> = (props: ProgramProps) => {
    return (
       <div id={props.id} className={`windows-program ${props.className}`}>
-         <TitleBar titleIconSrc={props.titleIconSrc} titleStyle={props.titleStyle} title={props.title} hasMinimizeButton={props.hasMinimizeButton} isDraggable={props.isDraggable} />
+         <TitleBar minimizeFunc={props.minimizeFunc} titleIconSrc={props.titleIconSrc} titleStyle={props.titleStyle} title={props.title} hasMinimizeButton={props.hasMinimizeButton} isDraggable={props.isDraggable || false} />
          {props.children}
       </div>
    )

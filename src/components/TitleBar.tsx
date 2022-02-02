@@ -6,6 +6,7 @@ interface TitleBarProps {
    titleStyle?: string;
    titleIconSrc?: string;
    hasMinimizeButton: boolean;
+   minimizeFunc?: () => void;
    isDraggable: boolean;
 }
 
@@ -24,7 +25,7 @@ const TitleBar = (props: TitleBarProps) => {
          <span>{props.title}</span>
 
          {props.hasMinimizeButton ?
-         <UIButton type="minimize" />
+         <UIButton onClick={props.minimizeFunc} type="minimize" />
          : ""}
       </div>
    )

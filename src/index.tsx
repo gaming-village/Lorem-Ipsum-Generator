@@ -75,13 +75,13 @@ window.onload = () => {
       updateViewSizes();
    });
 
+   setupApplications();
+
    // Set up the tick shenanigans
    setInterval(() => Game.tick(), 1000 / Game.tps);
 
    // Display the lorem count everywhere
    Game.updateLorem();
-
-   setupApplications();
 
    setupStartMenu();
 

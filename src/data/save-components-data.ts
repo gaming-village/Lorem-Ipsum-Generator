@@ -154,7 +154,6 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
 
             if (letterInfo) {
                const letterData = Number(letterSaveData.split(":")[1]).toString(2).split("").reverse();
-               console.log(letterData);
                if (letterInfo!) {
                   letterInfo.isReceived = !!Number(letterData[0]);
                   letterInfo.isOpened = !!Number(letterData[1]);

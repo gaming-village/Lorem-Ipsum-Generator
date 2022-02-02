@@ -11,7 +11,7 @@ import ButtonContainer from "./components/ButtonContainer";
 function App() {
    return (
       <>
-         <Program id="devtools" className="hidden" title="Devtools" titleIconSrc={require("./images/icons/settings.png").default}>
+         <Program id="devtools" className="hidden" title="Devtools" titleIconSrc={require("./images/icons/settings.png").default} hasMinimizeButton={false}>
             <>
                <h2 className="resources">Resources</h2>
 

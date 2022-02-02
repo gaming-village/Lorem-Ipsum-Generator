@@ -8,7 +8,6 @@ import { unlockAchievement } from "./applications/achievement-tracker";
 import { LOREM_LETTERS } from "./data/letter-data";
 import ACHIEVEMENTS from "./data/achievements-data";
 import { hasUpgrade } from "./upgrades";
-import Application from "./classes/applications/Application";
 
 const Game = {
    ticks: 0,
@@ -16,7 +15,8 @@ const Game = {
    // TODO: set this to lorem num when the game loads
    previousLorem: 0,
    loremAchievements: new Array<Achievement>(),
-   applications: new Array<Application>(),
+   applications: {} as { [key: string]: any },
+   programs: {} as { [key: string]: any },
    tick: function(): void {
       this.ticks++;
 
@@ -92,6 +92,11 @@ const Game = {
    },
    lorem: 0 as number,
    updateLorem: function(): void {
+      const loremCounterUpdateFunc = this.applications.loremCounter.updateLoremCount;
+      if (typeof loremCounterUpdateFunc !== "undefined") {
+         loremCounterUpdateFunc(this.lorem);
+      }
+
       const loremCountDisplay = roundNum(this.lorem).toString();
 
       const loremCounterText = getElem("lorem-counter").querySelector(".lorem-count");

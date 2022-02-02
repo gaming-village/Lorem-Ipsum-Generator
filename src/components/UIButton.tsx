@@ -1,8 +1,8 @@
-import React, { MouseEventHandler } from "react";
+import React from "react";
 
 interface UIButtonProps {
    type: "close" | "minimize";
-   onClick?: MouseEventHandler;
+   onClick?: () => void;
    isClickable?: boolean;
 }
 
