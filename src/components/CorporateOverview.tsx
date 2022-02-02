@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../css/corporate-overview.css";
 import Button from "./Button";
-import CorporatePanel from "./CorporatePanel";
 import Program from "./Program";
 import { loremCorp, switchJSXPanel } from "../corporate-overview";
 import { beautify, getPrefix, roundNum } from "../utils";
@@ -11,6 +10,18 @@ import WORKERS, { Worker } from "../data/workers";
 import { getUpgrades } from "../upgrades";
 import { getPackElements } from "../lorem-production";
 import ButtonContainer from "./ButtonContainer";
+
+interface CorporatePanelProps {
+   className?: string;
+   children: JSX.Element;
+}
+const CorporatePanel = (props: CorporatePanelProps) => {
+   return (
+      <div className={`panel-container hidden ${props.className}`}>
+         {props.children}
+      </div>
+   )
+}
 
 const CorporateOverview = () => {
    const [job, setJob] = useState(WORKERS[0]);

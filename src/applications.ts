@@ -63,34 +63,43 @@ const createApplicationTaskbarReference = (application: ApplicationInfo) => {
    });
 }
 export function setupApplications() {
-   for (const applicationInfo of Object.values(applications)) {
-      try {
-         const applicationScript = require(`./applications/${applicationInfo.containerID}`).default;
+   const applicationScriptNames: ReadonlyArray<string> = ["LoremCounter"];
 
-         if (applicationScript.hasOwnProperty("setup")) {
-            applicationScript.setup();
-         }
-      } catch {}
-
-      // Create the taskbar application references
-      if (applicationInfo.isUnlocked) {
-         createApplicationTaskbarReference(applicationInfo);
-      }
-
-      // Opens all previously opened applications
-      if (applicationInfo.isOpened) {
-         openApplication(applicationInfo);
-      }
-
-      // Drag functionality
-      const application: HTMLElement = getElem(applicationInfo.containerID);
-      const titleBar: HTMLElement = (application.querySelector(".title-bar") as HTMLElement);
-      dragElem(application, titleBar);
-
-      // Minimise button functionality
-      const minimiseButton = application.querySelector(".ui-minimize");
-      if (minimiseButton) minimiseButton.addEventListener("click", () => closeApplication(applicationInfo));
+   for (const info of applicationScriptNames) {
+      const applicationClass = require("./classes/applications/" + info).default;
+      console.log(applicationClass);
+      const application = new applicationClass();
+      console.log(application);
    }
+
+   // for (const applicationInfo of Object.values(applications)) {
+   //    try {
+   //       const applicationScript = require(`./applications/${applicationInfo.containerID}`).default;
+
+   //       if (applicationScript.hasOwnProperty("setup")) {
+   //          applicationScript.setup();
+   //       }
+   //    } catch {}
+
+   //    // Create the taskbar application references
+   //    if (applicationInfo.isUnlocked) {
+   //       createApplicationTaskbarReference(applicationInfo);
+   //    }
+
+   //    // Opens all previously opened applications
+   //    if (applicationInfo.isOpened) {
+   //       openApplication(applicationInfo);
+   //    }
+
+   //    // Drag functionality
+   //    const application: HTMLElement = getElem(applicationInfo.containerID);
+   //    const titleBar: HTMLElement = (application.querySelector(".title-bar") as HTMLElement);
+   //    dragElem(application, titleBar);
+
+   //    // Minimise button functionality
+   //    const minimiseButton = application.querySelector(".ui-minimize");
+   //    if (minimiseButton) minimiseButton.addEventListener("click", () => closeApplication(applicationInfo));
+   // }
 }
 export function openApplication(application: ApplicationInfo) {
    application.isOpened = true;

@@ -8,13 +8,15 @@ import { unlockAchievement } from "./applications/achievement-tracker";
 import { LOREM_LETTERS } from "./data/letter-data";
 import ACHIEVEMENTS from "./data/achievements-data";
 import { hasUpgrade } from "./upgrades";
+import Application from "./classes/applications/Application";
 
 const Game = {
    ticks: 0,
    tps: 10,
    // TODO: set this to lorem num when the game loads
    previousLorem: 0,
-   loremAchievements: [] as Array<Achievement>,
+   loremAchievements: new Array<Achievement>(),
+   applications: new Array<Application>(),
    tick: function(): void {
       this.ticks++;
 
@@ -55,7 +57,7 @@ const Game = {
       }
    },
    motivation: 0,
-   updateMotivation: function() {
+   updateMotivation: function(): void {
       const unlockedAchievementCount = ACHIEVEMENTS.filter(achievement => achievement.isUnlocked).length;
       this.motivation = Math.pow(unlockedAchievementCount, 0.8);
 

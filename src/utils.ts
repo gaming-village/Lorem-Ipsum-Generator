@@ -1,3 +1,12 @@
+export class Vector {
+   x: number;
+   y: number;
+   constructor(x: number, y: number) {
+      this.x = x;
+      this.y = y;
+   }
+}
+
 export function randInt(min: number, max: number): number {
    return Math.floor(Math.random() * (max - min)) + min;
 }
