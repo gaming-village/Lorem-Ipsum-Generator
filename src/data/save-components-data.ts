@@ -1,7 +1,7 @@
 import { applications } from "../applications";
 import { loremCorp } from "../corporate-overview";
 import Game from "../Game";
-import preferences, { preferenceData } from "../programs/preferences";
+import preferences, { preferenceData } from "../classes/programs/preferences";
 import { getCurrentTime, randInt } from "../utils";
 import ACHIEVEMENTS from "./achievements-data";
 import LETTERS, { LetterInfo } from "./letter-data";

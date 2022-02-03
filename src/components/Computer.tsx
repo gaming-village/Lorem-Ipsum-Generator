@@ -1,7 +1,7 @@
 import React from "react";
 import "../css/computer.css";
 import "../css/programs.css";
-import Program from "./Program";
+import WindowsProgram from "./WindowsProgram";
 import TaskBar from "./TaskBar";
 
 const Computer = () => {
@@ -11,11 +11,11 @@ const Computer = () => {
             <span className="instruction">(Type to generate lorem)</span>
          </div>
 
-         <Program title="lorem_counter.gov" hasMinimizeButton={false} id="lorem-counter" className="hidden">
+         <WindowsProgram title="lorem_counter.gov" hasMinimizeButton={false} id="lorem-counter" className="hidden">
             <span className="lorem-count"></span>
-         </Program>
+         </WindowsProgram>
 
-         <Program title="Preferences" id="preferences" className="hidden" hasMinimizeButton={false}>
+         <WindowsProgram title="Preferences" id="preferences" className="hidden" hasMinimizeButton={false}>
             <>
                <h2>Background Image</h2>
 
@@ -35,15 +35,15 @@ const Computer = () => {
                <h2>Applications</h2>
                <p>Change how your Applications appear in the taskbar.</p>
             </>
-         </Program>
+         </WindowsProgram>
 
-         <Program title="Application Shop" id="application-shop" className="hidden" hasMinimizeButton={false}>
+         <WindowsProgram title="Application Shop" id="application-shop" className="hidden" hasMinimizeButton={false}>
             <>
                <p>Purchase applications to enchance your productivity here at Lorem Corp.</p>
             </>
-         </Program>
+         </WindowsProgram>
 
-         <Program title="Achievement Tracker" id="achievement-tracker" className="hidden" hasMinimizeButton={false}>
+         <WindowsProgram title="Achievement Tracker" id="achievement-tracker" className="hidden" hasMinimizeButton={false}>
             <div className="formatter">
                <div className="left-column">
                   <h2>Overview</h2>
@@ -67,9 +67,9 @@ const Computer = () => {
                   <div className="achievement-container"></div>
                </div>
             </div>
-         </Program>
+         </WindowsProgram>
 
-         <Program title="Intern Enhancement Program" id="intern-enhancement-program" className="hidden" hasMinimizeButton={false}>
+         <WindowsProgram title="Intern Enhancement Program" id="intern-enhancement-program" className="hidden" hasMinimizeButton={false}>
             <>
                <p>enhance ur interns here!11!1</p>
 
@@ -77,7 +77,7 @@ const Computer = () => {
 
                <p>paragraph</p>
             </>
-         </Program>
+         </WindowsProgram>
 
          <TaskBar />
       </div>

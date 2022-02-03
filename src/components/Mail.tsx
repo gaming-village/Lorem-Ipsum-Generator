@@ -3,7 +3,7 @@ import "../css/mail.css";
 import { LetterInfo } from "../data/letter-data";
 import { claimReward, createFolderListener, createMailReceiveEvent, getInboxMail, mail, openMail } from "../mail";
 import Button from "./Button";
-import Program from "./Program";
+import WindowsProgram from "./WindowsProgram";
 import ScrollArea from "./ScrollArea";
 import Section from "./Section";
 import SectionContainer from "./SectionContainer";
@@ -39,7 +39,7 @@ const Mail = () => {
          </div>
 
          <div id="mail-container" className="hidden">
-            <Program id="inbox" title="Inbox" isDraggable={false} hasMinimizeButton={false}>
+            <WindowsProgram id="inbox" title="Inbox" isDraggable={false} hasMinimizeButton={false}>
                <>
                <div className="left">
                   <div className="folder-container text-box">
@@ -66,10 +66,10 @@ const Mail = () => {
                   </ScrollArea>
                </div>
                </>
-            </Program>
+            </WindowsProgram>
 
             {mail.currentLetter !== undefined ?
-            <Program id="letter" title={`${letter.subject} - Microsoft Exchange`} titleStyle="bold" titleIconSrc={require("../images/icons/letter.png").default} hasMinimizeButton={false} isDraggable={false}>
+            <WindowsProgram id="letter" title={`${letter.subject} - Microsoft Exchange`} titleStyle="bold" titleIconSrc={require("../images/icons/letter.png").default} hasMinimizeButton={false} isDraggable={false}>
                <>
                   <table>
                      <tbody>
@@ -115,7 +115,7 @@ const Mail = () => {
                      }
                   </div>
                </>
-            </Program>
+            </WindowsProgram>
             : "" }
          </div>
       </div>

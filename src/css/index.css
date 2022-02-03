@@ -156,7 +156,7 @@ body {
    cursor: pointer;
 }
 .windows-program h2 {
-   font-size: 1.2rem;
+   font-size: 1.25rem;
    margin: 1rem 2px 0.5rem;
 }
 .windows-program h3 {
@@ -167,10 +167,10 @@ body {
 .windows-program p {
    margin: 1rem 2px;
 }
-.windows-program p:first-of-type {
+.windows-program .title-bar + p:first-of-type {
    margin-top: 0.2rem;
 }
-.windows-program p:last-of-type {
+.windows-program p:last-child {
    margin-bottom: 0.2rem;
 }
 .windows-program .text-box, .windows-program input[type=text] {

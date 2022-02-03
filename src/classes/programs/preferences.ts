@@ -1,4 +1,4 @@
-import { getElem } from "../utils";
+import { getElem } from "../../utils";
 
 interface BackgroundInfo {
    content: string;
@@ -16,8 +16,8 @@ export const preferenceData: PreferenceData = {
 }
 
 const preferences = {
-   elementID: "preferences" as string,
-   currentBackgroundIndexes: [0, 0] as number[],
+   elementID: "preferences",
+   currentBackgroundIndexes: [0, 0],
    backgrounds: {
       "computer": [
          {
@@ -43,7 +43,7 @@ const preferences = {
             name: "Garden",
             isTileable: true
          }
-      ] as BackgroundInfo[],
+      ],
       "mail": [
          {
             content: "straws.png",
@@ -57,7 +57,7 @@ const preferences = {
             name: "Tiles",
             isTileable: true
          }
-      ] as BackgroundInfo[],
+      ],
       "corporate-overview": [
          {
             content: "carved-stone.png",
@@ -71,8 +71,8 @@ const preferences = {
             name: "Garden",
             isTileable: true
          }
-      ] as BackgroundInfo[]
-   },
+      ]
+   } as { [key: string]: ReadonlyArray<BackgroundInfo> },
    setup: function(): void {
       // Show the current background image
       this.updateBackgrounds();
@@ -81,9 +81,9 @@ const preferences = {
    },
    createBackgroundThumbnails: function(): void {
       for (let i = 0; i < Object.keys(this.backgrounds).length; i++) {
-         const backgroundType = Object.keys(this.backgrounds)[i];
-         const thumbnailContainer = getElem(this.elementID)?.querySelector(`.${backgroundType}-thumbnail-container`);
-         for (let k = 0; k < Object.values(this.backgrounds)[i].length; k++) {
+         const [categoryName, backgroundCategory] = Object.entries(this.backgrounds)[i];
+         const thumbnailContainer = getElem(this.elementID)?.querySelector(`.${categoryName}-thumbnail-container`);
+         for (let k = 0; k < (backgroundCategory as ReadonlyArray<BackgroundInfo>).length; k++) {
             const background = Object.values(this.backgrounds)[i][k];
 
             const thumbnail: HTMLElement = document.createElement("div");
@@ -97,17 +97,17 @@ const preferences = {
             if (background.type === "colour") {
                image.style.backgroundColor = background.content;
             } else if (background.type === "image") {
-               image.style.backgroundImage = `url(${require("../images/backgrounds/" + background.content).default})`;
+               image.style.backgroundImage = `url(${require("../../images/backgrounds/" + background.content).default})`;
             }
 
             if (preferenceData.backgroundIndexes[i] === k) {
-               this.selectThumbnail(thumbnail, backgroundType);
+               this.selectThumbnail(thumbnail, categoryName);
             }
 
             thumbnail.addEventListener("click", () => {
                preferenceData.backgroundIndexes[i] = k;
 
-               this.selectThumbnail(thumbnail, backgroundType);
+               this.selectThumbnail(thumbnail, categoryName);
                this.updateBackgrounds();
             });
 
@@ -140,7 +140,7 @@ const preferences = {
             backgroundContainer.style.backgroundImage = "none";
             backgroundContainer.style.backgroundColor = background.content;
          } else if (background.type === "image") {
-            backgroundContainer.style.backgroundImage = `url(${require("../images/backgrounds/" + background.content).default})`;
+            backgroundContainer.style.backgroundImage = `url(${require("../../images/backgrounds/" + background.content).default})`;
             if (background.isTileable) {
                backgroundContainer.classList.add("tileable");
             } else {

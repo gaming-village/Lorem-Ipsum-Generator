@@ -1,80 +1,87 @@
-import { closeProgram, openProgram, programIsOpen } from "./programs";
 import { elemExists, getElem } from "./utils";
+import Program from './classes/programs/Program';
+import Game from "./Game";
 
 
 interface PanelData {
    name: string;
    imgSrc: string;
-   tree: object;
+   tree: ReadonlyArray<PanelData> | string | null;
 }
 
-const startMenuTree = {
-   test: {
+const startMenuTree: ReadonlyArray<PanelData> = [
+   {
       name: "test",
       imgSrc: "/images/icons/picture.png",
-      tree: {
-         test2: {
+      tree: [
+         {
             name: "test2",
             imgSrc: "/images/win95/folder-search.png",
-            tree: {
-               test4: {
+            tree: [
+               {
                   name: "test4",
                   imgSrc: "/images/win95/folder-search.png",
                   tree: "testingGamer"
                }
-            }
+            ]
          },
-         test3: {
+         {
             name: "test3",
             imgSrc: "/images/win95/info.png",
             tree: ""
          }
-      }
+      ]
    },
-   applications: {
+   {
       name: "Applications",
       imgSrc: "/images/icons/picture.png",
-      tree: {
-         shop: {
+      tree: [
+         {
             name: "Shop",
             imgSrc: "/images/icons/search-folder.png",
-            tree: "application-shop"
+            tree: "applicationShop"
          },
-         status: {
+         {
             name: "Status",
             imgSrc: "/images/icons/computer.png",
-            tree: ""
+            tree: null
          }
          // TODO: Manager/Management?
-      }
+      ]
    },
-   preferences: {
+   {
       name: "Preferences",
       imgSrc: "/images/icons/save.png",
       tree: "preferences"
    },
-   help: {
+   {
       name: "Help",
       imgSrc: "/images/icons/home.png",
-      tree: {
-         guide: {
+      tree: [
+         {
             name: "Guide",
             imgSrc: "/images/win95/books.png",
-            tree: ""
+            tree: null
          },
-         faq: {
+         {
             name: "FaQ",
             imgSrc: "/images/win95/properties.png",
-            tree: ""
+            tree: null
          },
-         issues: {
+         {
             name: "Issues",
             imgSrc: "/images/win95/error.png",
-            tree: ""
+            tree: null
          }
-      }
+      ]
    }
-};
+];
+
+interface PanelReference {
+   name: string;
+   element: HTMLElement;
+}
+const panelReferences: Array<PanelReference> = new Array<PanelReference>();
 
 const createPanel = (panelData: PanelData, panelContainer: HTMLElement) => {
    const panel = document.createElement("div");
@@ -115,7 +122,7 @@ const createPanelContainer = (id: string, parent?: Element, parentPanel?: HTMLEl
       panelContainer.style.top = top - 2 + "px";
       panelContainer.style.left = panelBounds.width + 2 + "px";
    } else {
-      // Root start menu panel container
+      // Root start menu panel container b
 
       panelContainer.id = id;
 
@@ -126,27 +133,17 @@ const createPanelContainer = (id: string, parent?: Element, parentPanel?: HTMLEl
    return panelContainer;
 }
 
-const findPanelParent = (targetPanelData: PanelData, currentParentDatas: object[] = [startMenuTree]): PanelData => {
-   // Recursively search of the parent of a panel data
-   let parentDatasToSearch: object[] = [];
-   for (const currentParentData of currentParentDatas) {
-      for (const panelData of Object.values(currentParentData)) {
-         if (panelData === targetPanelData) {
-            return (currentParentData as PanelData);
-         }
-         if (typeof panelData.tree === "object") parentDatasToSearch.push(panelData.tree);
-      }
-   }
-   return findPanelParent(targetPanelData, parentDatasToSearch);
+const toggleProgram = (programName: string): void => {
+   const program = Game.programs[programName] as Program;
+   program.isOpened ? program.close() : program.open();
 }
 
-const populatePanelContainer = (panelContainer: HTMLElement, panelContainerTree: object) => {
-   for (const panelData of Object.entries(panelContainerTree)) {
-      const panel = createPanel(panelData[1], panelContainer);
+const populatePanelContainer = (panelContainer: HTMLElement, panelTree: ReadonlyArray<PanelData>) => {
+   for (const item of panelTree) {
+      const panel = createPanel(item, panelContainer);
 
       // If the panel opens another panel container
-      const treeType: string = panelData[1].tree;
-      if (typeof treeType === "object") {
+      if (typeof item.tree === "object") {
          // Create the opening arrow icon
          createOpeningArrow(panel);
 
@@ -156,26 +153,33 @@ const populatePanelContainer = (panelContainer: HTMLElement, panelContainerTree:
                previouslyOpenedPanel?.classList.remove("opened");
                panel.classList.add("opened");
 
-               // Remove any other panel containers
-               const panelDataParent = findPanelParent(panelData[1]);
-               for (const name of Object.keys(panelDataParent)) {
-                  if (elemExists(`start-menu-${name}`)) {
-                     getElem(`start-menu-${name}`).remove();
+               // Remove any sibling panel containers
+               const siblingPanelNames = panelTree.map(panel => panel.name);
+               for (const name of siblingPanelNames) {
+                  for (const panelReference of panelReferences) {
+                     if (panelReference.name === name) {
+                        panelReference.element.remove();
+                     }
                   }
                }
 
-               const newPanelContainer = createPanelContainer(panelData[0], panelContainer, panel);
-               populatePanelContainer(newPanelContainer, treeType);
+               const newPanelContainer = createPanelContainer("a", panelContainer, panel);
+               populatePanelContainer(newPanelContainer, item.tree as Array<PanelData>);
+               panelReferences.push({ name: item.name, element: newPanelContainer });
             } else {
                panel.classList.remove("opened");
 
-               getElem("start-menu-" + panelData[0])?.remove();
+               for (const panelReference of panelReferences) {
+                  if (panelReference.name === item.name) {
+                     panelReference.element.remove();
+                     break;
+                  }
+               }
             }
          });
-      } else if (typeof treeType === "string") {
+      } else if (typeof item.tree === "string") {
          panel.addEventListener("click", () => {
-            // Close program if opened, open if closed
-            programIsOpen(treeType) ? closeProgram(treeType) : openProgram(treeType);
+            toggleProgram(item.tree as string);
          });
       }
    }
@@ -212,7 +216,6 @@ export function setupStartMenu() {
          closeMenuOnHoverOut(startMenu);
       } else {
          // Close the start menu
-
          closeStartMenu();
       }
    });

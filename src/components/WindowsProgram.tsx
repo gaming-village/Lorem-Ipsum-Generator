@@ -22,7 +22,7 @@ const defaultProps: ProgramProps = {
    className: ""
 }
 
-const Program: React.FunctionComponent<ProgramProps> = (props: ProgramProps) => {
+const WindowsProgram: React.FunctionComponent<ProgramProps> = (props: ProgramProps) => {
    return (
       <div id={props.id} className={`windows-program ${props.className}`}>
          <TitleBar minimizeFunc={props.minimizeFunc} titleIconSrc={props.titleIconSrc} titleStyle={props.titleStyle} title={props.title} hasMinimizeButton={props.hasMinimizeButton} isDraggable={props.isDraggable || false} />
@@ -31,6 +31,6 @@ const Program: React.FunctionComponent<ProgramProps> = (props: ProgramProps) => 
    )
 }
 
-Program.defaultProps = defaultProps;
+WindowsProgram.defaultProps = defaultProps;
 
-export default Program;
+export default WindowsProgram;

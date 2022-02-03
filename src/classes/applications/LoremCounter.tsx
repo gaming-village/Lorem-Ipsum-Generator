@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Game from "../../Game";
 import { roundNum } from "../../utils";
-import Application from "./Application";
+import Application, { ApplicationCategory } from "./Application";
 
 interface ElemProps {
    application: LoremCounter;
@@ -22,7 +22,13 @@ class LoremCounter extends Application {
    updateLoremCount!: (newVal: number) => void;
 
    constructor() {
-      super("Lorem Counter", "loremCounter", "i count lorem", 0);
+      super({
+         name: "Lorem Counter",
+         id: "loremCounter",
+         category: ApplicationCategory.lifestyle,
+         description: "i count lorem",
+         cost: 0
+      });
    }
 
    instantiate(): JSX.Element {

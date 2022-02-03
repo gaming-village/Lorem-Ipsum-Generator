@@ -65,10 +65,14 @@ const createApplicationTaskbarReference = (application: ApplicationInfo) => {
 
 export function setupApplications() {
    const fileNames: ReadonlyArray<string> = ["LoremCounter", "AchievementTracker"];
+   const applications = fileNames.map(fileName => require("./classes/applications/" + fileName).default)
 
-   for (const fileName of fileNames) {
-      const applicationClass = require("./classes/applications/" + fileName).default;
-      new applicationClass();
+   for (const application of applications) {
+      new application();
+   }
+   // Loop again once Game.applications is filled
+   for (const application of applications) {
+      if (application.setup) application.setup();
    }
 
    // for (const applicationInfo of Object.values(applications)) {

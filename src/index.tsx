@@ -80,9 +80,6 @@ window.onload = () => {
    // Set up the tick shenanigans
    setInterval(() => Game.tick(), 1000 / Game.tps);
 
-   // Display the lorem count everywhere
-   Game.updateLorem();
-
    setupStartMenu();
 
    setupPrograms();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../css/corporate-overview.css";
 import Button from "./Button";
-import Program from "./Program";
+import WindowsProgram from "./WindowsProgram";
 import { loremCorp, switchJSXPanel } from "../corporate-overview";
 import { beautify, getPrefix, roundNum } from "../utils";
 import List from "./List";
@@ -56,7 +56,7 @@ const CorporateOverview = () => {
       const panelName = `${worker.name}-panel`;
       const panel = <CorporatePanel key={i} className={panelName}>
          <>
-            <Program className="panel" title={workerType} hasMinimizeButton={false}>
+            <WindowsProgram className="panel" title={workerType} hasMinimizeButton={false}>
                <>
                   <h2>Overview</h2>
 
@@ -64,9 +64,9 @@ const CorporateOverview = () => {
 
                   <p>Each {workerType} produces {roundNum(baseWorkerProduction)} lorem.</p>
                </>
-            </Program>
+            </WindowsProgram>
 
-            <Program className="panel" title="Purchase" hasMinimizeButton={false}>
+            <WindowsProgram className="panel" title="Purchase" hasMinimizeButton={false}>
                <>
                   <h2>Costs</h2>
 
@@ -102,7 +102,7 @@ const CorporateOverview = () => {
                      </>
                   </ButtonContainer>
                </>
-            </Program>
+            </WindowsProgram>
          </>
       </CorporatePanel>
       jobPanels.push(panel);
@@ -138,7 +138,7 @@ const CorporateOverview = () => {
          <div className="right-bar">
             <CorporatePanel className="home-panel">
                <>
-                  <Program className="panel" title="Profile" isDraggable={false} hasMinimizeButton={false}>
+                  <WindowsProgram className="panel" title="Profile" isDraggable={false} hasMinimizeButton={false}>
                      <>
                         <h2>Worker #{loremCorp.workerNumber}</h2>
 
@@ -153,9 +153,9 @@ const CorporateOverview = () => {
                            </div>
                         </div>
                      </>
-                  </Program>
+                  </WindowsProgram>
 
-                  <Program className="panel" title="Overview" isDraggable={false} hasMinimizeButton={false}>
+                  <WindowsProgram className="panel" title="Overview" isDraggable={false} hasMinimizeButton={false}>
                      <>
                         <p>Lorem Production: {roundNum(totalLoremProduction)} per second</p>
 
@@ -178,9 +178,9 @@ const CorporateOverview = () => {
                         <p>You have no workers.</p>
                         }
                      </>
-                  </Program>
+                  </WindowsProgram>
                   
-                  <Program className="panel" title="Promote" isDraggable={false} hasMinimizeButton={false}>
+                  <WindowsProgram className="panel" title="Promote" isDraggable={false} hasMinimizeButton={false}>
                      <>
                         {
                         loremCorp.jobIndex < WORKERS.length - 1 ?
@@ -192,13 +192,13 @@ const CorporateOverview = () => {
                         <p>You are {getPrefix(job.name) + " " + beautify(job.name)}.</p>
                         }
                      </>
-                  </Program>
+                  </WindowsProgram>
                </>
             </CorporatePanel>
 
             <CorporatePanel className="upgrades-panel">
                <>
-                  <Program className="panel" title="Upgrades" hasMinimizeButton={false}>
+                  <WindowsProgram className="panel" title="Upgrades" hasMinimizeButton={false}>
                      <>
                         <h2>Information</h2>
 
@@ -206,18 +206,18 @@ const CorporateOverview = () => {
 
                         <p>More tiers of upgrades are unlocked as you progress through Lorem Corp.</p>
                      </>
-                  </Program>
+                  </WindowsProgram>
 
                   {getUpgrades(job)}
                </>
             </CorporatePanel>
 
             <CorporatePanel className="lorem-packs-shop-panel">
-               <Program title="Shop" hasMinimizeButton={false} isDraggable={false}>
+               <WindowsProgram title="Shop" hasMinimizeButton={false} isDraggable={false}>
                   <>
                      {getPackElements()}
                   </>
-               </Program>
+               </WindowsProgram>
             </CorporatePanel>
 
             <CorporatePanel className="dictionary-panel">

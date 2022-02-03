@@ -1,55 +1,30 @@
-import { dragElem, getElem } from "./utils";
-
-export const programs: any = {};
-const programNames: string[] = ["preferences", "application-shop"];
-
-interface Program {
-   elementID: string;
-   setup: () => void;
-}
+export const programsREMOVELATER: any = {};
+// const programNames: string[] = ["preferences", "application-shop"];
 
 export function initialisePrograms() {
-   for (const name of programNames) {
-      const program: Program = require("./programs/" + name).default;
-      programs[name] = program;
-
-      const element = getElem(program.elementID);
-      element?.querySelector(".ui-minimize")?.addEventListener("click", () => {
-         closeProgram(name);
-      });
-
-      const titleBar: HTMLElement = (element.querySelector(".title-bar") as HTMLElement);
-      dragElem(element, titleBar);
-   }
+   // for (const name of programNames) {
+   //    const program = require("./classes/programs/" + name).default;
+   //    programsREMOVELATER[name] = program;
+   // }
 }
 
 export function setupPrograms() {
-   for (let i = 0; i < Object.values(programs).length; i++) {
-      const program: Program = (Object.values(programs)[i] as Program);
-      if (program.hasOwnProperty("setup")) {
-         program.setup();
-      }
+   const fileNames: ReadonlyArray<string> = ["ApplicationShop", "Preferences"];
+   const programClasses = fileNames.map(fileName => require("./classes/programs/" + fileName).default);
+
+   const programs = new Array<any>();
+   for (const program of programClasses) {
+      programs.push(new program());
    }
-}
-
-export function programIsOpen(elementName: string): boolean {
-   const element = getElem(elementName);
-   if (element) return !element.classList.contains("hidden");
-   return false;
-}
-
-export function openProgram(name: string) {
-   const program = programs[name];
-
-   if (program !== undefined) {
-      getElem(program.elementID).classList.remove("hidden");
-   } else {
-      throw new Error(`Program '${name}' does not exist.`);
+   // Setup all after Game.programs if filled
+   for (const program of programs) {
+      if (program.setup) program.setup();
    }
-}
 
-export function closeProgram(name: string) {
-   const program = programs[name];
-
-   getElem(program.elementID)?.classList.add("hidden");
+   // for (let i = 0; i < Object.values(programsREMOVELATER).length; i++) {
+   //    const program = Object.values(programsREMOVELATER)[i] as any;
+   //    if (program.hasOwnProperty("setup")) {
+   //       program.setup();
+   //    }
+   // }
 }

@@ -40,8 +40,7 @@ const Game = {
             }
          }
 
-         this.updateLorem();
-         this.displayLoremChange(loremDiff);
+         this.updateLorem(loremDiff);
       }
 
       const SECONDS_BETWEEN_SAVES: number = 10;
@@ -91,7 +90,7 @@ const Game = {
       Game.lorem += productionWhileIdle;
    },
    lorem: 0 as number,
-   updateLorem: function(): void {
+   updateLorem: function(loremDiff: number): void {
       const loremCounterUpdateFunc = this.applications.loremCounter.updateLoremCount;
       if (typeof loremCounterUpdateFunc !== "undefined") {
          loremCounterUpdateFunc(this.lorem);
@@ -99,16 +98,10 @@ const Game = {
 
       const loremCountDisplay = roundNum(this.lorem).toString();
 
-      const loremCounterText = getElem("lorem-counter").querySelector(".lorem-count");
-      if (loremCounterText) loremCounterText.innerHTML = loremCountDisplay;
-
       const corporateOverviewCounter = getElem("corporate-overview").querySelector(".lorem-count");
       if (corporateOverviewCounter) corporateOverviewCounter.innerHTML = `Lorem: ${loremCountDisplay}`;
 
       loremCorp.updatePromotionProgress();
-   },
-   displayLoremChange: function(loremDiff: number): void {
-
    },
    isInFocus: false as boolean,
    maskClickEvent: undefined as Function | undefined,

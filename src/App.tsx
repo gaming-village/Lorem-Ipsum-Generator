@@ -4,14 +4,14 @@ import Computer from "./components/Computer";
 import CorporateOverview from "./components/CorporateOverview";
 import Mail from "./components/Mail";
 import Settings from "./components/Settings";
-import Program from "./components/Program";
+import WindowsProgram from "./components/WindowsProgram";
 import Button from "./components/Button";
 import ButtonContainer from "./components/ButtonContainer";
 
 function App() {
    return (
       <>
-         <Program id="devtools" className="hidden" title="Devtools" titleIconSrc={require("./images/icons/settings.png").default} hasMinimizeButton={false}>
+         <WindowsProgram id="devtools" className="hidden" title="Devtools" titleIconSrc={require("./images/icons/settings.png").default} hasMinimizeButton={false}>
             <>
                <h2 className="resources">Resources</h2>
 
@@ -45,7 +45,7 @@ function App() {
                   <Button text="Reset" className="reset-button" isCentered={true} />
                </div>
             </>
-         </Program>
+         </WindowsProgram>
 
          <div id="mask" className="hidden"></div>
 

@@ -1,7 +1,7 @@
 import WORKERS, { Worker } from "./data/workers";
 import UPGRADES, { Upgrade, UpgradeRequirements } from "./data/upgrades-data";
 import React from "react";
-import Program from "./components/Program";
+import WindowsProgram from "./components/WindowsProgram";
 import Game from "./Game";
 import Button from "./components/Button";
 import { loremCorp } from "./corporate-overview";
@@ -89,7 +89,7 @@ export function getUpgrades(job: Worker): ReadonlyArray<JSX.Element> {
          break;
       }
 
-      const upgrade = <Program key={i} className={`upgrade upgrade-${i} ${upgradeInfo.isBought ? "bought" : ""}`} title={upgradeInfo.name} hasMinimizeButton={false}>
+      const upgrade = <WindowsProgram key={i} className={`upgrade upgrade-${i} ${upgradeInfo.isBought ? "bought" : ""}`} title={upgradeInfo.name} hasMinimizeButton={false}>
          <>
             <p>{upgradeInfo.description}</p>
 
@@ -97,7 +97,7 @@ export function getUpgrades(job: Worker): ReadonlyArray<JSX.Element> {
 
             <Button text={!upgradeInfo.isBought ? "Buy Upgrade" : "Bought"} className={upgradeInfo.isBought ? "dark" : ""} isCentered={true} onClick={() => buyUpgrade(upgradeInfo, i)} />
          </>
-      </Program>
+      </WindowsProgram>
 
       if (!upgradesDictionary.hasOwnProperty(upgradeInfo.tier)) {
          upgradesDictionary[upgradeInfo.tier] = [ upgrade ];

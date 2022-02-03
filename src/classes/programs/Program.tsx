@@ -1,13 +1,16 @@
 import { useState } from "react";
-import Game from "../Game";
-import { getElem } from "../utils";
+import ReactDOM from "react-dom";
+import WindowsProgram from "../../components/WindowsProgram";
+import Game from "../../Game";
+import { getElem } from "../../utils";
 
 interface ProgramElemProps {
    name: string;
+   id: string;
    program: Program;
    children: JSX.Element;
 }
-const ProgramElem = ({ name, program, children }: ProgramElemProps): JSX.Element => {
+const ProgramElem = ({ name, id, program, children }: ProgramElemProps): JSX.Element => {
    const [opened, setOpened] = useState<boolean>(false);
 
    program.setVisibility = (newVal: boolean): void => {
@@ -17,18 +20,26 @@ const ProgramElem = ({ name, program, children }: ProgramElemProps): JSX.Element
    const minimizeFunc = () => program.close();
    
    return opened ? (
-      <Program title={name} hasMinimizeButton={true} isDraggable={true} minimizeFunc={minimizeFunc}>
+      <WindowsProgram title={name} id={id} hasMinimizeButton={true} isDraggable={true} minimizeFunc={minimizeFunc}>
          {children}
-      </Program>
+      </WindowsProgram>
    ) : <></>;
 }
 
+interface ProgramType {
+   name: string;
+   id: string;
+}
 abstract class Program {
    private readonly name: string;
+   private readonly id: string;
+
+   isOpened: boolean = false;
 
    setVisibility!: (newVal: boolean) => void;
-   constructor(name: string, id: string) {
+   constructor({ name, id }: ProgramType) {
       this.name = name;
+      this.id = id;
 
       const elemContent = this.instantiate();
       this.createElem(elemContent);
@@ -37,7 +48,7 @@ abstract class Program {
    }
 
    private createElem(elemContent: JSX.Element): void {
-      const elem = <ProgramElem name={this.name} program={this}>
+      const elem = <ProgramElem id={this.id} name={this.name} program={this}>
          {elemContent}
       </ProgramElem>;
 
@@ -47,14 +58,18 @@ abstract class Program {
       computer.appendChild(container);
    }
 
-   abstract instantiate(): JSX.Element;
+   protected abstract instantiate(): JSX.Element;
 
-   private open(): void {
-
+   open(): void {
+      if (this.isOpened) return;
+      this.isOpened = true;
+      this.setVisibility(true);
    }
 
-   private close(): void {
-
+   close(): void {
+      if (!this.isOpened) return;
+      this.isOpened = false;
+      this.setVisibility(false);
    }
 }
 

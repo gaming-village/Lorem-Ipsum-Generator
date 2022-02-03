@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ReactDOM from "react-dom";
-import Program from "../../components/Program";
+import WindowsProgram from "../../components/WindowsProgram";
 import Game from "../../Game";
 import { getElem } from "../../utils";
 
@@ -46,27 +46,38 @@ const ApplicationElem = ({ title, application, children }: ApplicationElemProps)
    const minimizeFunc = () => application.close();
    
    return visible ? (
-      <Program title={title} hasMinimizeButton={true} isDraggable={true} minimizeFunc={minimizeFunc}>
+      <WindowsProgram title={title} hasMinimizeButton={true} isDraggable={true} minimizeFunc={minimizeFunc}>
          {children}
-      </Program>
+      </WindowsProgram>
    ) : <></>;
 }
 
+export enum ApplicationCategory {
+   lifestyle = "Lifestyle",
+   utility = "Utility"
+}
+interface ApplicationType {
+   name: string;
+   id: string;
+   category: ApplicationCategory;
+   description: string;
+   cost: number;
+}
 abstract class Application {
    private readonly name: string;
-   private readonly description: string;
-   private readonly cost: number;
-   private readonly id: string;
+   readonly category: ApplicationCategory;
+   readonly description: string;
+   readonly cost: number;
 
    setVisibility!: (newVal: boolean) => void;
    setTaskbarStatus!: (newVal: boolean) => void;
 
    isUnlocked: boolean = false;
    isOpened: boolean = false;
-   constructor(name: string, id: string, description: string, cost: number) {
+   constructor({ name, id, category, description, cost }: ApplicationType) {
       this.name = name;
+      this.category = category;
       this.description = description;
-      this.id = id;
       this.cost = cost;
 
       const elemContent = this.instantiate();
@@ -96,6 +107,7 @@ abstract class Application {
       const icon = <TaskbarIcon name={this.name} application={this} />
 
       const container = document.createElement("div");
+      container.style.display = "inline";
       ReactDOM.render(icon, container);
       taskbar.appendChild(container);
    }
