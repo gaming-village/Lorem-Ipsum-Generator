@@ -1,10 +1,13 @@
 import Application, { ApplicationCategory } from './Application';
 
+const categoryFilter = (): ReadonlyArray<JSX.Element> => {
+   const arr = new Array<JSX.Element>();
+}
+
 interface ElemProps {
    application: AchievementTracker;
 }
 const Elem = ({ application }: ElemProps): JSX.Element => {
-
    return <div className="formatter">
       <div className="left-column">
          <h2>Overview</h2>

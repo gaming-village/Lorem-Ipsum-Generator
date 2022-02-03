@@ -143,10 +143,10 @@ const achievementTracker = {
             const filteredAchievements: { [key: string]: Array<Achievement> } = {};
 
             for (const achievement of ACHIEVEMENTS) {
-               if (!filteredAchievements.hasOwnProperty(achievement.type)) {
-                  filteredAchievements[achievement.type] = [ achievement ];
+               if (!filteredAchievements.hasOwnProperty(achievement.category)) {
+                  filteredAchievements[achievement.category] = [ achievement ];
                } else {
-                  filteredAchievements[achievement.type].push(achievement);
+                  filteredAchievements[achievement.category].push(achievement);
                }
             }
 

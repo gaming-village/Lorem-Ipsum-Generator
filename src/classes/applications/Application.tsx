@@ -33,10 +33,11 @@ const TaskbarIcon = ({ name, application }: TaskbarIconProps): JSX.Element => {
 
 interface ApplicationElemProps {
    title: string;
+   id: string;
    application: Application;
    children?: JSX.Element;
 }
-const ApplicationElem = ({ title, application, children }: ApplicationElemProps): JSX.Element => {
+const ApplicationElem = ({ title, id, application, children }: ApplicationElemProps): JSX.Element => {
    const [visible, setVisible] = useState<boolean>(false);
 
    application.setVisibility = (newVal: boolean): void => {
@@ -46,7 +47,7 @@ const ApplicationElem = ({ title, application, children }: ApplicationElemProps)
    const minimizeFunc = () => application.close();
    
    return visible ? (
-      <WindowsProgram title={title} hasMinimizeButton={true} isDraggable={true} minimizeFunc={minimizeFunc}>
+      <WindowsProgram title={title} id={id} hasMinimizeButton={true} isDraggable={true} minimizeFunc={minimizeFunc}>
          {children}
       </WindowsProgram>
    ) : <></>;
@@ -65,6 +66,7 @@ interface ApplicationType {
 }
 abstract class Application {
    private readonly name: string;
+   private readonly id: string;
    readonly category: ApplicationCategory;
    readonly description: string;
    readonly cost: number;
@@ -76,6 +78,7 @@ abstract class Application {
    isOpened: boolean = false;
    constructor({ name, id, category, description, cost }: ApplicationType) {
       this.name = name;
+      this.id = id;
       this.category = category;
       this.description = description;
       this.cost = cost;
@@ -89,7 +92,7 @@ abstract class Application {
    }
 
    private createElem(elemContent: JSX.Element): void {
-      const elem = <ApplicationElem title={this.name} application={this}>
+      const elem = <ApplicationElem id={this.id} title={this.name} application={this}>
          {elemContent}
       </ApplicationElem>;
 

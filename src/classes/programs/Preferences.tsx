@@ -104,7 +104,7 @@ const Elem = ({ program }: ElemProps): JSX.Element => {
       const category = backgroundInfo[i];
       content.push(
          <h3 key={currentKey++}>{category.name}</h3>,
-         <p key={currentKey++}>{category.description}</p>
+         <p key={currentKey++} style={{ marginBottom: "0.2rem" }}>{category.description}</p>
       );
          
       const categoryContent = new Array<JSX.Element>();
@@ -129,7 +129,6 @@ const Elem = ({ program }: ElemProps): JSX.Element => {
             for (let k = 0; k < selectedBackgroundArray.length; k++) {
                if (k === i) {
                   selectedBackgrounds[k] = category.backgrounds.indexOf(background);
-
                   newBackgroundArray[k] = background;
                }
             }
@@ -154,6 +153,12 @@ const Elem = ({ program }: ElemProps): JSX.Element => {
          </div>
       );
    }
+
+   content.push(
+      <h2>Taskbar Appearance</h2>,
+      // TODO: Regular and compact modes for taskbar icon appearance
+      <p>Change how your Applications appear in the taskbar.</p>
+   );
 
    return <> {content} </>;
 }

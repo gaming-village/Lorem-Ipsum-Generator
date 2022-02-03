@@ -1,13 +1,17 @@
+enum AchievementCategory {
+   challenge = "Challenge",
+   tiered = "Tiered"
+}
+
 interface AchievementRequirements {
    readonly lorem?: number;
    readonly applications?: number;
 }
-
 export interface Achievement {
    readonly id: string;
    readonly name: string;
    readonly description: string;
-   readonly type: string;
+   readonly category: AchievementCategory;
    readonly iconSrc: string;
    readonly requirements: AchievementRequirements;
    isUnlocked?: boolean;
@@ -18,7 +22,7 @@ const ACHIEVEMENTS: ReadonlyArray<Achievement> = [
       id: "SO_IT_BEGINS",
       name: "So it begins...",
       description: "Generate your first lorem.",
-      type: "tiered",
+      category: AchievementCategory.tiered,
       iconSrc: "picture.png",
       requirements: {
          lorem: 1
@@ -28,7 +32,7 @@ const ACHIEVEMENTS: ReadonlyArray<Achievement> = [
       id: "GETTING_SOMEWHERE",
       name: "Getting somewhere",
       description: "Generate 100 lorem.",
-      type: "tiered",
+      category: AchievementCategory.tiered,
       iconSrc: "save.png",
       requirements: {
          lorem: 100
@@ -38,7 +42,7 @@ const ACHIEVEMENTS: ReadonlyArray<Achievement> = [
       id: "MICRO_MANAGEMENT",
       name: "Micro Management",
       description: "Generate 10000 lorem.",
-      type: "tiered",
+      category: AchievementCategory.tiered,
       iconSrc: "save.png",
       requirements: {
          lorem: 10000
@@ -48,7 +52,7 @@ const ACHIEVEMENTS: ReadonlyArray<Achievement> = [
       id: "MICRO_TRANSACTIONS",
       name: "Micro Transactions",
       description: "Buy your first application.",
-      type: "tiered",
+      category: AchievementCategory.tiered,
       iconSrc: "save.png",
       requirements: {
          applications: 1
@@ -58,7 +62,7 @@ const ACHIEVEMENTS: ReadonlyArray<Achievement> = [
       id: "FOOLS_GOLD",
       name: "Fool's Gold",
       description: "do something",
-      type: "challenge",
+      category: AchievementCategory.challenge,
       iconSrc: "",
       requirements: {}
    },
@@ -66,7 +70,7 @@ const ACHIEVEMENTS: ReadonlyArray<Achievement> = [
       id: "SHADY_SALES",
       name: "Shady Sales",
       description: "Unlock the black market.",
-      type: "challenge",
+      category: AchievementCategory.challenge,
       iconSrc: "white-letter.png",
       requirements: {}
    }

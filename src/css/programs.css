@@ -12,7 +12,7 @@
    border-bottom-color: #000;
    border-right-color: #000;
    margin: 8px;
-   cursor: pointer;
+   cursor: pointer; 
    position: relative;
 }
 #preferences .thumbnail.selected {
