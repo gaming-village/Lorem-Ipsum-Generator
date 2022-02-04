@@ -1,4 +1,4 @@
-enum AchievementCategory {
+export enum AchievementCategory {
    challenge = "Challenge",
    tiered = "Tiered"
 }

@@ -1,6 +1,5 @@
 import ACHIEVEMENTS, { Achievement } from "../data/achievements-data";
 import Game from "../Game";
-import { createNotification } from "../notifications";
 import { beautify, getElem, roundNum } from "../utils";
 
 interface AchievementReferences {
@@ -61,34 +60,34 @@ const updateAchievementCount = (): void => {
    getElem("achievement-tracker").querySelector(".achievement-count")!.innerHTML = `Achievements: ${achievementCount}/${ACHIEVEMENTS.length} <i>(${progress}%)</i>`;
 }
 
-const findAchievement = (name: string): Achievement | null => {
-   for (const achievement of ACHIEVEMENTS) {
-      if (achievement.id === name) return achievement;
-   }
-   return null;
-}
-export function unlockAchievement(name: string): void {
-   const achievement = findAchievement(name);
-   if (achievement === null) {
-      console.warn(`An achievement with an ID of '${name}' does not exist!`);
-      return;
-   }
+// const findAchievement = (name: string): Achievement | null => {
+//    for (const achievement of ACHIEVEMENTS) {
+//       if (achievement.id === name) return achievement;
+//    }
+//    return null;
+// }
+// export function unlockAchievement(name: string): void {
+//    const achievement = findAchievement(name);
+//    if (achievement === null) {
+//       console.warn(`An achievement with an ID of '${name}' does not exist!`);
+//       return;
+//    }
 
-   achievement.isUnlocked = true;
-   achievementTracker.updateAchievements("normal");
+//    achievement.isUnlocked = true;
+//    achievementTracker.updateAchievements("normal");
 
-   Game.motivation = ACHIEVEMENTS.filter(achievement => achievement.isUnlocked).length;
+//    Game.motivation = ACHIEVEMENTS.filter(achievement => achievement.isUnlocked).length;
 
-   const notificationInfo = {
-      iconSrc: "settings.png",
-      title: achievement.name,
-      description: achievement.description,
-      caption: "New achievement!"
-   };
-   createNotification(notificationInfo, false, true);
+//    const notificationInfo = {
+//       iconSrc: "settings.png",
+//       title: achievement.name,
+//       description: achievement.description,
+//       caption: "New achievement!"
+//    };
+//    createNotification(notificationInfo, false, true);
 
-   Game.updateMotivation();
-}
+//    Game.updateMotivation();
+// }
 
 const achievementTracker = {
    getAchievementContainer: function(): HTMLElement {

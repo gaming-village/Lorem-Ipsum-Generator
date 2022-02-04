@@ -4,6 +4,22 @@ import Program from "./Program";
 
 const selectedBackgrounds: [number, number, number] = [0, 0, 0];
 
+interface PreferenceData {
+   selectedBackgrounds: [number, number, number];
+}
+export function getPreferences(): PreferenceData {
+   return {
+      selectedBackgrounds: selectedBackgrounds
+   };
+}
+
+export function setPreferences(newPreferences: PreferenceData): void {
+   for (let i = 0; i < selectedBackgrounds.length; i++) {
+      const idx = newPreferences.selectedBackgrounds[i];
+      selectedBackgrounds[i] = idx;
+   }
+}
+
 interface BackgroundCategory {
    name: string;
    elementID: string;

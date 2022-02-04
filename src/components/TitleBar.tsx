@@ -1,4 +1,4 @@
-import React from "react";
+import React, { LegacyRef } from "react";
 import UIButton from "./UIButton";
 
 interface TitleBarProps {
@@ -8,16 +8,17 @@ interface TitleBarProps {
    hasMinimizeButton: boolean;
    minimizeFunc?: () => void;
    isDraggable: boolean;
+   refTransfer?: HTMLElement | null;
 }
 
-const TitleBar = (props: TitleBarProps) => {
+const TitleBar = React.forwardRef((props: TitleBarProps, ref: LegacyRef<HTMLDivElement>) => {
    let titleStyle = {};
    if (props.titleStyle === "bold") {
       titleStyle = { fontWeight: "bold" };
    }
 
    return (
-      <div style={titleStyle} className={`title-bar ${props.isDraggable ? "draggable" : ""}`}>
+      <div ref={ref} style={titleStyle} className={`title-bar ${props.isDraggable ? "draggable" : ""}`}>
          {props.titleIconSrc ? 
          <img src={props.titleIconSrc} alt="" />
          : ""}
@@ -29,6 +30,6 @@ const TitleBar = (props: TitleBarProps) => {
          : ""}
       </div>
    )
-}
+});
 
 export default TitleBar;

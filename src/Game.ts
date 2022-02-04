@@ -4,7 +4,7 @@ import { loremCorp } from "./corporate-overview";
 import { receiveMail } from "./mail";
 import { createNotification } from "./notifications";
 import achievements, { Achievement } from "./data/achievements-data";
-import { unlockAchievement } from "./applications/achievement-tracker";
+import { unlockAchievement } from "./classes/applications/AchievementTracker";
 import { LOREM_LETTERS } from "./data/letter-data";
 import ACHIEVEMENTS from "./data/achievements-data";
 import { hasUpgrade } from "./upgrades";

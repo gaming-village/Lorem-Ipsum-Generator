@@ -12,7 +12,7 @@
    display: flex;
    justify-content: space-evenly;
 }
-#achievementTracker .view-option {
+#achievementTracker .display-type {
    background-color: #bbb;
    border: 2px solid;
    border-top-color: #000;
@@ -23,7 +23,7 @@
    position: relative;
    cursor: pointer;
 }
-#achievementTracker .view-option.selected {
+#achievementTracker .display-type.selected {
    background-color: #ccc;
    border-top-color: #fff;
    border-right-color: #000;
@@ -31,14 +31,14 @@
    border-left-color: #fff;
    cursor: default;
 }
-#achievementTracker .view-option img {
+#achievementTracker .display-type img {
    width: 32px;
    margin-bottom: -5px;
 }
-#achievementTracker .view-option:not(.selected) img {
+#achievementTracker .display-type:not(.selected) img {
    opacity: 0.6;
 }
-#achievementTracker .view-option .display-name {
+#achievementTracker .display-type .name {
    color: #555;
    font-weight: normal;
    font-style: italic;
@@ -47,7 +47,7 @@
    left: 50%;
    transform: translate(-50%, -100%);
 }
-#achievementTracker .view-option.selected .display-name {
+#achievementTracker .display-type.selected .name {
    color: #444;
    font-weight: bold;
    font-style: normal;
@@ -182,7 +182,7 @@
    }
 }
 
-@media screen and (min-width: 80rem) {
+@media screen and (min-width: 60rem) {
    #achievementTracker {
       min-width: 60rem;
    }
@@ -191,7 +191,6 @@
    }
    #achievementTracker .seperator {
       width: 2px;
-      /* height: 100%; */
       background-color: #000;
       margin: 5px 10px;
       box-shadow: 2px 0 0 0 #fff;

@@ -1,7 +1,7 @@
 import { applications } from "../applications";
 import { loremCorp } from "../corporate-overview";
 import Game from "../Game";
-import preferences, { preferenceData } from "../classes/programs/preferences";
+import { getPreferences, setPreferences } from "../classes/programs/Preferences";
 import { getCurrentTime, randInt } from "../utils";
 import ACHIEVEMENTS from "./achievements-data";
 import LETTERS, { LetterInfo } from "./letter-data";
@@ -168,19 +168,26 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
    {
       name: "Preferences",
       defaultValue: () => {
-         return Object.keys(preferences.backgrounds).reduce((previousValue, _, i) => {
-            const suffix = i + 1 < Object.keys(preferences.backgrounds).length ? ":" : "";
-            return previousValue + "0" + suffix;
-         }, "");
+         return "0:0:0";
+         // return Object.keys(preferences.backgrounds).reduce((previousValue, _, i) => {
+         //    const suffix = i + 1 < Object.keys(preferences.backgrounds).length ? ":" : "";
+         //    return previousValue + "0" + suffix;
+         // }, "");
       },
       updateValue: () => {
-         return preferenceData.backgroundIndexes.reduce((previousValue, currentValue, i) => {
-            const suffix = i + 1 < preferenceData.backgroundIndexes.length ? ":" : "";
+         const preferences = getPreferences();
+
+         const selectedBackgrounds = preferences.selectedBackgrounds;
+         return selectedBackgrounds.reduce((previousValue, currentValue, i) => {
+            const suffix = i + 1 < selectedBackgrounds.length ? ":" : "";
             return previousValue + currentValue + suffix;
          }, "");
       },
       loadEvent: (savedValue: string) => {
-         preferenceData.backgroundIndexes = savedValue.split(":").map(Number);
+         const selectedBackgrounds = savedValue.split(":").map(Number) as [number, number, number];
+         setPreferences({
+            selectedBackgrounds: selectedBackgrounds
+         });
       }
    },
    {

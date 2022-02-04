@@ -9,7 +9,7 @@ import { getElem } from "./utils";
 import { loadSave } from "./save";
 import { setupApplications } from "./applications";
 import { setupStartMenu } from "./start-menu";
-import { initialisePrograms, setupPrograms } from "./programs";
+import { setupPrograms } from "./programs";
 import { loremCorp, setupCorporateOverview } from "./corporate-overview";
 import { generateLetterHashes, setupMail } from "./mail";
 import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from "./devtools";
@@ -63,8 +63,6 @@ const updateViewSizes = () => {
 window.onload = () => {
    // Generate unique letter ID's based on their names.
    generateLetterHashes();
-
-   initialisePrograms();
 
    // Load any saved games. If there aren't any, use the default save
    loadSave();
