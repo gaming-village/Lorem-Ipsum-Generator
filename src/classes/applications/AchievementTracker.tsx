@@ -31,7 +31,7 @@ enum FilterTypes {
    category = "Category"
 }
 enum DisplayTypes {
-   grid = "Grid",
+   compact = "Compact",
    strips = "Strips"
 }
 
@@ -54,29 +54,35 @@ const categoryFilter = (displayType: DisplayTypes): ReadonlyArray<JSX.Element> =
 
       const achievementArr = new Array<JSX.Element>();
       let containerClassName = "achievement-container";
-      if (displayType === DisplayTypes.grid) {
-         containerClassName += " grid";
-      } else if (displayType === DisplayTypes.strips) {
-         containerClassName += " strips";
+      for (const [display, displayName] of Object.entries(DisplayTypes)) {
+         if (displayName === displayType) containerClassName += " " + display;
       }
 
       const achievements = filteredAchievements[categoryName];
       for (const achievement of achievements) {
          let achievementSrc;
-         try {
-            achievementSrc = require("../../images/icons/" + achievement.iconSrc).default;
-         } catch {
+         if (!achievement.isUnlocked) {
             achievementSrc = require("../../images/icons/questionmark.png").default;
+         } else {
+            try {
+               achievementSrc = require("../../images/icons/" + achievement.iconSrc).default;
+            } catch {
+               achievementSrc = require("../../images/icons/questionmark.png").default;
+            }
+         }
+
+         let className = "achievement";
+         if (!achievement.isUnlocked) {
+            className += " locked";
          }
 
          achievementArr.push(
-            <div key={key++} className="achievement">
-               <img src={achievementSrc} alt={achievement.name} />
+            <div key={key++} className={className}>
+               <img className="icon" src={achievementSrc} alt={achievement.name} />
                <div>
                   <p className="name">{achievement.isUnlocked ? achievement.name : "???"}</p>
                   <p className="description">{achievement.isUnlocked ? achievement.description : "???"}</p>
                </div>
-               <div className="bg"></div>
             </div>
          );
       }
@@ -109,8 +115,11 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
          setDisplayType(displayName);
       }
 
+      let className = "display-type";
+      if (displayName === displayType) className += " selected";
+
       viewOptions.push(
-         <div className="display-type" onClick={clickEvent} key={i}>
+         <div className={className} onClick={clickEvent} key={i}>
             <div className="name">{displayName}</div>
          </div>
       )
