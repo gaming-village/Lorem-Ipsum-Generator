@@ -14,7 +14,7 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
    };
 
    return <>
-      <p>Lorem: {roundNum(lorem)}</p>
+      <p>{roundNum(lorem)} lorem</p>
    </>;
 }
 

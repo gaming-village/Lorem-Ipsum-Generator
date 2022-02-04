@@ -66,7 +66,7 @@ window.onload = () => {
 
    // Load any saved games. If there aren't any, use the default save
    loadSave();
-   
+
    loremCorp.updateCorporateOverview();
 
    updateViewSizes();
@@ -139,4 +139,36 @@ document.addEventListener("keydown", event => {
 document.addEventListener("keyup", function(event) {
    const key = event.key;
    keysDown.splice(keysDown.indexOf(key), 1);
+});
+
+export function focusProgram(program: HTMLElement): void {
+   const previouslySelectedProgram = document.querySelector(".windows-program.in-focus");
+   if (previouslySelectedProgram) previouslySelectedProgram.classList.remove("in-focus");
+
+   program.classList.add("in-focus");
+}
+
+document.addEventListener("mousedown", () => {
+   const e = window.event!;
+
+   let shouldHidePrevious = true;
+   for (const target of e.composedPath()) {
+      const elem = target as HTMLElement;
+      if (elem.classList && elem.classList.contains("taskbar-icon")) {
+         shouldHidePrevious = false;
+         break;
+      }
+   }
+   if (shouldHidePrevious) {
+      const previouslySelectedProgram = document.querySelector(".windows-program.in-focus");
+      if (previouslySelectedProgram) previouslySelectedProgram.classList.remove("in-focus");
+   }
+
+   for (const target of e.composedPath()) {
+      const elem = target as HTMLElement;
+      if (typeof elem.classList !== "undefined" && elem.classList.contains("windows-program")) {
+         focusProgram(elem);
+         break;
+      }
+   }
 });

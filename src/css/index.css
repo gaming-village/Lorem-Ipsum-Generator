@@ -130,12 +130,18 @@ body {
 }
 .windows-program .title-bar {
    color: #fff;
-   background-color: rgb(7, 30, 129);
+   background-color: #888;
    padding: 0.2rem 0;
    position: relative;
    overflow: hidden;
    white-space: pre;
    text-overflow: ellipsis;
+}
+.windows-program:not(.in-focus) {
+   cursor: pointer;
+}
+.windows-program.in-focus .title-bar {
+   background-color: rgb(7, 30, 129);
 }
 .windows-program .title-bar span {
    pointer-events: none;

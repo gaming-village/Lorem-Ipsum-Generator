@@ -130,9 +130,6 @@
    height: 100%;
    margin-left: 0.2rem;
 }
-/* #inbox .right .scroll-area ul {
-   list-style-type: disc;
-} */
 #inbox .ui-section-container img {
    width: 16px;
    position: absolute;
@@ -213,68 +210,6 @@
    white-space: pre;
 }
 
-/* #inbox {
-   min-width: 10rem;
-   padding: 0.3rem 0.6rem 0.3rem 0.3rem;
-   position: absolute;
-   top: 50%;
-   left: 25%;
-   display: inline-block;
-   transform: translate(-50%, -50%);
-   overflow: visible;
-   pointer-events: all;
-}
-#inbox .letter {
-   width: 100%;
-   background-color: #aaa;
-   margin-right: 1rem;
-   border: 2px solid;
-   border-top-color: #ddd;
-   border-right-color: #000;
-   border-bottom-color: #000;
-   border-left-color: #ddd;
-   display: block;
-   position: relative;
-   cursor: pointer;
-}
-#inbox .letter:hover {
-   background-color: #b3b3b3;
-}
-#inbox .letter:active {
-   background-color: #a5a5a5;
-}
-#inbox .letter:not(:last-child) {
-   margin-bottom: 0.3rem;
-}
-#inbox .letter.opened {
-   background-color: #ddd;
-   border-top-color: #fff;
-   border-left-color: #fff;
-}
-#inbox .letter.opened:hover {
-   background-color: #e5e5e5;
-}
-#inbox .letter.opened:active {
-   background-color: #d5d5d5;
-}
-
-#inbox .title {
-   font-size: 1.05rem;
-   font-weight: bold;
-   margin-left: 0.2rem;
-   margin-bottom: 0.2rem;
-   pointer-events: none;
-}
-#inbox .from {
-   font-size: 0.95rem;
-   margin-left: 0.5rem;
-   margin-bottom: 0.2rem;
-   pointer-events: none;
-}
-#inbox .from::before {
-   content: "- ";
-} */
-
 #letter {
    width: 30%;
    padding: 0.3rem;
@@ -312,6 +247,7 @@
 }
 
 #letter-body {
+   font-family: "Times New Roman", Times, serif;
    max-height: 10rem;
    overflow: scroll;
    overflow-x: hidden;

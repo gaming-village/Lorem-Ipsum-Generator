@@ -1,3 +1,7 @@
+#loremCounter p {
+   text-align: center;
+}
+
 #achievementTracker .achievement-count {
    margin-bottom: 0;
 }
@@ -96,7 +100,7 @@
 #achievementTracker .achievement-container.compact .achievement {
    width: 40px;
    height: 40px;
-   margin: 5px;
+   margin: 3px;
 }
 #achievementTracker .achievement-container.compact .achievement :is(.name, .description) {
    display: none;

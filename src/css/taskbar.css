@@ -170,6 +170,7 @@
    height: 24px;
    width: 24px;
    left: 0.5rem;
+   image-rendering: pixelated;
 }
 .start-menu-container :is(p, img) {
    position: absolute;

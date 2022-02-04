@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
+import { focusProgram } from "../..";
 import WindowsProgram from "../../components/WindowsProgram";
 import Game from "../../Game";
 import { getElem } from "../../utils";
@@ -12,6 +13,11 @@ interface ProgramElemProps {
 }
 const ProgramElem = ({ name, id, program, children }: ProgramElemProps): JSX.Element => {
    const [opened, setOpened] = useState<boolean>(false);
+   const programRef = useRef(null);
+
+   useEffect(() => {
+      if (programRef.current) focusProgram(programRef.current);
+   });
 
    program.setVisibility = (newVal: boolean): void => {
       setOpened(newVal);
@@ -20,7 +26,7 @@ const ProgramElem = ({ name, id, program, children }: ProgramElemProps): JSX.Ele
    const minimizeFunc = () => program.close();
    
    return opened ? (
-      <WindowsProgram title={name} id={id} hasMinimizeButton={true} isDraggable={true} minimizeFunc={minimizeFunc}>
+      <WindowsProgram ref={programRef} title={name} id={id} hasMinimizeButton={true} isDraggable={true} minimizeFunc={minimizeFunc}>
          {children}
       </WindowsProgram>
    ) : <></>;
