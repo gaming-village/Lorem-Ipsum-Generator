@@ -2,7 +2,7 @@ import React from "react";
 import "../css/computer.css";
 import "../css/programs.css";
 import WindowsProgram from "./WindowsProgram";
-import TaskBar from "./TaskBar";
+import TaskBar from "./Taskbar";
 
 const Computer = () => {
    return (

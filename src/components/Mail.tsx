@@ -35,7 +35,7 @@ const Mail = () => {
    return (
       <div id="mail" className="view">
          <div className="center-container">
-            <Button onClick={openMail} text="Open Mail" />
+            <Button onClick={openMail}>Open Mail</Button>
          </div>
 
          <div id="mail-container" className="hidden">
@@ -108,7 +108,7 @@ const Mail = () => {
                            <div className="text">{letter.reward.name}</div>
                         </div>
 
-                        <Button onClick={() => claimReward(letter)} className={rewardIsClaimed ? "dark" : "no"} text={rewardIsClaimed ? "Already claimed" : "Claim"} isCentered={true} />
+                        <Button onClick={() => claimReward(letter)} className={rewardIsClaimed ? "dark" : "no"} isCentered={true}>{rewardIsClaimed ? "Already claimed" : "Claim"}</Button>
                      </>
                      :
                      <p style={{ textAlign: "center", fontStyle: "italic" }}>This letter has no rewards!</p>

@@ -26,9 +26,13 @@ class LoremCounter extends Application {
          name: "Lorem Counter",
          id: "loremCounter",
          category: ApplicationCategory.lifestyle,
-         description: "i count lorem",
-         cost: 0
+         description: "Counts your lorem.",
+         iconSrc: "lorem-counter.png",
+         cost: 0,
+         isUnlocked: true
       });
+
+      super.open();
    }
 
    instantiate(): JSX.Element {

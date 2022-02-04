@@ -1,4 +1,4 @@
-import { applications } from "../applications";
+import { setUnlockedApplications } from "../applications";
 import { loremCorp } from "../corporate-overview";
 import Game from "../Game";
 import { getPreferences, setPreferences } from "../classes/programs/Preferences";
@@ -52,24 +52,21 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       name: "Unlocked applications",
       defaultValue: () => {
          let total = 0;
-         Object.values(applications).forEach((application, i) => {
+         Object.values(Game.applications).forEach((application, i) => {
             if (application.isUnlocked) total += Math.pow(2, i);
          });
          return total.toString();
       },
       updateValue: () => {
          let total = 0;
-         Object.values(applications).forEach((application, i) => {
+         Object.values(Game.applications).forEach((application, i) => {
             if (application.isUnlocked) total += Math.pow(2, i);
          });
          return total.toString();
       },
       loadEvent: (savedValue: string) => {
-         const bits = Number(savedValue).toString(2).split("").reverse();
-         bits.forEach((bit, i) => {
-            const application = Object.values(applications)[i];
-            if (bit === "1") application.isUnlocked = true;
-         });
+         const bitmap = Number(savedValue).toString(2).split("").reverse().map(Number) as ReadonlyArray<0 | 1>;
+         setUnlockedApplications(bitmap);
       }
    },
    {

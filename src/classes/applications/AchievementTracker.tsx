@@ -153,13 +153,15 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
 }
 
 class AchievementTracker extends Application {
-   constructor() {
+   constructor(isUnlocked: boolean) {
       super({
          name: "Achievement Tracker",
          id: "achievementTracker",
          category: ApplicationCategory.lifestyle,
-         description: "Achieve",
-         cost: 5
+         description: "Keep track of how how many meaningless tasks you have completed.",
+         iconSrc: "achievement-tracker.png",
+         cost: 5,
+         isUnlocked: isUnlocked
       });
    }
 

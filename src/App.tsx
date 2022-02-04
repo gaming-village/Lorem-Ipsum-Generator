@@ -20,8 +20,8 @@ function App() {
                   <input className="lorem-input" />
                   <ButtonContainer>
                      <>
-                        <Button className="add-lorem" text="Add" />
-                        <Button className="set-lorem" text="Set" />
+                        <Button className="add-lorem">Add</Button>
+                        <Button className="set-lorem">Set</Button>
                      </>
                   </ButtonContainer>
                </div>
@@ -33,16 +33,16 @@ function App() {
 
                   <select className="letter-select" name="Letters"></select>
 
-                  <Button className="receive-letter-button" text="Receive" />
+                  <Button className="receive-letter-button">Receive</Button>
 
                   <p>Receive all letters</p>
-                  <Button className="receive-all-letters-button" text="Receive All" />
+                  <Button className="receive-all-letters-button">Receive all</Button>
                </div>
 
                <h2 className="data">Data</h2>
 
                <div className="data-tab">
-                  <Button text="Reset" className="reset-button" isCentered={true} />
+                  <Button className="reset-button" isCentered={true}>Reset</Button>
                </div>
             </>
          </WindowsProgram>

@@ -95,7 +95,7 @@ export function getUpgrades(job: Worker): ReadonlyArray<JSX.Element> {
 
             <div className="requirements text-box">{createRequirementsString(upgradeInfo)}</div>
 
-            <Button text={!upgradeInfo.isBought ? "Buy Upgrade" : "Bought"} className={upgradeInfo.isBought ? "dark" : ""} isCentered={true} onClick={() => buyUpgrade(upgradeInfo, i)} />
+            <Button className={upgradeInfo.isBought ? "dark" : ""} isCentered={true} onClick={() => buyUpgrade(upgradeInfo, i)}>{!upgradeInfo.isBought ? "Buy Upgrade" : "Bought"}</Button>
          </>
       </WindowsProgram>
 

@@ -62,31 +62,36 @@ interface ApplicationType {
    id: string;
    category: ApplicationCategory;
    description: string;
+   iconSrc: string | null;
    cost: number;
+   isUnlocked: boolean;
 }
 abstract class Application {
    private readonly name: string;
    private readonly id: string;
    readonly category: ApplicationCategory;
    readonly description: string;
+   readonly iconSrc: string | null;
    readonly cost: number;
 
    setVisibility!: (newVal: boolean) => void;
    setTaskbarStatus!: (newVal: boolean) => void;
 
-   isUnlocked: boolean = false;
+   isUnlocked: boolean;
    isOpened: boolean = false;
-   constructor({ name, id, category, description, cost }: ApplicationType) {
+   constructor({ name, id, category, description, iconSrc, cost, isUnlocked }: ApplicationType) {
       this.name = name;
       this.id = id;
       this.category = category;
       this.description = description;
+      this.iconSrc = iconSrc;
       this.cost = cost;
+      this.isUnlocked = isUnlocked;
+
+      if (this.isUnlocked) this.createTaskbarIcon();
 
       const elemContent = this.instantiate();
       this.createElem(elemContent);
-
-      this.createTaskbarIcon();
 
       Game.applications[id] = this;
    }
@@ -119,6 +124,7 @@ abstract class Application {
       if (this.isUnlocked) return;
 
       this.isUnlocked = true;
+      this.createTaskbarIcon();
    }
 
    open() {

@@ -110,17 +110,17 @@ const Elem = ({ program }: ElemProps): JSX.Element => {
    const defaultBackgroundArray = backgroundInfo.map(category => category.backgrounds[0]);
    const [selectedBackgroundArray, setSelectedBackgroundArray] = useState<Array<Background>>(defaultBackgroundArray);
 
-   let currentKey = 0;
+   let key = 0;
    const content = new Array<JSX.Element>();
    content.push(
-      <h2 key={currentKey++}>Backgrounds</h2>
+      <h2 key={key++}>Backgrounds</h2>
    )
    
    for (let i = 0; i < backgroundInfo.length; i++) {
       const category = backgroundInfo[i];
       content.push(
-         <h3 key={currentKey++}>{category.name}</h3>,
-         <p key={currentKey++} style={{ marginBottom: "0.2rem" }}>{category.description}</p>
+         <h3 key={key++}>{category.name}</h3>,
+         <p key={key++} style={{ marginBottom: "0.2rem" }}>{category.description}</p>
       );
          
       const categoryContent = new Array<JSX.Element>();
@@ -156,7 +156,7 @@ const Elem = ({ program }: ElemProps): JSX.Element => {
          let className = "thumbnail";
          if (selectedBackgroundArray.includes(background)) className += " selected";
          categoryContent.push(
-            <div key={currentKey++} className={className} onClick={clickEvent}>
+            <div key={key++} className={className} onClick={clickEvent}>
                <div className="image" style={style}></div>
                <div>"{background.name}"</div>
             </div>
@@ -164,16 +164,16 @@ const Elem = ({ program }: ElemProps): JSX.Element => {
       }
 
       content.push(
-         <div key={currentKey++} className="thumbnail-container">
+         <div key={key++} className="thumbnail-container">
             {categoryContent}
          </div>
       );
    }
 
    content.push(
-      <h2>Taskbar Appearance</h2>,
+      <h2 key={key++}>Taskbar Appearance</h2>,
       // TODO: Regular and compact modes for taskbar icon appearance
-      <p>Change how your Applications appear in the taskbar.</p>
+      <p key={key++}>Change how your Applications appear in the taskbar.</p>
    );
 
    return <> {content} </>;

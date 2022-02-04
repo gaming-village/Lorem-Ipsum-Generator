@@ -197,23 +197,31 @@ const populatePanelContainer = (panelContainer: HTMLElement, panelTree: Readonly
 const startMenuIsOpen = (): boolean => {
    return elemExists("start-menu");
 }
-const closeStartMenu = () => {
-   getElem("start-menu")?.remove();
+const openStartMenu = (): void => {
+   const startMenu = createPanelContainer("start-menu");
+   populatePanelContainer(startMenu, startMenuTree);
+   closeMenuOnHoverOut(startMenu);
+
+   const startButton = getElem("start-button")!;
+   startButton.classList.add("opened");
 }
-const closeMenuOnHoverOut = (startMenu: HTMLElement) => {
+const closeStartMenu = (): void => {
+   getElem("start-menu")?.remove();
+
+   const startButton = getElem("start-button")!;
+   startButton.classList.remove("opened");
+}
+const closeMenuOnHoverOut = (startMenu: HTMLElement): void => {
    startMenu.addEventListener("mouseleave", () => {
       closeStartMenu();
    });
 }
 export function setupStartMenu() {
-   const startIcon = getElem("taskbar")?.querySelector(".start-icon");
-   startIcon?.addEventListener("click", () => {
+   const startButton = getElem("start-button")!;
+   startButton.addEventListener("click", () => {
       if (!startMenuIsOpen()) {
          // Open the start menu
-
-         const startMenu = createPanelContainer("start-menu");
-         populatePanelContainer(startMenu, startMenuTree);
-         closeMenuOnHoverOut(startMenu);
+         openStartMenu();
       } else {
          // Close the start menu
          closeStartMenu();

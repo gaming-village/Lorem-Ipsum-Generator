@@ -1,3 +1,4 @@
+/* PREFERENCES */
 #preferences .thumbnail-container {
    display: flex;
    justify-content: space-evenly;
@@ -44,40 +45,62 @@
    white-space: nowrap;
 }
 
-#application-shop .application {
+/* APPLICATION SHOP */
+#applicationShop .tab {
+   width: clamp(0px, 75%, 100%);
    background-color: #ddd;
    border: 2px solid;
    border-top-color: #fff;
    border-right-color: #000;
    border-bottom-color: #000;
    border-left-color: #fff;
-   margin: 0.5rem;
-   position: relative;
+   display: table;
+   margin: 10px 0 10px 50%;
+   transform: translateX(-50%);
+   box-shadow: 4px 4px 1px 0 rgba(0, 0, 0, 0.3);
 }
-#application-shop .application.unlocked {
+#applicationShop .tab.unlocked {
    background-color: #bbb;
    border-top-color: #000;
-   border-right-color: #ddd;
-   border-bottom-color: #ddd;
+   border-right-color: #eee;
+   border-bottom-color: #eee;
    border-left-color: #000;
+   box-shadow: none;
 }
-#application-shop .name {
+#applicationShop .tab > .formatter {
+   width: 95%;
+   padding: 3px 0;
+   margin-left: 50%;
+   display: flex;
+   justify-content:space-around;
+   align-items: center;
+   transform: translateX(-50%);
+}
+#applicationShop .formatter .formatter {
+   display: flex;
+   align-items: center;
+}
+#applicationShop .tab .formatter > * {
+   margin: 0 3px;
+}
+#applicationShop .tab img {
+   --size: 30px;
+   width: var(--size);
+   height: var(--size);
+   image-rendering: pixelated;
+}
+#applicationShop .name {
    font-size: 1.05rem;
    font-weight: bold;
    margin: 0 0 0.3rem 0.5rem;
 }
-#application-shop .description {
+#applicationShop .description {
    font-size: 0.95rem;
    margin: 0 0 0 0.4rem;
 }
-#application-shop button {
+#applicationShop button {
    min-width: unset;
-   position: absolute;
-   right: 5px;
-   top: 50%;
-   transform: translateY(-50%);
-   margin: 0;
 }
-#application-shop .application.unlocked button {
+#applicationShop .tab.unlocked button {
    font-style: italic;
 }

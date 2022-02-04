@@ -66,6 +66,7 @@ window.onload = () => {
 
    // Load any saved games. If there aren't any, use the default save
    loadSave();
+   
    loremCorp.updateCorporateOverview();
 
    updateViewSizes();

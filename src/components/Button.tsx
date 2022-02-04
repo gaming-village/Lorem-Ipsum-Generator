@@ -5,13 +5,13 @@ interface ButtonProps {
    className?: string;
    onClick?: MouseEventHandler;
    isCentered?: boolean;
-   text: string;
+   children: JSX.Element | string;
 }
 
 const Button = (props: ButtonProps) => {
    return (
       <button onClick={props.onClick} id={props.id} className={`button ${props.className} ${props.isCentered ? "centered" : ""}`}>
-         {props.text}
+         {props.children}
       </button>
    )
 }

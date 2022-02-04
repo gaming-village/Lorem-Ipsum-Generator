@@ -315,7 +315,7 @@ export function getPackElements(): ReadonlyArray<JSX.Element> {
          </div>
 
          {!packInfo.isBought ?
-         <Button onClick={() => buyPack(packInfo, getPack(i))} text="Unlock" isCentered={true} />
+         <Button onClick={() => buyPack(packInfo, getPack(i))} isCentered={true}>Unlock</Button>
          : ""}
          
       </div>;

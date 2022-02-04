@@ -97,8 +97,8 @@ const CorporateOverview = () => {
 
                   <ButtonContainer>
                      <>
-                     <Button onClick={() => loremCorp.attemptToBuyWorker(worker)} text="Buy" />
-                     <Button onClick={() => loremCorp.buyMaxWorkers(worker)} text="Buy Max" />
+                     <Button onClick={() => loremCorp.attemptToBuyWorker(worker)}>Buy</Button>
+                     <Button onClick={() => loremCorp.buyMaxWorkers(worker)}>Buy Max</Button>
                      </>
                   </ButtonContainer>
                </>
@@ -107,7 +107,7 @@ const CorporateOverview = () => {
       </CorporatePanel>
       jobPanels.push(panel);
 
-      const button = <Button onClick={() => switchJSXPanel(worker.name)} key={i} className={`${worker.name}-button dark`} text={workerName} />
+      const button = <Button onClick={() => switchJSXPanel(worker.name)} key={i} className={`${worker.name}-button dark`}>{workerName}</Button>
       jobButtons.push(button);
    }
 
@@ -122,12 +122,12 @@ const CorporateOverview = () => {
             <p>Salary: {job.salary}</p>
 
             <h2>Main</h2>
-            <Button className="home-button dark" text="Home" />
-            <Button className="upgrades-button dark" text="Upgrades" />
+            <Button className="home-button dark">Home</Button>
+            <Button className="upgrades-button dark">Upgrades</Button>
 
             <h2>Lorem Packs</h2>
-            <Button className="lorem-packs-shop-button dark" text="Browse" />
-            <Button className="dictionary-button dark" text="Dictionary" />
+            <Button className="lorem-packs-shop-button dark">Browse</Button>
+            <Button className="dictionary-button dark">Dictionary</Button>
 
             {jobButtons.length > 0 ? <h2>Subordinates</h2> : ""}
             <div className="job-button-container">
@@ -187,7 +187,7 @@ const CorporateOverview = () => {
                         <>
                            <p>You are currently {getPrefix(job.name) + " " + beautify(job.name)}. Your next position is as {getPrefix(WORKERS[loremCorp.jobIndex + 1].name) + " " + beautify(WORKERS[loremCorp.jobIndex + 1].name)}.</p>
                            <ProgressBar />
-                           <Button onClick={() => loremCorp.attemptToPromote()} isCentered={true} text="Promote" />
+                           <Button onClick={() => loremCorp.attemptToPromote()} isCentered={true}>Promote</Button>
                         </> :
                         <p>You are {getPrefix(job.name) + " " + beautify(job.name)}.</p>
                         }
