@@ -88,7 +88,7 @@ const WelcomeScreen = () => {
    }
 
    return stage === Stages.hidden ? <></> : (
-      <WindowsProgram ref={welcomeScreenRef} id="welcome-screen" title="Welcome" hasMinimizeButton={false}>
+      <WindowsProgram ref={welcomeScreenRef} id="welcome-screen" title="Welcome" uiButtons={["close"]} buttonsAreDark={section < sections.length - 1} closeFunc={section === sections.length - 1 ? () => close() : undefined}>
          <>
             <h1 style={{ textAlign: "center" }}>Welcome to LoremCorp&trade;!</h1>
 

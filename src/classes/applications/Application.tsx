@@ -53,7 +53,7 @@ const ApplicationElem = ({ title, id, application, children }: ApplicationElemPr
    const minimizeFunc = () => application.close();
    
    return visible ? (
-      <WindowsProgram ref={applicationRef} title={title} id={id} hasMinimizeButton={true} isDraggable={true} minimizeFunc={minimizeFunc}>
+      <WindowsProgram ref={applicationRef} title={title} id={id} uiButtons={["minimize"]} isDraggable={true} minimizeFunc={minimizeFunc}>
          {children}
       </WindowsProgram>
    ) : <></>;

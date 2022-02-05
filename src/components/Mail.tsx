@@ -39,7 +39,7 @@ const Mail = () => {
          </div>
 
          <div id="mail-container" className="hidden">
-            <WindowsProgram id="inbox" title="Inbox" isDraggable={false} hasMinimizeButton={false}>
+            <WindowsProgram id="inbox" title="Inbox" isDraggable={false} uiButtons={["minimize"]}>
                <>
                <div className="left">
                   <div className="folder-container text-box">
@@ -69,7 +69,7 @@ const Mail = () => {
             </WindowsProgram>
 
             {mail.currentLetter !== undefined ?
-            <WindowsProgram id="letter" title={`${letter.subject} - Microsoft Exchange`} titleStyle="bold" titleIconSrc={require("../images/icons/letter.png").default} hasMinimizeButton={false} isDraggable={false}>
+            <WindowsProgram id="letter" title={`${letter.subject} - Microsoft Exchange`} titleStyle="bold" titleIconSrc={require("../images/icons/letter.png").default} uiButtons={["minimize"]} isDraggable={false}>
                <>
                   <table>
                      <tbody>

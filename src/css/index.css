@@ -262,18 +262,22 @@ body {
    height: 20px;
    margin-left: 0.2rem;
    float: right;
-   opacity: 0.85;
    cursor: pointer;
 }
 .ui-button:hover {
    opacity: 1;
+   filter: brightness(1.1);
 }
 .ui-button:active {
-   opacity: 0.75;
+   filter: brightness(0.9);
 }
-.ui-button.unclickable, .ui-button.unclickable:hover, .ui-button.unclickable:active {
+/* .ui-button.unclickable, .ui-button.unclickable:hover, .ui-button.unclickable:active {
    opacity: 0.4;
    cursor: default;
+} */
+.ui-button.unclickable {
+   filter: brightness(0.7) !important;
+   cursor: default !important;
 }
 
 .left {

@@ -56,7 +56,7 @@ const CorporateOverview = () => {
       const panelName = `${worker.name}-panel`;
       const panel = <CorporatePanel key={i} className={panelName}>
          <>
-            <WindowsProgram className="panel" title={workerType} hasMinimizeButton={false}>
+            <WindowsProgram className="panel" title={workerType} uiButtons={["minimize"]}>
                <>
                   <h2>Overview</h2>
 
@@ -66,7 +66,7 @@ const CorporateOverview = () => {
                </>
             </WindowsProgram>
 
-            <WindowsProgram className="panel" title="Purchase" hasMinimizeButton={false}>
+            <WindowsProgram className="panel" title="Purchase" uiButtons={["minimize"]}>
                <>
                   <h2>Costs</h2>
 
@@ -138,7 +138,7 @@ const CorporateOverview = () => {
          <div className="right-bar">
             <CorporatePanel className="home-panel">
                <>
-                  <WindowsProgram className="panel" title="Profile" isDraggable={false} hasMinimizeButton={false}>
+                  <WindowsProgram className="panel" title="Profile" isDraggable={false} uiButtons={["minimize"]}>
                      <>
                         <h2>Worker #{loremCorp.workerNumber}</h2>
 
@@ -155,7 +155,7 @@ const CorporateOverview = () => {
                      </>
                   </WindowsProgram>
 
-                  <WindowsProgram className="panel" title="Overview" isDraggable={false} hasMinimizeButton={false}>
+                  <WindowsProgram className="panel" title="Overview" isDraggable={false} uiButtons={["minimize"]}>
                      <>
                         <p>Lorem Production: {roundNum(totalLoremProduction)} per second</p>
 
@@ -180,7 +180,7 @@ const CorporateOverview = () => {
                      </>
                   </WindowsProgram>
                   
-                  <WindowsProgram className="panel" title="Promote" isDraggable={false} hasMinimizeButton={false}>
+                  <WindowsProgram className="panel" title="Promote" isDraggable={false} uiButtons={["minimize"]}>
                      <>
                         {
                         loremCorp.jobIndex < WORKERS.length - 1 ?
@@ -198,7 +198,7 @@ const CorporateOverview = () => {
 
             <CorporatePanel className="upgrades-panel">
                <>
-                  <WindowsProgram className="panel" title="Upgrades" hasMinimizeButton={false}>
+                  <WindowsProgram className="panel" title="Upgrades" uiButtons={["minimize"]}>
                      <>
                         <h2>Information</h2>
 
@@ -213,7 +213,7 @@ const CorporateOverview = () => {
             </CorporatePanel>
 
             <CorporatePanel className="lorem-packs-shop-panel">
-               <WindowsProgram title="Shop" hasMinimizeButton={false} isDraggable={false}>
+               <WindowsProgram title="Shop" uiButtons={["minimize"]} isDraggable={false}>
                   <>
                      {getPackElements()}
                   </>

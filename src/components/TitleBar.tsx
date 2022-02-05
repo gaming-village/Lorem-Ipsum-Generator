@@ -1,12 +1,15 @@
 import React, { LegacyRef } from "react";
 import UIButton from "./UIButton";
 
+type UIButtonType = "minimize" | "close";
 interface TitleBarProps {
    title: string;
    titleStyle?: string;
    titleIconSrc?: string;
-   hasMinimizeButton: boolean;
+   uiButtons: ReadonlyArray<UIButtonType>;
+   buttonsAreDark?: boolean;
    minimizeFunc?: () => void;
+   closeFunc?: () => void;
    isDraggable: boolean;
    refTransfer?: HTMLElement | null;
 }
@@ -25,9 +28,12 @@ const TitleBar = React.forwardRef((props: TitleBarProps, ref: LegacyRef<HTMLDivE
 
          <span>{props.title}</span>
 
-         {props.hasMinimizeButton ?
-         <UIButton onClick={props.minimizeFunc} type="minimize" />
-         : ""}
+         {props.uiButtons.includes("minimize") ?
+            <UIButton isClickable={props.buttonsAreDark} onClick={props.minimizeFunc} type="minimize" />
+         : <></> }
+         {props.uiButtons.includes("close") ?
+            <UIButton isClickable={props.buttonsAreDark} onClick={props.closeFunc} type="close" />
+         : <></> }
       </div>
    )
 });

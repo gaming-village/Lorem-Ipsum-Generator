@@ -26,7 +26,7 @@ const ProgramElem = ({ name, id, program, children }: ProgramElemProps): JSX.Ele
    const minimizeFunc = () => program.close();
    
    return opened ? (
-      <WindowsProgram ref={programRef} title={name} id={id} hasMinimizeButton={true} isDraggable={true} minimizeFunc={minimizeFunc}>
+      <WindowsProgram ref={programRef} title={name} id={id} uiButtons={["minimize"]} isDraggable={true} minimizeFunc={minimizeFunc}>
          {children}
       </WindowsProgram>
    ) : <></>;
