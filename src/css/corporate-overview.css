@@ -25,6 +25,10 @@
    right: 0;
 }
 
+#corporate-overview .windows-program {
+   overflow-y: auto;
+}
+
 #corporate-overview .panel-container {
    width: calc(100% - 15rem - 26px);
    height: 100%;
@@ -58,7 +62,7 @@
 }
 
 #corporate-overview .upgrades-panel {
-   overflow: scroll;
+   overflow: auto;
 }
 #corporate-overview .upgrade-row {
    margin: 3rem 0;
