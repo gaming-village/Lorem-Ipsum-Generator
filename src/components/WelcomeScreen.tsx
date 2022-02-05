@@ -29,16 +29,16 @@ const sections: ReadonlyArray<SectionInfo> = [
       name: "Introduction",
       text: <>
          <p>Welcome intern.</p>
-         <p>Congratulations on your entry into Lorem Corp. You have been supplied with a virtual Windows 95 machine on which to conduct your mining.</p>
+         <p>Congratulations on your entry into LoremCorp&trade;. You have been supplied with a virtual Windows 95 machine on which to conduct your mining.</p>
+         <p>LoremCorp&trade; is the world's leading lorem production company, well known for its 'innovative' ethical practices.</p>
       </>
    },
    {
       name: "About",
       text: <>
-         <p>LoremCorp&trade; is the world's leading lorem production company, well known for its 'innovative' ethical practices.</p>
          <p>As an intern, it is your duty to tirelessly produce lorem with no pay. Any behaviour which may be deemed 'unnecessary' will result in immediate disciplinary action.</p>
          <p>Lorem mining is conducted by using the letter keys on your assigned keyboard.</p>
-         <p>Try mining some now.</p>
+         <p>Practice mining lorem now.</p>
          <div className="text-box">
             <span className="placeholder-text">[Use your keys to type]</span>
          </div>
