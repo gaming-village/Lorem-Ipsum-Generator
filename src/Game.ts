@@ -27,6 +27,7 @@ const Game = {
 
       if (this.previousLorem !== this.lorem) {
          const loremDiff: number = this.lorem - this.previousLorem;
+         this.previousLorem = this.lorem;
 
          for (const letter of LOREM_LETTERS) {
             if (this.lorem >= letter.requirement) {
@@ -92,8 +93,8 @@ const Game = {
    lorem: 0 as number,
    updateLorem: function(loremDiff: number): void {
       const loremCounterUpdateFunc = this.applications.loremCounter.updateLoremCount;
-      if (typeof loremCounterUpdateFunc !== "undefined") {
-         loremCounterUpdateFunc(this.lorem);
+      if (loremCounterUpdateFunc !== null) {
+         loremCounterUpdateFunc(this.lorem, loremDiff);
       }
 
       const loremCountDisplay = roundNum(this.lorem).toString();

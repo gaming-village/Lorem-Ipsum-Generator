@@ -1,5 +1,21 @@
 #loremCounter p {
    text-align: center;
+   position: relative;
+}
+#loremCounter .effect-text {
+   position: absolute;
+   top: 0;
+   animation: EffectTextDescend 0.5s linear infinite;
+}
+@keyframes EffectTextDescend {
+   0% {
+      top: 0;
+      opacity: 1;
+   }
+   100% {
+      top: 100%;
+      opacity: 0;
+   }
 }
 
 #achievementTracker .achievement-count {
