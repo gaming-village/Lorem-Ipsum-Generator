@@ -114,6 +114,42 @@ body {
    margin-left: 50%;
    transform: translateX(-50%);
 }
+.button.flashing::after {
+   content: "";
+   border: 2px solid;
+   border-radius: 3px;
+   position: absolute;
+   top: -6px;
+   right: -6px;
+   bottom: -6px;
+   left: -6px;
+   animation: ButtonFlash 1.3s linear infinite;
+}
+@keyframes ButtonFlash {
+   0% {
+      border-color: transparent;
+   }
+   49% {
+      border-color: transparent;
+   }
+   50% {
+      border-color: red;
+   }
+   100% {
+      border-color: red;
+   }
+}
+.button.dotted::before {
+   --offsetX: 2px;
+   --offsetY: 1px;
+   content: '';
+   border: 2px dotted rgba(0, 0, 0, 0.4);
+   position: absolute;
+   top: var(--offsetY);
+   left: var(--offsetX);
+   bottom: var(--offsetY);
+   right: var(--offsetX);
+}
 
 .windows-program {
    max-width: 50%;
@@ -176,7 +212,7 @@ body {
 .windows-program .title-bar + p:first-of-type {
    margin-top: 0.2rem;
 }
-.windows-program p:last-child {
+.windows-program > p:last-child {
    margin-bottom: 0.2rem;
 }
 .windows-program .text-box, .windows-program input[type=text] {

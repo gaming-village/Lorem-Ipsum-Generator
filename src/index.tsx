@@ -2,11 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./css/index.css";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-
 import Game from "./Game";
 import { getElem } from "./utils";
-import { loadSave } from "./save";
+import { getCurrentSave, getDefaultSave, loadSave } from "./save";
 import { setupApplications } from "./applications";
 import { setupStartMenu } from "./start-menu";
 import { setupPrograms } from "./programs";
@@ -14,6 +12,7 @@ import { loremCorp, setupCorporateOverview } from "./corporate-overview";
 import { generateLetterHashes, setupMail } from "./mail";
 import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from "./devtools";
 import { type } from "./lorem-production";
+import { previewType, showWelcomeScreen } from "./components/WelcomeScreen";
 
 ReactDOM.render(
    <React.StrictMode>
@@ -21,11 +20,6 @@ ReactDOM.render(
    </React.StrictMode>,
    document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
 
 const viewNames: string[] = ["computer", "mail", "corporate-overview", "settings"];
 const setupViews = (): void => {
@@ -64,8 +58,13 @@ window.onload = () => {
    // Generate unique letter ID's based on their names.
    generateLetterHashes();
 
-   // Load any saved games. If there aren't any, use the default save
-   loadSave();
+   let shouldShowWelcomeScreen = false;
+   let saveData = getCurrentSave();
+   if (saveData === null) {
+      saveData = getDefaultSave();
+      shouldShowWelcomeScreen = true;
+   }
+   loadSave(saveData);
 
    loremCorp.updateCorporateOverview();
 
@@ -75,6 +74,8 @@ window.onload = () => {
    });
 
    setupApplications();
+
+   if (shouldShowWelcomeScreen) showWelcomeScreen();
 
    // Set up the tick shenanigans
    setInterval(() => Game.tick(), 1000 / Game.tps);
@@ -132,6 +133,10 @@ document.addEventListener("keydown", event => {
 
    // When any letter key or the space bar is pressed
    if (ALL_LOREM_CHARS.includes(key) && !keysDown.includes(key)) {
+      if (previewType !== null) {
+         previewType();
+         return;
+      }
       keysDown.push(key)
       type(key);
    }

@@ -7,10 +7,13 @@ import Settings from "./components/Settings";
 import WindowsProgram from "./components/WindowsProgram";
 import Button from "./components/Button";
 import ButtonContainer from "./components/ButtonContainer";
+import WelcomeScreen from "./components/WelcomeScreen";
 
 function App() {
    return (
       <>
+         <WelcomeScreen />
+
          <WindowsProgram id="devtools" className="hidden" title="Devtools" titleIconSrc={require("./images/icons/settings.png").default} hasMinimizeButton={false}>
             <>
                <h2 className="resources">Resources</h2>
