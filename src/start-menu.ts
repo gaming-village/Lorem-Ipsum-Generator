@@ -11,28 +11,6 @@ interface PanelData {
 
 const startMenuTree: ReadonlyArray<PanelData> = [
    {
-      name: "test",
-      imgSrc: "/images/icons/picture.png",
-      tree: [
-         {
-            name: "test2",
-            imgSrc: "/images/win95/folder-search.png",
-            tree: [
-               {
-                  name: "test4",
-                  imgSrc: "/images/win95/folder-search.png",
-                  tree: "testingGamer"
-               }
-            ]
-         },
-         {
-            name: "test3",
-            imgSrc: "/images/win95/info.png",
-            tree: ""
-         }
-      ]
-   },
-   {
       name: "Applications",
       imgSrc: "/images/icons/picture.png",
       tree: [
@@ -53,6 +31,11 @@ const startMenuTree: ReadonlyArray<PanelData> = [
       name: "Preferences",
       imgSrc: "/images/icons/save.png",
       tree: "preferences"
+   },
+   {
+      name: "Settings",
+      imgSrc: "/images/icons/settings.png",
+      tree: "settings"
    },
    {
       name: "Help",

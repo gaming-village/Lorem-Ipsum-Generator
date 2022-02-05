@@ -3,7 +3,6 @@ import TopBar from "./components/TopBar";
 import Computer from "./components/Computer";
 import CorporateOverview from "./components/CorporateOverview";
 import Mail from "./components/Mail";
-import Settings from "./components/Settings";
 import WindowsProgram from "./components/WindowsProgram";
 import Button from "./components/Button";
 import ButtonContainer from "./components/ButtonContainer";
@@ -58,7 +57,6 @@ function App() {
          <Computer />
          <CorporateOverview />
          <Mail />
-         <Settings />
       </>
    );
 }

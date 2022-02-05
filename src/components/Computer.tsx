@@ -11,11 +11,11 @@ const Computer = () => {
             <span className="instruction">(Type to generate lorem)</span>
          </div>
 
-         <WindowsProgram title="lorem_counter.gov" hasMinimizeButton={false} id="lorem-counter" className="hidden">
+         <WindowsProgram title="lorem_counter.gov" id="lorem-counter" className="hidden">
             <span className="lorem-count"></span>
          </WindowsProgram>
 
-         <WindowsProgram title="Preferences" id="preferences" className="hidden" hasMinimizeButton={false}>
+         <WindowsProgram title="Preferences" id="preferences" className="hidden">
             <>
                <h2>Background Image</h2>
 
@@ -37,13 +37,13 @@ const Computer = () => {
             </>
          </WindowsProgram>
 
-         <WindowsProgram title="Application Shop" id="application-shop" className="hidden" hasMinimizeButton={false}>
+         <WindowsProgram title="Application Shop" id="application-shop" className="hidden">
             <>
                <p>Purchase applications to enchance your productivity here at Lorem Corp.</p>
             </>
          </WindowsProgram>
 
-         <WindowsProgram title="Achievement Tracker" id="achievement-tracker" className="hidden" hasMinimizeButton={false}>
+         <WindowsProgram title="Achievement Tracker" id="achievement-tracker" className="hidden">
             <div className="formatter">
                <div className="left-column">
                   <h2>Overview</h2>
@@ -69,7 +69,7 @@ const Computer = () => {
             </div>
          </WindowsProgram>
 
-         <WindowsProgram title="Intern Enhancement Program" id="intern-enhancement-program" className="hidden" hasMinimizeButton={false}>
+         <WindowsProgram title="Intern Enhancement Program" id="intern-enhancement-program" className="hidden">
             <>
                <p>enhance ur interns here!11!1</p>
 

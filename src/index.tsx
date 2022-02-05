@@ -21,7 +21,7 @@ ReactDOM.render(
    document.getElementById("root")
 );
 
-const viewNames: string[] = ["computer", "mail", "corporate-overview", "settings"];
+const viewNames: string[] = ["computer", "mail", "corporate-overview"];
 const setupViews = (): void => {
    // Hide all views except the computer and setup the buttons
    for (const name of viewNames) {
@@ -127,7 +127,12 @@ document.addEventListener("keydown", event => {
 
    // If the input is a number from 1-9 (keycodes 49-57) and the command key isn't held and the view exists
    const VIEW_NUMS = "123456789".split("");
-   if (VIEW_NUMS.includes(key) && Number(key) <= viewNames.length && !event.metaKey) {
+   if (VIEW_NUMS.includes(key) && Number(key) <= viewNames.length) {
+      // On mac if the command key is pressed (switch tab) don't fire
+      if (window.navigator.appVersion.indexOf("Mac") !== -1 && event.metaKey) return;
+      // On windows if the ctrl key is pressed (switch tab) don't fire
+      else if (window.navigator.appVersion.indexOf("Win") !== -1 && event.ctrlKey) return;
+      
       switchView(viewNames[Number(key) - 1]);
    }
 

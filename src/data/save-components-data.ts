@@ -8,6 +8,7 @@ import LETTERS, { LetterInfo } from "./letter-data";
 import LOREM_PACKS from "./lorem-packs-data";
 import UPGRADES from "./upgrades-data";
 import WORKERS from "./workers";
+import { getDefaultSettings } from "../classes/programs/Settings";
 
 const decimalToBinaryArr = (num: string): Array<number> => {
    return Number(num).toString(2).split("").reverse().map(Number);
@@ -260,6 +261,66 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
             const upgrade = UPGRADES[i];
             if (part === 1) upgrade.isBought = true;
          });
+      }
+   },
+   {
+      name: "Settings",
+      defaultValue: () => {
+         const defaultSettings = getDefaultSettings();
+
+         let result = "";
+         for (let i = 0; i < defaultSettings.length; i++) {
+            const setting = defaultSettings[i];
+            switch (setting.type) {
+               case "range": {
+                  result += setting.value;
+                  break;
+               }
+            }
+
+            if (i < Game.settings.length - 1) result += ":";
+         }
+
+         return result;
+      },
+      updateValue: () => {
+         let result = "";
+         for (let i = 0; i < Game.settings.length; i++) {
+            const setting = Game.settings[i];
+            switch (setting.type) {
+               case "range": {
+                  result += setting.value;
+                  break;
+               }
+            }
+
+            if (i < Game.settings.length - 1) result += ":";
+         }
+
+         return result;
+      },
+      loadEvent: (savedValue: string) => {
+         const defaultSettings = getDefaultSettings();
+
+         if (savedValue === "") {
+            Game.settings = defaultSettings;
+            return;
+         }
+
+         const settingsData = savedValue.split(":");
+         for (let i = 0; i < defaultSettings.length; i++) {
+            const setting = defaultSettings[i];
+            const dataVal = settingsData[i];
+
+            switch (setting.type) {
+               case "range": {
+                  const val = parseFloat(dataVal);
+                  setting.value = val;
+                  break;
+               }
+            }
+         }
+         Game.settings = defaultSettings;
       }
    }
 ];

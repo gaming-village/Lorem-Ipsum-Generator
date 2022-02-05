@@ -1,5 +1,5 @@
 export function setupPrograms() {
-   const fileNames: ReadonlyArray<string> = ["ApplicationShop", "Preferences"];
+   const fileNames: ReadonlyArray<string> = ["ApplicationShop", "Preferences", "Settings"];
    const programClasses = fileNames.map(fileName => require("./classes/programs/" + fileName).default);
 
    const programs = new Array<any>();

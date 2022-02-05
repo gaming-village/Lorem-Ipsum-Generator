@@ -209,9 +209,9 @@ body {
 .windows-program p {
    margin: 1rem 2px;
 }
-.windows-program .title-bar + p:first-of-type {
+/* .windows-program .title-bar + p:first-of-type {
    margin-top: 0.2rem;
-}
+} */
 .windows-program > p:last-child {
    margin-bottom: 0.2rem;
 }

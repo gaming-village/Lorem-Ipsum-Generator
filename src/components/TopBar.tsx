@@ -9,7 +9,6 @@ const TopBar = () => {
             <Button id="computer-button" className="view-button">Computer</Button>
             <Button id="mail-button" className="view-button">Mail</Button>
             <Button id="corporate-overview-button" className="view-button">Corporate Overview</Button>
-            <Button id="settings-button" className="view-button">Settings</Button>
          </div>
       </div>
    )

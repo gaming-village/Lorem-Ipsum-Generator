@@ -104,3 +104,35 @@
 #applicationShop .tab.unlocked button {
    font-style: italic;
 }
+
+#settings .setting {
+   width: 80%;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-left-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   margin-left: 50%;
+   transform: translateX(-50%);
+}
+#settings .formatter {
+   display: flex;
+   align-items: center;
+}
+#settings .setting > .formatter {
+   padding: 2px 3px;
+   justify-content: space-between;
+}
+#settings .icon {
+   --size: 32px;
+   width: var(--size);
+   height: var(--size);
+   image-rendering: pixelated;
+}
+#settings .label {
+   font-weight: bold;
+   text-align: center;
+}
+#settings .value {
+   margin-right: 10px;
+}

@@ -8,6 +8,7 @@ import { unlockAchievement } from "./classes/applications/AchievementTracker";
 import { LOREM_LETTERS } from "./data/letter-data";
 import ACHIEVEMENTS from "./data/achievements-data";
 import { hasUpgrade } from "./upgrades";
+import { SettingsType } from "./classes/programs/Settings";
 
 const Game = {
    ticks: 0,
@@ -15,6 +16,7 @@ const Game = {
    // TODO: set this to lorem num when the game loads
    previousLorem: 0,
    loremAchievements: new Array<Achievement>(),
+   settings: [] as SettingsType,
    applications: {} as { [key: string]: any },
    programs: {} as { [key: string]: any },
    tick: function(): void {
