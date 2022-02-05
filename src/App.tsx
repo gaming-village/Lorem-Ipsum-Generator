@@ -14,7 +14,7 @@ function App() {
       <>
          <WelcomeScreen />
 
-         <WindowsProgram id="devtools" className="hidden" title="Devtools" titleIconSrc={require("./images/icons/settings.png").default} hasMinimizeButton={false}>
+         <WindowsProgram id="devtools" className="hidden" title="Devtools" titleIconSrc={require("./images/icons/settings.png").default}>
             <>
                <h2 className="resources">Resources</h2>
 

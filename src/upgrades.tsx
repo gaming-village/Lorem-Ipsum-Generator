@@ -89,7 +89,7 @@ export function getUpgrades(job: Worker): ReadonlyArray<JSX.Element> {
          break;
       }
 
-      const upgrade = <WindowsProgram key={i} className={`upgrade upgrade-${i} ${upgradeInfo.isBought ? "bought" : ""}`} title={upgradeInfo.name} hasMinimizeButton={false}>
+      const upgrade = <WindowsProgram key={i} className={`upgrade upgrade-${i} ${upgradeInfo.isBought ? "bought" : ""}`} title={upgradeInfo.name}>
          <>
             <p>{upgradeInfo.description}</p>
 
