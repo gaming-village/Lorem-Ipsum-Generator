@@ -13,6 +13,7 @@ import { generateLetterHashes, setupMail } from "./mail";
 import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from "./devtools";
 import { type } from "./lorem-production";
 import { previewType, showWelcomeScreen } from "./components/WelcomeScreen";
+import { setupNavBar, switchView } from "./components/NavBar";
 
 ReactDOM.render(
    <React.StrictMode>
@@ -20,32 +21,6 @@ ReactDOM.render(
    </React.StrictMode>,
    document.getElementById("root")
 );
-
-const viewNames: string[] = ["computer", "mail", "corporate-overview"];
-const setupViews = (): void => {
-   // Hide all views except the computer and setup the buttons
-   for (const name of viewNames) {
-      const button = getElem(`${name}-button`);
-      button.addEventListener("click", () => switchView(name));
-
-      if (name === "computer") continue;
-
-      getElem(name).classList.add("hidden");
-      button.classList.add("dark");
-   }
-}
-export function switchView(viewName: string): void {
-   if (Game.isInFocus) return;
-
-   const previouslyShownView = document.querySelector(".view:not(.hidden)");
-   if (previouslyShownView) previouslyShownView.classList.add("hidden");
-
-   const previouslySelectedButton = document.querySelector(".view-button:not(.dark)");
-   if (previouslySelectedButton) previouslySelectedButton.classList.add("dark");
-
-   getElem(viewName).classList.remove("hidden");
-   getElem(`${viewName}-button`).classList.remove("dark");
-}
 
 const updateViewSizes = () => {
    const views: HTMLElement[] = Array.from(document.getElementsByClassName("view") as HTMLCollectionOf<HTMLElement>);
@@ -84,8 +59,7 @@ window.onload = () => {
 
    setupPrograms();
 
-   // Hide all views other than the computer
-   setupViews();
+   setupNavBar();
 
    // Setup mail
    setupMail();
@@ -127,13 +101,15 @@ document.addEventListener("keydown", event => {
 
    // If the input is a number from 1-9 (keycodes 49-57) and the command key isn't held and the view exists
    const VIEW_NUMS = "123456789".split("");
-   if (VIEW_NUMS.includes(key) && Number(key) <= viewNames.length) {
+   if (VIEW_NUMS.includes(key)) {
+      if (Game.isInFocus) return;
+
       // On mac if the command key is pressed (switch tab) don't fire
       if (window.navigator.appVersion.indexOf("Mac") !== -1 && event.metaKey) return;
       // On windows if the ctrl key is pressed (switch tab) don't fire
       else if (window.navigator.appVersion.indexOf("Win") !== -1 && event.ctrlKey) return;
       
-      switchView(viewNames[Number(key) - 1]);
+      switchView(Number(key) - 1);
    }
 
    // When any letter key or the space bar is pressed

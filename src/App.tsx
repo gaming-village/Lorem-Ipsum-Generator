@@ -1,5 +1,5 @@
 import React from "react";
-import TopBar from "./components/TopBar";
+import NavBar from "./components/NavBar";
 import Computer from "./components/Computer";
 import CorporateOverview from "./components/CorporateOverview";
 import Mail from "./components/Mail";
@@ -53,7 +53,7 @@ function App() {
 
          <div id="notification-container"></div>
 
-         <TopBar />
+         <NavBar />
          <Computer />
          <CorporateOverview />
          <Mail />

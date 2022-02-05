@@ -3,12 +3,11 @@
    border-bottom: 2px solid #aaa;
    padding: 4px 0;
 }
-#top-bar .container {
+#top-bar .formatter {
    margin-left: 50%;
-   display: inline-block;
+   display: inline-flex;
    transform: translateX(-50%);
 }
 #top-bar button {
    margin: 0 0.5rem;
-   display: inline;
 }

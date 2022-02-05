@@ -84,6 +84,9 @@
 #inbox .folder.opened .icon {
    background-image: url("../images/icons/opened-folder.png");
 }
+#inbox .folder.has-unopened-letters span {
+   color: red;
+}
 #inbox .folder.has-unopened-letters .icon::after {
    --size: 16px;
    content: "";

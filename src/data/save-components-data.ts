@@ -302,7 +302,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       loadEvent: (savedValue: string) => {
          const defaultSettings = getDefaultSettings();
 
-         if (savedValue === "") {
+         if (typeof savedValue === "undefined" || savedValue === "") {
             Game.settings = defaultSettings;
             return;
          }

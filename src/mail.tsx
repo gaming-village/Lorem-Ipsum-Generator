@@ -3,7 +3,7 @@ import Game from "./Game";
 import { createLineTrail, getElem, hashCode } from "./utils";
 import LETTERS, { LetterInfo, LetterReward } from "./data/letter-data";
 import { createNotification } from "./notifications";
-import { switchView } from ".";
+import { switchView } from "./components/NavBar";
 
 export const mail = {
    currentLetter: undefined as unknown as LetterInfo,
