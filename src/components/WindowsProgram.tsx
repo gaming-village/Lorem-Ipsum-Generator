@@ -20,7 +20,7 @@ interface ProgramProps {
 const defaultProps: ProgramProps = {
    title: "",
    titleStyle: "bold",
-   uiButtons: ["minimize"],
+   uiButtons: [],
    isDraggable: true,
    id: "",
    className: ""

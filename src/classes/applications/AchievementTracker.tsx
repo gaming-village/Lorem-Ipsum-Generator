@@ -158,7 +158,7 @@ class AchievementTracker extends Application {
          name: "Achievement Tracker",
          id: "achievementTracker",
          category: ApplicationCategory.lifestyle,
-         description: "Keep track of how how many meaningless tasks you have completed.",
+         description: "Keep track of how many meaningless tasks you have completed.",
          iconSrc: "achievement-tracker.png",
          cost: 5,
          isUnlocked: isUnlocked
