@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/Navbar";
 import Computer from "./components/Computer";
 import CorporateOverview from "./components/CorporateOverview";
 import Mail from "./components/Mail";

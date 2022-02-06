@@ -1,4 +1,109 @@
-#corporate-overview .left-bar {
+/* GENERAL STYLES */
+#corporate-overview h1 {
+   text-align: center;
+   text-decoration: underline;
+   font-size: 1.4rem;
+   margin: 0.5rem 2px 0.4rem;
+}
+#corporate-overview h2 {
+   font-size: 1.25rem;
+   margin: 1rem 2px 0.5rem;
+}
+#corporate-overview .separator {
+   width: 80%;
+   height: 1px;
+   background-color: #000;
+   margin-left: 50%;
+   border-bottom: 1px solid #fff;
+   transform: translateX(-50%);
+}
+
+#corporate-overview .formatter {
+   display: flex;
+   position: absolute;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+}
+
+/* LEFT BAR (Control Panel) */
+#corporate-overview .control-panel {
+   min-width: 15rem;
+   height: 100%;
+   background-color: #ccc;
+   border-right: 2px solid #000;
+}
+#corporate-overview .control-panel button {
+   margin-left: 1rem;
+}
+
+/* MAIN SCREEN (sections) */
+#corporate-overview .content {
+   height: 100%;
+   width: 100%;
+   position: relative;
+}
+#corporate-overview .section {
+   min-width: 25rem;
+   max-width: 75%;
+   background-color: #ccc;
+   padding: 2px;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   display: table;
+   position: absolute;
+   left: 50%;
+   top: 2rem;
+   transform: translateX(-50%);
+}
+#corporate-overview .title-bar {
+   color: #fff;
+   text-align: center;
+   font-weight: 600;
+   font-size: 1.05rem;
+   background-color: rgb(7, 30, 129);
+   padding: 0.05rem 0;
+}
+
+/* ID CARD (Overview section) */
+.id-card {
+   min-width: 15rem;
+   background-color: rgb(255, 255, 220);
+   border: 1px solid #888;
+   border-radius: 5px;
+   padding: 5px 10px;
+   margin: 1rem 0 1rem 50%;
+   display: table;
+   transform: translateX(-50%);
+   box-shadow: 6px 6px 1px -1px rgba(0, 0, 0, 0.25);
+}
+.id-card .job-occupation {
+   font-size: 0.85rem;
+   margin-bottom: 0.3rem;
+}
+.id-card .worker-number {
+   margin: 0 0 0.2rem;
+}
+.id-card ul {
+   margin: 0;
+   padding-left: 1.5rem;
+}
+.id-card li {
+   list-style-type: initial;
+}
+.id-card .footer {
+   color: #666;
+   font-style: italic;
+   font-size: 0.8rem;
+   margin-top: 0.5rem;
+   float: right;
+}
+
+/* #corporate-overview .left-bar {
    width: 15rem;
    height: 100%;
    background-color: #ccc;
@@ -195,4 +300,4 @@
 }
 .lorem-tooltip table {
    width: 100%;
-}
+} */

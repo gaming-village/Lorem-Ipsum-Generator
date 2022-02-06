@@ -38,7 +38,7 @@ const sections: ReadonlyArray<SectionInfo> = [
       text: <>
          <p>As an intern, it is your duty to tirelessly produce lorem with no pay. Any behaviour which may be deemed 'unnecessary' will result in immediate disciplinary action.</p>
          <p>Lorem mining is conducted by using the letter keys on your assigned keyboard.</p>
-         <p>Practice mining lorem now.</p>
+         <p>You can practice mining lorem below.</p>
          <div className="text-box">
             <span className="placeholder-text">[Use your keys to type]</span>
          </div>

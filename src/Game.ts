@@ -10,15 +10,46 @@ import ACHIEVEMENTS from "./data/achievements-data";
 import { hasUpgrade } from "./upgrades";
 import { SettingsType } from "./classes/programs/Settings";
 
-const Game = {
+interface GameType {
+   ticks: number;
+   tps: number;
+   lorem: number;
+   totalLoremTyped: number;
+   previousLorem: number;
+   wordsTyped: number;
+   loremAchievements: Array<Achievement>;
+   settings: SettingsType;
+   applications: { [key: string]: any };
+   programs: { [key: string]: any };
+   tick: () => void;
+   loadLoremAchievements: () => void;
+   motivation: number;
+   updateMotivation: () => void;
+   timeAtLastSave: number;
+   calculateIdleProfits: () => void;
+   updateLorem: (loremDiff: number) => void;
+   isInFocus: boolean;
+   maskClickEvent: (() => void) | undefined;
+   setupMask: () => void;
+   showMask: () => void;
+   hideMask: () => void;
+   reset: () => void;
+}
+interface UserInfo {
+   workerNumber: number;
+}
+
+const Game: GameType = {
    ticks: 0,
    tps: 10,
-   // TODO: set this to lorem num when the game loads
+   lorem: 0,
+   totalLoremTyped: 0,
    previousLorem: 0,
+   wordsTyped: 0,
    loremAchievements: new Array<Achievement>(),
-   settings: [] as SettingsType,
-   applications: {} as { [key: string]: any },
-   programs: {} as { [key: string]: any },
+   settings: [],
+   applications: {},
+   programs: {},
    tick: function(): void {
       this.ticks++;
 
@@ -67,16 +98,7 @@ const Game = {
          getElem("achievement-tracker").querySelector(".motivation")!.innerHTML = `Motivation: ${roundNum(this.motivation)}`;
       }
    },
-   _wordsTyped: 0,
-   get wordsTyped() {
-      return this._wordsTyped;
-   },
-   set wordsTyped(value) {
-      this._wordsTyped = value;
-
-      getElem("words-typed").innerHTML = `Words typed: ${this.wordsTyped}`;
-   },
-   timeAtLastSave: undefined as unknown as number,
+   timeAtLastSave: -1,
    calculateIdleProfits: function(): void {
       const secondsIdle = (getCurrentTime() - this.timeAtLastSave) / 1000;
       const productionWhileIdle = loremCorp.getTotalWorkerProduction() * secondsIdle;
@@ -92,7 +114,6 @@ const Game = {
 
       Game.lorem += productionWhileIdle;
    },
-   lorem: 0 as number,
    updateLorem: function(loremDiff: number): void {
       const loremCounterUpdateFunc = this.applications.loremCounter.updateLoremCount;
       if (loremCounterUpdateFunc !== null) {
@@ -106,8 +127,8 @@ const Game = {
 
       loremCorp.updatePromotionProgress();
    },
-   isInFocus: false as boolean,
-   maskClickEvent: undefined as Function | undefined,
+   isInFocus: false,
+   maskClickEvent: undefined,
    setupMask: function(): void {
       getElem("mask").addEventListener("click", () => {
          if (this.maskClickEvent) this.maskClickEvent();
@@ -125,6 +146,9 @@ const Game = {
 
       // Reload the page
       window.location.reload();
+   },
+   userInfo: {
+      workerNumber: 0
    }
 };
 
