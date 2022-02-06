@@ -10,6 +10,9 @@ import ACHIEVEMENTS from "./data/achievements-data";
 import { hasUpgrade } from "./upgrades";
 import { SettingsType } from "./classes/programs/Settings";
 
+interface UserInfo {
+   workerNumber: number;
+}
 interface GameType {
    ticks: number;
    tps: number;
@@ -34,9 +37,7 @@ interface GameType {
    showMask: () => void;
    hideMask: () => void;
    reset: () => void;
-}
-interface UserInfo {
-   workerNumber: number;
+   userInfo: UserInfo;
 }
 
 const Game: GameType = {
