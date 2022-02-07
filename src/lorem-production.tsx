@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "./components/Button";
 import List from "./components/List";
-import { loremCorp } from "./corporate-overview";
 import LOREM_PACKS, { LoremCategory, LoremPack, LoremWord, SentenceStructure } from "./data/lorem-packs-data";
 import Game from "./Game";
 import { createTooltip, removeTooltip } from "./tooltips";
@@ -187,8 +186,8 @@ export function type(key: string): void {
 
    const WORKER_CREATION_CHANCE = 0.01;
    if (hasUpgrade("Mechanical Keyboard") && Math.random() < WORKER_CREATION_CHANCE) {
-      const randomWorkerIndex = randInt(0, loremCorp.jobIndex);
-      loremCorp.workers[randomWorkerIndex]++;
+      const randomWorkerIndex = randInt(0, Game.userInfo.jobIndex);
+      Game.userInfo.workers[randomWorkerIndex]++;
    }
 
    letterIndex++;
@@ -202,7 +201,6 @@ const buyPack = (packInfo: LoremPack, pack: HTMLElement) => {
    if (Game.wordsTyped < packInfo.requirements.wordsTyped) return;
 
    packInfo.isBought = true;
-   loremCorp.updateCorporateOverview();
 }
 
 const showPackPreview = (packInfo: LoremPack, pack: HTMLElement) => {

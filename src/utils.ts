@@ -141,3 +141,7 @@ export function updateProgressBar(progressBarContainer: HTMLElement, progress: n
    label.innerHTML = `${roundNum(Math.min(progress, 100))}%`;
    label.style.left = `${Math.min(progress, 100)}%`;
 }
+
+export function clamp(value: number, min: number, max: number): number {
+   return Math.max(Math.min(value, max), min);
+}

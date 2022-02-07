@@ -8,7 +8,6 @@ import { getCurrentSave, getDefaultSave, loadSave } from "./save";
 import { setupApplications } from "./applications";
 import { setupStartMenu } from "./start-menu";
 import { setupPrograms } from "./programs";
-import { loremCorp, setupCorporateOverview } from "./corporate-overview";
 import { generateLetterHashes, setupMail } from "./mail";
 import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from "./devtools";
 import { type } from "./lorem-production";

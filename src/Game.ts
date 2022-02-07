@@ -1,6 +1,5 @@
 import { roundNum, getElem, getCurrentTime } from "./utils";
 import { updateSave } from "./save";
-import { loremCorp } from "./corporate-overview";
 import { receiveMail } from "./mail";
 import { createNotification } from "./notifications";
 import achievements, { Achievement } from "./data/achievements-data";
@@ -12,6 +11,8 @@ import { SettingsType } from "./classes/programs/Settings";
 
 interface UserInfo {
    workerNumber: number;
+   jobIndex: number;
+   workers: Array<number>;
 }
 interface GameType {
    ticks: number;
@@ -38,6 +39,9 @@ interface GameType {
    hideMask: () => void;
    reset: () => void;
    userInfo: UserInfo;
+   renderListeners: Array<() => void>
+   createRenderListener: (func: () => void) => void;
+   removeRenderListener: (func: () => void) => void;
 }
 
 const Game: GameType = {
@@ -54,14 +58,19 @@ const Game: GameType = {
    tick: function(): void {
       this.ticks++;
 
-      const workerLoremProduction = loremCorp.getTotalWorkerProduction();
-      if (workerLoremProduction > 0) {
-         this.lorem += workerLoremProduction / this.tps;
-      }
+      for (const func of this.renderListeners) func();
+
+      // const workerLoremProduction = loremCorp.getTotalWorkerProduction();
+      // if (workerLoremProduction > 0) {
+      //    this.lorem += workerLoremProduction / this.tps;
+      // }
 
       if (this.previousLorem !== this.lorem) {
          const loremDiff: number = this.lorem - this.previousLorem;
          this.previousLorem = this.lorem;
+
+         // Add to the total lorem typed
+         if (loremDiff > 0) this.totalLoremTyped += loremDiff;
 
          for (const letter of LOREM_LETTERS) {
             if (this.lorem >= letter.requirement) {
@@ -101,32 +110,25 @@ const Game: GameType = {
    },
    timeAtLastSave: -1,
    calculateIdleProfits: function(): void {
-      const secondsIdle = (getCurrentTime() - this.timeAtLastSave) / 1000;
-      const productionWhileIdle = loremCorp.getTotalWorkerProduction() * secondsIdle;
+      // const secondsIdle = (getCurrentTime() - this.timeAtLastSave) / 1000;
+      // const productionWhileIdle = loremCorp.getTotalWorkerProduction() * secondsIdle;
 
-      if (productionWhileIdle === 0) return;
+      // if (productionWhileIdle === 0) return;
 
-      const notificationInfo = {
-         iconSrc: "save.png",
-         title: "Idle profits",
-         description: `While you were away your workers generated ${roundNum(productionWhileIdle)} lorem.`
-      }
-      createNotification(notificationInfo, false, true);
+      // const notificationInfo = {
+      //    iconSrc: "save.png",
+      //    title: "Idle profits",
+      //    description: `While you were away your workers generated ${roundNum(productionWhileIdle)} lorem.`
+      // }
+      // createNotification(notificationInfo, false, true);
 
-      Game.lorem += productionWhileIdle;
+      // Game.lorem += productionWhileIdle;
    },
    updateLorem: function(loremDiff: number): void {
       const loremCounterUpdateFunc = this.applications.loremCounter.updateLoremCount;
       if (loremCounterUpdateFunc !== null) {
          loremCounterUpdateFunc(this.lorem, loremDiff);
       }
-
-      const loremCountDisplay = roundNum(this.lorem).toString();
-
-      const corporateOverviewCounter = getElem("corporate-overview").querySelector(".lorem-count");
-      if (corporateOverviewCounter) corporateOverviewCounter.innerHTML = `Lorem: ${loremCountDisplay}`;
-
-      loremCorp.updatePromotionProgress();
    },
    isInFocus: false,
    maskClickEvent: undefined,
@@ -148,8 +150,18 @@ const Game: GameType = {
       // Reload the page
       window.location.reload();
    },
+   renderListeners: new Array<() => void>(),
+   createRenderListener: function(func: () => void): void {
+      this.renderListeners.push(func);
+   },
+   removeRenderListener: function(func: () => void): void {
+      const idx = this.renderListeners.indexOf(func);
+      this.renderListeners.splice(idx, 1);
+   },
    userInfo: {
-      workerNumber: 0
+      workerNumber: 0,
+      jobIndex: 0,
+      workers: []
    }
 };
 

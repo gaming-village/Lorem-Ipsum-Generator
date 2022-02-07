@@ -30,7 +30,7 @@ const JOB_DATA: ReadonlyArray<Job> = [
       name: "Worker",
       salary: "N/A",
       requirements: {
-         lorem: 0
+         lorem: 100
       },
       costs: {
          lorem: 0
@@ -42,7 +42,7 @@ const JOB_DATA: ReadonlyArray<Job> = [
       name: "Manager",
       salary: "N/A",
       requirements: {
-         lorem: 0
+         lorem: 500
       },
       costs: {
          lorem: 0
@@ -54,7 +54,7 @@ const JOB_DATA: ReadonlyArray<Job> = [
       name: "Technician",
       salary: "N/A",
       requirements: {
-         lorem: 0
+         lorem: 600
       },
       costs: {
          lorem: 0
@@ -66,7 +66,7 @@ const JOB_DATA: ReadonlyArray<Job> = [
       name: "Director",
       salary: "N/A",
       requirements: {
-         lorem: 0
+         lorem: 2500
       },
       costs: {
          lorem: 0

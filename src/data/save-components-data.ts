@@ -1,5 +1,4 @@
 import { setUnlockedApplications } from "../applications";
-import { loremCorp } from "../corporate-overview";
 import Game from "../Game";
 import { getPreferences, setPreferences } from "../classes/programs/Preferences";
 import { getCurrentTime, randInt } from "../utils";
@@ -9,6 +8,7 @@ import LOREM_PACKS from "./lorem-packs-data";
 import UPGRADES from "./upgrades-data";
 import WORKERS from "./workers";
 import { getDefaultSettings } from "../classes/programs/Settings";
+import JOB_DATA from "./corporate-overview-data";
 
 const decimalToBinaryArr = (num: string): Array<number> => {
    return Number(num).toString(2).split("").reverse().map(Number);
@@ -76,44 +76,40 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return randInt(10000, 1000000).toString();
       },
       updateValue: () => {
-         return loremCorp.workerNumber.toString();
+         return Game.userInfo.workerNumber.toString();
       },
       loadEvent: (savedValue: string) => {
-         loremCorp.workerNumber = Number(savedValue);
+         Game.userInfo.workerNumber = Number(savedValue);
       }
    },
    {
       name: "Job position index",
       defaultValue: () => {
-         return ("0");
+         return "0";
       },
       updateValue: () => {
-         return loremCorp.jobIndex.toString();
+         return Game.userInfo.jobIndex.toString();
       },
       loadEvent: (savedValue: string) => {
-         const jobIndex = Number(savedValue);
-
-         loremCorp.jobIndex = jobIndex;
-         loremCorp.job = WORKERS[jobIndex];
-         loremCorp.nextJob = WORKERS[jobIndex + 1];
+         Game.userInfo.jobIndex = Number(savedValue);
       }
    },
    {
       name: "Worker counts",
       defaultValue: () => {
-         return "0-".repeat(WORKERS.length).substr(0, WORKERS.length * 2 - 1);
+         return "0-".repeat(JOB_DATA.length).substring(0, JOB_DATA.length * 2 - 1);
       },
       updateValue: () => {
          let returnVal = "";
-         loremCorp.workers.forEach((workerCount, i) => {
+         Game.userInfo.workers.forEach((workerCount, i) => {
             returnVal += workerCount.toString();
-            if (i + 1 < loremCorp.workers.length) returnVal += "-";
+            if (i + 1 < Game.userInfo.workers.length) returnVal += "-";
          })
          return returnVal;
       },
       loadEvent: (savedValue: string) => {
          // e.g. "5-1-0-0" to [5, 1, 0, 0]
-         loremCorp.workers = savedValue.split("-").map(Number);
+         Game.userInfo.workers = savedValue.split("-").map(Number);
       }
    },
    {

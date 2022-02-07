@@ -4,8 +4,8 @@ import React from "react";
 import WindowsProgram from "./components/WindowsProgram";
 import Game from "./Game";
 import Button from "./components/Button";
-import { loremCorp } from "./corporate-overview";
 import { getElem } from "./utils";
+import JOB_DATA from "./data/corporate-overview-data";
 
 interface UpgradesDictionary {
    [key: number]: Array<JSX.Element>;
@@ -31,7 +31,7 @@ const buyUpgrade = (upgradeInfo: Upgrade, upgradeID: number): void => {
    if (requirements.workers) {
       for (let i = 0; i < Object.entries(requirements.workers).length; i++) {
          const workerRequirement = requirements.workers[WORKERS[i].name];
-         if (workerRequirement && loremCorp.workers[i] < workerRequirement) {
+         if (workerRequirement && Game.userInfo.workers[i] < workerRequirement) {
             return;
          }
       }
@@ -41,12 +41,12 @@ const buyUpgrade = (upgradeInfo: Upgrade, upgradeID: number): void => {
    if (requirements.lorem) Game.lorem -= requirements.lorem;
    if (requirements.workers) {
       for (let i = 0; i < Object.entries(requirements.workers).length; i++) {
-         const workerRequirement = requirements.workers[WORKERS[i].name];
-         if (workerRequirement) {
-            loremCorp.workers[i] -= workerRequirement;
-         }
+         // TODO: FIX!!!!!!
+         // const workerRequirement = requirements.workers[JOB_DATA[i].name];
+         // if (workerRequirement) {
+         //    Game.userInfo.workers[i] -= workerRequirement;
+         // }
       }
-      loremCorp.updateCorporateOverview();
    }
    upgradeInfo.isBought = true;
 

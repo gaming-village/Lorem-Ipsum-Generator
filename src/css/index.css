@@ -1,10 +1,12 @@
 body {
-   --win95-bg-colour: #c3c7cb;
-   --win95-dark-blue: rgb(7, 30, 129);
    margin: 0;
+   overflow: hidden;
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
-   overflow: hidden;
+}
+:root {
+   --win95-bg-colour: #c3c7cb;
+   --win95-dark-blue: rgb(7, 30, 129);
 }
 
 .hidden {
@@ -345,8 +347,7 @@ body {
    position: relative;
 }
 .progress-bar {
-   width: 0%;
-   max-width: 100%;
+   width: var(--progress);
    height: 100%;
    border-radius: 0.25rem;
    background-color: rgb(43, 82, 255);

@@ -1,12 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../css/corporate-overview.css";
 import JOB_DATA, { Job } from "../data/corporate-overview-data";
+import Game from "../Game";
+import { getPrefix, roundNum } from "../utils";
 import Button from "./Button";
+import ProgressBar from "./ProgressBar";
 
 interface ProfileSectionProps {
    job: Job;
+   promoteFunc?: () => void
 }
-const ProfileSection = ({ job }: ProfileSectionProps) => {
+const ProfileSection = ({ job, promoteFunc }: ProfileSectionProps) => {
+   const nextJob = JOB_DATA[JOB_DATA.indexOf(job) + 1];
+   const [totalLoremTyped, setTotalLoremTyped] = useState(Game.totalLoremTyped);
+
+   useEffect(() => {
+      const updateTotalLoremTyped = () => {
+         setTotalLoremTyped(Game.totalLoremTyped);
+      }
+
+      Game.createRenderListener(updateTotalLoremTyped);
+
+      return () => {
+         Game.removeRenderListener(updateTotalLoremTyped);
+      }
+   });
+
+   const canPromote = totalLoremTyped > nextJob.requirements.lorem;
+   
+   const promote = (): void => {
+      if (canPromote) promoteFunc!();
+   }
+
    return <>
       <h2>ID Card</h2>
 
@@ -21,6 +46,25 @@ const ProfileSection = ({ job }: ProfileSectionProps) => {
       </div>
 
       <h2>Job Status</h2>
+
+      <p>You are currently {getPrefix(job.name)} {job.name}. Your next position is as {getPrefix(nextJob.name)} {nextJob.name}.</p>
+
+      <p className="promotion-progress">{roundNum(totalLoremTyped)} / {nextJob.requirements.lorem}</p>
+
+      <ProgressBar progress={totalLoremTyped} start={job.requirements.lorem} end={nextJob.requirements.lorem} />
+
+      <div className="progress-bar-formatter">
+         <div>
+            <h3>{job.name}</h3>
+            <p>{job.requirements.lorem} lorem generated</p>
+         </div>
+         <div>
+            <h3>{nextJob.name}</h3>
+            <p>{nextJob.requirements.lorem} lorem generated</p>
+         </div>
+      </div>
+
+      <Button isDark={!canPromote} isFlashing={canPromote} isCentered={true} onClick={promote}>Promote</Button>
    </>;
 }
 
@@ -33,7 +77,7 @@ interface SectionType {
    type: "regular";
    category: SectionCategories;
    isOpened: boolean;
-   getSection: (job: Job) => JSX.Element;
+   getSection: (job: Job, promoteFunc?: () => void) => JSX.Element;
 }
 const DEFAULT_SECTIONS: ReadonlyArray<SectionType> = [
    {
@@ -41,7 +85,7 @@ const DEFAULT_SECTIONS: ReadonlyArray<SectionType> = [
       type: "regular",
       category: SectionCategories.general,
       isOpened: true,
-      getSection: (job: Job) => <ProfileSection job={job} />
+      getSection: (job: Job, promoteFunc?: () => void) => <ProfileSection job={job} promoteFunc={promoteFunc} />
    }
 ];
 
@@ -102,6 +146,10 @@ const CorporateOverview = () => {
       setSections(newSectionArr);
    }
 
+   const promote = (): void => {
+      setJob(JOB_DATA[JOB_DATA.indexOf(job) + 1]);
+   }
+
    const controlPanel = getControlPanel(sections, changeSection);
    
    let section!: JSX.Element;
@@ -109,7 +157,7 @@ const CorporateOverview = () => {
       section = <div className="section">
          <div className="title-bar">{openedSection.name}</div>
 
-         {openedSection.getSection(job)}
+         {openedSection.getSection(job, promote)}
       </div>;
    }
 
