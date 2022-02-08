@@ -355,6 +355,9 @@ body {
    background-image: linear-gradient( 135deg, #fff 25%, transparent 25%, transparent 50%, #fff 50%, #fff 75%, transparent 75%, transparent);
    animation: progressBarMove 1s forwards infinite linear;
 }
+.progress-bar-container.complete .progress-bar {
+   animation-duration: 2.5s;
+}
 @keyframes  progressBarMove {
    0% {
       background-position-x: 0px;
