@@ -15,6 +15,7 @@ const ProgressBar = ({ progress, start, end }: ProgressBarProps) => {
       progressAmount = clamp(progressAmount, 0, 100);
       
       progressBar.current!.style.setProperty("--progress", progressAmount + "%");
+      progressBar.current!.className = "progress-bar-container" + (progressAmount === 100 ? " complete" : "");
    });
 
    return <div ref={progressBar} className="progress-bar-container">

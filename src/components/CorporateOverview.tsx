@@ -71,12 +71,38 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
 
 const UpgradesSection = ({ job }: SectionProps) => {
    return <div>
-
+      
    </div>;
 }
 
+const WorkerSection = ({ job }: SectionProps) => {
+   const jobIndex = JOB_DATA.indexOf(job);
+
+   const workerCount = Game.userInfo.workers[jobIndex];
+   const loremProduction = workerCount * job.loremProduction;
+
+   return <div>
+      <h2>Overview</h2>
+
+      <p>You currently have {workerCount} {job.name}{workerCount === 1 ? "" : "s"}, producing {loremProduction} lorem every second.</p>
+
+      <p>Each {job.name} produces {job.loremProduction} lorem every second.</p>
+
+      <div className="separator"></div>
+
+      <h2>Market</h2>
+
+      <div className="button-container">
+         <Button>Buy</Button>
+         <Button>Buy max</Button>
+      </div>
+   </div>
+}
+
+
 enum SectionCategories {
-   general = "General"
+   general = "General",
+   workers = "Workers"
 }
 
 interface SectionType {
@@ -84,9 +110,10 @@ interface SectionType {
    type: "regular"| "custom";
    category: SectionCategories;
    isOpened: boolean;
+   shouldShow?: (job: Job) => boolean;
    getSection: (job: Job, promoteFunc?: () => void) => JSX.Element;
 }
-const DEFAULT_SECTIONS: ReadonlyArray<SectionType> = [
+let DEFAULT_SECTIONS: ReadonlyArray<SectionType> = [
    {
       name: "Profile",
       type: "regular",
@@ -102,8 +129,20 @@ const DEFAULT_SECTIONS: ReadonlyArray<SectionType> = [
       getSection: (job: Job) => <UpgradesSection job={job} />
    }
 ];
+DEFAULT_SECTIONS = DEFAULT_SECTIONS.concat(JOB_DATA.map(currentJob => {
+   return {
+      name: currentJob.name,
+      type: "regular",
+      category: SectionCategories.workers,
+      isOpened: false,
+      shouldShow: (job: Job) => {
+         return currentJob.tier < job.tier;
+      },
+      getSection: () => <WorkerSection job={currentJob} />
+   } as SectionType;
+}));
 
-const getControlPanel = (sections: Array<SectionType>, changeSection: (newSection: SectionType) => void): Array<JSX.Element> => {
+const getControlPanel = (job: Job, sections: Array<SectionType>, changeSection: (newSection: SectionType) => void): Array<JSX.Element> => {
    let key = 0;
    let content = new Array<JSX.Element>();
 
@@ -124,6 +163,9 @@ const getControlPanel = (sections: Array<SectionType>, changeSection: (newSectio
       );
 
       for (const section of sections) {
+         if (section.shouldShow && !section.shouldShow(job)) {
+            continue;
+         }
          content.push(
             <Button onClick={() => changeSection(section)} className={section.isOpened ? "" : "dark"} key={key++}>{section.name}</Button>
          );
@@ -164,7 +206,7 @@ const CorporateOverview = () => {
       setJob(JOB_DATA[JOB_DATA.indexOf(job) + 1]);
    }
 
-   const controlPanel = getControlPanel(sections, changeSection);
+   const controlPanel = getControlPanel(job, sections, changeSection);
    
    let section!: JSX.Element;
    if (openedSection.type === "regular") {
