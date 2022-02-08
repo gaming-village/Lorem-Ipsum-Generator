@@ -8,7 +8,7 @@ import LOREM_PACKS from "./lorem-packs-data";
 import UPGRADES from "./upgrades-data";
 import WORKERS from "./workers";
 import { getDefaultSettings } from "../classes/programs/Settings";
-import JOB_DATA from "./corporate-overview-data";
+import { JOB_DATA } from "./corporate-overview-data";
 
 const decimalToBinaryArr = (num: string): Array<number> => {
    return Number(num).toString(2).split("").reverse().map(Number);
