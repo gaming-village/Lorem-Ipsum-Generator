@@ -8,15 +8,17 @@ import { LOREM_LETTERS } from "./data/letter-data";
 import ACHIEVEMENTS from "./data/achievements-data";
 import { hasUpgrade } from "./upgrades";
 import { SettingsType } from "./classes/programs/Settings";
+import JOB_DATA, { Job } from "./data/corporate-overview-data";
 
 interface UserInfo {
    workerNumber: number;
-   jobIndex: number;
+   job: Job;
+   jobPath: string;
    workers: Array<number>;
 }
 interface GameType {
    ticks: number;
-   tps: number;
+   readonly tps: number;
    lorem: number;
    totalLoremTyped: number;
    previousLorem: number;
@@ -160,7 +162,8 @@ const Game: GameType = {
    },
    userInfo: {
       workerNumber: 0,
-      jobIndex: 0,
+      job: JOB_DATA[0],
+      jobPath: "0",
       workers: []
    }
 };

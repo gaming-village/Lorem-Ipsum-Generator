@@ -6,7 +6,6 @@ import ACHIEVEMENTS from "./achievements-data";
 import LETTERS, { LetterInfo } from "./letter-data";
 import LOREM_PACKS from "./lorem-packs-data";
 import UPGRADES from "./upgrades-data";
-import WORKERS from "./workers";
 import { getDefaultSettings } from "../classes/programs/Settings";
 import JOB_DATA from "./corporate-overview-data";
 
@@ -35,6 +34,19 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          Game.lorem = Number(savedValue);
+         Game.previousLorem = Number(savedValue);
+      }
+   },
+   {
+      name: "Total lorem typed",
+      defaultValue: () => {
+         return "0";
+      },
+      updateValue: () => {
+         return Game.totalLoremTyped.toString();
+      },
+      loadEvent: (savedValue: string) => {
+         Game.totalLoremTyped = Number(savedValue);
       }
    },
    {
@@ -88,10 +100,25 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         return Game.userInfo.jobIndex.toString();
+         return Game.userInfo.jobPath.toString();
       },
       loadEvent: (savedValue: string) => {
-         Game.userInfo.jobIndex = Number(savedValue);
+         Game.userInfo.jobPath = Number(savedValue);
+      }
+   },
+   {
+      name: "Corporate overview job path",
+      // Format:
+      // 0010
+      // numbers indicate job index per tier, read left to right (last digit = intern)
+      defaultValue: () => {
+         return "0";
+      },
+      updateValue: () => {
+
+      },
+      loadValue: (savedValue: string) => {
+
       }
    },
    {

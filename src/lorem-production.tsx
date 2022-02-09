@@ -186,7 +186,7 @@ export function type(key: string): void {
 
    const WORKER_CREATION_CHANCE = 0.01;
    if (hasUpgrade("Mechanical Keyboard") && Math.random() < WORKER_CREATION_CHANCE) {
-      const randomWorkerIndex = randInt(0, Game.userInfo.jobIndex);
+      const randomWorkerIndex = randInt(0, Game.userInfo.jobPath);
       Game.userInfo.workers[randomWorkerIndex]++;
    }
 

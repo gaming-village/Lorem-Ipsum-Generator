@@ -51,15 +51,23 @@ export function updateSave(): void {
       return saveComponent.updateValue();
    });
    const saveData = newSaveArray.join("_");
+   console.log(saveData);
 
    setCookie(saveName, saveData);
 }
 
 export function loadSave(saveData: string): void {
    const saveDataComponents = saveData.split("_");
-   SAVE_COMPONENTS.forEach((saveComponent, i) => {
-      saveComponent.loadEvent(saveDataComponents[i]);
-   });
+   for (let i = 0; i < SAVE_COMPONENTS.length; i++) {
+      const saveComponent = SAVE_COMPONENTS[i];
+      try {
+         saveComponent.loadEvent(saveDataComponents[i]);
+      } catch {
+         alert("Malformed save detected. Resetting save! (This usually occurs because a new save component has been added.");
+         loadSave(getDefaultSave());
+         break;
+      }
+   }
 }
 
 // export function loadSave(): void {

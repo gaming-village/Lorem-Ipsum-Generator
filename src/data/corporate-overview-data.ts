@@ -5,16 +5,18 @@ interface JobCosts {
    lorem: number;
 }
 export interface Job {
-   name: string;
-   salary: string;
-   requirements: JobRequirements;
-   costs: JobCosts;
-   loremProduction: number;
-   tier: number;
+   readonly id: string;
+   readonly name: string;
+   readonly salary: string;
+   readonly requirements: JobRequirements;
+   readonly costs: JobCosts;
+   readonly loremProduction: number;
+   readonly tier: number;
 }
 
 const JOB_DATA: ReadonlyArray<Job> = [
    {
+      id: "interns",
       name: "Intern",
       salary: "N/A",
       requirements: {
@@ -27,6 +29,7 @@ const JOB_DATA: ReadonlyArray<Job> = [
       tier: 1
    },
    {
+      id: "workers",
       name: "Worker",
       salary: "N/A",
       requirements: {
@@ -39,6 +42,7 @@ const JOB_DATA: ReadonlyArray<Job> = [
       tier: 2
    },
    {
+      id: "managers",
       name: "Manager",
       salary: "N/A",
       requirements: {
@@ -51,6 +55,7 @@ const JOB_DATA: ReadonlyArray<Job> = [
       tier: 3
    },
    {
+      id: "technicians",
       name: "Technician",
       salary: "N/A",
       requirements: {
@@ -63,6 +68,7 @@ const JOB_DATA: ReadonlyArray<Job> = [
       tier: 3
    },
    {
+      id: "directors",
       name: "Director",
       salary: "N/A",
       requirements: {
