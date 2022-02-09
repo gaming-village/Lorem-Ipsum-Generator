@@ -8,13 +8,13 @@ import { LOREM_LETTERS } from "./data/letter-data";
 import ACHIEVEMENTS from "./data/achievements-data";
 import { hasUpgrade } from "./upgrades";
 import { SettingsType } from "./classes/programs/Settings";
-import JOB_DATA, { Job } from "./data/corporate-overview-data";
+import { JOB_DATA, Job } from "./data/corporate-overview-data";
 
 interface UserInfo {
    workerNumber: number;
    job: Job;
    jobPath: string;
-   workers: Array<number>;
+   workers: { [key: string ]: number};
 }
 interface GameType {
    ticks: number;
@@ -164,7 +164,7 @@ const Game: GameType = {
       workerNumber: 0,
       job: JOB_DATA[0],
       jobPath: "0",
-      workers: []
+      workers: {}
    }
 };
 

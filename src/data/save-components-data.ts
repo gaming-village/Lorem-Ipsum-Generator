@@ -7,7 +7,7 @@ import LETTERS, { LetterInfo } from "./letter-data";
 import LOREM_PACKS from "./lorem-packs-data";
 import UPGRADES from "./upgrades-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
-import JOB_DATA from "./corporate-overview-data";
+import { JOB_DATA } from "./corporate-overview-data";
 
 const decimalToBinaryArr = (num: string): Array<number> => {
    return Number(num).toString(2).split("").reverse().map(Number);
@@ -103,7 +103,8 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return Game.userInfo.jobPath.toString();
       },
       loadEvent: (savedValue: string) => {
-         Game.userInfo.jobPath = Number(savedValue);
+         // TODO: FIX!
+         // Game.userInfo.jobPath = Number(savedValue);
       }
    },
    {
@@ -115,10 +116,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-
+         return "0";
       },
-      loadValue: (savedValue: string) => {
-
+      loadEvent: (savedValue: string) => {
+         Game.userInfo.jobPath = "0";
       }
    },
    {
@@ -128,7 +129,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       updateValue: () => {
          let returnVal = "";
-         Game.userInfo.workers.forEach((workerCount, i) => {
+         Object.values(Game.userInfo.workers).forEach((workerCount, i) => {
             returnVal += workerCount.toString();
             if (i + 1 < Game.userInfo.workers.length) returnVal += "-";
          })
@@ -136,7 +137,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          // e.g. "5-1-0-0" to [5, 1, 0, 0]
-         Game.userInfo.workers = savedValue.split("-").map(Number);
+         // Game.userInfo.workers = savedValue.split("-").map(Number);
       }
    },
    {

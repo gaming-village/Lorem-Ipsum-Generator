@@ -1,16 +1,35 @@
 import React, { useEffect, useState } from "react";
 import "../css/corporate-overview.css";
-import JOB_DATA, { Job } from "../data/corporate-overview-data";
+import { JOB_DATA, Job } from "../data/corporate-overview-data";
 import Game from "../Game";
-import { getPrefix, roundNum } from "../utils";
+import { getPrefix, randItem, roundNum } from "../utils";
 import Button from "./Button";
 import ProgressBar from "./ProgressBar";
 
-interface ProfileSectionProps {
+export function getRandomWorker(): Job {
+   const potentialWorkers = new Array<Job>();
+   const chosenJobIndexes = Game.userInfo.jobPath.split("");
+   let idx = 0;
+   for (const job of JOB_DATA) {
+      if (job.tier > idx) {
+         idx = 0;
+      } else {
+         idx++;
+      }
+      const chosenJobIdx = Number(chosenJobIndexes[job.tier]);
+      if (idx === chosenJobIdx) {
+         potentialWorkers.push(job)
+      }
+   }
+   return randItem(potentialWorkers);
+}
+
+interface SectionProps {
    job: Job;
    promoteFunc?: () => void
 }
-const ProfileSection = ({ job, promoteFunc }: ProfileSectionProps) => {
+
+const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
    const nextJob = JOB_DATA[JOB_DATA.indexOf(job) + 1];
    const [totalLoremTyped, setTotalLoremTyped] = useState(Game.totalLoremTyped);
 
@@ -68,7 +87,13 @@ const ProfileSection = ({ job, promoteFunc }: ProfileSectionProps) => {
    </>;
 }
 
-const WorkerSection = ({ job }: ProfileSectionProps) => {
+const UpgradesSection = ({ job }: SectionProps) => {
+   return <div>
+      
+   </div>;
+}
+
+const WorkerSection = ({ job }: SectionProps) => {
    const jobIndex = JOB_DATA.indexOf(job);
 
    const workerCount = Game.userInfo.workers[jobIndex];
@@ -89,9 +114,9 @@ const WorkerSection = ({ job }: ProfileSectionProps) => {
          <Button>Buy</Button>
          <Button>Buy max</Button>
       </div>
-
-   </div>;
+   </div>
 }
+
 
 enum SectionCategories {
    general = "General",
@@ -100,7 +125,7 @@ enum SectionCategories {
 
 interface SectionType {
    name: string;
-   type: "regular";
+   type: "regular"| "custom";
    category: SectionCategories;
    isOpened: boolean;
    shouldShow?: (job: Job) => boolean;
@@ -113,6 +138,13 @@ let DEFAULT_SECTIONS: ReadonlyArray<SectionType> = [
       category: SectionCategories.general,
       isOpened: true,
       getSection: (job: Job, promoteFunc?: () => void) => <ProfileSection job={job} promoteFunc={promoteFunc} />
+   },
+   {
+      name: "Upgrades",
+      type: "custom",
+      category: SectionCategories.general,
+      isOpened: false,
+      getSection: (job: Job) => <UpgradesSection job={job} />
    }
 ];
 DEFAULT_SECTIONS = DEFAULT_SECTIONS.concat(JOB_DATA.map(currentJob => {
@@ -213,6 +245,8 @@ const CorporateOverview = () => {
 
          {openedSection.getSection(job, promote)}
       </div>;
+   } else if (openedSection.type === "custom") {
+      section = openedSection.getSection(job, promote);
    }
 
    return <div id="corporate-overview" className="view">

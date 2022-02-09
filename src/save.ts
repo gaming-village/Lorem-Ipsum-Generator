@@ -63,6 +63,7 @@ export function loadSave(saveData: string): void {
       try {
          saveComponent.loadEvent(saveDataComponents[i]);
       } catch {
+         console.log(saveData);
          alert("Malformed save detected. Resetting save! (This usually occurs because a new save component has been added.");
          loadSave(getDefaultSave());
          break;

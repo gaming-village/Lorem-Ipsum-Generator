@@ -5,7 +5,7 @@ import WindowsProgram from "./components/WindowsProgram";
 import Game from "./Game";
 import Button from "./components/Button";
 import { getElem } from "./utils";
-import JOB_DATA from "./data/corporate-overview-data";
+import { JOB_DATA } from "./data/corporate-overview-data";
 
 interface UpgradesDictionary {
    [key: number]: Array<JSX.Element>;

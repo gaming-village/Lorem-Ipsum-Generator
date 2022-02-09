@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "./components/Button";
+import { getRandomWorker } from "./components/CorporateOverview";
 import List from "./components/List";
 import LOREM_PACKS, { LoremCategory, LoremPack, LoremWord, SentenceStructure } from "./data/lorem-packs-data";
 import Game from "./Game";
@@ -186,8 +187,8 @@ export function type(key: string): void {
 
    const WORKER_CREATION_CHANCE = 0.01;
    if (hasUpgrade("Mechanical Keyboard") && Math.random() < WORKER_CREATION_CHANCE) {
-      const randomWorkerIndex = randInt(0, Game.userInfo.jobPath);
-      Game.userInfo.workers[randomWorkerIndex]++;
+      const randomWorker = getRandomWorker();
+      Game.userInfo.workers[randomWorker.id]++;
    }
 
    letterIndex++;
