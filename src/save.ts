@@ -30,8 +30,6 @@ function setCookie(name: string, value: string, exdays?: number): void {
    document.cookie = `${name}=${value};${expires};path=/`;
 }
 
-
-
 const saveName: string = "save1";
 
 export function getCurrentSave(): string | null {

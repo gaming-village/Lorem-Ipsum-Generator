@@ -88,9 +88,15 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
 }
 
 const UpgradesSection = ({ job }: SectionProps) => {
-   return <div>
+   return <>
       
-   </div>;
+   </>;
+}
+
+const CareerPathSection = ({ job }: SectionProps) => {
+   return <>
+
+   </>
 }
 
 const WorkerSection = ({ job }: SectionProps) => {
@@ -131,7 +137,7 @@ interface SectionType {
    shouldShow?: (job: Job) => boolean;
    getSection: (job: Job, promoteFunc?: () => void) => JSX.Element;
 }
-let DEFAULT_SECTIONS: ReadonlyArray<SectionType> = [
+let sectionData: ReadonlyArray<SectionType> = [
    {
       name: "Profile",
       type: "regular",
@@ -145,9 +151,16 @@ let DEFAULT_SECTIONS: ReadonlyArray<SectionType> = [
       category: SectionCategories.general,
       isOpened: false,
       getSection: (job: Job) => <UpgradesSection job={job} />
+   },
+   {
+      name: "Career Path",
+      type: "regular",
+      category: SectionCategories.general,
+      isOpened: false,
+      getSection: (job: Job) => <CareerPathSection job={job} />
    }
 ];
-DEFAULT_SECTIONS = DEFAULT_SECTIONS.concat(JOB_DATA.map(currentJob => {
+sectionData = sectionData.concat(JOB_DATA.map(currentJob => {
    return {
       name: currentJob.name + "s",
       type: "regular",
@@ -303,7 +316,7 @@ const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
 export let updateCorporateOverview: (() => void) | null = null;
 
 const CorporateOverview = () => {
-   const [sections, setSections] = useState<Array<SectionType>>(DEFAULT_SECTIONS.slice());
+   const [sections, setSections] = useState<Array<SectionType>>(sectionData.slice());
    const [job, setJob] = useState(Game.userInfo.job);
    const [isPromoting, setIsPromoting] = useState(false);
 
