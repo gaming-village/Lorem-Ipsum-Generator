@@ -1,9 +1,41 @@
+// import React, { Ref } from "react";
+
 export class Vector {
    x: number;
    y: number;
    constructor(x: number, y: number) {
       this.x = x;
       this.y = y;
+   }
+}
+
+const audioNames: ReadonlyArray<string> = ["win95-startup"];
+export const audioSources: { [key: typeof audioNames[number]]: CustomAudio } = {};
+export function setupAudio() {
+   for (const name of audioNames) {
+      audioSources[name] = new CustomAudio(name);
+   }
+}
+
+export class CustomAudio {
+   private sound: HTMLAudioElement;
+
+   constructor(url: string, removeAfterPlay: boolean = false) {
+      this.sound = document.createElement("audio");
+      this.sound.src = require("./audio/" + url + ".mp3").default;
+      this.sound.setAttribute("preload", "auto");
+      this.sound.setAttribute("controls", "none");
+      document.body.appendChild(this.sound);
+
+      if (removeAfterPlay) {
+         this.sound.addEventListener("ended", () => {
+            this.sound.remove();
+       });
+      }
+   }
+
+   play(): void {
+      this.sound.play();
    }
 }
 

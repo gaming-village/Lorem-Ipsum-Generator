@@ -1,11 +1,10 @@
+import React from "react";
 import WORKERS, { Worker } from "./data/workers";
 import UPGRADES, { Upgrade, UpgradeRequirements } from "./data/upgrades-data";
-import React from "react";
 import WindowsProgram from "./components/WindowsProgram";
 import Game from "./Game";
 import Button from "./components/Button";
 import { getElem } from "./utils";
-import { JOB_DATA } from "./data/corporate-overview-data";
 
 interface UpgradesDictionary {
    [key: number]: Array<JSX.Element>;

@@ -23,6 +23,10 @@ body.blurred::after {
    display: none !important;
 }
 
+audio {
+   display: none;
+}
+
 .cf:before,
 .cf:after {
   content: " ";

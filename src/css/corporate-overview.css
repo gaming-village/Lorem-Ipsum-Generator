@@ -17,6 +17,27 @@
    border-bottom: 1.5px solid #fff;
    transform: translateX(-50%);
 }
+#promotion-animation {
+   background-color: #fff;
+   position: absolute;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   z-index: 99999;
+   animation: PromoteAnimation 2s linear forwards;
+}
+@keyframes PromoteAnimation {
+   0% {
+      opacity: 0;
+   }
+   70% {
+      opacity: 1;
+   }
+   100% {
+      opacity: 0;
+   }
+}
 
 #corporate-overview .formatter {
    display: flex;

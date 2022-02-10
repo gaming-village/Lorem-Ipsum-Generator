@@ -6,7 +6,7 @@ import LOREM_PACKS, { LoremCategory, LoremPack, LoremWord, SentenceStructure } f
 import Game from "./Game";
 import { createTooltip, removeTooltip } from "./tooltips";
 import { hasUpgrade } from "./upgrades";
-import { beautify, capitalise, getElem, randInt, randItem } from "./utils";
+import { beautify, capitalise, getElem, randItem } from "./utils";
 
 const getAvailablePacks = (): ReadonlyArray<LoremPack> => {
    return LOREM_PACKS.filter(pack => pack.isBought);

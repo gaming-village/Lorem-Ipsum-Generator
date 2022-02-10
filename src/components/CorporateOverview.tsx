@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../css/corporate-overview.css";
 import { JOB_DATA, Job, JOB_REQUIREMENTS } from "../data/corporate-overview-data";
 import Game from "../Game";
-import { getPrefix, randItem, roundNum } from "../utils";
+import { audioSources, getPrefix, randItem, roundNum } from "../utils";
 import Button from "./Button";
 import ProgressBar from "./ProgressBar";
 
@@ -212,6 +212,27 @@ const getControlPanel = (job: Job, sections: Array<SectionType>, changeSection: 
    return content;
 }
 
+const playPromotionAnimation = (): Promise<void> => {
+   const animation = document.createElement("div");
+   animation.id = "promotion-animation";
+   document.body.appendChild(animation);
+
+   audioSources["win95-startup"].play();
+
+   const ENTRANCE_DURATION = 1400;
+   const EXIT_DURATION = 600;
+
+   return new Promise(resolve => {
+      setTimeout(() => {
+         resolve();
+
+         setTimeout(() => {
+            animation.remove();
+         }, EXIT_DURATION);
+      }, ENTRANCE_DURATION);
+   });
+}
+
 interface PromotionScreenProps {
    job: Job;
    promote: (newJob: Job) => void;
@@ -244,8 +265,10 @@ const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
       </div>
    });
 
-   const promotionAttempt = (job: Job | null) => {
+   const promotionAttempt = async (job: Job | null) => {
       if (job !== null) {
+         await playPromotionAnimation();
+
          promote(job);
       }
    }
@@ -260,7 +283,7 @@ const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
             {careerPanels}
          </div>
 
-         <Button onClick={() => promote(nextJobs[0])} isCentered={true} isFlashing={true}>Continue</Button>
+         <Button onClick={() => promotionAttempt(nextJobs[0])} isCentered={true} isFlashing={true}>Continue</Button>
       </> : <>
          <p>Choose your career path:</p>
 

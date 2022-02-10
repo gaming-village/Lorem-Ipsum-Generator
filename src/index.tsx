@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./css/index.css";
 import App from "./App";
 import Game from "./Game";
-import { getElem } from "./utils";
+import { getElem, setupAudio } from "./utils";
 import { getCurrentSave, getDefaultSave, loadSave } from "./save";
 import { setupApplications } from "./applications";
 import { setupStartMenu } from "./start-menu";
@@ -75,6 +75,8 @@ window.onload = () => {
    Game.loadLoremAchievements();
 
    setupDevtools();
+
+   setupAudio();
 };
 
 let keysDown: Array<string> = [];
