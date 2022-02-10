@@ -136,8 +136,13 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return returnVal;
       },
       loadEvent: (savedValue: string) => {
-         // e.g. "5-1-0-0" to [5, 1, 0, 0]
-         // Game.userInfo.workers = savedValue.split("-").map(Number);
+         const workerCounts = savedValue.split("-").map(Number);
+         for (const count of workerCounts) {
+            for (let i = 0; i < JOB_DATA.length; i++) {
+               const job = JOB_DATA[i];
+               Game.userInfo.workers[job.id] = count;
+            }
+         }
       }
    },
    {
