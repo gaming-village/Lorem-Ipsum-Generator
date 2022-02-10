@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../css/corporate-overview.css";
-import { JOB_DATA, Job } from "../data/corporate-overview-data";
+import { JOB_DATA, Job, JOB_REQUIREMENTS } from "../data/corporate-overview-data";
 import Game from "../Game";
 import { getPrefix, randItem, roundNum } from "../utils";
 import Button from "./Button";
@@ -30,22 +30,22 @@ interface SectionProps {
 }
 
 const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
-   const nextJob = JOB_DATA[JOB_DATA.indexOf(job) + 1];
    const [totalLoremTyped, setTotalLoremTyped] = useState(Game.totalLoremTyped);
-
+   
    useEffect(() => {
       const updateTotalLoremTyped = () => {
          setTotalLoremTyped(Game.totalLoremTyped);
       }
-
+      
       Game.createRenderListener(updateTotalLoremTyped);
-
+      
       return () => {
          Game.removeRenderListener(updateTotalLoremTyped);
       }
    });
-
-   const canPromote = totalLoremTyped > nextJob.requirements.lorem;
+   
+   const nextJobRequirements = JOB_REQUIREMENTS[JOB_DATA.indexOf(job) + 1];
+   const canPromote = totalLoremTyped > nextJobRequirements;
    
    const promote = (): void => {
       if (canPromote) promoteFunc!();
@@ -66,24 +66,24 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
 
       <h2>Job Status</h2>
 
-      <p>You are currently {getPrefix(job.name)} {job.name}. Your next position is as {getPrefix(nextJob.name)} {nextJob.name}.</p>
+      <p>You are currently {getPrefix(job.name)} {job.name}.</p>
 
-      <p className="promotion-progress">{roundNum(totalLoremTyped)} / {nextJob.requirements.lorem}</p>
+      <p className="promotion-progress">{roundNum(totalLoremTyped)} / {nextJobRequirements}</p>
 
-      <ProgressBar progress={totalLoremTyped} start={job.requirements.lorem} end={nextJob.requirements.lorem} />
+      <ProgressBar progress={totalLoremTyped} start={JOB_REQUIREMENTS[job.tier]} end={nextJobRequirements} />
 
       <div className="progress-bar-formatter">
          <div>
             <h3>{job.name}</h3>
-            <p>{job.requirements.lorem} lorem generated</p>
+            <p>{JOB_REQUIREMENTS[job.tier]} lorem generated</p>
          </div>
          <div>
-            <h3>{nextJob.name}</h3>
-            <p>{nextJob.requirements.lorem} lorem generated</p>
+            <h3>???</h3>
+            <p>{nextJobRequirements} lorem generated</p>
          </div>
       </div>
 
-      <Button isDark={!canPromote} isFlashing={canPromote} isCentered={true} onClick={promote}>Promote</Button>
+      <Button isDark={!canPromote} isFlashing={canPromote} isCentered={true} onClick={() => promote()}>Promote</Button>
    </>;
 }
 
@@ -215,6 +215,7 @@ const getControlPanel = (job: Job, sections: Array<SectionType>, changeSection: 
 const CorporateOverview = () => {
    const [sections, setSections] = useState<Array<SectionType>>(DEFAULT_SECTIONS.slice());
    const [job, setJob] = useState(JOB_DATA[0]);
+   const [isPromoting, setIsPromoting] = useState(false);
 
    let openedSection!: SectionType;
    for (const section of sections) {
@@ -233,7 +234,9 @@ const CorporateOverview = () => {
    }
 
    const promote = (): void => {
-      setJob(JOB_DATA[JOB_DATA.indexOf(job) + 1]);
+      setIsPromoting(true);
+
+      // setJob(JOB_DATA[JOB_DATA.indexOf(job) + 1]);
    }
 
    const controlPanel = getControlPanel(job, sections, changeSection);

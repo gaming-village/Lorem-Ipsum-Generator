@@ -2,49 +2,41 @@ export interface Job {
    readonly id: string;
    readonly name: string;
    readonly salary: string;
-   readonly requirements: {
-      readonly lorem: number;
-   };
    readonly costs: {
       readonly lorem: number;
    };
    readonly loremProduction: number;
    readonly tier: number;
 }
+export const JOB_REQUIREMENTS = [0, 100, 500, 2500];
 export const JOB_DATA: ReadonlyArray<Job> = [
+   // TIER 1
    {
       id: "interns",
       name: "Intern",
       salary: "N/A",
-      requirements: {
-         lorem: 0
-      },
       costs: {
          lorem: 0
       },
       loremProduction: 0.01,
       tier: 1
    },
+   // TIER 2
    {
       id: "workers",
       name: "Worker",
       salary: "N/A",
-      requirements: {
-         lorem: 100
-      },
       costs: {
          lorem: 0
       },
       loremProduction: 0.01,
       tier: 2
    },
+   // TIER 3
    {
       id: "managers",
       name: "Manager",
       salary: "N/A",
-      requirements: {
-         lorem: 500
-      },
       costs: {
          lorem: 0
       },
@@ -55,22 +47,17 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       id: "technicians",
       name: "Technician",
       salary: "N/A",
-      requirements: {
-         lorem: 600
-      },
       costs: {
          lorem: 0
       },
       loremProduction: 0.01,
       tier: 3
    },
+   // TIER 4
    {
       id: "directors",
       name: "Director",
       salary: "N/A",
-      requirements: {
-         lorem: 2500
-      },
       costs: {
          lorem: 0
       },

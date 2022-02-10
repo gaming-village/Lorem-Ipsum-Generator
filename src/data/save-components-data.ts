@@ -116,10 +116,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         return "0";
+         return Game.userInfo.jobPath;
       },
       loadEvent: (savedValue: string) => {
-         Game.userInfo.jobPath = "0";
+         Game.userInfo.jobPath = savedValue;
       }
    },
    {
@@ -191,10 +191,6 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       name: "Preferences",
       defaultValue: () => {
          return "0:0:0";
-         // return Object.keys(preferences.backgrounds).reduce((previousValue, _, i) => {
-         //    const suffix = i + 1 < Object.keys(preferences.backgrounds).length ? ":" : "";
-         //    return previousValue + "0" + suffix;
-         // }, "");
       },
       updateValue: () => {
          const preferences = getPreferences();

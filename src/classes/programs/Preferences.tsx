@@ -201,6 +201,7 @@ class Preferences extends Program {
          const selectedBackground = category.backgrounds[selectedBackgrounds[i]];
 
          const container: HTMLElement = getElem(category.elementID)!;
+         console.log(backgroundInfo, category, selectedBackground, selectedBackgrounds[i]);
          if (selectedBackground.type === "colour") {
             container.style.backgroundImage = "none";
             container.style.backgroundColor = selectedBackground.content;
