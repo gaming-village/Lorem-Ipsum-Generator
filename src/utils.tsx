@@ -19,23 +19,31 @@ export function setupAudio() {
 
 export class CustomAudio {
    private sound: HTMLAudioElement;
+   private isPlaying: boolean = false;
 
-   constructor(url: string, removeAfterPlay: boolean = false) {
+   constructor(url: string) {
       this.sound = document.createElement("audio");
       this.sound.src = require("./audio/" + url + ".mp3").default;
       this.sound.setAttribute("preload", "auto");
       this.sound.setAttribute("controls", "none");
       document.body.appendChild(this.sound);
 
-      if (removeAfterPlay) {
-         this.sound.addEventListener("ended", () => {
-            this.sound.remove();
-       });
-      }
+      this.sound.addEventListener("ended", () => this.stop());
    }
 
    play(): void {
+      if (this.isPlaying) {
+         this.sound.currentTime = 0;
+         return;
+      }
+
       this.sound.play();
+      this.isPlaying = true;
+   }
+
+   stop(): void {
+      this.sound.currentTime = 0;
+      this.isPlaying = false;
    }
 }
 
