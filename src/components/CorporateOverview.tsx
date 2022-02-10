@@ -300,10 +300,18 @@ const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
    </div>;
 }
 
+export let updateCorporateOverview: (() => void) | null = null;
+
 const CorporateOverview = () => {
    const [sections, setSections] = useState<Array<SectionType>>(DEFAULT_SECTIONS.slice());
-   const [job, setJob] = useState(JOB_DATA[0]);
+   const [job, setJob] = useState(Game.userInfo.job);
    const [isPromoting, setIsPromoting] = useState(false);
+
+   useEffect(() => {
+      updateCorporateOverview = () => {
+         setJob(Game.userInfo.job);
+      };
+   });
 
    let openedSection!: SectionType;
    for (const section of sections) {
@@ -323,6 +331,25 @@ const CorporateOverview = () => {
 
    const promote = (job: Job) => {
       setJob(job);
+
+      let tierIndex = 0;
+      for (const currentJob of JOB_DATA) {
+         if (currentJob.tier === job.tier) {
+            if (currentJob === job) {
+               break;
+            }
+            tierIndex++;
+         }
+      }
+
+      console.log(Object.assign({}, Game.userInfo.job));
+      console.log(Game.userInfo.jobPath + "");
+
+      Game.userInfo.job = job;
+      Game.userInfo.jobPath = tierIndex + Game.userInfo.jobPath;
+
+      console.log(Game.userInfo.job);
+      console.log(Game.userInfo.jobPath);
 
       setIsPromoting(false);
       Game.isInFocus = false;

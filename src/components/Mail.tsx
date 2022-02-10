@@ -21,16 +21,16 @@ const Mail = () => {
 
          let newRewardIsClaimed = mail.currentLetter && mail.currentLetter.reward ? mail.currentLetter.reward.isClaimed : false;
          setRewardClaimed(newRewardIsClaimed);
-      }
+      };
 
       createFolderListener(() => {
          setFolder(mail.currentSelectedFolder);
-      })
+      });
 
       createMailReceiveEvent(() => {
          setReceivedLetter(mail.receivedLetter);
-      })
-   }, [])
+      });
+   }, []);
 
    return (
       <div id="mail" className="view">

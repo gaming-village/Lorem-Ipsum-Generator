@@ -58,6 +58,8 @@ export function updateSave(): void {
 
 export function loadSave(saveData: string): void {
    const saveDataComponents = saveData.split("_");
+   console.log(saveDataComponents.length, SAVE_COMPONENTS.length);
+
    for (let i = 0; i < SAVE_COMPONENTS.length; i++) {
       const saveComponent = SAVE_COMPONENTS[i];
       try {

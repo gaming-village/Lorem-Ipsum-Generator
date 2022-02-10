@@ -7,7 +7,7 @@ import LETTERS, { LetterInfo } from "./letter-data";
 import LOREM_PACKS from "./lorem-packs-data";
 import UPGRADES from "./upgrades-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
-import { JOB_DATA } from "./corporate-overview-data";
+import { Job, JOB_DATA } from "./corporate-overview-data";
 
 const decimalToBinaryArr = (num: string): Array<number> => {
    return Number(num).toString(2).split("").reverse().map(Number);
@@ -95,19 +95,6 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       }
    },
    {
-      name: "Job position index",
-      defaultValue: () => {
-         return "0";
-      },
-      updateValue: () => {
-         return Game.userInfo.jobPath.toString();
-      },
-      loadEvent: (savedValue: string) => {
-         // TODO: FIX!
-         // Game.userInfo.jobPath = Number(savedValue);
-      }
-   },
-   {
       name: "Corporate overview job path",
       // Format:
       // 0010
@@ -120,6 +107,19 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          Game.userInfo.jobPath = savedValue;
+
+         let job!: Job;
+         const tier = savedValue.length;
+         let i = 0;
+         for (const currentJob of JOB_DATA) {
+            if (currentJob.tier === tier) {
+               if (i++ === Number(savedValue.split("")[0])) {
+                  job = currentJob;
+                  break;
+               }
+            }
+         }
+         Game.userInfo.job = job;
       }
    },
    {

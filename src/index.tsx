@@ -13,6 +13,8 @@ import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from "./dev
 import { type } from "./lorem-production";
 import { previewType, showWelcomeScreen } from "./components/WelcomeScreen";
 import { setupNavBar, switchView } from "./components/Navbar";
+import { updateCorporateOverview } from "./components/CorporateOverview";
+// import { setupNavBar, switchView } from "./components/Navbar";
 
 ReactDOM.render(
    <React.StrictMode>
@@ -40,7 +42,7 @@ window.onload = () => {
    }
    loadSave(saveData);
 
-   // loremCorp.updateCorporateOverview();
+   updateCorporateOverview!();
 
    updateViewSizes();
    window.addEventListener("resize", () => {
@@ -62,9 +64,6 @@ window.onload = () => {
 
    // Setup mail
    setupMail();
-
-   // Setup the corporate overview
-   // setupCorporateOverview();
 
    // Sets up the mask click event handler
    Game.setupMask();

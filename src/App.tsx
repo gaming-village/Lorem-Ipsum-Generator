@@ -1,5 +1,5 @@
-import React from "react";
-import NavBar from "./components/Navbar";
+import React, { useState } from "react";
+import Navbar from "./components/Navbar";
 import Computer from "./components/Computer";
 import CorporateOverview from "./components/CorporateOverview";
 import Mail from "./components/Mail";
@@ -9,56 +9,55 @@ import ButtonContainer from "./components/ButtonContainer";
 import WelcomeScreen from "./components/WelcomeScreen";
 
 function App() {
-   return (
-      <>
-         <WelcomeScreen />
+   return <>
+      <WelcomeScreen />
 
-         <WindowsProgram id="devtools" className="hidden" title="Devtools" titleIconSrc={require("./images/icons/settings.png").default}>
-            <>
-               <h2 className="resources">Resources</h2>
+      <WindowsProgram id="devtools" className="hidden" title="Devtools" titleIconSrc={require("./images/icons/settings.png").default}>
+         <>
+            <h2 className="resources">Resources</h2>
 
-               <div className="resources-tab">
-                  <p>Add or set the lorem count.</p>
-                  <input className="lorem-input" />
-                  <ButtonContainer>
-                     <>
-                        <Button className="add-lorem">Add</Button>
-                        <Button className="set-lorem">Set</Button>
-                     </>
-                  </ButtonContainer>
-               </div>
+            <div className="resources-tab">
+               <p>Add or set the lorem count.</p>
+               <input className="lorem-input" />
+               <ButtonContainer>
+                  <>
+                     <Button className="add-lorem">Add</Button>
+                     <Button className="set-lorem">Set</Button>
+                  </>
+               </ButtonContainer>
+            </div>
 
-               <h2 className="mail">Mail</h2>
+            <h2 className="mail">Mail</h2>
 
-               <div className="mail-tab">
-                  <p>Receive letter</p>
+            <div className="mail-tab">
+               <p>Receive letter</p>
 
-                  <select className="letter-select" name="Letters"></select>
+               <select className="letter-select" name="Letters"></select>
 
-                  <Button className="receive-letter-button">Receive</Button>
+               <Button className="receive-letter-button">Receive</Button>
 
-                  <p>Receive all letters</p>
-                  <Button className="receive-all-letters-button">Receive all</Button>
-               </div>
+               <p>Receive all letters</p>
+               <Button className="receive-all-letters-button">Receive all</Button>
+            </div>
 
-               <h2 className="data">Data</h2>
+            <h2 className="data">Data</h2>
 
-               <div className="data-tab">
-                  <Button className="reset-button" isCentered={true}>Reset</Button>
-               </div>
-            </>
-         </WindowsProgram>
+            <div className="data-tab">
+               <Button className="reset-button" isCentered={true}>Reset</Button>
+            </div>
+         </>
+      </WindowsProgram>
 
-         <div id="mask" className="hidden"></div>
+      <div id="mask" className="hidden"></div>
 
-         <div id="notification-container"></div>
+      <div id="notification-container"></div>
 
-         <NavBar />
-         <Computer />
-         <CorporateOverview />
-         <Mail />
-      </>
-   );
+      <Navbar />
+      
+      <Computer />
+      <Mail />
+      <CorporateOverview />
+   </>;
 }
 
 export default App;
