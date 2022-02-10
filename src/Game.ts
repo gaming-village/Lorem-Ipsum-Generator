@@ -44,6 +44,8 @@ interface GameType {
    renderListeners: Array<() => void>
    createRenderListener: (func: () => void) => void;
    removeRenderListener: (func: () => void) => void;
+   blurScreen: () => void;
+   unblurScreen: () => void;
 }
 
 const Game: GameType = {
@@ -165,6 +167,12 @@ const Game: GameType = {
       job: JOB_DATA[0],
       jobPath: "0",
       workers: {}
+   },
+   blurScreen: () => {
+      document.body.classList.add("blurred");
+   },
+   unblurScreen: () => {
+      document.body.classList.remove("blurred");
    }
 };
 

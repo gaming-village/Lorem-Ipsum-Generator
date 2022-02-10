@@ -8,6 +8,16 @@ body {
    --win95-bg-colour: #c3c7cb;
    --win95-dark-blue: rgb(7, 30, 129);
 }
+body.blurred::after {
+   content: "";
+   position: absolute;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   backdrop-filter: blur(2px);
+   z-index: 2;
+}
 
 .hidden {
    display: none !important;
@@ -372,10 +382,6 @@ body {
    position: absolute;
    top: 50%;
    transform: translate(-50%, -150%);
-}
-
-ul:not(.bullet-points) {
-   list-style-type: none;
 }
 
 #notification-container {

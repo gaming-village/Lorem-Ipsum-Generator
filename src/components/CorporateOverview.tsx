@@ -70,12 +70,12 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
 
       <p className="promotion-progress">{roundNum(totalLoremTyped)} / {nextJobRequirements}</p>
 
-      <ProgressBar progress={totalLoremTyped} start={JOB_REQUIREMENTS[job.tier]} end={nextJobRequirements} />
+      <ProgressBar progress={totalLoremTyped} start={JOB_REQUIREMENTS[job.tier - 1]} end={nextJobRequirements} />
 
       <div className="progress-bar-formatter">
          <div>
             <h3>{job.name}</h3>
-            <p>{JOB_REQUIREMENTS[job.tier]} lorem generated</p>
+            <p>{JOB_REQUIREMENTS[job.tier - 1]} lorem generated</p>
          </div>
          <div>
             <h3>???</h3>
@@ -212,6 +212,71 @@ const getControlPanel = (job: Job, sections: Array<SectionType>, changeSection: 
    return content;
 }
 
+interface PromotionScreenProps {
+   job: Job;
+   promote: (newJob: Job) => void;
+}
+const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
+   let nextJobs = new Array<Job>();
+   for (const currentJob of JOB_DATA) {
+      if (currentJob.tier < job.tier + 1) continue;
+      if (currentJob.tier > job.tier + 1) break;
+
+      nextJobs.push(currentJob);
+   }
+
+   const [selectedJob, setSelectedJob] = useState<Job | null>(nextJobs.length !== 1 ? null : nextJobs[0]);
+
+   const switchSelectedJob = (newJob: Job) => {
+      setSelectedJob(newJob);
+   }
+
+   const careerPanels = nextJobs.map((currentJob, i) => {
+      return <div onClick={() => switchSelectedJob(currentJob)} className={`career-panel${currentJob === selectedJob ? " selected" : ""}`} key={i}>
+         <h3>{currentJob.name}</h3>
+         <div className="salary">Salary: {currentJob.salary}</div>
+
+         <ul>
+            {currentJob.benefits.map((benefit, j) => {
+               return <li key={j}>{benefit}</li>
+            })}
+         </ul>
+      </div>
+   });
+
+   const promotionAttempt = (job: Job | null) => {
+      if (job !== null) {
+         promote(job);
+      }
+   }
+
+   return <div id="promotion-screen" className={nextJobs.length === 1 ? "single-option" : ""}>
+      <h1>You've been promoted!</h1>
+
+      {nextJobs.length === 1 ? <>
+         <p>New job:</p>
+
+         <div className="career-path-container">
+            {careerPanels}
+         </div>
+
+         <Button onClick={() => promote(nextJobs[0])} isCentered={true} isFlashing={true}>Continue</Button>
+      </> : <>
+         <p>Choose your career path:</p>
+
+         <div className="career-path-container">
+            {careerPanels}
+         </div>
+
+         <p className="selected-label">Selected: <b>{selectedJob ? selectedJob.name : "None"}</b></p>
+
+         <Button isDark={selectedJob === null} isFlashing={selectedJob !== null} isCentered={true} onClick={() => promotionAttempt(selectedJob)}>Continue</Button>
+      </>}
+
+      <div className="footer">LoremCorp LLC&trade;</div>
+   </div>;
+}
+
 const CorporateOverview = () => {
    const [sections, setSections] = useState<Array<SectionType>>(DEFAULT_SECTIONS.slice());
    const [job, setJob] = useState(JOB_DATA[0]);
@@ -233,10 +298,20 @@ const CorporateOverview = () => {
       setSections(newSectionArr);
    }
 
-   const promote = (): void => {
-      setIsPromoting(true);
+   const promote = (job: Job) => {
+      setJob(job);
 
-      // setJob(JOB_DATA[JOB_DATA.indexOf(job) + 1]);
+      setIsPromoting(false);
+      Game.isInFocus = false;
+      Game.hideMask();
+      Game.unblurScreen();
+   }
+
+   const showPromotionScreen = (): void => {
+      setIsPromoting(true);
+      Game.isInFocus = true;
+      Game.showMask();
+      Game.blurScreen();
    }
 
    const controlPanel = getControlPanel(job, sections, changeSection);
@@ -246,13 +321,15 @@ const CorporateOverview = () => {
       section = <div className="section">
          <div className="title-bar">{openedSection.name}</div>
 
-         {openedSection.getSection(job, promote)}
+         {openedSection.getSection(job, showPromotionScreen)}
       </div>;
    } else if (openedSection.type === "custom") {
-      section = openedSection.getSection(job, promote);
+      section = openedSection.getSection(job, showPromotionScreen);
    }
 
-   return <div id="corporate-overview" className="view">
+   const main = isPromoting ? <>
+      <PromotionScreen job={job} promote={promote} />
+   </> : <>
       <div className="formatter">
          <div className="control-panel">
             <h1>Control Panel</h1>
@@ -263,7 +340,11 @@ const CorporateOverview = () => {
             {section}
          </div>
       </div>
-   </div>;
+   </>
+
+   return <div id="corporate-overview" className="view">
+      {main}
+   </div>
 }
 
 export default CorporateOverview;

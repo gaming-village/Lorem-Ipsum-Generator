@@ -2,19 +2,23 @@ export interface Job {
    readonly id: string;
    readonly name: string;
    readonly salary: string;
+   readonly benefits: Array<string>;
    readonly costs: {
       readonly lorem: number;
    };
    readonly loremProduction: number;
    readonly tier: number;
 }
-export const JOB_REQUIREMENTS = [0, 100, 500, 2500];
+export const JOB_REQUIREMENTS = [0, 50, 250, 1000];
 export const JOB_DATA: ReadonlyArray<Job> = [
    // TIER 1
    {
       id: "interns",
       name: "Intern",
       salary: "N/A",
+      benefits: [
+         "Nothing, you suck."
+      ],
       costs: {
          lorem: 0
       },
@@ -23,9 +27,13 @@ export const JOB_DATA: ReadonlyArray<Job> = [
    },
    // TIER 2
    {
-      id: "workers",
-      name: "Worker",
-      salary: "N/A",
+      id: "employees",
+      name: "Employee",
+      salary: "$10",
+      benefits: [
+         "Unlock Upgrades.",
+         "Ability to buy workers."
+      ],
       costs: {
          lorem: 0
       },
@@ -37,6 +45,10 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       id: "managers",
       name: "Manager",
       salary: "N/A",
+      benefits: [
+         "Interns generate 2x as much lorem.",
+         "All workers are 10% cheaper."
+      ],
       costs: {
          lorem: 0
       },
@@ -47,6 +59,9 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       id: "technicians",
       name: "Technician",
       salary: "N/A",
+      benefits: [
+         "Increases lorem generated from typing by 2x."
+      ],
       costs: {
          lorem: 0
       },
@@ -58,6 +73,9 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       id: "directors",
       name: "Director",
       salary: "N/A",
+      benefits: [
+         "TODO"
+      ],
       costs: {
          lorem: 0
       },
