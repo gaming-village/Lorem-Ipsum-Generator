@@ -221,3 +221,35 @@
    text-align: center;
    margin-bottom: 0.5rem;
 }
+
+#career-path {
+   --item-size: 4rem;
+   --item-spacing-x: 50px;
+}
+#career-path .row {
+   height: var(--item-size);
+   margin: 0.5rem 0 0.5rem 50%;
+   display: table;
+   transform: translateX(calc(-50% + var(--offset) * var(--item-size)))
+}
+#career-path .item {
+   width: var(--item-size);
+   height: var(--item-size);
+   display: inline-block;
+   white-space: pre;
+}
+#career-path .item:not(:first-child) {
+   margin-left: calc(var(--item-spacing-x) / 2);
+}
+#career-path .item:not(:last-child) {
+   margin-right: calc(var(--item-spacing-x) / 2);
+}
+#career-path .item.previousJob {
+   background-color: red;
+}
+#career-path .item.nonSelected {
+   background-color: blue;
+}
+#career-path .item.unknown {
+   background-color: #aaa;
+}

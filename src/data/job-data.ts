@@ -1,3 +1,30 @@
+interface JobTierInfo {
+   readonly requirements: number;
+   readonly benefits: Array<string>;
+}
+export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
+   {
+      requirements: 0,
+      benefits: [""]
+   },
+   {
+      requirements: 25,
+      benefits: [
+         "Ability to buy workers."
+      ]
+   },
+   {
+      requirements: 100,
+      benefits: [
+         "Unlock the Upgrades panel.",
+      ]
+   },
+   {
+      requirements: 250,
+      benefits: []
+   }
+];
+
 export interface Job {
    readonly id: string;
    readonly name: string;
@@ -6,10 +33,10 @@ export interface Job {
    readonly costs: {
       readonly lorem: number;
    };
+   readonly requirement?: string;
    readonly loremProduction: number;
    readonly tier: number;
 }
-export const JOB_REQUIREMENTS = [0, 50, 250, 1000];
 export const JOB_DATA: ReadonlyArray<Job> = [
    // TIER 1
    {
@@ -31,13 +58,25 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       name: "Employee",
       salary: "$10",
       benefits: [
-         "Unlock Upgrades.",
-         "Ability to buy workers."
+         "Workers generate 1.5x as much lorem."
       ],
       costs: {
          lorem: 0
       },
-      loremProduction: 0.01,
+      loremProduction: 0.1,
+      tier: 2
+   },
+   {
+      id: "programmers",
+      name: "Programmer",
+      salary: "$9",
+      benefits: [
+         "Increases lorem generated from typing by 2x."
+      ],
+      costs: {
+         lorem: 0
+      },
+      loremProduction: 0.05,
       tier: 2
    },
    // TIER 3
@@ -49,29 +88,59 @@ export const JOB_DATA: ReadonlyArray<Job> = [
          "Interns generate 2x as much lorem.",
          "All workers are 10% cheaper."
       ],
+      requirement: "Employee",
       costs: {
          lorem: 0
       },
-      loremProduction: 0.01,
+      loremProduction: 0.25,
       tier: 3
    },
    {
       id: "technicians",
       name: "Technician",
-      salary: "N/A",
+      salary: "$1000",
       benefits: [
          "Increases lorem generated from typing by 2x."
       ],
+      requirement: "Programmer",
       costs: {
          lorem: 0
       },
-      loremProduction: 0.01,
+      loremProduction: 0.15,
+      tier: 3
+   },
+   {
+      id: "developers",
+      name: "Web Developer",
+      salary: "$1000",
+      benefits: [
+         "Increases lorem generated from typing by 2x."
+      ],
+      requirement: "Programmer",
+      costs: {
+         lorem: 0
+      },
+      loremProduction: 0.15,
       tier: 3
    },
    // TIER 4
    {
       id: "directors",
       name: "Director",
+      salary: "N/A",
+      benefits: [
+         "TODO"
+      ],
+      requirement: "Manager",
+      costs: {
+         lorem: 0
+      },
+      loremProduction: 0.01,
+      tier: 4
+   },
+   {
+      id: "test",
+      name: "test",
       salary: "N/A",
       benefits: [
          "TODO"

@@ -8,7 +8,7 @@ import { LOREM_LETTERS } from "./data/letter-data";
 import ACHIEVEMENTS from "./data/achievements-data";
 import { hasUpgrade } from "./upgrades";
 import { SettingsType } from "./classes/programs/Settings";
-import { JOB_DATA, Job } from "./data/corporate-overview-data";
+import { JOB_DATA, Job } from "./data/job-data";
 
 interface UserInfo {
    workerNumber: number;

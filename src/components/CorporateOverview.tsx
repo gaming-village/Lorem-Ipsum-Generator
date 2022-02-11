@@ -1,10 +1,40 @@
 import React, { useEffect, useState } from "react";
 import "../css/corporate-overview.css";
-import { JOB_DATA, Job, JOB_REQUIREMENTS } from "../data/corporate-overview-data";
+import { JOB_DATA, JOB_TIER_DATA, Job } from "../data/job-data";
 import Game from "../Game";
 import { audioSources, getPrefix, randItem, roundNum } from "../utils";
 import Button from "./Button";
 import ProgressBar from "./ProgressBar";
+
+const getJobsByTier = (tier: number): ReadonlyArray<Job> => {
+   let jobs = new Array<Job>();
+   for (const currentJob of JOB_DATA) {
+      if (currentJob.tier === tier) {
+         jobs.push(currentJob);
+      } else if (currentJob.tier > tier) break;
+   }
+   return jobs;
+}
+
+const getJobHistory = (): ReadonlyArray<Job> => {
+   let jobHistory = new Array<Job>();
+   const jobPath = Game.userInfo.jobPath.split("").reverse();
+   let i = -1;
+   let currentTier = 1;
+   for (const currentJob of JOB_DATA) {
+      if (currentJob.tier !== currentTier) {
+         i = 0;
+      } else {
+         i++;
+      }
+      const idx = Number(jobPath[currentJob.tier - 1]);
+      if (i === idx) {
+         jobHistory.push(currentJob);
+      }
+      currentTier = currentJob.tier;
+   }
+   return jobHistory;
+}
 
 export function getRandomWorker(): Job {
    const potentialWorkers = new Array<Job>();
@@ -44,7 +74,8 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
       }
    });
    
-   const nextJobRequirements = JOB_REQUIREMENTS[JOB_DATA.indexOf(job) + 1];
+   const currentJobRequirements = JOB_TIER_DATA[job.tier - 1].requirements;
+   const nextJobRequirements = JOB_TIER_DATA[job.tier].requirements;
    const canPromote = totalLoremTyped > nextJobRequirements;
    
    const promote = (): void => {
@@ -70,12 +101,12 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
 
       <p className="promotion-progress">{roundNum(totalLoremTyped)} / {nextJobRequirements}</p>
 
-      <ProgressBar progress={totalLoremTyped} start={JOB_REQUIREMENTS[job.tier - 1]} end={nextJobRequirements} />
+      <ProgressBar progress={totalLoremTyped} start={currentJobRequirements} end={nextJobRequirements} />
 
       <div className="progress-bar-formatter">
          <div>
             <h3>{job.name}</h3>
-            <p>{JOB_REQUIREMENTS[job.tier - 1]} lorem generated</p>
+            <p>{currentJobRequirements} lorem generated</p>
          </div>
          <div>
             <h3>???</h3>
@@ -93,16 +124,122 @@ const UpgradesSection = ({ job }: SectionProps) => {
    </>;
 }
 
+interface CareerPathNode {
+   status: "previousJob" | "nonSelected" | "unknown";
+   job: Job;
+   children: Array<CareerPathNode>
+}
 const CareerPathSection = ({ job }: SectionProps) => {
-   return <>
+   const jobHistory = getJobHistory();
 
-   </>
+   // Create the tree
+   const careerPathTree: CareerPathNode = {
+      status: "previousJob",
+      job: JOB_DATA[0],
+      children: new Array<CareerPathNode>()
+   };
+   let previousNode: CareerPathNode = careerPathTree;
+   let finalNode: CareerPathNode = careerPathTree;
+   for (let i = 0; i < jobHistory.length; i++) {
+      const previousJob = jobHistory[i];
+      const nextJob = jobHistory[i + 1];
+
+      let nextNode!: CareerPathNode;
+      const tierJobs = getJobsByTier(previousJob.tier + 1);
+      for (const currentJob of tierJobs) {
+         let newNode!: CareerPathNode;
+
+         if (currentJob === nextJob) {
+            newNode = {
+               status: "previousJob",
+               job: currentJob,
+               children: new Array<CareerPathNode>()
+            }
+
+            nextNode = newNode;
+            finalNode = newNode;
+         } else if (typeof currentJob.requirement === "undefined" || currentJob.requirement === previousJob.name) {
+            newNode = {
+               status: "nonSelected",
+               job: currentJob,
+               children: new Array<CareerPathNode>()
+            }
+         } else {
+            continue;
+         }
+         
+         previousNode.children.push(newNode);
+      }
+      
+      previousNode = nextNode;
+   }
+   // Create unknown tree nodes
+   const unknownJobs = getJobsByTier(finalNode.job.tier + 1);
+   for (const currentJob of unknownJobs) {
+      if (typeof currentJob.requirement === "undefined" || currentJob.requirement === finalNode.job.name) {
+         console.log(currentJob);
+         finalNode.children.push({
+            status: "unknown",
+            job: currentJob,
+            children: new Array<CareerPathNode>()
+         });
+      }
+   }
+   
+
+   // Won't actually be created
+   const baseNode: CareerPathNode = {
+      status: "unknown",
+      job: JOB_DATA[0],
+      children: [careerPathTree]
+   };
+
+   // Make the JSX
+   let key = 0;
+   const tree = new Array<JSX.Element>();
+   let currentNode: CareerPathNode = baseNode;
+   let i = 0;
+   while (true) {
+      // console.log(currentNode);
+      if (typeof currentNode === "undefined" || currentNode.children.length === 0) {
+         break;
+      }
+      
+      let nextNode!: CareerPathNode;
+      const newRow = new Array<JSX.Element>();
+      for (const child of currentNode.children) {
+         const className = `item ${child.status}`
+         newRow.push(
+            <div key={key++} className={className}>
+               {child.job.name}
+            </div>
+         );
+
+         if (child.status === "previousJob") {
+            nextNode = child;
+         }
+      }
+
+      const rowStyle = {
+         "--offset": Math.max(i - 1, 0)
+      } as React.CSSProperties;
+      tree.push(
+         <div key={key++} className="row" style={rowStyle}>
+            {newRow}
+         </div>
+      );
+
+      currentNode = nextNode;
+      i++;
+   }
+
+   return <div id="career-path">
+      {tree}
+   </div>
 }
 
 const WorkerSection = ({ job }: SectionProps) => {
-   const jobIndex = JOB_DATA.indexOf(job);
-
-   const workerCount = Game.userInfo.workers[jobIndex];
+   const workerCount = Game.userInfo.workers[job.id];
    const loremProduction = workerCount * job.loremProduction;
 
    return <div>
@@ -134,7 +271,7 @@ interface SectionType {
    type: "regular"| "custom";
    category: SectionCategories;
    isOpened: boolean;
-   shouldShow?: (job: Job) => boolean;
+   shouldShow?: () => boolean;
    getSection: (job: Job, promoteFunc?: () => void) => JSX.Element;
 }
 let sectionData: ReadonlyArray<SectionType> = [
@@ -166,8 +303,9 @@ sectionData = sectionData.concat(JOB_DATA.map(currentJob => {
       type: "regular",
       category: SectionCategories.workers,
       isOpened: false,
-      shouldShow: (job: Job) => {
-         return currentJob.tier < job.tier;
+      shouldShow: () => {
+         const jobHistory = getJobHistory();
+         return jobHistory.includes(currentJob);
       },
       getSection: () => <WorkerSection job={currentJob} />
    } as SectionType;
@@ -194,7 +332,7 @@ const getControlPanel = (job: Job, sections: Array<SectionType>, changeSection: 
       for (let j = 0; j < sections.length; j++) {
          const section = sections[j];
          
-         sectionShowInfo[j] = section.shouldShow ? section.shouldShow(job) : true;
+         sectionShowInfo[j] = section.shouldShow ? section.shouldShow() : true;
          if (sectionShowInfo[j]) allIsHidden = false;
       }
 
@@ -253,7 +391,7 @@ interface PromotionScreenProps {
 const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
    let nextJobs = new Array<Job>();
    for (const currentJob of JOB_DATA) {
-      if (currentJob.tier < job.tier + 1) continue;
+      if (currentJob.tier < job.tier + 1 || (currentJob.requirement && currentJob.requirement !== job.name)) continue;
       if (currentJob.tier > job.tier + 1) break;
 
       nextJobs.push(currentJob);
@@ -278,6 +416,13 @@ const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
       </div>
    });
 
+   const promotionBenefitData = JOB_TIER_DATA[job.tier].benefits;
+   const promotionBenefits = <ul>
+      {promotionBenefitData.map((benefit, i) => {
+         return <li key={i}>{benefit}</li>
+      })}
+   </ul>;
+
    const promotionAttempt = async (job: Job | null) => {
       if (job !== null) {
          await playPromotionAnimation();
@@ -292,6 +437,8 @@ const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
       {nextJobs.length === 1 ? <>
          <p>New job:</p>
 
+         {promotionBenefits}
+
          <div className="career-path-container">
             {careerPanels}
          </div>
@@ -299,6 +446,8 @@ const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
          <Button onClick={() => promotionAttempt(nextJobs[0])} isCentered={true} isFlashing={true}>Continue</Button>
       </> : <>
          <p>Choose your career path:</p>
+
+         {promotionBenefits}
 
          <div className="career-path-container">
             {careerPanels}
@@ -343,6 +492,7 @@ const CorporateOverview = () => {
    }
 
    const promote = (job: Job) => {
+      setIsPromoting(false);
       setJob(job);
 
       let tierIndex = 0;
@@ -355,16 +505,9 @@ const CorporateOverview = () => {
          }
       }
 
-      console.log(Object.assign({}, Game.userInfo.job));
-      console.log(Game.userInfo.jobPath + "");
-
       Game.userInfo.job = job;
       Game.userInfo.jobPath = tierIndex + Game.userInfo.jobPath;
 
-      console.log(Game.userInfo.job);
-      console.log(Game.userInfo.jobPath);
-
-      setIsPromoting(false);
       Game.isInFocus = false;
       Game.hideMask();
       Game.unblurScreen();
