@@ -23,6 +23,7 @@ const getJobHistory = (): ReadonlyArray<Job> => {
    let currentTier = 1;
    for (const currentJob of JOB_DATA) {
       if (currentJob.tier !== currentTier) {
+         if (currentJob.tier > jobPath.length) break;
          i = 0;
       } else {
          i++;
@@ -131,6 +132,7 @@ interface CareerPathNode {
 }
 const CareerPathSection = ({ job }: SectionProps) => {
    const jobHistory = getJobHistory();
+   console.log(jobHistory);
 
    // Create the tree
    const careerPathTree: CareerPathNode = {
@@ -141,6 +143,7 @@ const CareerPathSection = ({ job }: SectionProps) => {
    let previousNode: CareerPathNode = careerPathTree;
    let finalNode: CareerPathNode = careerPathTree;
    for (let i = 0; i < jobHistory.length; i++) {
+      if (jobHistory.length === 1) break;
       const previousJob = jobHistory[i];
       const nextJob = jobHistory[i + 1];
 
@@ -177,7 +180,6 @@ const CareerPathSection = ({ job }: SectionProps) => {
    const unknownJobs = getJobsByTier(finalNode.job.tier + 1);
    for (const currentJob of unknownJobs) {
       if (typeof currentJob.requirement === "undefined" || currentJob.requirement === finalNode.job.name) {
-         console.log(currentJob);
          finalNode.children.push({
             status: "unknown",
             job: currentJob,
@@ -200,7 +202,6 @@ const CareerPathSection = ({ job }: SectionProps) => {
    let currentNode: CareerPathNode = baseNode;
    let i = 0;
    while (true) {
-      // console.log(currentNode);
       if (typeof currentNode === "undefined" || currentNode.children.length === 0) {
          break;
       }
@@ -208,7 +209,7 @@ const CareerPathSection = ({ job }: SectionProps) => {
       let nextNode!: CareerPathNode;
       const newRow = new Array<JSX.Element>();
       for (const child of currentNode.children) {
-         const className = `item ${child.status}`
+         const className = `item ${child.status}`;
          newRow.push(
             <div key={key++} className={className}>
                {child.job.name}
