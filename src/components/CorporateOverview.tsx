@@ -132,7 +132,6 @@ interface CareerPathNode {
 }
 const CareerPathSection = ({ job }: SectionProps) => {
    const jobHistory = getJobHistory();
-   console.log(jobHistory);
 
    // Create the tree
    const careerPathTree: CareerPathNode = {
@@ -212,7 +211,7 @@ const CareerPathSection = ({ job }: SectionProps) => {
          const className = `item ${child.status}`;
          newRow.push(
             <div key={key++} className={className}>
-               {child.job.name}
+               <span>{child.status === "unknown" ? "???" : child.job.name}</span>
             </div>
          );
 
@@ -239,9 +238,57 @@ const CareerPathSection = ({ job }: SectionProps) => {
    </div>
 }
 
+export function calculateWorkerProduction(): number {
+   let totalProduction = 0;
+   for (let i = 0; i < JOB_DATA.length; i++) {
+      const worker = JOB_DATA[i];
+      const count = Game.userInfo.workers[worker.id];
+      totalProduction += worker.loremProduction * count;
+   }
+   return totalProduction;
+}
+
+const calculateWorkerCost = (initialCost: number, workerCount: number): number => {
+   return initialCost * Math.pow(1.3, workerCount);
+}
+
 const WorkerSection = ({ job }: SectionProps) => {
-   const workerCount = Game.userInfo.workers[job.id];
+   const [workerCount, setWorkerCount] = useState(Game.userInfo.workers[job.id]);
+
+   // For some reason if this isn't here, the default state of workerCount is 1... regardless of the value of Game.userInfo.workers[job.id]
+   useEffect(() => {
+      setWorkerCount(Game.userInfo.workers[job.id]);
+   }, [job.id]);
+
    const loremProduction = workerCount * job.loremProduction;
+
+   const initialCost = JOB_TIER_DATA[job.tier - 1].initialCost;
+   const cost = calculateWorkerCost(initialCost, workerCount);
+   
+   const buyWorker = (): boolean => {
+      const initialCost = JOB_TIER_DATA[job.tier - 1].initialCost;
+      const cost = calculateWorkerCost(initialCost, Game.userInfo.workers[job.id]);
+
+      if (Game.lorem >= cost) {
+         Game.lorem -= cost;
+
+         Game.userInfo.workers[job.id]++;
+         return true;
+      }
+      return false;
+   }
+
+   const buySingularWorker = () => {
+      if (buyWorker()) {
+         setWorkerCount(Game.userInfo.workers[job.id]);
+      };
+   }
+
+   const buyMaxWorker = () => {
+      while (buyWorker()) {
+         setWorkerCount(Game.userInfo.workers[job.id]);
+      };
+   }
 
    return <div>
       <h2>Overview</h2>
@@ -254,9 +301,13 @@ const WorkerSection = ({ job }: SectionProps) => {
 
       <h2>Market</h2>
 
+      <p>Purchase {job.name}{workerCount === 1 ? "" : "s"} to increase your Lorem production.</p>
+
+      <p>Costs <b>{cost}</b> lorem.</p>
+
       <div className="button-container">
-         <Button>Buy</Button>
-         <Button>Buy max</Button>
+         <Button onClick={buySingularWorker}>Buy</Button>
+         <Button onClick={buyMaxWorker}>Buy max</Button>
       </div>
    </div>
 }

@@ -120,6 +120,8 @@ document.addEventListener("keydown", event => {
       }
       keysDown.push(key)
       type(key);
+
+      Game.applications.loremCounter.createTextEffect();
    }
 });
 document.addEventListener("keyup", function(event) {

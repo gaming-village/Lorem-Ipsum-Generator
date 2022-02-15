@@ -125,8 +125,6 @@ const createTextContainer = (): HTMLElement => {
    const textContainer = document.createElement("span");
    getElem("lorem-container").appendChild(textContainer);
 
-   
-
    return textContainer as HTMLElement;
 }
 const createTextMeaning = (textContainer: HTMLElement, sentenceMeaning: string): void => {

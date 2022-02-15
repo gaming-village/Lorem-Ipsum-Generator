@@ -1,27 +1,32 @@
 interface JobTierInfo {
    readonly requirements: number;
    readonly benefits: Array<string>;
+   readonly initialCost: number;
 }
 export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
    {
       requirements: 0,
-      benefits: [""]
+      benefits: [""],
+      initialCost: 10
    },
    {
       requirements: 25,
       benefits: [
          "Ability to buy workers."
-      ]
+      ],
+      initialCost: 25
    },
    {
       requirements: 100,
       benefits: [
          "Unlock the Upgrades panel.",
-      ]
+      ],
+      initialCost: 75
    },
    {
       requirements: 250,
-      benefits: []
+      benefits: [],
+      initialCost: 150
    }
 ];
 
@@ -30,9 +35,6 @@ export interface Job {
    readonly name: string;
    readonly salary: string;
    readonly benefits: Array<string>;
-   readonly costs: {
-      readonly lorem: number;
-   };
    readonly requirement?: string;
    readonly loremProduction: number;
    readonly tier: number;
@@ -46,9 +48,6 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       benefits: [
          "Nothing, you suck."
       ],
-      costs: {
-         lorem: 0
-      },
       loremProduction: 0.01,
       tier: 1
    },
@@ -60,9 +59,6 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       benefits: [
          "Workers generate 1.5x as much lorem."
       ],
-      costs: {
-         lorem: 0
-      },
       loremProduction: 0.1,
       tier: 2
    },
@@ -73,9 +69,6 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       benefits: [
          "Increases lorem generated from typing by 2x."
       ],
-      costs: {
-         lorem: 0
-      },
       loremProduction: 0.05,
       tier: 2
    },
@@ -89,9 +82,6 @@ export const JOB_DATA: ReadonlyArray<Job> = [
          "All workers are 10% cheaper."
       ],
       requirement: "Employee",
-      costs: {
-         lorem: 0
-      },
       loremProduction: 0.25,
       tier: 3
    },
@@ -103,9 +93,6 @@ export const JOB_DATA: ReadonlyArray<Job> = [
          "Increases lorem generated from typing by 2x."
       ],
       requirement: "Programmer",
-      costs: {
-         lorem: 0
-      },
       loremProduction: 0.15,
       tier: 3
    },
@@ -117,9 +104,6 @@ export const JOB_DATA: ReadonlyArray<Job> = [
          "Increases lorem generated from typing by 2x."
       ],
       requirement: "Programmer",
-      costs: {
-         lorem: 0
-      },
       loremProduction: 0.15,
       tier: 3
    },
@@ -132,9 +116,6 @@ export const JOB_DATA: ReadonlyArray<Job> = [
          "TODO"
       ],
       requirement: "Manager",
-      costs: {
-         lorem: 0
-      },
       loremProduction: 0.01,
       tier: 4
    },
@@ -145,9 +126,6 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       benefits: [
          "TODO"
       ],
-      costs: {
-         lorem: 0
-      },
       loremProduction: 0.01,
       tier: 4
    }

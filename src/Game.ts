@@ -9,6 +9,7 @@ import ACHIEVEMENTS from "./data/achievements-data";
 import { hasUpgrade } from "./upgrades";
 import { SettingsType } from "./classes/programs/Settings";
 import { JOB_DATA, Job } from "./data/job-data";
+import { calculateWorkerProduction } from "./components/CorporateOverview";
 
 interface UserInfo {
    workerNumber: number;
@@ -64,10 +65,10 @@ const Game: GameType = {
 
       for (const func of this.renderListeners) func();
 
-      // const workerLoremProduction = loremCorp.getTotalWorkerProduction();
-      // if (workerLoremProduction > 0) {
-      //    this.lorem += workerLoremProduction / this.tps;
-      // }
+      const workerProduction = calculateWorkerProduction();
+      if (workerProduction > 0 && this.ticks % this.tps === 0) {
+         this.lorem += workerProduction;
+      }
 
       if (this.previousLorem !== this.lorem) {
          const loremDiff: number = this.lorem - this.previousLorem;
@@ -89,6 +90,8 @@ const Game: GameType = {
          }
 
          this.updateLorem(loremDiff);
+
+         this.applications.loremCounter.createTextEffect();
       }
 
       const SECONDS_BETWEEN_SAVES: number = 10;

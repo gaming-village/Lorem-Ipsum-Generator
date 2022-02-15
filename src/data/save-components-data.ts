@@ -131,17 +131,16 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          let returnVal = "";
          Object.values(Game.userInfo.workers).forEach((workerCount, i) => {
             returnVal += workerCount.toString();
-            if (i + 1 < Game.userInfo.workers.length) returnVal += "-";
-         })
+            if (i + 1 < JOB_DATA.length) returnVal += "-";
+         });
          return returnVal;
       },
       loadEvent: (savedValue: string) => {
          const workerCounts = savedValue.split("-").map(Number);
-         for (const count of workerCounts) {
-            for (let i = 0; i < JOB_DATA.length; i++) {
-               const job = JOB_DATA[i];
-               Game.userInfo.workers[job.id] = count;
-            }
+         for (let i = 0; i < JOB_DATA.length; i++) {
+            const job = JOB_DATA[i];
+            const count = workerCounts[i];
+            Game.userInfo.workers[job.id] = count;
          }
       }
    },

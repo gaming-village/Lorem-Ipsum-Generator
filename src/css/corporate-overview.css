@@ -170,6 +170,7 @@
    width: var(--size);
    height: var(--size);
    border: 2px solid;
+   background-color: #bbb;
    border-top-color: #000;
    border-right-color: #fff;
    border-bottom-color: #fff;
@@ -178,7 +179,11 @@
    position: relative;
    cursor: pointer;
 }
+#promotion-screen .career-panel:not(.selected):hover {
+   background-color: #c5c5c5;
+}
 #promotion-screen .career-panel.selected {
+   background-color: #ccc;
    border-top-color: #fff;
    border-right-color: #000;
    border-bottom-color: #000;
@@ -245,11 +250,19 @@
    margin-right: calc(var(--item-spacing-x) / 2);
 }
 #career-path .item.previousJob {
-   background-color: red;
+   background-color: #fff;
 }
 #career-path .item.nonSelected {
-   background-color: blue;
+   background-color: #aaa;
 }
 #career-path .item.unknown {
-   background-color: #aaa;
+   background-color: #888;
+}
+
+#career-path .item span {
+   line-height: var(--item-size);
+   white-space: pre;
+   display: inline-block;
+   margin-left: 50%;
+   transform: translateX(-50%);
 }

@@ -27,8 +27,10 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
    useEffect(() => {
       application.updateLoremCount = (newVal: number): void => {
          setLorem(newVal);
-         createEffectText(loremCounter.current!);
       };
+      application.createTextEffect = (): void => {
+         createEffectText(loremCounter.current!);
+      }
 
       return () => {
          application.updateLoremCount = null;
@@ -42,6 +44,7 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
 
 class LoremCounter extends Application {
    updateLoremCount: ((newVal: number, diff: number) => void) | null = null;
+   createTextEffect: (() => void) | null = null;
 
    constructor() {
       super({
