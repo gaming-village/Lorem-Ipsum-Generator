@@ -119,7 +119,7 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
    </>;
 }
 
-const UpgradesSection = ({ job }: SectionProps) => {
+const UpgradesSection = () => {
    return <>
       
    </>;
@@ -130,8 +130,9 @@ interface CareerPathNode {
    job: Job;
    children: Array<CareerPathNode>
 }
-const CareerPathSection = ({ job }: SectionProps) => {
+const CareerPathSection = ({}: SectionProps) => {
    const jobHistory = getJobHistory();
+   console.log(jobHistory);
 
    // Create the tree
    const careerPathTree: CareerPathNode = {
@@ -140,18 +141,23 @@ const CareerPathSection = ({ job }: SectionProps) => {
       children: new Array<CareerPathNode>()
    };
    let previousNode: CareerPathNode = careerPathTree;
-   let finalNode: CareerPathNode = careerPathTree;
    for (let i = 0; i < jobHistory.length; i++) {
       if (jobHistory.length === 1) break;
-      const previousJob = jobHistory[i];
+      const job = jobHistory[i];
       const nextJob = jobHistory[i + 1];
 
       let nextNode!: CareerPathNode;
-      const tierJobs = getJobsByTier(previousJob.tier + 1);
+      const tierJobs = getJobsByTier(job.tier + 1);
       for (const currentJob of tierJobs) {
          let newNode!: CareerPathNode;
 
-         if (currentJob === nextJob) {
+         if (i === jobHistory.length - 1) {
+            newNode = {
+               status: "unknown",
+               job: currentJob,
+               children: new Array<CareerPathNode>()
+            };
+         } else if (currentJob === nextJob) {
             newNode = {
                status: "previousJob",
                job: currentJob,
@@ -159,8 +165,7 @@ const CareerPathSection = ({ job }: SectionProps) => {
             }
 
             nextNode = newNode;
-            finalNode = newNode;
-         } else if (typeof currentJob.requirement === "undefined" || currentJob.requirement === previousJob.name) {
+         } else if (typeof currentJob.requirement === "undefined" || currentJob.requirement === job.name) {
             newNode = {
                status: "nonSelected",
                job: currentJob,
@@ -175,18 +180,6 @@ const CareerPathSection = ({ job }: SectionProps) => {
       
       previousNode = nextNode;
    }
-   // Create unknown tree nodes
-   const unknownJobs = getJobsByTier(finalNode.job.tier + 1);
-   for (const currentJob of unknownJobs) {
-      if (typeof currentJob.requirement === "undefined" || currentJob.requirement === finalNode.job.name) {
-         finalNode.children.push({
-            status: "unknown",
-            job: currentJob,
-            children: new Array<CareerPathNode>()
-         });
-      }
-   }
-   
 
    // Won't actually be created
    const baseNode: CareerPathNode = {
@@ -200,6 +193,7 @@ const CareerPathSection = ({ job }: SectionProps) => {
    const tree = new Array<JSX.Element>();
    let currentNode: CareerPathNode = baseNode;
    let i = 0;
+   let offset = 0;
    while (true) {
       if (typeof currentNode === "undefined" || currentNode.children.length === 0) {
          break;
@@ -207,7 +201,8 @@ const CareerPathSection = ({ job }: SectionProps) => {
       
       let nextNode!: CareerPathNode;
       const newRow = new Array<JSX.Element>();
-      for (const child of currentNode.children) {
+      for (let j = 0; j < currentNode.children.length; j++) {
+         const child = currentNode.children[j];
          const className = `item ${child.status}`;
          newRow.push(
             <div key={key++} className={className}>
@@ -339,7 +334,7 @@ let sectionData: ReadonlyArray<SectionType> = [
       type: "custom",
       category: SectionCategories.general,
       isOpened: false,
-      getSection: (job: Job) => <UpgradesSection job={job} />
+      getSection: () => <UpgradesSection />
    },
    {
       name: "Career Path",
