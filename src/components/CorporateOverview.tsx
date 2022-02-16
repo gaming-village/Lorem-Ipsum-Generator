@@ -208,13 +208,10 @@ const CareerPathSection = ({}: SectionProps) => {
          const child = currentNode.children[j];
 
          if (i > 0 && child.status === "previousJob") {
-            console.log(i);
             if (j === 0) {
-               console.log("- offset");
                offset--;
             } else {
                offset++;
-               console.log("+ offset");
             }
          }
 
