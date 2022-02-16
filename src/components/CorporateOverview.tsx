@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "../css/corporate-overview.css";
-import { JOB_DATA, JOB_TIER_DATA, Job } from "../data/job-data";
+import { JOB_DATA, JOB_TIER_DATA, Job, UPGRADES } from "../data/job-data";
+import { UpgradeInfo } from "../data/upgrades-data";
 import Game from "../Game";
 import { audioSources, getPrefix, randItem, roundNum } from "../utils";
 import Button from "./Button";
 import ProgressBar from "./ProgressBar";
+import TitleBar from "./TitleBar";
 
 const getJobsByTier = (tier: number): ReadonlyArray<Job> => {
    let jobs = new Array<Job>();
@@ -119,10 +121,101 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
    </>;
 }
 
-const UpgradesSection = () => {
-   return <>
-      
-   </>;
+const getUpgradeRequirements = (upgrade: UpgradeInfo): ReadonlyArray<string> => {
+   let upgradeRequirements = new Array<string>();
+   if (typeof upgrade.requirements.lorem !== "undefined") {
+      upgradeRequirements.push(`${upgrade.requirements.lorem} Lorem`);
+   }
+   if (typeof upgrade.requirements.workers !== "undefined") {
+      for (const [workerName, count] of Object.entries(upgrade.requirements.workers)) {
+         upgradeRequirements.push(`${count} ${workerName}s`);
+      }
+   }
+   return upgradeRequirements;
+}
+
+const canBuyUpgrade = (upgrade: UpgradeInfo): boolean => {
+   for (const [type, requirement] of Object.entries(upgrade.requirements)) {
+      switch (type) {
+         case "lorem": {
+            if (Game.lorem < requirement) {
+               return false;
+            }
+            break;
+         }
+         case "workers": {
+            for (const [workerName, workerCount] of Object.entries(requirement)) {
+               if (Game.userInfo.workers[workerName] < (workerCount as number)) {
+                  return false;
+               }
+            }
+            break;
+         }
+      }
+   }
+   return true;
+}
+
+const UpgradesSection = ({ job }: SectionProps) => {
+   const [lorem, setLorem] = useState(0);
+
+   const updateLoremCount = (): void => {
+      setLorem(Game.lorem);
+   }
+
+   useEffect(() => {
+      updateLoremCount();
+
+      Game.createRenderListener(updateLoremCount);
+
+      return () => {
+         Game.removeRenderListener(updateLoremCount);
+      }
+   }, []);
+   
+   let content = new Array<JSX.Element>();
+   let key = 0;
+
+   let upgradeRow = new Array<JSX.Element>();
+   let previousTier = 1;
+   for (let i = 0; i < UPGRADES.length; i++) {
+      const upgrade = UPGRADES[i];
+      if (upgrade.tier > job.tier) break;
+      if (upgrade.tier !== previousTier) {
+         content.push(
+            <div key={key++} className="upgrade-container">
+               {upgradeRow}
+            </div>
+         );
+
+         upgradeRow = new Array<JSX.Element>();
+      }
+
+      const upgradeRequirements = getUpgradeRequirements(upgrade);
+      const canBuy = canBuyUpgrade(upgrade);
+
+      upgradeRow.push(
+         <div key={key++} className="upgrade">
+            <TitleBar title={upgrade.name} uiButtons={[]} isDraggable={false} />
+            
+            <p className="description">{upgrade.description}</p>
+
+            <div className="requirements">
+               {upgradeRequirements.reduce((previousValue, currentValue, i) => {
+                  return previousValue + currentValue + (i < upgradeRequirements.length - 1 ? ", " : "");
+               }, "")}
+            </div>
+
+            <Button isDark={!canBuy} isCentered={true}>Purchase</Button>
+         </div>
+      );
+
+      previousTier = upgrade.tier;
+   }
+
+   return <div id="upgrades">
+      {content}
+   </div>;
 }
 
 interface CareerPathNode {
@@ -208,13 +301,10 @@ const CareerPathSection = ({}: SectionProps) => {
          const child = currentNode.children[j];
 
          if (i > 0 && child.status === "previousJob") {
-            console.log(i);
             if (j === 0) {
-               console.log("- offset");
                offset--;
             } else {
                offset++;
-               console.log("+ offset");
             }
          }
 
@@ -346,7 +436,7 @@ let sectionData: ReadonlyArray<SectionType> = [
       type: "custom",
       category: SectionCategories.general,
       isOpened: false,
-      getSection: () => <UpgradesSection />
+      getSection: (job: Job) => <UpgradesSection job={job} />
    },
    {
       name: "Career Path",

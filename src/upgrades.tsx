@@ -1,6 +1,6 @@
 import React from "react";
 import WORKERS, { Worker } from "./data/workers";
-import UPGRADES, { Upgrade, UpgradeRequirements } from "./data/upgrades-data";
+import UPGRADES, { UpgradeInfo, UpgradeRequirements } from "./data/upgrades-data";
 import WindowsProgram from "./components/WindowsProgram";
 import Game from "./Game";
 import Button from "./components/Button";
@@ -20,7 +20,7 @@ const getUpgradeObject = (id: number): HTMLElement => {
    return getElem("corporate-overview").querySelector(`.upgrade-${id}`) as HTMLElement;
 }
 
-const buyUpgrade = (upgradeInfo: Upgrade, upgradeID: number): void => {
+const buyUpgrade = (upgradeInfo: UpgradeInfo, upgradeID: number): void => {
    if (upgradeInfo.isBought) return;
 
    const requirements: UpgradeRequirements = upgradeInfo.requirements;
@@ -61,7 +61,7 @@ const buyUpgrade = (upgradeInfo: Upgrade, upgradeID: number): void => {
    }
 }
 
-const createRequirementsString = (upgradeInfo: Upgrade): string => { 
+const createRequirementsString = (upgradeInfo: UpgradeInfo): string => { 
    let requirements: string = "";
    if (upgradeInfo.requirements.lorem) requirements += `, ${upgradeInfo.requirements.lorem} lorem`;
    if (upgradeInfo.requirements.workers) {
@@ -83,7 +83,7 @@ export function getUpgrades(job: Worker): ReadonlyArray<JSX.Element> {
    const upgradesDictionary: UpgradesDictionary = {};
 
    for (let i = 0; i < UPGRADES.length; i++) {
-      const upgradeInfo: Upgrade = UPGRADES[i];
+      const upgradeInfo: UpgradeInfo = UPGRADES[i];
       if (upgradeInfo.tier > maxTier) {
          break;
       }

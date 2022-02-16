@@ -267,3 +267,37 @@
    margin-left: 50%;
    transform: translateX(-50%);
 }
+
+#upgrades .upgrade-container {
+   width: 100%;
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   margin: 0.5rem 0;
+}
+#upgrades .upgrade {
+   width: 15rem;
+   background-color: #ccc;
+   padding: 0.2rem;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #fff;
+   border-bottom-color: #000;
+   border-left-color: #000;
+}
+#upgrades .upgrade .description {
+   margin-top: 0.5rem;
+}
+#upgrades .upgrade .requirements {
+   background-color: #fff;
+   margin: 0 0 0.5rem 50%;
+   padding: 0 0.2rem;
+   border: 2px solid;
+   border-top-color: #000;
+   border-right-color: #fff;
+   border-bottom-color: #fff;
+   border-left-color: #000;
+   display: table;
+   transform: translateX(-50%);
+   white-space: pre;
+}

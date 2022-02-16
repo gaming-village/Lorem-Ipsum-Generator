@@ -137,7 +137,6 @@ interface Upgrade {
    requirements: {
       lorem?: number;
       workers?: { [key: string]: number };
-      upgrades?: ReadonlyArray<string>;
    };
    tier: number;
 }
@@ -165,8 +164,7 @@ export const UPGRADES: ReadonlyArray<Upgrade> = [
       name: "Touch Typing",
       description: "Chance to generate lorem when typing any character, not just words.",
       requirements: {
-         lorem: 50,
-         upgrades: ["Typewriter"]
+         lorem: 50
       },
       tier: 2
    },

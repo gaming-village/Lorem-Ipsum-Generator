@@ -10,7 +10,7 @@ export interface UpgradeRequirements {
    readonly upgrades?: ReadonlyArray<string>;
 }
 
-export interface Upgrade {
+export interface UpgradeInfo {
    readonly name: string;
    readonly description: string;
    readonly tier: number;
@@ -18,7 +18,7 @@ export interface Upgrade {
    isBought?: boolean;
 }
 
-const UPGRADES: ReadonlyArray<Upgrade> = [
+const UPGRADES: ReadonlyArray<UpgradeInfo> = [
    {
       name: "Typewriter",
       description: "Lorem generation through typing is doubled.",
