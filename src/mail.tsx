@@ -250,15 +250,7 @@ export function receiveMail(letterSubject: string): void {
    }
    if (letterInfo.isReceived) return;
 
-   const notificationInfo = {
-      iconSrc: "folder.png",
-      title: letterInfo.subject,
-      description: "You've got mail!",
-      caption: "Click to open"
-   };
-   const notificationClickEvent = (notification: HTMLElement) => {
-      notification.remove();
-      
+   const notificationClickEvent = (): void => {
       switchView("mail");
       openMail();
 
@@ -270,7 +262,15 @@ export function receiveMail(letterSubject: string): void {
          openInboxLetter(letterInfo, getLetter(letterInfo));
       }, 1);
    }
-   createNotification(notificationInfo, true, true, notificationClickEvent);
+   createNotification({
+      iconSrc: "folder.png",
+      title: letterInfo.subject,
+      description: "You've got mail!",
+      caption: "Click to open",
+      isClickable: true,
+      hasCloseButton: true,
+      onClick: notificationClickEvent
+   });
 
    // Find an available letter number
    const letterNumber = LETTERS.indexOf(letterInfo);

@@ -1,46 +1,38 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { useEffect, useState } from "react";
+import Button from "./components/Button";
 import UIButton from "./components/UIButton";
-import { getElem } from "./utils";
+import "./css/notifications.css";
 
 export interface NotificationInfo {
    iconSrc: string;
    title: string;
    description: string;
    caption?: string;
+   isClickable?: boolean;
+   hasCloseButton?: boolean;
+   onClick?: () => void;
 }
 
-const getNotification = (notificationCount: number): HTMLElement => {
-   return document.querySelector(`.notification-${notificationCount}`) as HTMLElement;
+interface NotificationProps {
+   info: NotificationInfo;
+   closeFunc: (info: NotificationInfo) => void;
 }
-
-const closeNotification = (notification: HTMLElement): void => {
-   notification.remove();
-}
-
-const generateNotificationID = (): number => {
-   let i = 0;
-   while (document.querySelector(`.notification-${i}`) !== null) {
-      i++;
-   }
-   return i;
-}
-
-export function createNotification(info: NotificationInfo, isClickable: boolean = false, hasCloseButton: boolean = true, clickEvent?: Function): void {
-   const wrapper = document.createElement("div");
-   const notificationContainer = getElem("notification-container");
-   notificationContainer.appendChild(wrapper);
-
-   const notificationClickEvent = () => {
-      if (clickEvent) {
-         const notification = getNotification(notificationCount);
-         if (notification) clickEvent(notification);
-      }
+const Notification = ({ info, closeFunc }: NotificationProps) => {
+   let iconSrc;
+   try {
+      iconSrc = require(`./images/icons/${info.iconSrc}`).default;
+   } catch {
+      iconSrc = require("./images/icons/questionmark.png").default;
    }
 
-   const iconSrc = require(`./images/icons/${info.iconSrc}`).default;
-   const notificationCount = generateNotificationID();
-   const notification = <div onClick={notificationClickEvent} className={`notification notification-${notificationCount}${isClickable ? " clickable" : ""}`}>
+   const clickEvent = (): void => {
+      if (!info.onClick) return;
+      
+      closeFunc(info);
+      info.onClick();
+   }
+
+   return <div className={`notification${info.isClickable ? " clickable" : ""}`}>
       <>
          <div className="top">
             <img src={iconSrc} alt="" />
@@ -51,15 +43,49 @@ export function createNotification(info: NotificationInfo, isClickable: boolean 
          {info.caption ?
          <>
             <div className="seperator"></div>
-            <p className="caption">{info.caption}</p>
+            <p className="caption" onClick={clickEvent}>{info.caption}</p>
          </>
          : ""}
 
-         {hasCloseButton ?
-         <UIButton onClick={() => closeNotification(getNotification(notificationCount))} type="close" />
+         {info.hasCloseButton ?
+         <UIButton onClick={() => closeFunc(info)} type="close" />
          : ""}
       </>
-   </div>
+   </div>;
+}
 
-   ReactDOM.render(notification, wrapper);
+export let createNotification: (info: NotificationInfo) => void;
+
+let notificationBuffer = new Array<NotificationInfo>();
+export const NotificationContainer = () => {
+   const [notifications, setNotifications] = useState<Array<NotificationInfo>>(new Array<NotificationInfo>());
+
+   useEffect(() => {
+      createNotification = (info: NotificationInfo): void => {
+         notificationBuffer.push(info);
+         setNotifications(notificationBuffer.slice());
+      };
+   }, [notifications]);
+
+   const closeFunc = (info: NotificationInfo): void => {
+      for (let i = 0; i < notificationBuffer.length; i++) {
+         if (notificationBuffer[i] === info) {
+            notificationBuffer.splice(i, 1);
+         }
+      }
+      setNotifications(notificationBuffer.slice());
+   }
+
+   const closeAll = (): void => {
+      notificationBuffer = new Array<NotificationInfo>();
+      setNotifications(notificationBuffer.slice());
+   }
+
+   const MAX_NOTIFICATIONS = 4;
+   return <div id="notification-container">
+      {notifications.map((notification, i) => {
+         return <Notification key={i} info={notification} closeFunc={closeFunc} />;
+      })}
+      {notifications.length > MAX_NOTIFICATIONS ? <Button onClick={closeAll} isCentered={true}>Close All</Button> : ""}
+   </div>;
 }

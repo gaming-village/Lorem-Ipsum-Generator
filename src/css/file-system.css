@@ -1,0 +1,39 @@
+#file-system {
+   margin: 0 24px;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+}
+
+#file-system .file {
+   margin: 14px;
+   display: table;
+   position: relative;
+   cursor: pointer;
+}
+#file-system .file .icon {
+   --size: 32px;
+   width: var(--size);
+   height: var(--size);
+   image-rendering: pixelated;
+}
+#file-system .file:hover .icon {
+   filter: brightness(1.1);
+}
+#file-system .file:active .icon {
+   filter: brightness(0.9);
+}
+#file-system .file span {
+   max-width: 96px;
+   font: 0.9rem 400 "MS Sans Serif";
+   line-height: 0.8rem;
+   color: #fff;
+   text-align: center;
+   margin: 0;
+   position: absolute;
+   bottom: 0.2rem;
+   left: 50%;
+   transform: translate(-50%, 100%);
+   text-shadow: 1px 1px 0 #000;
+   word-wrap: break-word;
+}

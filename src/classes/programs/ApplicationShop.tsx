@@ -51,7 +51,8 @@ class ApplicationShop extends Program {
    constructor() {
       super({
          name: "Application Shop",
-         id: "applicationShop"
+         id: "applicationShop",
+         fileName: "application_shop"
       });
    }
 

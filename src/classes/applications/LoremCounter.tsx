@@ -50,6 +50,7 @@ class LoremCounter extends Application {
       super({
          name: "Lorem Counter",
          id: "loremCounter",
+         fileName: "lorem_counter",
          category: ApplicationCategory.lifestyle,
          description: "Counts your lorem.",
          iconSrc: "lorem-counter.png",

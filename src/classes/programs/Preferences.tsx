@@ -183,7 +183,8 @@ class Preferences extends Program {
    constructor() {
       super({
          name: "Preferences",
-         id: "preferences"
+         id: "preferences",
+         fileName: "preferences"
       });
    }
 

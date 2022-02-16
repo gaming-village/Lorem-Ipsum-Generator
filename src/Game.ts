@@ -10,6 +10,9 @@ import { hasUpgrade } from "./upgrades";
 import { SettingsType } from "./classes/programs/Settings";
 import { JOB_DATA, Job } from "./data/job-data";
 import { calculateWorkerProduction } from "./components/CorporateOverview";
+import Application from "./classes/applications/Application";
+import Program from "./classes/programs/Program";
+import LoremCounter from "./classes/applications/LoremCounter";
 
 interface UserInfo {
    workerNumber: number;
@@ -26,8 +29,8 @@ interface GameType {
    wordsTyped: number;
    loremAchievements: Array<Achievement>;
    settings: SettingsType;
-   applications: { [key: string]: any };
-   programs: { [key: string]: any };
+   applications: { [key: string]: Application };
+   programs: { [key: string]: Program };
    tick: () => void;
    loadLoremAchievements: () => void;
    motivation: number;
@@ -91,7 +94,7 @@ const Game: GameType = {
 
          this.updateLorem(loremDiff);
 
-         this.applications.loremCounter.createTextEffect();
+         (this.applications.loremCounter as LoremCounter).createTextEffect!();
       }
 
       const SECONDS_BETWEEN_SAVES: number = 10;
@@ -132,7 +135,7 @@ const Game: GameType = {
       // Game.lorem += productionWhileIdle;
    },
    updateLorem: function(loremDiff: number): void {
-      const loremCounterUpdateFunc = this.applications.loremCounter.updateLoremCount;
+      const loremCounterUpdateFunc = (this.applications.loremCounter as LoremCounter).updateLoremCount;
       if (loremCounterUpdateFunc !== null) {
          loremCounterUpdateFunc(this.lorem, loremDiff);
       }

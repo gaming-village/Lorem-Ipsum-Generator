@@ -7,6 +7,7 @@ import WindowsProgram from "./components/WindowsProgram";
 import Button from "./components/Button";
 import ButtonContainer from "./components/ButtonContainer";
 import WelcomeScreen from "./components/WelcomeScreen";
+import { NotificationContainer } from "./notifications";
 
 function App() {
    return <>
@@ -50,7 +51,7 @@ function App() {
 
       <div id="mask" className="hidden"></div>
 
-      <div id="notification-container"></div>
+      <NotificationContainer />
 
       <Navbar />
       

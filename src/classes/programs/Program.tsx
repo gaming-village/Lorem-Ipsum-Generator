@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { focusProgram } from "../..";
+import { createFile } from "../../components/FileSystem";
 import WindowsProgram from "../../components/WindowsProgram";
 import Game from "../../Game";
 import { getElem } from "../../utils";
@@ -35,6 +36,7 @@ const ProgramElem = ({ name, id, program, children }: ProgramElemProps): JSX.Ele
 interface ProgramType {
    name: string;
    id: string;
+   fileName: string;
 }
 abstract class Program {
    private readonly name: string;
@@ -43,9 +45,14 @@ abstract class Program {
    isOpened: boolean = false;
 
    setVisibility!: (newVal: boolean) => void;
-   constructor({ name, id }: ProgramType) {
+   constructor({ name, id, fileName }: ProgramType) {
       this.name = name;
       this.id = id;
+
+      createFile({
+         name: fileName,
+         extension: "exe"
+      });
 
       const elemContent = this.instantiate();
       this.createElem(elemContent);

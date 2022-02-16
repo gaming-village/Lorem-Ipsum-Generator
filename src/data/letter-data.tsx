@@ -82,10 +82,10 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
       from: "Apple Company",
       body: <>
          <p>Greeting customer</p>
-         <p>Becuse of you are 1,00,000th viewer, Steve Job give you free iphone $1 now</p>
-         <p>Pls sned bank acount details to james.willson@yahoo.com and arabian prince will give you 2$ of .</p>
-         <p>Of kind Regard ,</p>
-         <p>queen of England</p>
+         <p>You are 1,00,000.0,0 viewer. Steve give you iphone $1. yes?</p>
+         <p>plz sned bank acount details to james.willson@yahoo.com and arabian prince will give you 2$ of .</p>
+         <p>Regard of kind,</p>
+         <p>an queen Of England</p>
       </>,
       folder: "junkMail",
       isCloseable: false

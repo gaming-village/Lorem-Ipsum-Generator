@@ -235,7 +235,7 @@
    height: var(--item-size);
    margin: 0.5rem 0 0.5rem 50%;
    display: table;
-   transform: translateX(calc(-50% + var(--offset) * var(--item-size)))
+   transform: translateX(calc(-50% + (var(--item-spacing-x) + var(--item-size)) * var(--offset) / 2));
 }
 #career-path .item {
    width: var(--item-size);
@@ -257,6 +257,7 @@
 }
 #career-path .item.unknown {
    background-color: #888;
+   opacity: 0.9;
 }
 
 #career-path .item span {

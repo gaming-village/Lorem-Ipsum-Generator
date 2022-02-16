@@ -1,6 +1,7 @@
 import React from "react";
 import "../css/computer.css";
 import "../css/programs.css";
+import FileSystem from "./FileSystem";
 import TaskBar from "./Taskbar";
 
 const Computer = () => {
@@ -9,6 +10,8 @@ const Computer = () => {
          <div id="lorem-container">
             <span className="instruction">(Type to generate lorem)</span>
          </div>
+
+         <FileSystem />
 
          <TaskBar />
       </div>

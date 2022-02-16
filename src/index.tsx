@@ -14,7 +14,7 @@ import { type } from "./lorem-production";
 import { previewType, showWelcomeScreen } from "./components/WelcomeScreen";
 import { setupNavBar, switchView } from "./components/Navbar";
 import { updateCorporateOverview } from "./components/CorporateOverview";
-// import { setupNavBar, switchView } from "./components/Navbar";
+import LoremCounter from "./classes/applications/LoremCounter";
 
 ReactDOM.render(
    <React.StrictMode>
@@ -121,7 +121,7 @@ document.addEventListener("keydown", event => {
       keysDown.push(key)
       type(key);
 
-      Game.applications.loremCounter.createTextEffect();
+      (Game.applications.loremCounter as LoremCounter).createTextEffect!();
    }
 });
 document.addEventListener("keyup", function(event) {

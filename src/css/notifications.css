@@ -1,0 +1,80 @@
+#notification-container {
+   position: absolute;
+   left: 50%;
+   bottom: 2.5rem;
+   display: inline-block;
+   transform: translate(-50%);
+   z-index: 1;
+}
+.notification {
+   font: normal 1rem "MS Sans Serif";
+   background-color: #ddd;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #fff;
+   padding: 0.2rem;
+   margin-left: 50%;
+   margin-top: 0.4rem;
+   display: table;
+   position: relative;
+   transform: translateX(-50%);
+   white-space: nowrap;
+   box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.4);
+}
+.notification .top {
+   height: 2rem;
+   margin-bottom: 0.4rem;
+   display: flex;
+}
+.notification img:not(.ui-button) {
+   width: 32px;
+   height: 32px;
+}
+.notification .title {
+   line-height: 2rem;
+   font-size: 0.95rem;
+   font-weight: bold;
+   margin: 0 1.8rem 0 0.2rem;
+}
+.notification .description {
+   color: #333;
+   font-size: 0.9rem;
+   font-style: italic;
+   margin: 0;
+}
+.notification .seperator {
+   width: 100%;
+   height: 2px;
+   background-color: #000;
+   margin: 0.5rem 0 0.2rem;
+   box-shadow: 0 2px 0 0 #fff;
+}
+.notification .caption {
+   text-align: center;
+   color: #888;
+   font-weight: bold;
+   font-size: 0.9rem;
+   margin: 0;
+}
+.notification.clickable .caption:hover {
+   color: #000;
+   background-color: #e5e5e5;
+   cursor: pointer;
+}
+.notification.clickable .caption:active {
+   color: #555;
+   background-color: #e0e0e0;
+   cursor: pointer;
+}
+.notification .ui-button {
+   --offset: 2px;
+   position: absolute;
+   top: var(--offset);
+   right: var(--offset);
+}
+
+#notification-container button {
+   cursor: pointer;
+}

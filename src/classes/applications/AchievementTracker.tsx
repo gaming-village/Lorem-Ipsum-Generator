@@ -23,8 +23,10 @@ export function unlockAchievement(id: string): void {
       iconSrc: "settings.png",
       title: achievement.name,
       description: achievement.description,
-      caption: "New achievement!"
-   }, false, true);
+      caption: "New achievement!",
+      isClickable: false,
+      hasCloseButton: true
+   });
 }
 
 enum FilterTypes {
@@ -157,6 +159,7 @@ class AchievementTracker extends Application {
       super({
          name: "Achievement Tracker",
          id: "achievementTracker",
+         fileName: "achievement_tracker",
          category: ApplicationCategory.lifestyle,
          description: "Keep track of how many meaningless tasks you have completed.",
          iconSrc: "achievement-tracker.png",

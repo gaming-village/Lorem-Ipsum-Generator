@@ -131,7 +131,8 @@ class Settings extends Program {
    constructor() {
       super({
          name: "Settings",
-         id: "settings"
+         id: "settings",
+         fileName: "settings"
       });
    }
 

@@ -132,7 +132,6 @@ interface CareerPathNode {
 }
 const CareerPathSection = ({}: SectionProps) => {
    const jobHistory = getJobHistory();
-   console.log(jobHistory);
 
    // Create the tree
    const careerPathTree: CareerPathNode = {
@@ -142,7 +141,6 @@ const CareerPathSection = ({}: SectionProps) => {
    };
    let previousNode: CareerPathNode = careerPathTree;
    for (let i = 0; i < jobHistory.length; i++) {
-      if (jobHistory.length === 1) break;
       const job = jobHistory[i];
       const nextJob = jobHistory[i + 1];
 
@@ -150,6 +148,9 @@ const CareerPathSection = ({}: SectionProps) => {
       const tierJobs = getJobsByTier(job.tier + 1);
       for (const currentJob of tierJobs) {
          let newNode!: CareerPathNode;
+
+         const isInPath = typeof currentJob.requirement === "undefined" || currentJob.requirement === job.name;
+         if (!isInPath) continue;
 
          if (i === jobHistory.length - 1) {
             newNode = {
@@ -165,14 +166,12 @@ const CareerPathSection = ({}: SectionProps) => {
             }
 
             nextNode = newNode;
-         } else if (typeof currentJob.requirement === "undefined" || currentJob.requirement === job.name) {
+         } else {
             newNode = {
                status: "nonSelected",
                job: currentJob,
                children: new Array<CareerPathNode>()
             }
-         } else {
-            continue;
          }
          
          previousNode.children.push(newNode);
@@ -192,17 +191,33 @@ const CareerPathSection = ({}: SectionProps) => {
    let key = 0;
    const tree = new Array<JSX.Element>();
    let currentNode: CareerPathNode = baseNode;
-   let i = 0;
    let offset = 0;
+   let i = 0;
    while (true) {
       if (typeof currentNode === "undefined" || currentNode.children.length === 0) {
          break;
       }
+
+      const rowStyle = {
+         "--offset": Math.max(offset, 0)
+      } as React.CSSProperties;
       
       let nextNode!: CareerPathNode;
       const newRow = new Array<JSX.Element>();
       for (let j = 0; j < currentNode.children.length; j++) {
          const child = currentNode.children[j];
+
+         if (i > 0 && child.status === "previousJob") {
+            console.log(i);
+            if (j === 0) {
+               console.log("- offset");
+               offset--;
+            } else {
+               offset++;
+               console.log("+ offset");
+            }
+         }
+
          const className = `item ${child.status}`;
          newRow.push(
             <div key={key++} className={className}>
@@ -215,9 +230,6 @@ const CareerPathSection = ({}: SectionProps) => {
          }
       }
 
-      const rowStyle = {
-         "--offset": Math.max(i - 1, 0)
-      } as React.CSSProperties;
       tree.push(
          <div key={key++} className="row" style={rowStyle}>
             {newRow}
@@ -298,7 +310,7 @@ const WorkerSection = ({ job }: SectionProps) => {
 
       <p>Purchase {job.name}{workerCount === 1 ? "" : "s"} to increase your Lorem production.</p>
 
-      <p>Costs <b>{cost}</b> lorem.</p>
+      <p>Costs <b>{roundNum(cost)}</b> lorem.</p>
 
       <div className="button-container">
          <Button onClick={buySingularWorker}>Buy</Button>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { focusProgram } from "../..";
+import { createFile } from "../../components/FileSystem";
 import WindowsProgram from "../../components/WindowsProgram";
 import Game from "../../Game";
 import { getElem } from "../../utils";
@@ -66,6 +67,7 @@ export enum ApplicationCategory {
 interface ApplicationType {
    name: string;
    id: string;
+   fileName: string;
    category: ApplicationCategory;
    description: string;
    iconSrc: string | null;
@@ -75,6 +77,7 @@ interface ApplicationType {
 abstract class Application {
    private readonly name: string;
    private readonly id: string;
+   private readonly fileName: string;
    readonly category: ApplicationCategory;
    readonly description: string;
    readonly iconSrc: string | null;
@@ -85,16 +88,20 @@ abstract class Application {
 
    isUnlocked: boolean;
    isOpened: boolean = false;
-   constructor({ name, id, category, description, iconSrc, cost, isUnlocked }: ApplicationType) {
+   constructor({ name, id, fileName, category, description, iconSrc, cost, isUnlocked }: ApplicationType) {
       this.name = name;
       this.id = id;
+      this.fileName = fileName;
       this.category = category;
       this.description = description;
       this.iconSrc = iconSrc;
       this.cost = cost;
       this.isUnlocked = isUnlocked;
 
-      if (this.isUnlocked) this.createTaskbarIcon();
+      if (this.isUnlocked) {
+         this.createTaskbarIcon();
+         this.createFile();
+      }
 
       const elemContent = this.instantiate();
       this.createElem(elemContent);
@@ -126,11 +133,26 @@ abstract class Application {
       taskbar.appendChild(container);
    }
 
+   private createFile(): void {
+      const toggleApplicationVisibility = (): void => {
+         console.log("u");
+         console.trace();
+         this.isOpened ? this.close() : this.open();
+      }
+      
+      createFile({
+         name: this.fileName,
+         extension: "exe",
+         clickEvent: toggleApplicationVisibility
+      });
+   }
+
    unlock(): void {
       if (this.isUnlocked) return;
 
       this.isUnlocked = true;
       this.createTaskbarIcon();
+      this.createFile();
    }
 
    open() {
