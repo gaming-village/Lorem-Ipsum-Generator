@@ -41,6 +41,7 @@ interface ProgramType {
 abstract class Program {
    private readonly name: string;
    private readonly id: string;
+   private readonly fileName: string;
 
    isOpened: boolean = false;
 
@@ -48,11 +49,9 @@ abstract class Program {
    constructor({ name, id, fileName }: ProgramType) {
       this.name = name;
       this.id = id;
+      this.fileName = fileName;
 
-      createFile({
-         name: fileName,
-         extension: "exe"
-      });
+      this.createFile();
 
       const elemContent = this.instantiate();
       this.createElem(elemContent);
@@ -72,6 +71,18 @@ abstract class Program {
    }
 
    protected abstract instantiate(): JSX.Element;
+
+   private createFile(): void {
+      const toggleProgramVisibility = (): void => {
+         this.isOpened ? this.close() : this.open();
+      }
+
+      createFile({
+         name: this.fileName,
+         extension: "exe",
+         clickEvent: toggleProgramVisibility
+      });
+   }
 
    open(): void {
       if (this.isOpened) return;

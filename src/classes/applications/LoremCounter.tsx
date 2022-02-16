@@ -55,10 +55,9 @@ class LoremCounter extends Application {
          description: "Counts your lorem.",
          iconSrc: "lorem-counter.png",
          cost: 0,
-         isUnlocked: true
+         isUnlocked: true,
+         isOpenByDefault: true
       });
-
-      super.open();
    }
 
    instantiate(): JSX.Element {

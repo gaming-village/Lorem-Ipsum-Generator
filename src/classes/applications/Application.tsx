@@ -45,7 +45,8 @@ const ApplicationElem = ({ title, id, application, children }: ApplicationElemPr
 
    useEffect(() => {
       if (applicationRef.current) focusProgram(applicationRef.current);
-   });
+      if (application.isOpened) setVisible(true);
+   }, [application.isOpened]);
 
    application.setVisibility = (newVal: boolean): void => {
       setVisible(newVal);
@@ -73,6 +74,7 @@ interface ApplicationType {
    iconSrc: string | null;
    cost: number;
    isUnlocked: boolean;
+   isOpenByDefault?: boolean;
 }
 abstract class Application {
    private readonly name: string;
@@ -87,8 +89,8 @@ abstract class Application {
    setTaskbarStatus!: (newVal: boolean) => void;
 
    isUnlocked: boolean;
-   isOpened: boolean = false;
-   constructor({ name, id, fileName, category, description, iconSrc, cost, isUnlocked }: ApplicationType) {
+   isOpened: boolean;
+   constructor({ name, id, fileName, category, description, iconSrc, cost, isUnlocked, isOpenByDefault = false }: ApplicationType) {
       this.name = name;
       this.id = id;
       this.fileName = fileName;
@@ -97,6 +99,7 @@ abstract class Application {
       this.iconSrc = iconSrc;
       this.cost = cost;
       this.isUnlocked = isUnlocked;
+      this.isOpened = isOpenByDefault;
 
       if (this.isUnlocked) {
          this.createTaskbarIcon();
@@ -105,7 +108,7 @@ abstract class Application {
 
       const elemContent = this.instantiate();
       this.createElem(elemContent);
-
+      
       Game.applications[id] = this;
    }
 
@@ -135,8 +138,6 @@ abstract class Application {
 
    private createFile(): void {
       const toggleApplicationVisibility = (): void => {
-         console.log("u");
-         console.trace();
          this.isOpened ? this.close() : this.open();
       }
       

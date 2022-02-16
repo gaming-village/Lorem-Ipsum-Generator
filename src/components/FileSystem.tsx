@@ -30,7 +30,7 @@ const FileSystem = () => {
             }
          }
 
-         return <div key={i} onClick={fileInfo.clickEvent ? fileInfo.clickEvent : undefined} className="file">
+         return <div key={i} onDoubleClick={fileInfo.clickEvent ? () => fileInfo.clickEvent!() : undefined} className="file">
             <img src={iconSrc} alt="" className="icon" />
 
             <span>{fileInfo.name}.{fileInfo.extension}</span>
