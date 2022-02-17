@@ -11,6 +11,7 @@ import { calculateWorkerProduction, hasUpgrade } from "./components/CorporateOve
 import Application from "./classes/applications/Application";
 import Program from "./classes/programs/Program";
 import LoremCounter from "./classes/applications/LoremCounter";
+import { createNotification } from "./notifications";
 
 interface UserInfo {
    workerNumber: number;
@@ -118,19 +119,22 @@ const Game: GameType = {
    },
    timeAtLastSave: -1,
    calculateIdleProfits: function(): void {
-      // const secondsIdle = (getCurrentTime() - this.timeAtLastSave) / 1000;
-      // const productionWhileIdle = loremCorp.getTotalWorkerProduction() * secondsIdle;
+      const secondsIdle = (getCurrentTime() - this.timeAtLastSave) / 1000;
+      const idleProduction = calculateWorkerProduction() * secondsIdle;
+      console.log(secondsIdle);
+      console.log("idle:", idleProduction);
 
-      // if (productionWhileIdle === 0) return;
+      if (idleProduction > 0) {
+         createNotification({
+            iconSrc: "save.png",
+            title: "Idle profits",
+            description: `While you were away your workers generated ${roundNum(idleProduction)} lorem.`,
+            isClickable: false,
+            hasCloseButton: true
+         });
 
-      // const notificationInfo = {
-      //    iconSrc: "save.png",
-      //    title: "Idle profits",
-      //    description: `While you were away your workers generated ${roundNum(productionWhileIdle)} lorem.`
-      // }
-      // createNotification(notificationInfo, false, true);
-
-      // Game.lorem += productionWhileIdle;
+         this.lorem += idleProduction;
+      }
    },
    updateLorem: function(loremDiff: number): void {
       const loremCounterUpdateFunc = (this.applications.loremCounter as LoremCounter).updateLoremCount;

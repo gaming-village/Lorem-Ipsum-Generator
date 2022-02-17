@@ -138,9 +138,15 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       loadEvent: (savedValue: string) => {
          const workerCounts = savedValue.split("-").map(Number);
          for (let i = 0; i < JOB_DATA.length; i++) {
-            const job = JOB_DATA[i];
+            const worker = JOB_DATA[i];
             const count = workerCounts[i];
-            Game.userInfo.workers[job.id] = count;
+            
+            if (!Number.isNaN(count)) {
+               Game.userInfo.workers[worker.id] = count;
+            } else {
+               console.warn(`Worker '${worker.name} count was NaN! Setting to 0`);
+               Game.userInfo.workers[worker.id] = 0;
+            }
          }
       }
    },

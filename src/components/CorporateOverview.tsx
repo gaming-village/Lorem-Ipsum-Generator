@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "../css/corporate-overview.css";
 import { JOB_DATA, JOB_TIER_DATA, Job, UPGRADES, UpgradeInfo } from "../data/job-data";
 import Game from "../Game";
-import { createTooltip } from "../tooltips";
 import { audioSources, getPrefix, randItem, roundNum } from "../utils";
 import Button from "./Button";
 import ProgressBar from "./ProgressBar";
@@ -258,7 +257,7 @@ interface CareerPathNode {
    job: Job;
    children: Array<CareerPathNode>
 }
-const CareerPathSection = ({}: SectionProps) => {
+const CareerPathSection = () => {
    const jobHistory = getJobHistory();
 
    // Create the tree
@@ -494,7 +493,7 @@ let sectionData: ReadonlyArray<SectionType> = [
       type: "regular",
       category: SectionCategories.general,
       isOpened: false,
-      getSection: (job: Job) => <CareerPathSection job={job} />
+      getSection: () => <CareerPathSection />
    }
 ];
 sectionData = sectionData.concat(JOB_DATA.map(currentJob => {

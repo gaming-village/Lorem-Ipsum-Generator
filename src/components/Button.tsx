@@ -1,6 +1,4 @@
-import React, { MouseEventHandler, useEffect, useRef, useState } from "react"
-import { JsxChild } from "typescript";
-import Game from "../Game";
+import React, { MouseEventHandler, useEffect, useRef } from "react"
 import { createTooltip, removeTooltip } from "../tooltips";
 
 interface ButtonProps {
