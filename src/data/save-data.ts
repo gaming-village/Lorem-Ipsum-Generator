@@ -5,7 +5,7 @@ import { getCurrentTime, randInt } from "../utils";
 import ACHIEVEMENTS from "./achievements-data";
 import LETTERS, { LetterInfo } from "./letter-data";
 import LOREM_PACKS from "./lorem-packs-data";
-import UPGRADES from "./upgrades-data";
+import { UPGRADES } from "./job-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
 import { Job, JOB_DATA } from "./job-data";
 
@@ -278,13 +278,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
             const upgrade = UPGRADES[i];
             if (upgrade.isBought) total += Math.pow(2, i);
          }
-         console.log("update:", total);
-         console.log(UPGRADES);
          return total.toString();
       },
       loadEvent: (savedValue: string) => {
          const bits = decimalToBinaryArr(savedValue);
-         console.log("load:", bits);
 
          for (let i = 0; i < UPGRADES.length; i++) {
             const upgrade = UPGRADES[i];

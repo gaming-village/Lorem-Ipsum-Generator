@@ -3,6 +3,7 @@ import "./css/devtools.css";
 import { getElem } from "./utils";
 import letters from "./data/letter-data";
 import { receiveMail } from "./mail";
+import { focusProgram } from ".";
 
 const devtoolTabNames: string[] = ["resources", "mail", "data"];
 
@@ -73,7 +74,9 @@ export function openDevtools(): void {
    Game.showMask();
    Game.maskClickEvent = hideDevtools;
 
-   getElem("devtools").classList.remove("hidden");
+   const devtools = getElem("devtools");
+   devtools.classList.remove("hidden");
+   focusProgram(devtools);
 }
 
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../css/corporate-overview.css";
-import { JOB_DATA, JOB_TIER_DATA, Job, UPGRADES } from "../data/job-data";
-import { UpgradeInfo } from "../data/upgrades-data";
+import { JOB_DATA, JOB_TIER_DATA, Job, UPGRADES, UpgradeInfo } from "../data/job-data";
 import Game from "../Game";
 import { audioSources, getPrefix, randItem, roundNum } from "../utils";
 import Button from "./Button";
@@ -121,6 +120,11 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
    </>;
 }
 
+/**
+ * Used to find whether the user owns an upgrade or not.
+ * @param name The name of the upgrade
+ * @returns If the upgrade is owned.
+ */
 export function hasUpgrade(name: string): boolean {
    for (const upgrade of UPGRADES) {
       if (upgrade.name === name) return upgrade.isBought || false;
@@ -163,17 +167,8 @@ const canBuyUpgrade = (upgrade: UpgradeInfo, lorem: number): boolean => {
    return true;
 }
 
-const getBoughtUpgrades = (): Array<UpgradeInfo> => {
-   let boughtUpgrades = new Array<UpgradeInfo>();
-   for (const upgrade of UPGRADES) {
-      if (upgrade.isBought) boughtUpgrades.push(upgrade);
-   }
-   return boughtUpgrades;
-}
-
 const buyUpgrade = (upgrade: UpgradeInfo): void => {
    upgrade.isBought = true;
-   console.log("buy", upgrade);
 
    if (typeof upgrade.requirements.lorem !== "undefined") {
       Game.lorem -= upgrade.requirements.lorem;
@@ -187,7 +182,6 @@ const buyUpgrade = (upgrade: UpgradeInfo): void => {
 
 const UpgradesSection = ({ job }: SectionProps) => {
    const [lorem, setLorem] = useState(Game.lorem);
-   const boughtUpgrades = getBoughtUpgrades();
 
    useEffect(() => {
       const updateLoremCount = (): void => {
@@ -232,7 +226,7 @@ const UpgradesSection = ({ job }: SectionProps) => {
 
       const upgradeRequirements = getUpgradeRequirements(upgrade);
       const canBuy = canBuyUpgrade(upgrade, lorem);
-      const isBought = boughtUpgrades.includes(upgrade);
+      const isBought = hasUpgrade(upgrade.name);
 
       upgradeRow.push(
          <div key={key++} className={`upgrade${isBought ? " bought" : ""}`}>
@@ -634,9 +628,10 @@ const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
 
          <Button onClick={() => promotionAttempt(nextJobs[0])} isCentered={true} isFlashing={true}>Continue</Button>
       </> : <>
-         <p>Choose your career path:</p>
-
+         <p className="benefits">Benefits:</p>
          {promotionBenefits}
+
+         <p className="choose-career-text">Choose your career path:</p>
 
          <div className="career-path-container">
             {careerPanels}

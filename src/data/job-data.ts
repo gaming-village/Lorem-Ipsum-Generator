@@ -131,7 +131,7 @@ export const JOB_DATA: ReadonlyArray<Job> = [
    }
 ];
 
-interface Upgrade {
+export interface UpgradeInfo {
    readonly name: string;
    readonly description: string;
    readonly requirements: {
@@ -141,7 +141,7 @@ interface Upgrade {
    readonly tier: number;
    isBought?: boolean;
 }
-export const UPGRADES: Array<Upgrade> = [
+export const UPGRADES: Array<UpgradeInfo> = [
    {
       name: "Typewriter",
       description: "Lorem generation through typing is doubled.",
