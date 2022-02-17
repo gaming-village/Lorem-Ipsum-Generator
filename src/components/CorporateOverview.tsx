@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../css/corporate-overview.css";
 import { JOB_DATA, JOB_TIER_DATA, Job, UPGRADES, UpgradeInfo } from "../data/job-data";
 import Game from "../Game";
+import { createTooltip } from "../tooltips";
 import { audioSources, getPrefix, randItem, roundNum } from "../utils";
 import Button from "./Button";
 import ProgressBar from "./ProgressBar";
@@ -443,6 +444,11 @@ const WorkerSection = ({ job }: SectionProps) => {
    </div>
 }
 
+const getTotalWorkerProduction = (worker: Job): number => {
+   const baseProduction = Game.userInfo.workers[worker.id] * worker.loremProduction;
+   return baseProduction;
+}
+
 
 enum SectionCategories {
    general = "General",
@@ -451,11 +457,12 @@ enum SectionCategories {
 
 interface SectionType {
    name: string;
-   type: "regular"| "custom";
+   type: "regular" | "custom";
    category: SectionCategories;
    isOpened: boolean;
    shouldShow?: () => boolean;
    getSection: (job: Job, promoteFunc?: () => void) => JSX.Element;
+   tooltipContent?: (job: Job) => JSX.Element;
 }
 let sectionData: ReadonlyArray<SectionType> = [
    {
@@ -463,7 +470,17 @@ let sectionData: ReadonlyArray<SectionType> = [
       type: "regular",
       category: SectionCategories.general,
       isOpened: true,
-      getSection: (job: Job, promoteFunc?: () => void) => <ProfileSection job={job} promoteFunc={promoteFunc} />
+      getSection: (job: Job, promoteFunc?: () => void) => <ProfileSection job={job} promoteFunc={promoteFunc} />,
+      tooltipContent: (job: Job) => {
+         const jobRequirements = JOB_TIER_DATA[job.tier - 1].requirements;
+         const nextJobRequirements = JOB_TIER_DATA[job.tier].requirements;
+
+         return <>
+            <h3>Profile</h3>
+            <p>You are currently {getPrefix(job.name)} {job.name}.</p>
+            <p>You are {roundNum((Game.totalLoremTyped - jobRequirements) / (nextJobRequirements - jobRequirements) * 100)}% of the way to a promotion.</p>
+         </>;
+      }
    },
    {
       name: "Upgrades",
@@ -490,7 +507,14 @@ sectionData = sectionData.concat(JOB_DATA.map(currentJob => {
          const jobHistory = getJobHistory();
          return jobHistory.includes(currentJob);
       },
-      getSection: () => <WorkerSection job={currentJob} />
+      getSection: () => <WorkerSection job={currentJob} />,
+      tooltipContent: () => {
+         return <>
+         <h3>{currentJob.name}s</h3>
+
+         <p>You have {Game.userInfo.workers[currentJob.id]} {currentJob.name}s producing {roundNum(getTotalWorkerProduction(currentJob))} lorem every second.</p>
+         </>; 
+      }
    } as SectionType;
 }));
 
@@ -537,9 +561,16 @@ const getControlPanel = (job: Job, sections: Array<SectionType>, changeSection: 
          if (!sectionShowInfo[j]) {
             continue;
          }
-         content.push(
-            <Button onClick={() => changeSection(section)} className={section.isOpened ? "" : "dark"} key={key++}>{section.name}</Button>
-         );
+
+         let button!: JSX.Element;
+         if (typeof section.tooltipContent === "undefined") {
+            button = <Button onClick={() => changeSection(section)} className={section.isOpened ? "" : "dark"} key={key++}>{section.name}</Button>;
+         } else {
+            const tooltip = () => section.tooltipContent!(job);
+            button = <Button tooltipContent={tooltip} onClick={() => changeSection(section)} className={section.isOpened ? "" : "dark"} key={key++}>{section.name}</Button>;
+         }
+
+         content.push(button);
       }
    }
 

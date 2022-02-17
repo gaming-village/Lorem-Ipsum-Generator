@@ -13,8 +13,8 @@ export function createTooltip(position: TooltipPosition, content: JSX.Element): 
    tooltip.className = "tooltip";
    getElem("root").appendChild(tooltip);
 
-   for (const pos of Object.entries(position)) {
-      tooltip.style[pos[0] as any] = pos[1];
+   for (const [posName, pos] of Object.entries(position)) {
+      tooltip.style[posName as any] = pos;
    }
 
    ReactDOM.render(content, tooltip);
