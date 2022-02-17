@@ -132,15 +132,16 @@ export const JOB_DATA: ReadonlyArray<Job> = [
 ];
 
 interface Upgrade {
-   name: string;
-   description: string;
-   requirements: {
-      lorem?: number;
-      workers?: { [key: string]: number };
+   readonly name: string;
+   readonly description: string;
+   readonly requirements: {
+      readonly lorem?: number;
+      readonly workers?: { [key: string]: number };
    };
-   tier: number;
+   readonly tier: number;
+   isBought?: boolean;
 }
-export const UPGRADES: ReadonlyArray<Upgrade> = [
+export const UPGRADES: Array<Upgrade> = [
    {
       name: "Typewriter",
       description: "Lorem generation through typing is doubled.",

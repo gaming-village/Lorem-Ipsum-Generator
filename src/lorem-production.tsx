@@ -1,11 +1,10 @@
 import React from "react";
 import Button from "./components/Button";
-import { getRandomWorker } from "./components/CorporateOverview";
+import { getRandomWorker, hasUpgrade } from "./components/CorporateOverview";
 import List from "./components/List";
 import LOREM_PACKS, { LoremCategory, LoremPack, LoremWord, SentenceStructure } from "./data/lorem-packs-data";
 import Game from "./Game";
 import { createTooltip, removeTooltip } from "./tooltips";
-import { hasUpgrade } from "./upgrades";
 import { beautify, capitalise, getElem, randItem } from "./utils";
 
 const getAvailablePacks = (): ReadonlyArray<LoremPack> => {

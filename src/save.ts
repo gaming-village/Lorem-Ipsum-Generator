@@ -1,6 +1,6 @@
 // Adapted from Cookie Clicker's system: https://cookieclicker.fandom.com/wiki/Save
 
-import SAVE_COMPONENTS from "./data/save-components-data";
+import SAVE_COMPONENTS from "./data/save-data";
 
 const getCookie = (cname: string): string | null => {
    var name = cname + "=";

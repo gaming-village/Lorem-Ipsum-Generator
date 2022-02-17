@@ -281,14 +281,22 @@
    padding: 0.2rem;
    border: 2px solid;
    border-top-color: #fff;
-   border-right-color: #fff;
+   border-right-color: #000;
    border-bottom-color: #000;
-   border-left-color: #000;
+   border-left-color: #fff;
+}
+#upgrades .upgrade.bought {
+   background-color: #aaa;
+   border-top-color: #ddd;
+   border-right-color: #000;
+   border-bottom-color: #000;
+   border-left-color: #ddd;
 }
 #upgrades .upgrade .description {
    margin-top: 0.5rem;
 }
 #upgrades .upgrade .requirements {
+   font-weight: 600;
    background-color: #fff;
    margin: 0 0 0.5rem 50%;
    padding: 0 0.2rem;
@@ -300,4 +308,11 @@
    display: table;
    transform: translateX(-50%);
    white-space: pre;
+}
+#upgrades .upgrade.bought .requirements {
+   color: #444;
+   font-style: italic;
+   background-color: #999;
+   border-right-color: #ddd;
+   border-bottom-color: #ddd;
 }

@@ -1,15 +1,13 @@
 import { roundNum, getElem, getCurrentTime } from "./utils";
 import { updateSave } from "./save";
 import { receiveMail } from "./mail";
-import { createNotification } from "./notifications";
 import achievements, { Achievement } from "./data/achievements-data";
 import { unlockAchievement } from "./classes/applications/AchievementTracker";
 import { LOREM_LETTERS } from "./data/letter-data";
 import ACHIEVEMENTS from "./data/achievements-data";
-import { hasUpgrade } from "./upgrades";
 import { SettingsType } from "./classes/programs/Settings";
 import { JOB_DATA, Job } from "./data/job-data";
-import { calculateWorkerProduction } from "./components/CorporateOverview";
+import { calculateWorkerProduction, hasUpgrade } from "./components/CorporateOverview";
 import Application from "./classes/applications/Application";
 import Program from "./classes/programs/Program";
 import LoremCounter from "./classes/applications/LoremCounter";

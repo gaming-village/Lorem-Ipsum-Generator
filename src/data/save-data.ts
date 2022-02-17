@@ -273,18 +273,24 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         return UPGRADES.reduce((previousValue, upgrade, i) => {
-            if (upgrade.isBought) return previousValue + Math.pow(2, i);
-            return previousValue;
-         }, 0).toString();
+         let total = 0;
+         for (let i = 0; i < UPGRADES.length; i++) {
+            const upgrade = UPGRADES[i];
+            if (upgrade.isBought) total += Math.pow(2, i);
+         }
+         console.log("update:", total);
+         console.log(UPGRADES);
+         return total.toString();
       },
       loadEvent: (savedValue: string) => {
-         const parts = decimalToBinaryArr(savedValue);
+         const bits = decimalToBinaryArr(savedValue);
+         console.log("load:", bits);
 
-         parts.forEach((part, i) => {
+         for (let i = 0; i < UPGRADES.length; i++) {
             const upgrade = UPGRADES[i];
-            if (part === 1) upgrade.isBought = true;
-         });
+            const bit = i <= bits.length ? bits[i] : 0;
+            upgrade.isBought = bit === 1;
+         }
       }
    },
    {

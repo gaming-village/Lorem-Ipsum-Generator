@@ -121,6 +121,13 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
    </>;
 }
 
+export function hasUpgrade(name: string): boolean {
+   for (const upgrade of UPGRADES) {
+      if (upgrade.name === name) return upgrade.isBought || false;
+   }
+   throw new Error(`Upgrade '${name}' does not exist!`);
+}
+
 const getUpgradeRequirements = (upgrade: UpgradeInfo): ReadonlyArray<string> => {
    let upgradeRequirements = new Array<string>();
    if (typeof upgrade.requirements.lorem !== "undefined") {
@@ -134,11 +141,11 @@ const getUpgradeRequirements = (upgrade: UpgradeInfo): ReadonlyArray<string> => 
    return upgradeRequirements;
 }
 
-const canBuyUpgrade = (upgrade: UpgradeInfo): boolean => {
+const canBuyUpgrade = (upgrade: UpgradeInfo, lorem: number): boolean => {
    for (const [type, requirement] of Object.entries(upgrade.requirements)) {
       switch (type) {
          case "lorem": {
-            if (Game.lorem < requirement) {
+            if (lorem < requirement) {
                return false;
             }
             break;
@@ -156,22 +163,43 @@ const canBuyUpgrade = (upgrade: UpgradeInfo): boolean => {
    return true;
 }
 
-const UpgradesSection = ({ job }: SectionProps) => {
-   const [lorem, setLorem] = useState(0);
-
-   const updateLoremCount = (): void => {
-      setLorem(Game.lorem);
+const getBoughtUpgrades = (): Array<UpgradeInfo> => {
+   let boughtUpgrades = new Array<UpgradeInfo>();
+   for (const upgrade of UPGRADES) {
+      if (upgrade.isBought) boughtUpgrades.push(upgrade);
    }
+   return boughtUpgrades;
+}
+
+const buyUpgrade = (upgrade: UpgradeInfo): void => {
+   upgrade.isBought = true;
+   console.log("buy", upgrade);
+
+   if (typeof upgrade.requirements.lorem !== "undefined") {
+      Game.lorem -= upgrade.requirements.lorem;
+   }
+   if (typeof upgrade.requirements.workers !== "undefined") {
+      for (const [workerName, workerCount] of Object.entries(upgrade.requirements.workers)) {
+         Game.userInfo.workers[workerName] -= workerCount;
+      }
+   }
+}
+
+const UpgradesSection = ({ job }: SectionProps) => {
+   const [lorem, setLorem] = useState(Game.lorem);
+   const boughtUpgrades = getBoughtUpgrades();
 
    useEffect(() => {
-      updateLoremCount();
+      const updateLoremCount = (): void => {
+         if (Game.lorem !== lorem) setLorem(Game.lorem);
+      }
 
       Game.createRenderListener(updateLoremCount);
 
       return () => {
          Game.removeRenderListener(updateLoremCount);
       }
-   }, []);
+   }, [lorem]);
    
    let content = new Array<JSX.Element>();
    let key = 0;
@@ -180,7 +208,18 @@ const UpgradesSection = ({ job }: SectionProps) => {
    let previousTier = 1;
    for (let i = 0; i < UPGRADES.length; i++) {
       const upgrade = UPGRADES[i];
-      if (upgrade.tier > job.tier) break;
+
+      if (upgrade.tier > job.tier) {
+         if (upgradeRow.length > 0) {
+            content.push(
+               <div key={key++} className="upgrade-container">
+                  {upgradeRow}
+               </div>
+            );
+         }
+         break;
+      }
+
       if (upgrade.tier !== previousTier) {
          content.push(
             <div key={key++} className="upgrade-container">
@@ -192,10 +231,11 @@ const UpgradesSection = ({ job }: SectionProps) => {
       }
 
       const upgradeRequirements = getUpgradeRequirements(upgrade);
-      const canBuy = canBuyUpgrade(upgrade);
+      const canBuy = canBuyUpgrade(upgrade, lorem);
+      const isBought = boughtUpgrades.includes(upgrade);
 
       upgradeRow.push(
-         <div key={key++} className="upgrade">
+         <div key={key++} className={`upgrade${isBought ? " bought" : ""}`}>
             <TitleBar title={upgrade.name} uiButtons={[]} isDraggable={false} />
             
             <p className="description">{upgrade.description}</p>
@@ -206,7 +246,7 @@ const UpgradesSection = ({ job }: SectionProps) => {
                }, "")}
             </div>
 
-            <Button isDark={!canBuy} isCentered={true}>Purchase</Button>
+            <Button onClick={canBuy && !isBought ? () => buyUpgrade(upgrade) : undefined} isFlashing={canBuy && !isBought} isDark={isBought} isCentered={true}>{isBought ? "Bought" : "Purchase"}</Button>
          </div>
       );
 
