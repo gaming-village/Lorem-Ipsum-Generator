@@ -156,7 +156,7 @@ export const UPGRADES: Array<UpgradeInfo> = [
       requirements: {
          lorem: 20,
          workers: {
-            intern: 5
+            interns: 5
          }
       },
       tier: 2
@@ -175,8 +175,8 @@ export const UPGRADES: Array<UpgradeInfo> = [
       requirements: {
          lorem: 100,
          workers: {
-            intern: 10,
-            employee: 1
+            interns: 10,
+            employees: 1
          }
       },
       tier: 3
@@ -186,7 +186,7 @@ export const UPGRADES: Array<UpgradeInfo> = [
       description: "Each non-intern worker increases all intern's base lorem production by 0.01.",
       requirements: {
          workers: {
-            intern: 20
+            interns: 20
          }
       },
       tier: 3

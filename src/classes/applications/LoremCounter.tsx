@@ -4,6 +4,8 @@ import { randInt, randItem, roundNum } from "../../utils";
 import Application, { ApplicationCategory } from "./Application";
 
 const createEffectText = (container: HTMLElement): void => {
+   if (container === null) return;
+   
    const text = document.createElement("span");
    container.appendChild(text);
    text.className = "effect-text";

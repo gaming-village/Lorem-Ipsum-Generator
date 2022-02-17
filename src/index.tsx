@@ -121,7 +121,7 @@ document.addEventListener("keydown", event => {
       keysDown.push(key)
       type(key);
 
-      (Game.applications.loremCounter as LoremCounter).createTextEffect!();
+      if (typeof Game.applications.loremCounter !== "undefined") (Game.applications.loremCounter as LoremCounter).createTextEffect!();
    }
 });
 document.addEventListener("keyup", function(event) {

@@ -121,8 +121,6 @@ const Game: GameType = {
    calculateIdleProfits: function(): void {
       const secondsIdle = (getCurrentTime() - this.timeAtLastSave) / 1000;
       const idleProduction = calculateWorkerProduction() * secondsIdle;
-      console.log(secondsIdle);
-      console.log("idle:", idleProduction);
 
       if (idleProduction > 0) {
          createNotification({

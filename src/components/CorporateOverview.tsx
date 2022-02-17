@@ -138,8 +138,17 @@ const getUpgradeRequirements = (upgrade: UpgradeInfo): ReadonlyArray<string> => 
       upgradeRequirements.push(`${upgrade.requirements.lorem} Lorem`);
    }
    if (typeof upgrade.requirements.workers !== "undefined") {
-      for (const [workerName, count] of Object.entries(upgrade.requirements.workers)) {
-         upgradeRequirements.push(`${count} ${workerName}s`);
+      for (const [workerID, count] of Object.entries(upgrade.requirements.workers)) {
+         // Find the corresponding worker
+         let worker!: Job;
+         for (const currentWorker of JOB_DATA) {
+            if (currentWorker.id === workerID) {
+               worker = currentWorker;
+               break;
+            }
+         }
+
+         upgradeRequirements.push(`${count} ${worker.name}s`);
       }
    }
    return upgradeRequirements;
@@ -155,8 +164,8 @@ const canBuyUpgrade = (upgrade: UpgradeInfo, lorem: number): boolean => {
             break;
          }
          case "workers": {
-            for (const [workerName, workerCount] of Object.entries(requirement)) {
-               if (Game.userInfo.workers[workerName] < (workerCount as number)) {
+            for (const [workerID, workerCount] of Object.entries(requirement)) {
+               if (Game.userInfo.workers[workerID] < Number(workerCount)) {
                   return false;
                }
             }
