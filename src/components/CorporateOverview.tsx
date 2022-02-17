@@ -183,8 +183,8 @@ const buyUpgrade = (upgrade: UpgradeInfo): void => {
       Game.lorem -= upgrade.requirements.lorem;
    }
    if (typeof upgrade.requirements.workers !== "undefined") {
-      for (const [workerName, workerCount] of Object.entries(upgrade.requirements.workers)) {
-         Game.userInfo.workers[workerName] -= workerCount;
+      for (const [workerID, workerCount] of Object.entries(upgrade.requirements.workers)) {
+         Game.userInfo.workers[workerID] -= workerCount;
       }
    }
 }
@@ -392,62 +392,85 @@ const calculateWorkerCost = (initialCost: number, workerCount: number): number =
    return initialCost * Math.pow(1.3, workerCount);
 }
 
-const WorkerSection = ({ job }: SectionProps) => {
-   const [workerCount, setWorkerCount] = useState(Game.userInfo.workers[job.id]);
+const calculateAffordAmount = (worker: Job): number => {
+   let affordAmount = 0;
+   let total = Game.lorem;
+   while (true) {
+      const initialCost = JOB_TIER_DATA[worker.tier - 1].initialCost;
+      const workerCount = Game.userInfo.workers[worker.id] + affordAmount;
+      const cost = calculateWorkerCost(initialCost, workerCount);
+
+      if (cost > total) {
+         return affordAmount;
+      }
+      affordAmount++;
+      total -= cost;
+   }
+}
+
+const WorkerSection = ({ job: worker }: SectionProps) => {
+   const [workerCount, setWorkerCount] = useState(Game.userInfo.workers[worker.id]);
+   const [lorem, setLorem] = useState(Game.lorem);
 
    // For some reason if this isn't here, the default state of workerCount is 1... regardless of the value of Game.userInfo.workers[job.id]
    useEffect(() => {
-      setWorkerCount(Game.userInfo.workers[job.id]);
-   }, [job.id]);
-
-   const loremProduction = workerCount * job.loremProduction;
-
-   const initialCost = JOB_TIER_DATA[job.tier - 1].initialCost;
-   const cost = calculateWorkerCost(initialCost, workerCount);
-   
-   const buyWorker = (): boolean => {
-      const initialCost = JOB_TIER_DATA[job.tier - 1].initialCost;
-      const cost = calculateWorkerCost(initialCost, Game.userInfo.workers[job.id]);
-
-      if (Game.lorem >= cost) {
-         Game.lorem -= cost;
-
-         Game.userInfo.workers[job.id]++;
-         return true;
+      const updateLorem = (): void => {
+         if (lorem !== Game.lorem) setLorem(Game.lorem);
       }
-      return false;
+
+      Game.createRenderListener(updateLorem);
+
+      setWorkerCount(Game.userInfo.workers[worker.id]);
+
+      return () => {
+         Game.removeRenderListener(updateLorem);
+      }
+   }, [worker.id, lorem]);
+
+   const loremProduction = workerCount * worker.loremProduction;
+
+   const initialCost = JOB_TIER_DATA[worker.tier - 1].initialCost;
+   
+   const singleCost = calculateWorkerCost(initialCost, workerCount);
+   const affordAmount = calculateAffordAmount(worker);
+   
+   const buyWorker = (num: number): void => {
+      for (let i = 0; i < num; i++) {
+         const initialCost = JOB_TIER_DATA[worker.tier - 1].initialCost;
+         const cost = calculateWorkerCost(initialCost, Game.userInfo.workers[worker.id]);
+         
+         Game.lorem -= cost;
+      }
+
+      Game.userInfo.workers[worker.id] += num;
    }
 
    const buySingularWorker = () => {
-      if (buyWorker()) {
-         setWorkerCount(Game.userInfo.workers[job.id]);
-      };
+      buyWorker(1);
    }
 
    const buyMaxWorker = () => {
-      while (buyWorker()) {
-         setWorkerCount(Game.userInfo.workers[job.id]);
-      };
+      buyWorker(affordAmount);
    }
 
    return <div>
       <h2>Overview</h2>
 
-      <p>You currently have {workerCount} {job.name}{workerCount === 1 ? "" : "s"}, producing {loremProduction} lorem every second.</p>
+      <p>You currently have {workerCount} {worker.name}{workerCount === 1 ? "" : "s"}, producing {loremProduction} lorem every second.</p>
 
-      <p>Each {job.name} produces {job.loremProduction} lorem every second.</p>
+      <p>Each {worker.name} produces {worker.loremProduction} lorem every second.</p>
 
       <div className="separator"></div>
 
       <h2>Market</h2>
 
-      <p>Purchase {job.name}{workerCount === 1 ? "" : "s"} to increase your Lorem production.</p>
+      <p>Purchase {worker.name}{workerCount === 1 ? "" : "s"} to increase your Lorem production.</p>
 
-      <p>Costs <b>{roundNum(cost)}</b> lorem.</p>
+      <p>Costs <b>{roundNum(singleCost)}</b> lorem.</p>
 
       <div className="button-container">
-         <Button onClick={buySingularWorker}>Buy</Button>
-         <Button onClick={buyMaxWorker}>Buy max</Button>
+         <Button isDark={affordAmount < 1} onClick={affordAmount > 0 ? buySingularWorker : undefined}>Buy</Button>
+         <Button isDark={affordAmount < 1} onClick={affordAmount > 0 ? buyMaxWorker : undefined}><>Buy max ({affordAmount})</></Button>
       </div>
    </div>
 }
