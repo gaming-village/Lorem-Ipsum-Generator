@@ -162,11 +162,23 @@ const getAvailableSentenceStructures = (): Array<SentenceStructure> => {
    return availableSentenceStructures;
 }
 
+/** Gets the latin and translation of a random sentence */
+const getRandomSentence = (): [string, string] => {
+   const sentenceStructure = randItem(getAvailableSentenceStructures());
+   const [rawSentence, sentenceMeaning] = sentenceStructureToEnglish(sentenceStructure);
+
+   const sentence = createSentence(rawSentence);
+   const meaning = createSentence(sentenceMeaning);
+
+   return [sentence, meaning];
+}
+
 interface LoremSentenceProps {
    sentence: string;
    meaning: string;
+   type: "regular" | "upcoming";
 }
-const LoremSentence = ({ sentence, meaning }: LoremSentenceProps) => {
+const LoremSentence = ({ sentence, meaning, type }: LoremSentenceProps) => {
    const ref = useRef<HTMLElement>(null);
    let tooltip: HTMLElement | null = null;
 
@@ -194,13 +206,23 @@ const LoremSentence = ({ sentence, meaning }: LoremSentenceProps) => {
       }
    })
 
+   let className = "";
+   if (type === "upcoming") {
+      className = "upcoming";
+   }
+
    return (
-      <span onMouseOver={hoverTooltip} onMouseOut={closeTooltip} ref={ref}>{sentence}</span>
+      <span className={className} onMouseOver={hoverTooltip} onMouseOut={closeTooltip} ref={ref}>{sentence}</span>
    );
 }
 
 let currentSentence: string | null = null;
 let currentSentenceMeaning: string | null = null;
+
+// The preview of the next sentence to be typed (shown as gray text)
+let upcomingSentence: string | null = null;
+let upcomingSentenceMeaning: string | null = null;
+
 let currentIndex = 0;
 let bufferedContent: Array<JSX.Element> | null = null;
 const LoremProductionSystem = () => {
@@ -209,13 +231,29 @@ const LoremProductionSystem = () => {
    useEffect(() => {
       type = (): void => {
          if (currentSentence === null) {
-            const sentenceStructure = randItem(getAvailableSentenceStructures());
-            const [rawSentence, sentenceMeaning] = sentenceStructureToEnglish(sentenceStructure);
+            if (upcomingSentence === null) {
+               const [sentence, meaning] = getRandomSentence();
+               upcomingSentence = sentence;
+               upcomingSentenceMeaning = meaning;
+            }
 
-            const sentence = createSentence(rawSentence);
-            currentSentence = sentence;
-            const meaning = createSentence(sentenceMeaning);
-            currentSentenceMeaning = meaning;
+            currentSentence = upcomingSentence;
+            currentSentenceMeaning = upcomingSentenceMeaning;
+            
+            {
+               const [sentence, meaning] = getRandomSentence();
+               upcomingSentence = sentence;
+               upcomingSentenceMeaning = meaning;
+            }
+
+
+            // const sentenceStructure = randItem(getAvailableSentenceStructures());
+            // const [rawSentence, sentenceMeaning] = sentenceStructureToEnglish(sentenceStructure);
+
+            // const sentence = createSentence(rawSentence);
+            // currentSentence = sentence;
+            // const meaning = createSentence(sentenceMeaning);
+            // currentSentenceMeaning = meaning;
 
             if (content === null) {
                bufferedContent = new Array<JSX.Element>();
@@ -230,13 +268,13 @@ const LoremProductionSystem = () => {
 
          if (currentIndex === 0) {
             bufferedContent?.push(
-               <LoremSentence key={bufferedContent.length} sentence="a" meaning="b" />
+               <LoremSentence key={bufferedContent.length} sentence="a" meaning="b" type="regular" />
             );
          }
 
          const sentencePart = currentSentence.substring(0, currentIndex);
          bufferedContent![bufferedContent!.length - 1] = (
-            <LoremSentence key={bufferedContent!.length} sentence={sentencePart} meaning={currentSentenceMeaning || "none"} />
+            <LoremSentence key={bufferedContent!.length} sentence={sentencePart} meaning={currentSentenceMeaning || "none"} type="regular" />
          );
          setContent(bufferedContent!.slice());
 
@@ -256,8 +294,26 @@ const LoremProductionSystem = () => {
       }
    });
 
+   let shownContent: Array<JSX.Element>;
+   if (bufferedContent !== null) {
+      shownContent = bufferedContent.slice();
+
+      // Create a preview of the remaining characters in the current sentence
+      const remainingSentence = currentSentence!.substring(currentIndex, currentSentence!.length);
+      if (remainingSentence.length > 0) {
+         shownContent.push(
+            <LoremSentence key={shownContent.length} sentence={remainingSentence} meaning="" type="upcoming" />
+         );
+      }
+
+      shownContent.push(
+         <LoremSentence key={shownContent.length} sentence={" " + upcomingSentence!} meaning={upcomingSentenceMeaning!} type="upcoming" />
+      );
+   }
+
+
    return <div id="lorem-container">
-      {bufferedContent !== null ? bufferedContent : <span className="instruction">Type to generate lorem</span>}
+      {bufferedContent !== null ? shownContent! : <span className="instruction">Type to generate lorem</span>}
    </div>;
 }
 

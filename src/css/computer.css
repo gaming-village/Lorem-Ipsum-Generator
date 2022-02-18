@@ -27,3 +27,7 @@
 #lorem-container span:not(.instruction) {
    cursor: help;
 }
+#lorem-container span.upcoming {
+   color: #666;
+   font-style: italic;
+}

@@ -258,6 +258,10 @@ const UpgradesSection = ({ job }: SectionProps) => {
 
    return <div id="upgrades">
       {content}
+
+      {job.tier < JOB_DATA[JOB_DATA.length - 1].tier ? (
+         <p className="notice">Get promoted to unlock more upgrades!</p>
+      ) : ""}
    </div>;
 }
 

@@ -322,3 +322,12 @@
    border-right-color: #ddd;
    border-bottom-color: #ddd;
 }
+#upgrades .notice {
+   color: #fff;
+   text-align: center;
+   text-shadow: 2px 2px 0 #000, -2px -2px 0 #000;
+   background-color: rgba(0, 0, 0, 0.3);
+   margin-left: 50%;
+   display: table;
+   transform: translateX(-50%);
+}
