@@ -1,14 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import LOREM_PACKS, { SentenceStructure, StructurePart, Word, NounCases } from '../data/lorem-packs-data';
+import React, { useEffect, useRef, useState } from 'react';
+import LOREM_PACKS, { SentenceStructure, StructurePart, Word, NounCases } from '../data/lorem-pack-data';
 import Game from '../Game';
+import { createTooltip, removeTooltip } from '../tooltips';
 import { randItem } from '../utils';
+
+const wordEndingChars = [" ", "."];
 
 export let type: () => void;
 
-const translateLatinToEnglish = (structurePart: StructurePart): string => {
-   let english!: string;
-   // switch (structurePart.wordCategory) {
-   //    case "noun": {
+const findWord = (sentence: string, endIdx: number): Word => {
+   let idx = endIdx;
+   let wordStr = "";
+   while (true) {
+      const newChar = sentence[idx];
+      if (wordEndingChars.includes(newChar) || idx < 0) {
+         break;
+      }
+
+      wordStr = newChar + wordStr;
+      idx--;
+   }
+   
+   let word!: Word;
+   for (const loremPack of LOREM_PACKS) {
+      if (Game.wordsTyped >= loremPack.requirements.wordsTyped && typeof loremPack.contents.words !== "undefined") {
+         for (const currentWord of loremPack.contents.words) {
+            for (const currentCase of currentWord.caseTable) {
+               if (currentCase.includes(wordStr.toLowerCase())) {
+                  word = currentWord;
+               }
+            }
+         }
+      }
+   }
+   return word;
+}
+
+const getLatinMeaning = (structurePart: StructurePart): string => {
    const x = structurePart.number === "singular" ? 0 : 1;
    const y = ["nominative", "accusative", "genetive", "dative", "ablative"].indexOf(structurePart.case!);
 
@@ -23,46 +51,60 @@ const translateLatinToEnglish = (structurePart: StructurePart): string => {
       }
    }
 
-   console.log(structurePart);
-   console.log(word.caseTable, x, y);
-   english = word.caseTable[y][x];
-   //    }
-   // }
+   const english = word.caseTable[y][x];
    return english;
 }
 
-interface TranslationDict {
+interface Dict {
    [key: number]: string;
 }
-const sentenceStructureToEnglish = (sentenceStructure: SentenceStructure): string => {
-   const translationDict: TranslationDict = {};
+const sentenceStructureToEnglish = (sentenceStructure: SentenceStructure): [string, string] => {
+   const latinDict: Dict = {};
+   const translationDict: Dict = {};
 
    const addToDict = (id: number, structurePart: StructurePart): void => {
-      const englishTranslation = translateLatinToEnglish(structurePart);
-      translationDict[id] = englishTranslation;
+      const englishTranslation = getLatinMeaning(structurePart);
+      latinDict[id] = englishTranslation;
    }
 
    // Look for any nouns in the sentence
    
    const structureParts: Array<[number, StructurePart]> = Object.entries(sentenceStructure.structure).map(([a, b]) => [Number(a), b]);
    for (const [id, structurePart] of structureParts) {
+      // Add it to the translation dictionary
+      let word!: Word;
+      for (const loremPack of LOREM_PACKS) {
+         if (Game.wordsTyped >= loremPack.requirements.wordsTyped && typeof loremPack.contents.words !== "undefined") {
+            let hasFound = false;
+            for (const currentWord of loremPack.contents.words) {
+               if (currentWord.latin === structurePart.latin) {
+                  word = currentWord;
+                  hasFound = true;
+                  break;
+               }
+            }
+            if (hasFound) break;
+         }
+      }
+      translationDict[id] = word.meaning;
+
+      // If the word has already been parsed, don't bother
+      if (typeof latinDict[id] !== "undefined") continue;
+
       if (structurePart.wordCategory === "noun") {
-         console.log(id);
          addToDict(id, structurePart);
 
          // See if the noun has a matching word
          for (const pair of sentenceStructure.pairs) {
             const idx = pair.indexOf(id);
-            console.log(typeof id);
-            console.log(pair, id);
             if (idx !== -1) {
-               // console.log("Found pair!", pairWord, idx, pairID);
                const pairID = pair[Math.abs(idx - 1)];
                const pairWord = sentenceStructure.structure[pairID];
                const pairStructurePart: StructurePart = {
                   latin: pairWord.latin,
                   wordCategory: pairWord.wordCategory,
-                  case: structurePart.case
+                  case: structurePart.case,
+                  number: structurePart.number
                };
                addToDict(pairID, pairStructurePart);
             }
@@ -70,14 +112,49 @@ const sentenceStructureToEnglish = (sentenceStructure: SentenceStructure): strin
       }
    }
 
-   console.log(translationDict);
-   return "obama gaming";
+   let sentence = "";
+   for (const id of Object.keys(sentenceStructure.structure)) {
+      sentence += latinDict[Number(id)];
+      sentence += " ";
+   }
+   // Remove trailing whitespace
+   sentence = sentence.substring(0, sentence.length - 1);
+
+   // Combine the translation dict into a sentence
+   // e.g. { 1: "lorem", 2: "ipsum"} becomes "lorem ipsum"
+   // let sentence = "";
+   let meaning = "";
+   for (const id of sentenceStructure.meaning) {
+      if (typeof id === "number") {
+         // Number, add corresponding word from the translation dictionary to the sentence
+         meaning += translationDict[id];
+      } else {
+         // String, add an extra word
+         meaning += id;
+      }
+      meaning += " ";
+   }
+   // Remove trailing whitespace
+   meaning = meaning.substring(0, meaning.length - 1);
+
+
+   return [sentence, meaning];
+}
+
+// Converts a sentence into proper sentence format (punctionation and capitalisation)
+// e.g. "lorem ipsum" becomes "Lorem ipsum."
+const createSentence = (rawSentence: string): string => {
+   // Capitalise first letter
+   let sentence = rawSentence[0].toUpperCase() + rawSentence.substring(1, rawSentence.length);
+   // Add punctuation
+   sentence = sentence + ".";
+   return sentence;
 }
 
 const getAvailableSentenceStructures = (): Array<SentenceStructure> => {
    let availableSentenceStructures = new Array<SentenceStructure>();
    for (const loremPack of LOREM_PACKS) {
-      if (Game.wordsTyped > loremPack.requirements.wordsTyped) {
+      if (Game.wordsTyped >= loremPack.requirements.wordsTyped) {
          if (typeof loremPack.contents.sentenceStructures !== "undefined") {
             availableSentenceStructures = availableSentenceStructures.concat(loremPack.contents.sentenceStructures);
          }
@@ -86,22 +163,101 @@ const getAvailableSentenceStructures = (): Array<SentenceStructure> => {
    return availableSentenceStructures;
 }
 
+interface LoremSentenceProps {
+   sentence: string;
+   meaning: string;
+}
+const LoremSentence = ({ sentence, meaning }: LoremSentenceProps) => {
+   const ref = useRef<HTMLElement>(null);
+   let tooltip: HTMLElement | null = null;
+
+   const hoverTooltip = (): HTMLElement => {
+      const buttonBounds = ref.current!.getBoundingClientRect();
+      const pos = {
+         left: buttonBounds.left + buttonBounds.width * 0.75 + "px",
+         top: buttonBounds.top + buttonBounds.height / 2 + "px"
+      }
+
+      tooltip = createTooltip(pos, <span>{meaning}</span>);
+      return tooltip;
+   }
+
+   const closeTooltip = () => {
+      if (tooltip !== null) {
+         removeTooltip(tooltip);
+         tooltip = null;
+      }
+   }
+
+   useEffect(() => {
+      return () => {
+         if (tooltip !== null) tooltip.remove();
+      }
+   })
+
+   return (
+      <span onMouseOver={hoverTooltip} onMouseOut={closeTooltip} ref={ref}>{sentence}</span>
+   );
+}
+
 let currentSentence: string | null = null;
+let currentSentenceMeaning: string | null = null;
+let currentIndex = 0;
+let bufferedContent: Array<JSX.Element> | null = null;
 const LoremProductionSystem = () => {
-   const [content, setContent] = useState("");
+   const [content, setContent] = useState<Array<JSX.Element> | null>(null);
 
    useEffect(() => {
       type = (): void => {
          if (currentSentence === null) {
             const sentenceStructure = randItem(getAvailableSentenceStructures());
-            const sentence = sentenceStructureToEnglish(sentenceStructure);
+            const [rawSentence, sentenceMeaning] = sentenceStructureToEnglish(sentenceStructure);
+
+            const sentence = createSentence(rawSentence);
             currentSentence = sentence;
+            currentSentenceMeaning = sentenceMeaning;
+
+            if (content === null) {
+               bufferedContent = new Array<JSX.Element>();
+            } else {
+               bufferedContent?.push(<span key={bufferedContent.length + 1}> </span>);
+            }
+            setContent(bufferedContent);
+         }
+
+         // Add the next letter to the content.
+         // e.g. "Lorem ipsu" becomes "Lorem ipsum"
+
+         if (currentIndex === 0) {
+            bufferedContent?.push(
+               <LoremSentence key={bufferedContent.length} sentence="a" meaning="b" />
+            );
+         }
+
+         const sentencePart = currentSentence.substring(0, currentIndex);
+         bufferedContent![bufferedContent!.length - 1] = (
+            <LoremSentence key={bufferedContent!.length} sentence={sentencePart} meaning={currentSentenceMeaning || "none"} />
+         );
+         setContent(bufferedContent!.slice());
+
+         // If a word has been completed, award lorem based on its value.
+         if (wordEndingChars.includes(currentSentence[currentIndex + 1])) {
+            const word = findWord(currentSentence, currentIndex);
+
+            Game.lorem += word.value;
+         }
+
+         if (currentIndex >= currentSentence.length) {
+            currentSentence = null;
+            currentIndex = 0;
+         } else {  
+            currentIndex++;
          }
       }
    });
 
    return <div id="lorem-container">
-      <span className="instruction">(Type to generate lorem)</span>
+      {bufferedContent !== null ? bufferedContent : <span className="instruction">Type to generate lorem</span>}
    </div>;
 }
 

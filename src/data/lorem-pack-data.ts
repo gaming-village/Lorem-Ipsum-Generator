@@ -31,10 +31,10 @@ export interface StructurePart {
 }
 
 export interface SentenceStructure {
-   structure: {
+   readonly structure: {
       [key: number]: StructurePart;
    };
-   meaning: ReadonlyArray<number | string>;
+   readonly meaning: ReadonlyArray<number | string>;
    readonly pairs: Array<[number, number]>;
 }
 
@@ -69,7 +69,7 @@ const LOREM_PACKS: ReadonlyArray<LoremPack> = [
                declension: 2,
                caseTable: [
                   ["lorum", "lora"],
-                  ["lorum", "lora"],
+                  ["lorem", "lora"], // "lorem" should technically be "lorum" but whatever
                   ["lori", "lororum"],
                   ["loro", "loris"],
                   ["loro", "loris"]
@@ -81,11 +81,11 @@ const LOREM_PACKS: ReadonlyArray<LoremPack> = [
                meaning: "itself",
                value: 0.1,
                caseTable: [
-                  ["ego", "nos"],
-                  ["mei", "nostrum"],
-                  ["mihi", "nobis"],
-                  ["me", "nos"],
-                  ["me", "nobis"]
+                  ["ipsum", "ipsa"],
+                  ["ipsum", "ipsa"],
+                  ["ipsuis", "ipsorum"],
+                  ["ipsi", "ipsis"],
+                  ["ipso", "ipsis"]
                ]
             }
          ],

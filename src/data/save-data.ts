@@ -4,7 +4,7 @@ import { getPreferences, setPreferences } from "../classes/programs/Preferences"
 import { getCurrentTime, randInt } from "../utils";
 import ACHIEVEMENTS from "./achievements-data";
 import LETTERS, { LetterInfo } from "./letter-data";
-import LOREM_PACKS from "./lorem-packs-data";
+import LOREM_PACKS from "./lorem-pack-data";
 import { UPGRADES } from "./job-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
 import { Job, JOB_DATA } from "./job-data";
