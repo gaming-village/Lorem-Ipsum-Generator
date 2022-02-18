@@ -10,11 +10,12 @@ import { setupStartMenu } from "./start-menu";
 import { setupPrograms } from "./programs";
 import { generateLetterHashes, setupMail } from "./mail";
 import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from "./devtools";
-import { type } from "./lorem-production";
+// import { type } from "./lorem-production";
 import { previewType, showWelcomeScreen } from "./components/WelcomeScreen";
 import { setupNavBar, switchView } from "./components/Navbar";
 import { updateCorporateOverview } from "./components/CorporateOverview";
 import LoremCounter from "./classes/applications/LoremCounter";
+import { type } from "./components/LoremProductionSystem";
 
 ReactDOM.render(
    <React.StrictMode>
@@ -119,7 +120,7 @@ document.addEventListener("keydown", event => {
          return;
       }
       keysDown.push(key)
-      type(key);
+      type();
 
       if (typeof Game.applications.loremCounter !== "undefined") (Game.applications.loremCounter as LoremCounter).createTextEffect!();
    }
