@@ -137,7 +137,6 @@ const sentenceStructureToEnglish = (sentenceStructure: SentenceStructure): [stri
    // Remove trailing whitespace
    meaning = meaning.substring(0, meaning.length - 1);
 
-
    return [sentence, meaning];
 }
 
@@ -215,7 +214,8 @@ const LoremProductionSystem = () => {
 
             const sentence = createSentence(rawSentence);
             currentSentence = sentence;
-            currentSentenceMeaning = sentenceMeaning;
+            const meaning = createSentence(sentenceMeaning);
+            currentSentenceMeaning = meaning;
 
             if (content === null) {
                bufferedContent = new Array<JSX.Element>();
