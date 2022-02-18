@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Button from '../../components/Button';
 import ACHIEVEMENTS, { Achievement, AchievementCategory } from '../../data/achievements-data';
 import { createNotification } from '../../notifications';
 import Application, { ApplicationCategory } from './Application';
@@ -30,38 +31,108 @@ export function unlockAchievement(id: string): void {
 }
 
 enum FilterTypes {
-   category = "Category"
+   category = "Category",
+   unlocked = "Unlocked"
 }
 enum DisplayTypes {
    compact = "Compact",
    strips = "Strips"
 }
 
-const categoryFilter = (displayType: DisplayTypes): ReadonlyArray<JSX.Element> => {
-   let key = 0;
-   const arr = new Array<JSX.Element>();
+interface FilterItem {
+   type: "heading" | "achievement";
+   content: Achievement | string;
+}
 
+const getCategoryFilter = (): ReadonlyArray<FilterItem> => {
+   // Create the dictionary of sorted achievements.
    const filteredAchievements: { [key: string]: Array<Achievement> } = {};
+   for (const categoryName of Object.values(AchievementCategory)) {
+      filteredAchievements[categoryName] = new Array<Achievement>();
+   }
    for (const achievement of ACHIEVEMENTS) {
-      if (!filteredAchievements.hasOwnProperty(achievement.category)) {
-         filteredAchievements[achievement.category] = new Array<Achievement>();
-      }
       filteredAchievements[achievement.category].push(achievement);
    }
 
-   for (const categoryName of Object.values(AchievementCategory)) {
-      arr.push(
-         <h2 key={key++}>{categoryName}</h2>
-      );
+   let filterItems = new Array<FilterItem>();
+   for (const [filterCategory, achievements] of Object.entries(filteredAchievements)) {
+      filterItems.push({
+         type: "heading",
+         content: filterCategory
+      });
 
-      const achievementArr = new Array<JSX.Element>();
+      for (const achievement of achievements) {
+         filterItems.push({
+            type: "achievement",
+            content: achievement
+         });
+      }
+   }
+   return filterItems;
+}
+
+const getUnlockedFilter = (): ReadonlyArray<FilterItem> => {
+   // Create the dictionary of sorted achievements.
+   const filteredAchievements = {
+      "Unlocked": new Array<Achievement>(),
+      "Locked": new Array<Achievement>()
+   };
+   for (const achievement of ACHIEVEMENTS) {
+      filteredAchievements[achievement.isUnlocked ? "Unlocked" : "Locked"].push(achievement);
+   }
+
+   let filterItems = new Array<FilterItem>();
+   for (const [filterCategory, achievements] of Object.entries(filteredAchievements)) {
+      filterItems.push({
+         type: "heading",
+         content: filterCategory
+      });
+
+      for (const achievement of achievements) {
+         filterItems.push({
+            type: "achievement",
+            content: achievement
+         });
+      }
+   }
+   return filterItems;
+}
+
+const filterToElems = (filterItems: ReadonlyArray<FilterItem>, displayType: DisplayTypes): ReadonlyArray<JSX.Element> => {
+   let key = 0;
+   let elems = new Array<JSX.Element>();
+
+   let currentContainer = new Array<JSX.Element>();
+
+   const createNewContainer = (): void => {
       let containerClassName = "achievement-container";
       for (const [display, displayName] of Object.entries(DisplayTypes)) {
          if (displayName === displayType) containerClassName += " " + display;
       }
 
-      const achievements = filteredAchievements[categoryName];
-      for (const achievement of achievements) {
+      elems.push(
+         <div key={key++} className={containerClassName}>
+            {currentContainer}
+         </div>
+      );
+
+      currentContainer = new Array<JSX.Element>();
+   }
+
+   for (let i = 0; i < filterItems.length; i++) {
+      const item = filterItems[i];
+      if (item.type === "heading") {
+         if (i > 0) {
+            createNewContainer();
+         }
+
+         elems.push(
+            <h2 key={key++}>{item.content}</h2>
+         );
+
+      } else if (item.type === "achievement") {
+         const achievement = item.content as Achievement;
+         
          let achievementSrc;
          if (!achievement.isUnlocked) {
             achievementSrc = require("../../images/icons/questionmark.png").default;
@@ -78,7 +149,7 @@ const categoryFilter = (displayType: DisplayTypes): ReadonlyArray<JSX.Element> =
             className += " locked";
          }
 
-         achievementArr.push(
+         currentContainer.push(
             <div key={key++} className={className}>
                <img className="icon" src={achievementSrc} alt={achievement.name} />
                <div>
@@ -88,14 +159,10 @@ const categoryFilter = (displayType: DisplayTypes): ReadonlyArray<JSX.Element> =
             </div>
          );
       }
-      arr.push(
-         <div key={key++} className={containerClassName}>
-            {achievementArr}
-         </div>
-      );
    }
+   createNewContainer();
 
-   return arr;
+   return elems;
 }
 
 interface ElemProps {
@@ -105,10 +172,19 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
    const [filterType, setFilterType] = useState<FilterTypes>(FilterTypes.category);
    const [displayType, setDisplayType] = useState<DisplayTypes>(DisplayTypes.strips);
 
-   let achievements!: ReadonlyArray<JSX.Element>;
+   let filterItems!: ReadonlyArray<FilterItem>;
    if (filterType === FilterTypes.category) {
-      achievements = categoryFilter(displayType);
+      filterItems = getCategoryFilter();
+   } else if (filterType === FilterTypes.unlocked) {
+      filterItems = getUnlockedFilter();
    }
+
+   const achievements = filterToElems(filterItems, displayType);
+
+   // let achievements!: ReadonlyArray<JSX.Element>;
+   // if (filterType === FilterTypes.category) {
+   //    achievements = categoryFilter(displayType);
+   // }
 
    const viewOptions = new Array<JSX.Element>();
    for (let i = 0; i < Object.keys(DisplayTypes).length; i++) {
@@ -127,6 +203,14 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
       )
    }
 
+   const switchFilterType = (newFilterType: FilterTypes): void => {
+      setFilterType(newFilterType);
+   }
+
+   const filterTypeButtons = Object.entries(FilterTypes).map(([id, name], i) => {
+      return <Button onClick={() => switchFilterType(name)} isDark={name !== filterType} key={i}>{name}</Button>;
+   });
+
    return <div className="formatter">
       <div className="left-column">
          <h2>Overview</h2>
@@ -141,7 +225,9 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
 
          <h2>Filter</h2>
          <p className="caption">Filter your achievements based on certain criteria.</p>
-         <div className="filter-container"></div>
+         <div className="filter-container">
+            {filterTypeButtons}
+         </div>
          <input className="search-achievements hidden" type="text" placeholder="Search achievements..." />
       </div>
 

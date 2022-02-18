@@ -189,7 +189,7 @@ const LoremSentence = ({ sentence, meaning, type }: LoremSentenceProps) => {
          top: buttonBounds.top + buttonBounds.height / 2 + "px"
       }
 
-      tooltip = createTooltip(pos, <span>{meaning}</span>);
+      tooltip = createTooltip(pos, <span><b>Meaning:</b> {meaning}</span>);
       return tooltip;
    }
 
@@ -246,15 +246,6 @@ const LoremProductionSystem = () => {
                upcomingSentenceMeaning = meaning;
             }
 
-
-            // const sentenceStructure = randItem(getAvailableSentenceStructures());
-            // const [rawSentence, sentenceMeaning] = sentenceStructureToEnglish(sentenceStructure);
-
-            // const sentence = createSentence(rawSentence);
-            // currentSentence = sentence;
-            // const meaning = createSentence(sentenceMeaning);
-            // currentSentenceMeaning = meaning;
-
             if (content === null) {
                bufferedContent = new Array<JSX.Element>();
             } else {
@@ -302,12 +293,12 @@ const LoremProductionSystem = () => {
       const remainingSentence = currentSentence!.substring(currentIndex, currentSentence!.length);
       if (remainingSentence.length > 0) {
          shownContent.push(
-            <LoremSentence key={shownContent.length} sentence={remainingSentence} meaning="" type="upcoming" />
+            <LoremSentence key={shownContent.length + 1} sentence={remainingSentence} meaning={currentSentenceMeaning!} type="upcoming" />
          );
       }
 
       shownContent.push(
-         <LoremSentence key={shownContent.length} sentence={" " + upcomingSentence!} meaning={upcomingSentenceMeaning!} type="upcoming" />
+         <LoremSentence key={shownContent.length + 1} sentence={" " + upcomingSentence!} meaning={upcomingSentenceMeaning!} type="upcoming" />
       );
    }
 
