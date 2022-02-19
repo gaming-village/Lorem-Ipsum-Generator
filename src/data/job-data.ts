@@ -10,7 +10,7 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       initialCost: 10
    },
    {
-      requirements: 25,
+      requirements: 15,
       benefits: [
          "Ability to buy workers."
       ],

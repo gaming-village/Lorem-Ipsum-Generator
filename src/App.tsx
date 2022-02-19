@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "./components/Navbar";
 import Computer from "./components/Computer";
 import CorporateOverview from "./components/CorporateOverview";
@@ -8,6 +8,7 @@ import Button from "./components/Button";
 import ButtonContainer from "./components/ButtonContainer";
 import WelcomeScreen from "./components/WelcomeScreen";
 import { NotificationContainer } from "./notifications";
+import BlackMarket from "./components/BlackMarket";
 
 function App() {
    return <>
@@ -58,6 +59,7 @@ function App() {
       <Computer />
       <Mail />
       <CorporateOverview />
+      <BlackMarket />
    </>;
 }
 

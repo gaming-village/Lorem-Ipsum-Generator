@@ -53,7 +53,7 @@ interface GameType {
 
 const Game: GameType = {
    ticks: 0,
-   tps: 10,
+   tps: 20,
    lorem: 0,
    totalLoremTyped: 0,
    previousLorem: 0,

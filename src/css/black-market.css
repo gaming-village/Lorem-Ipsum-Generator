@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600&display=swap');
+
+/* GENERAL STYLES */
+#black-market {
+   background-color: #111;
+   box-shadow: 0 0 20px 5px #000 inset;
+   overflow: hidden;
+}
+#black-market .falling-text {
+   color: rgb(0, 255, 0);
+   font: 600 1rem "Source Code Pro";
+   position: absolute;
+   transform: translate(-50%, -100%);
+}
