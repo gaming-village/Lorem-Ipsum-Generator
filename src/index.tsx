@@ -79,12 +79,13 @@ window.onload = () => {
    setupAudio();
 };
 
+// Create a list of all keys which generate lorem when typed.
+const ALL_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const ALL_LOREM_CHARS = ALL_LETTERS.concat([" ", "."]);
+
 let keysDown: Array<string> = [];
 document.addEventListener("keydown", event => {
    const key = event.key;
-
-   const ALL_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-   const ALL_LOREM_CHARS = ALL_LETTERS.concat([" "]);
 
    // When ` is pressed, open the devtools
    if (key === "`" && process.env.NODE_ENV === "development") {
