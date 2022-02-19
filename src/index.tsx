@@ -10,10 +10,8 @@ import { setupStartMenu } from "./start-menu";
 import { setupPrograms } from "./programs";
 import { generateLetterHashes, setupMail } from "./mail";
 import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from "./devtools";
-// import { type } from "./lorem-production";
 import { previewType, showWelcomeScreen } from "./components/WelcomeScreen";
 import { setupNavBar, switchView } from "./components/Navbar";
-import { updateCorporateOverview } from "./components/CorporateOverview";
 import LoremCounter from "./classes/applications/LoremCounter";
 import { type } from "./components/LoremProductionSystem";
 
@@ -42,8 +40,6 @@ window.onload = () => {
       shouldShowWelcomeScreen = true;
    }
    loadSave(saveData);
-
-   updateCorporateOverview!();
 
    updateViewSizes();
    window.addEventListener("resize", () => {

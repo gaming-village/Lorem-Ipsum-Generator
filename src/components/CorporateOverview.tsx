@@ -712,18 +712,14 @@ const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
    </div>;
 }
 
-export let updateCorporateOverview: (() => void) | null = null;
-
 const CorporateOverview = () => {
    const [sections, setSections] = useState<Array<SectionType>>(sectionData.slice());
    const [job, setJob] = useState(Game.userInfo.job);
    const [isPromoting, setIsPromoting] = useState(false);
 
    useEffect(() => {
-      updateCorporateOverview = () => {
-         setJob(Game.userInfo.job);
-      };
-   });
+      setJob(Game.userInfo.job);
+   }, []);
 
    let openedSection!: SectionType;
    for (const section of sections) {
