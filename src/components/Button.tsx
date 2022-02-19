@@ -12,6 +12,7 @@ interface ButtonProps {
    tooltipContent?: () => JSX.Element;
 }
 
+/** A standardized button. Should only be used for non-custom buttons */
 const Button = (props: ButtonProps) => {
    const ref = useRef<HTMLButtonElement>(null);
    let tooltip: HTMLElement | null = null;

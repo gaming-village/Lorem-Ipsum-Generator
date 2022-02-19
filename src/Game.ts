@@ -31,6 +31,8 @@ interface GameType {
    applications: { [key: string]: Application };
    programs: { [key: string]: Program };
    tick: () => void;
+   packets: number;
+   packetExchangeRate: number;
    loadLoremAchievements: () => void;
    motivation: number;
    updateMotivation: () => void;
@@ -44,9 +46,10 @@ interface GameType {
    hideMask: () => void;
    reset: () => void;
    userInfo: UserInfo;
-   renderListeners: Array<() => void>
+   renderListeners: Array<() => void>;
    createRenderListener: (func: () => void) => void;
    removeRenderListener: (func: () => void) => void;
+   hasRenderListener: (func: () => void) => boolean;
    blurScreen: () => void;
    unblurScreen: () => void;
 }
@@ -101,6 +104,8 @@ const Game: GameType = {
          updateSave();
       }
    },
+   packets: 0,
+   packetExchangeRate: 0.1,
    loadLoremAchievements: function(): void {
       for (const achievement of achievements) {
          if (Object.keys(achievement.requirements).includes("lorem")) {
@@ -167,6 +172,9 @@ const Game: GameType = {
    removeRenderListener: function(func: () => void): void {
       const idx = this.renderListeners.indexOf(func);
       this.renderListeners.splice(idx, 1);
+   },
+   hasRenderListener: function(func: () => void): boolean {
+      return this.renderListeners.indexOf(func) !== -1;
    },
    userInfo: {
       workerNumber: 0,

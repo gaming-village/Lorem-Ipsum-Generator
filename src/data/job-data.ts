@@ -146,7 +146,7 @@ export const UPGRADES: Array<UpgradeInfo> = [
       name: "Typewriter",
       description: "Lorem generation through typing is doubled.",
       requirements: {
-         lorem: 10
+         lorem: 5
       },
       tier: 1
    },

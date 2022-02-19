@@ -82,6 +82,9 @@ audio {
 .button-container .button {
    margin: 10px;
 }
+button, .button {
+   outline: none;
+}
 .button {
    min-width: 5rem;
    text-align: center;
@@ -100,7 +103,6 @@ audio {
    cursor: pointer;
    white-space: nowrap;
    position: relative;
-   outline: none;
    box-shadow: 0 0 0 2px #000;
 }
 .button:hover {

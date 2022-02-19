@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import "../css/black-market.css";
 import Game from '../Game';
-import { randInt, randItem } from '../utils';
+import { randInt, randItem, roundNum } from '../utils';
 
 interface FallingText {
    age: number;
@@ -23,28 +23,29 @@ const createFallingText = (blackMarket: HTMLElement): void => {
    blackMarket.appendChild(fallingText);
 }
 
-export let showBlackMarket: () => void;
+let hasRenderListener = false;
 
 const BlackMarket = () => {
    const blackMarket = useRef(null);
-
-   showBlackMarket = () => {
-
-   }
+   const [packets, setPackets] = useState(0);
+   const [lorem, setLorem] = useState(0);
 
    useEffect(() => {
-      const createFallingTextFunc = (): void => {
-         if (Math.random() < 5 / Game.tps) {
+      const updateFunc = (): void => {
+         if (lorem !== Game.lorem) setLorem(Game.lorem);
+         if (packets !== Game.packets) setPackets(Game.packets);
 
+         if (Math.random() < 5 / Game.tps) {
             createFallingText(blackMarket.current!);
          }
 
          let textsToRemove = new Array<FallingText>();
          for (const text of fallingTexts) {
-            if (text.age++ >= 2000 / Game.tps) {
+            if (text.age++ >= 200) {
                textsToRemove.push(text);
             }
-            text.elem.style.top = text.age * Game.tps / 20 + "%";
+            text.elem.style.top = text.age * Game.tps / 40 + "%";
+            text.elem.style.opacity = Math.pow(text.age / 200, 1.2).toString();
          }
 
          for (const textToRemove of textsToRemove) {
@@ -55,11 +56,42 @@ const BlackMarket = () => {
          }
       }
 
-      Game.createRenderListener(createFallingTextFunc);
-   }, []);
+      if (!hasRenderListener) Game.createRenderListener(updateFunc);
+      hasRenderListener = true;
+   }, [lorem, packets]);
+
+   const exchangeAmount = Game.lorem * Game.packetExchangeRate;
+
+   const exchangePackets = (): void => {
+      Game.lorem = 0;
+      Game.packets += exchangeAmount;
+   }
 
    return <div ref={blackMarket} id="black-market" className="view">
-      BlackMarket
+      <div className="top-container">
+         <div className="packet-counter">
+            <h2>{roundNum(packets)} Packets</h2>
+         </div>
+
+         <div className="transfer-rate">
+            <p>Transfer rate:</p>
+            <p>{Game.packetExchangeRate} lorem -&gt; 1 packet</p>
+         </div>
+      </div>
+
+      <div className="exchange-container">
+         <div className="heading">
+            <h2>Currency Exchange</h2>
+         </div>
+
+         <div className="exchange">
+            <h3>{roundNum(lorem)} LOREM</h3>
+            <h4>CONVERTS TO</h4>
+            <h2>{roundNum(exchangeAmount)} PACKETS</h2>
+         </div>
+
+         <button onClick={exchangeAmount > 0 ? exchangePackets : undefined} className={exchangeAmount <= 0 ? "dark" : ""}>EXCHANGE</button>
+      </div>
    </div>;
 }
 

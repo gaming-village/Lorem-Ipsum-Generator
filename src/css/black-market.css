@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap');
 
 /* GENERAL STYLES */
 #black-market {
@@ -11,4 +12,114 @@
    font: 600 1rem "Source Code Pro";
    position: absolute;
    transform: translate(-50%, -100%);
+   pointer-events: none;
+   z-index: 1;
+}
+
+#black-market .top-container {
+   text-align: center;
+   display: table;
+   position: absolute;
+   top: 1rem;
+   left: 50%;
+   transform: translateX(-50%);
+   z-index: 2;
+}
+
+/* Packet counter */
+#black-market .packet-counter {
+   background-color: #222;
+}
+#black-market .packet-counter h2 {
+   color: #fff;
+   margin: 0;
+   font-size: 2rem;
+}
+
+/* Transfer rate */
+#black-market .transfer-rate {
+   border: 2px solid #888;
+   border-radius: 5px;
+   padding: 0 0.2rem;
+   background-color: #222;
+   margin-top: 0.5rem;
+   margin-left: 50%;
+   display: table;
+   transform: translateX(-50%);
+   white-space: pre;
+}
+#black-market .transfer-rate p {
+   color: #eee;
+   margin: 0.2rem 0;
+}
+
+
+/* Exchange container */
+#black-market .exchange-container {
+   text-align: center;
+   width: 20rem;
+   background-color: #222;
+   border: 2px solid #ccc;
+   border-radius: 5px;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   box-shadow: 0 0 10px 3px #000 inset;
+   z-index: 2;
+}
+
+/* Exchange container heading */
+#black-market .heading {
+   border-bottom: 2px solid #aaa;
+   background-color: #333;
+   padding: 0;
+}
+#black-market .heading h2 {
+   font: 400 1.2rem "PT Serif";
+   margin: 0;
+   color: #ddd;
+}
+
+#black-market .exchange h3 {
+   font-family: "PT Serif";
+   color: #eee;
+   margin: 1rem 0 0;
+}
+#black-market .exchange h4 {
+   font-family: "PT Serif";
+   color: #aaa;
+   margin: 0;
+}
+#black-market .exchange h2 {
+   font-family: "PT Serif";
+   color: #fff;
+   margin: 0;
+}
+
+#black-market .exchange-container button {
+   color: #fff;
+   font: 700 1.1rem "PT Serif";
+   background-color: rgb(255, 84, 17);
+   padding: 0.1rem 1rem;
+   border: 1px solid rgb(255, 253, 228);
+   margin: 0.5rem 0 1rem;
+   box-shadow: 0 0 0 1px rgb(184 128 54), 0 0 6px 1px rgb(0 0 0 / 40%) inset;
+   cursor: pointer;
+}
+#black-market .exchange-container button:not(.dark):hover {
+   box-shadow: none;
+}
+#black-market .exchange-container button:not(.dark):active {
+   color: rgb(235, 233, 210);
+   border-color: rgb(235, 233, 210);
+   background-color: rgb(226, 81, 24);
+   box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.3) inset, 0 0 8px 1px #000;
+}
+#black-market .exchange-container button.dark {
+   color: #aaa;
+   background-color: #555;
+   border-color: #aaa;
+   box-shadow: none;
+   cursor: default;
 }

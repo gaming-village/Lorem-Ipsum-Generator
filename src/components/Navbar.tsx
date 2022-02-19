@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Button from "./Button";
 import "../css/navbar.css";
 import { getElem } from "../utils";
-import { showBlackMarket } from "./BlackMarket";
 
 export let switchView!: (view: number | string) => void;
 
@@ -38,10 +37,6 @@ const defaultViews: ReadonlyArray<ViewInfo> = [
 
 const updateVisibleViews = (views: ReadonlyArray<ViewInfo>) => {
    for (const view of views) {
-      if (view.text === "Black Market" && view.isSelected) {
-         showBlackMarket();
-      }
-
       const elem = getElem(view.elemID);
       if (!view.isSelected) {
          elem.classList.add("hidden");
