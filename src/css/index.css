@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
 body {
    margin: 0;
    overflow: hidden;
@@ -17,6 +19,16 @@ body.blurred::after {
    left: 0;
    backdrop-filter: blur(2px);
    z-index: 2;
+}
+
+#version-text {
+   --offset: 0.3rem;
+   color: #ddd;
+   font: 400 0.95em "Source Code Pro";
+   position: absolute;
+   top: var(--offset);
+   left: var(--offset);
+   text-shadow: 2px 2px 0 #000;
 }
 
 .hidden {

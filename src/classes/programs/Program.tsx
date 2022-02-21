@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import { focusProgram } from "../..";
+import { focusProgram } from "../../pages/Home";
 import { createFile } from "../../components/FileSystem";
 import WindowsProgram from "../../components/WindowsProgram";
 import Game from "../../Game";

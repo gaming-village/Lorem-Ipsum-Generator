@@ -20,6 +20,7 @@ interface UserInfo {
    workers: { [key: string ]: number};
 }
 interface GameType {
+   version: string;
    ticks: number;
    readonly tps: number;
    lorem: number;
@@ -55,6 +56,7 @@ interface GameType {
 }
 
 const Game: GameType = {
+   version: "0.1",
    ticks: 0,
    tps: 20,
    lorem: 0,

@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import Game from '../Game';
 import WindowsProgram from './WindowsProgram';
 import '../css/welcome-screen.css';
-import { focusProgram } from '..';
+import { focusProgram } from "../pages/Home";
 import Button from './Button';
 import { getElem } from '../utils';
 

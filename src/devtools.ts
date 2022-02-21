@@ -3,7 +3,7 @@ import "./css/devtools.css";
 import { getElem } from "./utils";
 import letters from "./data/letter-data";
 import { receiveMail } from "./mail";
-import { focusProgram } from ".";
+import { focusProgram } from "./pages/Home";
 
 const devtoolTabNames: string[] = ["resources", "mail", "data"];
 

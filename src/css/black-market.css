@@ -123,3 +123,18 @@
    box-shadow: none;
    cursor: default;
 }
+
+
+/* SHOPS */
+#black-market .shops {
+   background-color: red;
+   position: absolute;
+   top: 1rem;
+   left: 1rem;
+}
+#black-market .shop {
+   border: 2px solid #fff;
+}
+#black-market .shop h2 {
+   margin: 0;
+}

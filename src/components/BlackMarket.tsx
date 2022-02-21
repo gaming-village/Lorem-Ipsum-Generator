@@ -1,7 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from "react-router-dom";
+
 import "../css/black-market.css";
+import { BlackMarketShop, BLACK_MARKET_SHOPS } from '../data/black-market-data';
 import Game from '../Game';
 import { randInt, randItem, roundNum } from '../utils';
+
+interface ShopProps {
+   shop: BlackMarketShop;
+}
+const Shop = ({ shop }: ShopProps) => {
+   return <div className="shop">
+      <h2>{shop.name}</h2>
+
+      <Link to={"/" + shop.pageName}>
+         <button>Go</button>
+      </Link>
+   </div>
+}
+
+const Shops = () => {
+   return <div className="shops">
+      {BLACK_MARKET_SHOPS.map((shop, i) => <Shop key={i} shop={shop} />)}
+   </div>
+}
 
 interface FallingText {
    age: number;
@@ -92,6 +114,8 @@ const BlackMarket = () => {
 
          <button onClick={exchangeAmount > 0 ? exchangePackets : undefined} className={exchangeAmount <= 0 ? "dark" : ""}>EXCHANGE</button>
       </div>
+
+      <Shops />
    </div>;
 }
 
