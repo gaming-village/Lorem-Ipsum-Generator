@@ -42,8 +42,7 @@ const decToHex = (num: number): string => {
 
    // Find the highest corresponding b16 power
    let maxB16power: number = 1;
-   let i = 0;
-   for (; ; i++) {
+   for (let i = 0; ; i++) {
       const newPower = Math.pow(16, i);
       if (newPower > num) {
          break;
