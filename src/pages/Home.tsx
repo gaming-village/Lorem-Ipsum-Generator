@@ -23,6 +23,8 @@ import { type } from '../components/LoremProductionSystem';
 import '../css/pages/home.css';
 
 export function focusProgram(program: HTMLElement): void {
+   if (program === null) return;
+
    const previouslySelectedProgram = document.querySelector(".windows-program.in-focus");
    if (previouslySelectedProgram) previouslySelectedProgram.classList.remove("in-focus");
 

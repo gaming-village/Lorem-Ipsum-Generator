@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Game from '../Game';
 import WindowsProgram from './WindowsProgram';
 import '../css/welcome-screen.css';
@@ -66,6 +66,13 @@ const WelcomeScreen = () => {
    const [previewTextIndex, setPreviewTextIndex] = useState<number>(0);
    const welcomeScreenRef = useRef(null);
 
+   useEffect(() => {
+      show = () => {
+         setStage(Stages.introduction);
+         focusProgram(welcomeScreenRef.current!);
+      }
+   }, []);
+
    if (section === 1) {
       previewType = (): void => {
          setPreviewTextIndex(previewTextIndex + 1);
@@ -75,11 +82,6 @@ const WelcomeScreen = () => {
       }
    } else {
       previewType = null;
-   }
-
-   show = () => {
-      setStage(Stages.introduction);
-      focusProgram(welcomeScreenRef.current!);
    }
 
    const close = () => {

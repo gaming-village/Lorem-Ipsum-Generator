@@ -539,8 +539,7 @@ sectionData = sectionData.concat(JOB_DATA.map(currentJob => {
       category: SectionCategories.workers,
       isOpened: false,
       shouldShow: () => {
-         const jobHistory = getJobHistory();
-         return jobHistory.includes(currentJob);
+         return currentJob.tier < Game.userInfo.job.tier;
       },
       getSection: () => <WorkerSection job={currentJob} />,
       tooltipContent: () => {
@@ -556,6 +555,7 @@ sectionData = sectionData.concat(JOB_DATA.map(currentJob => {
 const getControlPanel = (job: Job, sections: Array<SectionType>, changeSection: (newSection: SectionType) => void): Array<JSX.Element> => {
    let key = 0;
    let content = new Array<JSX.Element>();
+   console.log(job, sections);
 
    const filteredSections = Object.values(SectionCategories).reduce((previousValue, currentValue) => {
       return { ...previousValue, [currentValue]: new Array<SectionType>() };
@@ -567,12 +567,12 @@ const getControlPanel = (job: Job, sections: Array<SectionType>, changeSection: 
 
 
    for (let i = 0; i < Object.keys(filteredSections).length; i++) {
-      const [categoryName, sections] = Object.entries(filteredSections)[i];
+      const [categoryName, categorySections] = Object.entries(filteredSections)[i];
 
-      const sectionShowInfo = new Array<boolean>(sections.length);
+      const sectionShowInfo = new Array<boolean>(categorySections.length);
       let allIsHidden = true;
-      for (let j = 0; j < sections.length; j++) {
-         const section = sections[j];
+      for (let j = 0; j < categorySections.length; j++) {
+         const section = categorySections[j];
          
          sectionShowInfo[j] = section.shouldShow ? section.shouldShow() : true;
          if (sectionShowInfo[j]) allIsHidden = false;
@@ -591,8 +591,8 @@ const getControlPanel = (job: Job, sections: Array<SectionType>, changeSection: 
          <h2 key={key++}>{categoryName}</h2>
       );
 
-      for (let j = 0; j < sections.length; j++) {
-         const section = sections[j];
+      for (let j = 0; j < categorySections.length; j++) {
+         const section = categorySections[j];
          if (!sectionShowInfo[j]) {
             continue;
          }

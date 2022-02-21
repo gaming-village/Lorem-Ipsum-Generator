@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import LOREM_PACKS, { SentenceStructure, StructurePart, Word, NounCases } from '../data/lorem-pack-data';
+import LOREM_PACKS, { SentenceStructure, StructurePart, Word } from '../data/lorem-pack-data';
 import Game from '../Game';
 import { createTooltip, removeTooltip } from '../tooltips';
 import { randItem } from '../utils';

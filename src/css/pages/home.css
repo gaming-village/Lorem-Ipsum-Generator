@@ -98,6 +98,7 @@ button, .button {
    bottom: -6px;
    left: -6px;
    animation: ButtonFlash 1.3s linear infinite;
+   pointer-events: none;
 }
 @keyframes ButtonFlash {
    0% {
