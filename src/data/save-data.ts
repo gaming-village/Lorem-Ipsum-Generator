@@ -9,8 +9,81 @@ import { UPGRADES } from "./job-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
 import { Job, JOB_DATA } from "./job-data";
 
-const decimalToBinaryArr = (num: string): Array<number> => {
+const HEX_UNITS: { [key: number]: string } = {
+   0: "0",
+   1: "1",
+   2: "2",
+   3: "3",
+   4: "4",
+   5: "5",
+   6: "6",
+   7: "7",
+   8: "8",
+   9: "9",
+   10: "A",
+   11: "B",
+   12: "C",
+   13: "D",
+   14: "E",
+   15: "F"
+};
+
+const decimalToBinaryArr = (num: number): Array<number> => {
    return Number(num).toString(2).split("").reverse().map(Number);
+}
+
+const decToHex = (num: number): string => {
+   // If not integer
+   if (!Number.isInteger(num)) {
+      const [units, decimalPlaces] = num.toString().split(".");
+      return decToHex(Number(units)) + "." + decToHex(Number(decimalPlaces));
+   }
+
+   // Find the highest corresponding b16 power
+   let maxB16power: number = 1;
+   let i = 0;
+   for (; ; i++) {
+      const newPower = Math.pow(16, i);
+      if (newPower > num) {
+         break;
+      }
+      maxB16power = newPower;
+   }
+
+   let result = "";
+   let remainder = num;
+   while (remainder > 0) {
+      const multiple = Math.floor(remainder / maxB16power);
+      remainder -= multiple * maxB16power;
+      result += HEX_UNITS[multiple];
+      maxB16power /= 16;
+   }
+   return result;
+}
+
+const hexToDec = (num: string): number => {
+   // If the number isn't an integer
+   if (num.split("").indexOf(".") !== -1) {
+      const [units, decimalPlaces] = num.toString().split(".");
+      return Number(hexToDec(units) + "." + hexToDec(decimalPlaces));
+   }
+
+   let result = 0;
+   for (let i = 0; i < num.length; i++) {
+      const hexUnit = num[i];
+
+      // Find the hex unit's corresponding decimal number
+      let decUnit!: number;
+      for (const [dec, hex] of Object.entries(HEX_UNITS)) {
+         if (hex === hexUnit) {
+            decUnit = Number(dec);
+            break;
+         }
+      }
+
+      result += decUnit * Math.pow(16, num.length - i - 1);
+   }
+   return result;
 }
 
 interface SaveComponent {
@@ -30,11 +103,12 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         return Game.lorem.toString();
+         return decToHex(Game.lorem);
       },
       loadEvent: (savedValue: string) => {
-         Game.lorem = Number(savedValue);
-         Game.previousLorem = Number(savedValue);
+         const decVal = hexToDec(savedValue);
+         Game.lorem = decVal;
+         Game.previousLorem = decVal;
       }
    },
    {
@@ -43,22 +117,22 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         return Game.totalLoremTyped.toString();
+         return decToHex(Game.totalLoremTyped);
       },
       loadEvent: (savedValue: string) => {
-         Game.totalLoremTyped = Number(savedValue);
+         Game.totalLoremTyped = hexToDec(savedValue);
       }
    },
    {
       name: "Time at last save",
       defaultValue: () => {
-         return getCurrentTime().toString();
+         return decToHex(getCurrentTime());
       },
       updateValue: () => {
-         return getCurrentTime().toString();
+         return decToHex(getCurrentTime());
       },
       loadEvent: (savedValue: string) => {
-         Game.timeAtLastSave = Number(savedValue);
+         Game.timeAtLastSave = hexToDec(savedValue);
       }
    },
    {
@@ -68,30 +142,30 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          Object.values(Game.applications).forEach((application, i) => {
             if (application.isUnlocked) total += Math.pow(2, i);
          });
-         return total.toString();
+         return decToHex(total);
       },
       updateValue: () => {
          let total = 0;
          Object.values(Game.applications).forEach((application, i) => {
             if (application.isUnlocked) total += Math.pow(2, i);
          });
-         return total.toString();
+         return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
-         const bitmap = Number(savedValue).toString(2).split("").reverse().map(Number) as ReadonlyArray<0 | 1>;
+         const bitmap = hexToDec(savedValue).toString(2).split("").reverse().map(Number) as ReadonlyArray<0 | 1>;
          setUnlockedApplications(bitmap);
       }
    },
    {
       name: "Worker number",
       defaultValue: () => {
-         return randInt(10000, 1000000).toString();
+         return decToHex(randInt(10000, 1000000));
       },
       updateValue: () => {
-         return Game.userInfo.workerNumber.toString();
+         return decToHex(Game.userInfo.workerNumber);
       },
       loadEvent: (savedValue: string) => {
-         Game.userInfo.workerNumber = Number(savedValue);
+         Game.userInfo.workerNumber = hexToDec(savedValue);
       }
    },
    {
@@ -140,7 +214,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          for (let i = 0; i < JOB_DATA.length; i++) {
             const worker = JOB_DATA[i];
             const count = workerCounts[i];
-            
+
             if (!Number.isNaN(count)) {
                Game.userInfo.workers[worker.id] = count;
             } else {
@@ -228,10 +302,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          ACHIEVEMENTS.forEach((achievement, i) => {
             if (achievement.isUnlocked) unlockedAchievementTotal += Math.pow(2, i);
          });
-         return unlockedAchievementTotal.toString();
+         return decToHex(unlockedAchievementTotal);
       },
       loadEvent: (savedValue: string) => {
-         const bits = Number(savedValue).toString(2).split("").reverse();
+         const bits = hexToDec(savedValue).toString(2).split("").reverse();
 
          bits.forEach((bit, i) => {
             const achievement = ACHIEVEMENTS[i];
@@ -242,19 +316,19 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
    {
       name: "Bought lorem packs",
       defaultValue: () => {
-         return LOREM_PACKS.reduce((previousValue, loremPack, i) => {
+         return decToHex(LOREM_PACKS.reduce((previousValue, loremPack, i) => {
             if (loremPack.isBought) return previousValue + Math.pow(2, i);
             return previousValue;
-         }, 0).toString();
+         }, 0));
       },
       updateValue: () => {
-         return LOREM_PACKS.reduce((previousValue, loremPack, i) => {
+         return decToHex(LOREM_PACKS.reduce((previousValue, loremPack, i) => {
             if (loremPack.isBought) return previousValue + Math.pow(2, i);
             return previousValue;
-         }, 0).toString();
+         }, 0));
       },
       loadEvent: (savedValue: string) => {
-         const boughtPacksData = Number(savedValue).toString(2).split("").reverse();
+         const boughtPacksData = hexToDec(savedValue).toString(2).split("").reverse();
 
          LOREM_PACKS.forEach((loremPack, i) => {
             if (boughtPacksData[i] === "1") loremPack.isBought = true;
@@ -267,10 +341,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         return Game.wordsTyped.toString();
+         return decToHex(Game.wordsTyped);
       },
       loadEvent: (savedValue: string) => {
-         Game.wordsTyped = Number(savedValue);
+         Game.wordsTyped = hexToDec(savedValue);
       }
    },
    {
@@ -284,10 +358,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
             const upgrade = UPGRADES[i];
             if (upgrade.isBought) total += Math.pow(2, i);
          }
-         return total.toString();
+         return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
-         const bits = decimalToBinaryArr(savedValue);
+         const bits = decimalToBinaryArr(hexToDec(savedValue));
 
          for (let i = 0; i < UPGRADES.length; i++) {
             const upgrade = UPGRADES[i];

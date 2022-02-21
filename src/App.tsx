@@ -6,6 +6,8 @@ function App() {
    return <>
       <div id="version-text">Version {Game.version}</div>
       <Main />
+
+      <div id="mask" className="hidden"></div>
    </>;
 }
 

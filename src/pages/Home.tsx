@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { NotificationContainer } from '../notifications';
 import BlackMarket from '../components/BlackMarket';
 import Button from '../components/Button';
@@ -19,6 +19,8 @@ import LoremCounter from '../classes/applications/LoremCounter';
 import { setupStartMenu } from '../start-menu';
 import { setupPrograms } from '../programs';
 import { type } from '../components/LoremProductionSystem';
+
+import '../css/pages/home.css';
 
 export function focusProgram(program: HTMLElement): void {
    const previouslySelectedProgram = document.querySelector(".windows-program.in-focus");
@@ -198,8 +200,6 @@ const Home = () => {
             </div>
          </>
       </WindowsProgram>
-
-      <div id="mask" className="hidden"></div>
 
       <NotificationContainer />
 

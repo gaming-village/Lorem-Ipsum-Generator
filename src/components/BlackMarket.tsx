@@ -31,6 +31,8 @@ interface FallingText {
 }
 let fallingTexts = new Array<FallingText>();
 const createFallingText = (blackMarket: HTMLElement): void => {
+   if (blackMarket === null) return;
+   
    const potentialText = "0123456789!@#$%^&*()";
    const text = randItem(potentialText.split(""));
    
