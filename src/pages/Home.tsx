@@ -39,18 +39,18 @@ const Home = () => {
          view.style.height = `${height}px`;
       }
    };
+      
+   let shouldShowWelcomeScreen = false;
+   let saveData = getCurrentSave();
+   if (saveData === null) {
+      saveData = getDefaultSave();
+      shouldShowWelcomeScreen = true;
+   }
+   loadSave(saveData);
 
    useEffect(() => {
       // Generate unique letter ID's based on their names.
       generateLetterHashes();
-      
-      let shouldShowWelcomeScreen = false;
-      let saveData = getCurrentSave();
-      if (saveData === null) {
-         saveData = getDefaultSave();
-         shouldShowWelcomeScreen = true;
-      }
-      loadSave(saveData);
       
       updateViewSizes();
       window.addEventListener("resize", () => {
@@ -162,7 +162,7 @@ const Home = () => {
             }
          }
       });
-   }, []);
+   }, [shouldShowWelcomeScreen]);
 
    return <>
       <WelcomeScreen />

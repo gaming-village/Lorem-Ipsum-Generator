@@ -51,6 +51,10 @@ export function randInt(min: number, max: number): number {
    return Math.floor(Math.random() * (max - min)) + min;
 }
 
+export function randFloat(min: number, max: number): number {
+   return Math.random() * (max - min) + min;
+}
+
 export function randItem(arr: Array<any> | ReadonlyArray<any>): any {
    const itemIndex = randInt(0, arr.length);
    return arr[itemIndex];

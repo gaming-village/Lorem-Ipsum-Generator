@@ -300,22 +300,20 @@ const CareerPathSection = () => {
    const tree = new Array<JSX.Element>();
    let currentNode: CareerPathNode = baseNode;
    let offset = 0;
-   let i = 0;
-   while (true) {
+   for (let i = 0; ; i++) {
       if (typeof currentNode === "undefined" || currentNode.children.length === 0) {
          break;
       }
 
       const rowStyle = {
-         "--offset": Math.max(offset, 0)
+         "--offset": offset
       } as React.CSSProperties;
       
       let nextNode!: CareerPathNode;
       const newRow = new Array<JSX.Element>();
       for (let j = 0; j < currentNode.children.length; j++) {
          const child = currentNode.children[j];
-
-         if (i > 0 && child.status === "previousJob") {
+         if (i > 0 && currentNode.children.length > 1 && child.status === "previousJob") {
             if (j === 0) {
                offset--;
             } else {
@@ -342,7 +340,6 @@ const CareerPathSection = () => {
       );
 
       currentNode = nextNode;
-      i++;
    }
 
    return <div id="career-path">
@@ -685,9 +682,7 @@ const CorporateOverview = () => {
    const [isPromoting, setIsPromoting] = useState(false);
 
    useEffect(() => {
-      setTimeout(() => {
-         setJob(Game.userInfo.job);
-      }, 1);
+      setJob(Game.userInfo.job);
    }, []);
 
    let openedSection!: SectionType;

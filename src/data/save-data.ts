@@ -8,6 +8,7 @@ import LOREM_PACKS from "./lorem-pack-data";
 import { UPGRADES } from "./job-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
 import { Job, JOB_DATA } from "./job-data";
+import { BLACK_MARKET_SHOPS } from "./black-market-data";
 
 const HEX_UNITS: { [key: number]: string } = {
    0: "0",
@@ -454,6 +455,38 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
             }
          }
          Game.settings = defaultSettings;
+      }
+   },
+   {
+      name: "Packets",
+      defaultValue: () => {
+         return "0"
+      },
+      updateValue: () => {
+         return decToHex(Game.packets);
+      },
+      loadEvent: (savedValue: string) => {
+         Game.packets = hexToDec(savedValue);
+      }
+   },
+   {
+      name: "Unlocked black market shops",
+      defaultValue: () => {
+         return "0";
+      },
+      updateValue: () => {
+         let result = 0;
+         for (let i = 0; i < BLACK_MARKET_SHOPS.length; i++) {
+            const shop = BLACK_MARKET_SHOPS[i];
+            if (shop.isUnlocked) result += Math.pow(2, i);
+         }
+         return decToHex(result);
+      },
+      loadEvent: (savedValue: string) => {
+         const bits = hexToDec(savedValue).toString().split("").map(Number);
+         for (let i = 0; i < bits.length; i++) {
+            BLACK_MARKET_SHOPS[i].isUnlocked = bits[i] === 1;
+         }
       }
    }
 ];

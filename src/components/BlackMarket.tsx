@@ -4,30 +4,61 @@ import { Link } from "react-router-dom";
 import "../css/black-market.css";
 import { BlackMarketShop, BLACK_MARKET_SHOPS } from '../data/black-market-data';
 import Game from '../Game';
-import { randInt, randItem, roundNum } from '../utils';
+import { randInt, randFloat, randItem, roundNum } from '../utils';
 
 interface ShopProps {
    shop: BlackMarketShop;
+   isUnlocked: boolean;
+   buyFunc: ((shop: BlackMarketShop) => void) | undefined;
 }
-const Shop = ({ shop }: ShopProps) => {
-   return <div className="shop">
-      <h2>{shop.name}</h2>
+const Shop = ({ shop, isUnlocked, buyFunc }: ShopProps) => {
+   return <div className={`shop${!isUnlocked ? " locked" : ""}`}>
+      <h2>{isUnlocked ? shop.name : "LOCKED"}</h2>
 
-      <Link to={"/" + shop.pageName}>
-         <button>Go</button>
-      </Link>
+      <div className="seperator"></div>
+
+      <p>{isUnlocked ? shop.description : <>You require <b>{shop.cost} packet{shop.cost === 1 ? "" : "s"}</b> to unlock this shop.</>}</p>
+
+      {isUnlocked ? (
+         <Link to={"/" + shop.pageName}>
+            <button>GO</button>
+         </Link>
+      ) : (
+         <button onClick={() => buyFunc!(shop)}>BUY</button>
+      )}
    </div>
 }
 
 const Shops = () => {
+   const [unlockedShops, setUnlockedShops] = useState<Array<BlackMarketShop>>([]);
+
+   useEffect(() => {
+      const newUnlockedShops = new Array<BlackMarketShop>();
+      for (const shop of BLACK_MARKET_SHOPS) {
+         if (shop.isUnlocked) newUnlockedShops.push(shop);
+      }
+      setUnlockedShops(newUnlockedShops);
+   }, []);
+
+   const buyShop = (shop: BlackMarketShop): void => {
+      shop.isUnlocked = true;
+      Game.packets -= shop.cost;
+
+      const newUnlockedShops = unlockedShops.slice();
+      newUnlockedShops.push(shop);
+      setUnlockedShops(newUnlockedShops);
+   }
+
    return <div className="shops">
-      {BLACK_MARKET_SHOPS.map((shop, i) => <Shop key={i} shop={shop} />)}
+      {BLACK_MARKET_SHOPS.map((shop, i) => <Shop key={i} shop={shop} isUnlocked={unlockedShops.includes(shop)} buyFunc={buyShop} />)}
    </div>
 }
 
 interface FallingText {
    age: number;
    elem: HTMLElement;
+   /** Influences how large the text is, and how quickly it falls */
+   size: number;
 }
 let fallingTexts = new Array<FallingText>();
 const createFallingText = (blackMarket: HTMLElement): void => {
@@ -40,11 +71,16 @@ const createFallingText = (blackMarket: HTMLElement): void => {
    fallingText.innerHTML = text;
    fallingText.className = "falling-text";
    fallingText.style.left = randInt(0, 25) * 4 + 1.25 + "%";
-   fallingTexts.push({
-      age: 0,
-      elem: fallingText
-   });
    blackMarket.appendChild(fallingText);
+
+   const textAttributes: FallingText = {
+      age: 0,
+      elem: fallingText,
+      size: randFloat(0.5, 2)
+   }
+   fallingText.style.fontSize = textAttributes.size + "rem";
+   
+   fallingTexts.push(textAttributes);
 }
 
 let hasRenderListener = false;
@@ -65,10 +101,10 @@ const BlackMarket = () => {
 
          let textsToRemove = new Array<FallingText>();
          for (const text of fallingTexts) {
-            if (text.age++ >= 200) {
+            if (text.age++ * text.size >= 200) {
                textsToRemove.push(text);
             }
-            text.elem.style.top = text.age * Game.tps / 40 + "%";
+            text.elem.style.top = text.age * text.size / 2 + "%";
             text.elem.style.opacity = Math.pow(text.age / 200, 1.2).toString();
          }
 

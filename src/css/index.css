@@ -39,6 +39,12 @@ audio {
    display: none;
 }
 
+
+button, .button {
+   outline: none;
+   cursor: pointer;
+}
+
 .cf:before,
 .cf:after {
   content: " ";
