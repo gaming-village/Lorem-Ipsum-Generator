@@ -17,43 +17,12 @@ const getJobsByTier = (tier: number): ReadonlyArray<Job> => {
    return jobs;
 }
 
-const getJobHistory = (): ReadonlyArray<Job> => {
-   let jobHistory = new Array<Job>();
-   const jobPath = Game.userInfo.jobPath.split("").reverse();
-   let i = -1;
-   let currentTier = 1;
-   for (const currentJob of JOB_DATA) {
-      if (currentJob.tier !== currentTier) {
-         if (currentJob.tier > jobPath.length) break;
-         i = 0;
-      } else {
-         i++;
-      }
-      const idx = Number(jobPath[currentJob.tier - 1]);
-      if (i === idx) {
-         jobHistory.push(currentJob);
-      }
-      currentTier = currentJob.tier;
-   }
-   return jobHistory;
-}
-
 export function getRandomWorker(): Job {
-   const potentialWorkers = new Array<Job>();
-   const chosenJobIndexes = Game.userInfo.jobPath.split("");
-   let idx = 0;
-   for (const job of JOB_DATA) {
-      if (job.tier > idx) {
-         idx = 0;
-      } else {
-         idx++;
-      }
-      const chosenJobIdx = Number(chosenJobIndexes[job.tier]);
-      if (idx === chosenJobIdx) {
-         potentialWorkers.push(job)
-      }
-   }
-   return randItem(potentialWorkers);
+   let potentialJobs = Game.userInfo.previousJobs.slice();
+   // Remove the current job
+   potentialJobs.splice(potentialJobs.length - 1, 1);
+
+   return randItem(potentialJobs);
 }
 
 interface SectionProps {
@@ -78,7 +47,7 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
    
    const currentJobRequirements = JOB_TIER_DATA[job.tier - 1].requirements;
    const nextJobRequirements = JOB_TIER_DATA[job.tier].requirements;
-   const canPromote = totalLoremTyped > nextJobRequirements;
+   const canPromote = totalLoremTyped >= nextJobRequirements;
    
    const promote = (): void => {
       if (canPromote) promoteFunc!();
@@ -271,8 +240,7 @@ interface CareerPathNode {
    children: Array<CareerPathNode>
 }
 const CareerPathSection = () => {
-   const jobHistory = getJobHistory();
-
+   const jobHistory = Game.userInfo.previousJobs;
    // Create the tree
    const careerPathTree: CareerPathNode = {
       status: "previousJob",
@@ -555,7 +523,6 @@ sectionData = sectionData.concat(JOB_DATA.map(currentJob => {
 const getControlPanel = (job: Job, sections: Array<SectionType>, changeSection: (newSection: SectionType) => void): Array<JSX.Element> => {
    let key = 0;
    let content = new Array<JSX.Element>();
-   console.log(job, sections);
 
    const filteredSections = Object.values(SectionCategories).reduce((previousValue, currentValue) => {
       return { ...previousValue, [currentValue]: new Array<SectionType>() };
@@ -718,7 +685,9 @@ const CorporateOverview = () => {
    const [isPromoting, setIsPromoting] = useState(false);
 
    useEffect(() => {
-      setJob(Game.userInfo.job);
+      setTimeout(() => {
+         setJob(Game.userInfo.job);
+      }, 1);
    }, []);
 
    let openedSection!: SectionType;
@@ -741,18 +710,8 @@ const CorporateOverview = () => {
       setIsPromoting(false);
       setJob(job);
 
-      let tierIndex = 0;
-      for (const currentJob of JOB_DATA) {
-         if (currentJob.tier === job.tier) {
-            if (currentJob === job) {
-               break;
-            }
-            tierIndex++;
-         }
-      }
-
       Game.userInfo.job = job;
-      Game.userInfo.jobPath = tierIndex + Game.userInfo.jobPath;
+      Game.userInfo.previousJobs.push(job);
 
       Game.isInFocus = false;
       Game.hideMask();

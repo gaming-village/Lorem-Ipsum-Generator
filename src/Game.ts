@@ -16,7 +16,7 @@ import { createNotification } from "./notifications";
 interface UserInfo {
    workerNumber: number;
    job: Job;
-   jobPath: string;
+   previousJobs: Array<Job>;
    workers: { [key: string ]: number};
 }
 interface GameType {
@@ -181,7 +181,7 @@ const Game: GameType = {
    userInfo: {
       workerNumber: 0,
       job: JOB_DATA[0],
-      jobPath: "0",
+      previousJobs: new Array<Job>(),
       workers: {}
    },
    blurScreen: () => {

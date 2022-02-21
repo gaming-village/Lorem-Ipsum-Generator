@@ -192,7 +192,7 @@ export const UPGRADES: Array<UpgradeInfo> = [
       tier: 3
    },
    {
-      name: "Mechanical Keyboard",
+      name: "Mechanical Keyboard", 
       description: "Typing has a small chance to create a random worker.",
       requirements: {
          lorem: 200

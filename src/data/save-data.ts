@@ -169,31 +169,57 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       }
    },
    {
-      name: "Corporate overview job path",
+      name: "Job history",
       // Format:
       // 0010
-      // numbers indicate job index per tier, read left to right (last digit = intern)
+      // numbers indicate job index per tier, read left to right (left most digit = intern, right most = highest job)
       defaultValue: () => {
          return "0";
       },
       updateValue: () => {
-         return Game.userInfo.jobPath;
-      },
-      loadEvent: (savedValue: string) => {
-         Game.userInfo.jobPath = savedValue;
+         let result = "";
+         let i = -1;
+         let previousTier = 1;
+         for (const job of JOB_DATA) {
+            if (job.tier > Game.userInfo.previousJobs.length) break;
 
-         let job!: Job;
-         const tier = savedValue.length;
-         let i = 0;
-         for (const currentJob of JOB_DATA) {
-            if (currentJob.tier === tier) {
-               if (i++ === Number(savedValue.split("")[0])) {
-                  job = currentJob;
-                  break;
-               }
+            if (job.tier !== previousTier) {
+               previousTier = job.tier;
+               i = 0;
+            } else {
+               i++;
+            }
+
+            if (Game.userInfo.previousJobs.includes(job)) {
+               result += i;
             }
          }
-         Game.userInfo.job = job;
+         return result;
+      },
+      loadEvent: (savedValue: string) => {
+         const jobIndexes = savedValue.split("").map(Number);
+
+         let i = -1;
+         let previousTier = 1;
+         const previousJobs = new Array<Job>();
+         for (const job of JOB_DATA) {
+            if (job.tier > jobIndexes.length) break;
+
+            if (job.tier !== previousTier) {
+               previousTier = job.tier;
+               i = 0;
+            } else {
+               i++;
+            }
+
+            const actualJobIndex = jobIndexes[job.tier - 1];
+            if (i === actualJobIndex) {
+               previousJobs.push(job);
+            }
+         }
+
+         Game.userInfo.previousJobs = previousJobs;
+         Game.userInfo.job = previousJobs[previousJobs.length - 1];
       }
    },
    {
