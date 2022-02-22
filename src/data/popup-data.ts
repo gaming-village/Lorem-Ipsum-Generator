@@ -17,7 +17,7 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       name: "microsoft-antivirus",
       flavourText: "An omen of what to come.",
       cost: 0.5,
-      iconSrc: "",
+      iconSrc: "microsoft-antivirus.png",
       displayPos: {
          top: 0,
          left: 0
