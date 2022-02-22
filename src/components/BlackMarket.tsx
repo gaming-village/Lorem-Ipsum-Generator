@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "../css/black-market.css";
 import { BlackMarketShop, BLACK_MARKET_SHOPS } from '../data/black-market-data';
 import Game from '../Game';
+import { updateSave } from '../save';
 import { randInt, randFloat, randItem, roundNum } from '../utils';
 
 interface ShopProps {
@@ -21,7 +22,7 @@ const Shop = ({ shop, isUnlocked, buyFunc }: ShopProps) => {
 
       {isUnlocked ? (
          <Link to={"/" + shop.pageName}>
-            <button>GO</button>
+            <button onClick={updateSave}>GO</button>
          </Link>
       ) : (
          <button onClick={() => buyFunc!(shop)}>BUY</button>

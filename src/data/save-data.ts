@@ -9,6 +9,7 @@ import { UPGRADES } from "./job-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
 import { Job, JOB_DATA } from "./job-data";
 import { BLACK_MARKET_SHOPS } from "./black-market-data";
+import POPUP_DATA from "./popup-data";
 
 const HEX_UNITS: { [key: number]: string } = {
    0: "0",
@@ -482,9 +483,28 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(result);
       },
       loadEvent: (savedValue: string) => {
-         const bits = hexToDec(savedValue).toString().split("").map(Number);
+         const bits = decimalToBinaryArr(hexToDec(savedValue));
          for (let i = 0; i < bits.length; i++) {
             BLACK_MARKET_SHOPS[i].isUnlocked = bits[i] === 1;
+         }
+      }
+   },
+   {
+      name: "Unlocked popups",
+      defaultValue: () => {
+         return "0";
+      },
+      updateValue: () => {
+         let result = 0;
+         for (let i = 0; i < POPUP_DATA.length; i++) {
+            if (POPUP_DATA[i].isUnlocked) result += Math.pow(2, i);
+         }
+         return decToHex(result);
+      },
+      loadEvent: (savedValue: string) => {
+         const bits = decimalToBinaryArr(hexToDec(savedValue));
+         for (let i = 0; i < bits.length; i++) {
+            POPUP_DATA[i].isUnlocked = bits[i] === 1;
          }
       }
    }

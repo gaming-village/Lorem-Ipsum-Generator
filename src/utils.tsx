@@ -1,5 +1,3 @@
-// import React, { Ref } from "react";
-
 export class Vector {
    x: number;
    y: number;

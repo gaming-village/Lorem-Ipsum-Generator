@@ -1,5 +1,5 @@
 * {
-   font-family: "MS Sans Serif";
+   font-family: "MS Sans Serif", Arial, Helvetica, sans-serif;
 }
 
 .view {
@@ -37,7 +37,8 @@
 .button {
    min-width: 5rem;
    text-align: center;
-   font: normal 1rem "MS Sans Serif";
+   font-weight: 400;
+   font-size: 1rem;
    background-color: #ccc;
    border: 2px solid;
    border-radius: 1px;
