@@ -98,7 +98,10 @@ const Game: GameType = {
 
          this.updateLorem(loremDiff);
 
-         (this.applications.loremCounter as LoremCounter).createTextEffect!();
+         const loremCounter = this.applications.loremCounter as LoremCounter;
+         if (typeof loremCounter !== "undefined" && loremCounter.createTextEffect !== null) {
+            loremCounter.createTextEffect();
+         }
       }
 
       const SECONDS_BETWEEN_SAVES: number = 10;
@@ -142,9 +145,9 @@ const Game: GameType = {
       }
    },
    updateLorem: function(loremDiff: number): void {
-      const loremCounterUpdateFunc = (this.applications.loremCounter as LoremCounter).updateLoremCount;
-      if (loremCounterUpdateFunc !== null) {
-         loremCounterUpdateFunc(this.lorem, loremDiff);
+      const loremCounter = this.applications.loremCounter as LoremCounter;
+      if (typeof loremCounter !== "undefined" && loremCounter.updateLoremCount !== null) {
+         loremCounter.updateLoremCount(this.lorem, loremDiff);
       }
    },
    isInFocus: false,

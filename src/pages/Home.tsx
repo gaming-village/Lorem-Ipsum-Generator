@@ -13,7 +13,7 @@ import { getElem, setupAudio } from '../utils';
 import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from '../devtools';
 import Game from '../Game';
 import { generateLetterHashes, setupMail } from '../mail';
-import { getCurrentSave, getDefaultSave, loadSave } from '../save';
+import { getCurrentSave } from '../save';
 import { setupApplications } from '../applications';
 import LoremCounter from '../classes/applications/LoremCounter';
 import { setupStartMenu } from '../start-menu';
@@ -39,14 +39,6 @@ const Home = () => {
          view.style.height = `${height}px`;
       }
    };
-      
-   let shouldShowWelcomeScreen = false;
-   let saveData = getCurrentSave();
-   if (saveData === null) {
-      saveData = getDefaultSave();
-      shouldShowWelcomeScreen = true;
-   }
-   loadSave(saveData);
 
    useEffect(() => {
       // Generate unique letter ID's based on their names.
@@ -59,10 +51,8 @@ const Home = () => {
       
       setupApplications();
       
-      if (shouldShowWelcomeScreen) showWelcomeScreen();
-      
-      // Set up the tick shenanigans
-      setInterval(() => Game.tick(), 1000 / Game.tps);
+      const saveData = getCurrentSave();
+      if (saveData === null) showWelcomeScreen();
       
       setupStartMenu();
       
@@ -84,7 +74,6 @@ const Home = () => {
       setupDevtools();
       
       setupAudio();
-
 
       // Create a list of all keys which generate lorem when typed.
       const ALL_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -162,7 +151,7 @@ const Home = () => {
             }
          }
       });
-   }, [shouldShowWelcomeScreen]);
+   }, []);
 
    return <>
       <WelcomeScreen />

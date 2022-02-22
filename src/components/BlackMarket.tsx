@@ -13,6 +13,12 @@ interface ShopProps {
    buyFunc: ((shop: BlackMarketShop) => void) | undefined;
 }
 const Shop = ({ shop, isUnlocked, buyFunc }: ShopProps) => {
+   const attemptBuy = (): void => {
+      if (Game.packets >= shop.cost) {
+         buyFunc!(shop)
+      }
+   }
+
    return <div className={`shop${!isUnlocked ? " locked" : ""}`}>
       <h2>{isUnlocked ? shop.name : "LOCKED"}</h2>
 
@@ -25,7 +31,7 @@ const Shop = ({ shop, isUnlocked, buyFunc }: ShopProps) => {
             <button onClick={updateSave}>GO</button>
          </Link>
       ) : (
-         <button onClick={() => buyFunc!(shop)}>BUY</button>
+         <button onClick={attemptBuy}>BUY</button>
       )}
    </div>
 }
@@ -90,11 +96,14 @@ const BlackMarket = () => {
    const blackMarket = useRef(null);
    const [packets, setPackets] = useState(0);
    const [lorem, setLorem] = useState(0);
+   const mounted = useRef(false);
 
    useEffect(() => {
+      mounted.current = true;
+
       const updateFunc = (): void => {
-         if (lorem !== Game.lorem) setLorem(Game.lorem);
-         if (packets !== Game.packets) setPackets(Game.packets);
+         if (lorem !== Game.lorem && mounted.current) setLorem(Game.lorem);
+         if (packets !== Game.packets && mounted.current) setPackets(Game.packets);
 
          if (Math.random() < 5 / Game.tps) {
             createFallingText(blackMarket.current!);
@@ -119,6 +128,10 @@ const BlackMarket = () => {
 
       if (!hasRenderListener) Game.createRenderListener(updateFunc);
       hasRenderListener = true;
+
+      return () => {
+         mounted.current = false;
+      }
    }, [lorem, packets]);
 
    const exchangeAmount = Game.lorem * Game.packetExchangeRate;

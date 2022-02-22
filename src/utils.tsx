@@ -1,9 +1,32 @@
-export class Vector {
+export class Point {
    x: number;
    y: number;
    constructor(x: number, y: number) {
       this.x = x;
       this.y = y;
+   }
+
+   add(point2: Point): Point {
+      return new Point(
+         this.x + point2.x,
+         this.y + point2.y
+      );
+   }
+}
+
+export class Vector {
+   magnitude: number;
+   direction: number;
+
+   constructor(magnitude: number, direction: number) {
+      this.magnitude = magnitude;
+      this.direction = direction;
+   }
+
+   convertToPoint(): Point {
+      const x = Math.cos(this.direction) * this.magnitude;
+      const y = Math.sin(this.direction) * this.magnitude;
+      return new Point(x, y);
    }
 }
 

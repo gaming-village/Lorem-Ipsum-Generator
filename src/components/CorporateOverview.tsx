@@ -504,6 +504,7 @@ sectionData = sectionData.concat(JOB_DATA.map(currentJob => {
       category: SectionCategories.workers,
       isOpened: false,
       shouldShow: () => {
+         // console.log(currentJob, Game.userInfo.)
          return currentJob.tier < Game.userInfo.job.tier;
       },
       getSection: () => <WorkerSection job={currentJob} />,
