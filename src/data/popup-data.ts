@@ -53,7 +53,7 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       description: 'Becomes enraged when closed too many times - appeasement is required.',
       flavourText: "The Lord, precursor of His peoples.",
       cost: 20,
-      iconSrc: "",
+      iconSrc: "chunky.png",
       displayPos: {
          top: -18,
          left: -4
@@ -65,7 +65,7 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       description: "Removes several popups when it appears.",
       flavourText: "Culls the popup population.",
       cost: 20,
-      iconSrc: "",
+      iconSrc: "clippy.png",
       displayPos: {
          top: -12,
          left: 7.5
