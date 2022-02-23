@@ -56,11 +56,8 @@ const decToHex = (rawNum: number | string): string => {
 
    const num = Number(rawNum);
 
+   // If negative
    if (Math.sign(num) === -1) return "-" + decToHex(Math.abs(num));
-   if (Number.isNaN(num)) {
-      console.trace();
-      throw new Error(`Tried to convert NaN to hex!`);
-   }
 
    // If not integer
    if (!Number.isInteger(num)) {
@@ -92,6 +89,11 @@ const decToHex = (rawNum: number | string): string => {
 
 const hexToDec = (num: string): string => {
    if (num === "0") return "0";
+
+   // If negative
+   if (num[0] === "-") {
+      return "-" + hexToDec(num.substring(1, num.length));
+   }
 
    let numLeadingZeros = 0;
    while (num[numLeadingZeros] === "0") {
@@ -139,12 +141,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         console.log(Game.lorem);
          return decToHex(Game.lorem);
       },
       loadEvent: (savedValue: string) => {
          const decVal = Number(hexToDec(savedValue));
-         console.log(decVal, savedValue);
          Game.lorem = decVal;
          Game.previousLorem = decVal;
       }
