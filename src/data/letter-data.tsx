@@ -19,7 +19,6 @@ export interface LetterInfo {
    readonly isCloseable: boolean;
    isReceived?: boolean;
    isOpened?: boolean;
-   hashID?: number;
 }
 
 interface LoremLetter {

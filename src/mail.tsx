@@ -1,6 +1,6 @@
 import React from "react";
 import Game from "./Game";
-import { createLineTrail, getElem, hashCode } from "./utils";
+import { createLineTrail, getElem } from "./utils";
 import LETTERS, { LetterInfo, LetterReward } from "./data/letter-data";
 import { createNotification } from "./notifications";
 import { switchView } from "./components/Navbar";
@@ -282,13 +282,6 @@ export function receiveMail(letterSubject: string): void {
    
    mail.receivedLetter = letterInfo;
    if (receiveMailEvent) receiveMailEvent();
-}
-
-export function generateLetterHashes(): void {
-   for (const letterInfo of LETTERS) {
-      const hash = hashCode(letterInfo.subject);
-      letterInfo.hashID = hash;
-   }
 }
 
 export function setupMail(): void {

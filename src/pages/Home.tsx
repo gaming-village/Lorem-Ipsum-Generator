@@ -12,7 +12,7 @@ import WindowsProgram from '../components/WindowsProgram';
 import { getElem, setupAudio } from '../utils';
 import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from '../devtools';
 import Game from '../Game';
-import { generateLetterHashes, setupMail } from '../mail';
+import { setupMail } from '../mail';
 import { getCurrentSave } from '../save';
 import { setupApplications } from '../applications';
 import LoremCounter from '../classes/applications/LoremCounter';
@@ -41,9 +41,6 @@ const Home = () => {
    };
 
    useEffect(() => {
-      // Generate unique letter ID's based on their names.
-      generateLetterHashes();
-      
       updateViewSizes();
       window.addEventListener("resize", () => {
          updateViewSizes();

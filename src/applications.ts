@@ -1,9 +1,9 @@
 import "./css/applications.css";
 
 const fileNames: ReadonlyArray<string> = ["LoremCounter", "AchievementTracker"];
-let unlockInfo: ReadonlyArray<0 | 1> = fileNames.map(_ => 0);
+let unlockInfo: Array<number> = fileNames.map(_ => 0);
 
-export function setUnlockedApplications(bitmap: ReadonlyArray<0 | 1>): void {
+export function setUnlockedApplications(bitmap: Array<number>): void {
    unlockInfo = bitmap;
 }
 

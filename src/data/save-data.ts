@@ -3,7 +3,7 @@ import Game from "../Game";
 import { getPreferences, setPreferences } from "../classes/programs/Preferences";
 import { getCurrentTime, randInt } from "../utils";
 import ACHIEVEMENTS from "./achievements-data";
-import LETTERS, { LetterInfo } from "./letter-data";
+import LETTERS from "./letter-data";
 import LOREM_PACKS from "./lorem-pack-data";
 import { UPGRADES } from "./job-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
@@ -30,15 +30,42 @@ const HEX_UNITS: { [key: number]: string } = {
    15: "F"
 };
 
-const decimalToBinaryArr = (num: number): Array<number> => {
-   return Number(num).toString(2).split("").reverse().map(Number);
+const hexToBinaryArr = (num: string): Array<number> => {
+   if (num === "0") return [0];
+
+   const dec = hexToDec(num);
+
+   let numTrailingZeros = 0;
+   while (dec[numTrailingZeros] === "0") {
+      numTrailingZeros++;
+   }
+
+   return ("0".repeat(numTrailingZeros) + Number(dec)).split("").map(Number);
 }
 
-const decToHex = (num: number): string => {
+const decToHex = (rawNum: number | string): string => {
+   if (rawNum === 0) return "0";
+
+   // Account for any leading 0's
+   let numLeadingZeros = 0;
+   if (typeof rawNum === "string") {
+      while (rawNum[numLeadingZeros] === "0") {
+         numLeadingZeros++;
+      }
+   }
+
+   const num = Number(rawNum);
+
+   if (Math.sign(num) === -1) return "-" + decToHex(Math.abs(num));
+   if (Number.isNaN(num)) {
+      console.trace();
+      throw new Error(`Tried to convert NaN to hex!`);
+   }
+
    // If not integer
    if (!Number.isInteger(num)) {
-      const [units, decimalPlaces] = num.toString().split(".");
-      return decToHex(Number(units)) + "." + decToHex(Number(decimalPlaces));
+      const [units, decimalPlaces] = typeof rawNum === "number" ? num.toString().split(".") : rawNum.split(".");
+      return decToHex(units) + "." + decToHex(decimalPlaces);
    }
 
    // Find the highest corresponding b16 power
@@ -59,14 +86,22 @@ const decToHex = (num: number): string => {
       result += HEX_UNITS[multiple];
       maxB16power /= 16;
    }
-   return result;
+
+   return "0".repeat(numLeadingZeros) + result;
 }
 
-const hexToDec = (num: string): number => {
+const hexToDec = (num: string): string => {
+   if (num === "0") return "0";
+
+   let numLeadingZeros = 0;
+   while (num[numLeadingZeros] === "0") {
+      numLeadingZeros++;
+   }
+
    // If the number isn't an integer
    if (num.split("").indexOf(".") !== -1) {
       const [units, decimalPlaces] = num.toString().split(".");
-      return Number(hexToDec(units) + "." + hexToDec(decimalPlaces));
+      return hexToDec(units) + "." + hexToDec(decimalPlaces);
    }
 
    let result = 0;
@@ -84,7 +119,7 @@ const hexToDec = (num: string): number => {
 
       result += decUnit * Math.pow(16, num.length - i - 1);
    }
-   return result;
+   return "0".repeat(numLeadingZeros) + result;
 }
 
 interface SaveComponent {
@@ -107,7 +142,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(Game.lorem);
       },
       loadEvent: (savedValue: string) => {
-         const decVal = hexToDec(savedValue);
+         const decVal = Number(hexToDec(savedValue));
          Game.lorem = decVal;
          Game.previousLorem = decVal;
       }
@@ -121,7 +156,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(Game.totalLoremTyped);
       },
       loadEvent: (savedValue: string) => {
-         Game.totalLoremTyped = hexToDec(savedValue);
+         Game.totalLoremTyped = Number(hexToDec(savedValue));
       }
    },
    {
@@ -133,7 +168,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(getCurrentTime());
       },
       loadEvent: (savedValue: string) => {
-         Game.timeAtLastSave = hexToDec(savedValue);
+         Game.timeAtLastSave = Number(hexToDec(savedValue));
       }
    },
    {
@@ -153,8 +188,8 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
-         const bitmap = hexToDec(savedValue).toString(2).split("").reverse().map(Number) as ReadonlyArray<0 | 1>;
-         setUnlockedApplications(bitmap);
+         const bits = hexToBinaryArr(savedValue);
+         setUnlockedApplications(bits);
       }
    },
    {
@@ -166,7 +201,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(Game.userInfo.workerNumber);
       },
       loadEvent: (savedValue: string) => {
-         Game.userInfo.workerNumber = hexToDec(savedValue);
+         Game.userInfo.workerNumber = Number(hexToDec(savedValue));
       }
    },
    {
@@ -254,66 +289,63 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
    {
       name: "Letter data",
       defaultValue: () => {
-         return LETTERS.reduce((previousValue, letterInfo, i) => {
-            const suffix = i + 1 < LETTERS.length ? "-" : "";
-            return previousValue + `${letterInfo.hashID}:0${suffix}`;
-         }, "");
+         return "0";
       },
       updateValue: () => {
-         return LETTERS.reduce((previousValue, letterInfo, i) => {
-            let infoTotal: number = 0;
-            if (letterInfo.isReceived) infoTotal += 1;
-            if (letterInfo.isOpened) infoTotal += 2;
-            if (letterInfo.reward && letterInfo.reward.isClaimed) infoTotal += 4;
-
-            const suffix = i + 1 < LETTERS.length ? "-" : "";
-            return previousValue + `${letterInfo.hashID}:${infoTotal}${suffix}`;
-         }, "");
-      },
-      loadEvent: (savedValue: string) => {
-         const allLetterData: string[] = savedValue.split("-");
-
-         for (const letterSaveData of allLetterData) {
-            const hash = Number(letterSaveData.split(":")[0]);
-
-            // Find the letter info
-            let letterInfo: LetterInfo = undefined as unknown as LetterInfo;
-            for (const currentLetterInfo of LETTERS) {
-               if (currentLetterInfo.hashID === hash) {
-                  letterInfo = currentLetterInfo;
-                  break;
-               }
-            }
-
-            if (letterInfo) {
-               const letterData = Number(letterSaveData.split(":")[1]).toString(2).split("").reverse();
-               if (letterInfo!) {
-                  letterInfo.isReceived = !!Number(letterData[0]);
-                  letterInfo.isOpened = !!Number(letterData[1]);
-                  if (letterInfo.reward) {
-                     letterInfo.reward.isClaimed = !!Number(letterData[2]);
+         let result = "";
+         for (const letter of LETTERS) {
+            let part = 0;
+            if (letter.isReceived) {
+               part += 1;
+               if (letter.isOpened) {
+                  part += 2;
+                  if (typeof letter.reward !== "undefined" && letter.reward.isClaimed) {
+                     part += 4;
                   }
                }
             }
+            result += part;
+         }
+
+         // Remove trailing 0's
+         let numTrailingZeros = 0;
+         while (result[result.length - numTrailingZeros - 1] === "0") {
+            numTrailingZeros++;
+         }
+         if (numTrailingZeros > 0) {
+            result = result.substring(0, result.length - numTrailingZeros);
+         }
+
+         return result;
+      },
+      loadEvent: (savedValue: string) => {
+         const parts = savedValue.split("").map(Number);
+
+         for (let i = 0; i < LETTERS.length; i++) {
+            const letter = LETTERS[0], part = parts[0] || 0;
+
+            letter.isReceived = part % 1 === 0;
+            letter.isOpened = part % 1 === 0;
+            if (typeof letter.reward !== "undefined") letter.reward.isClaimed = part % 4 === 0;
          }
       }
    },
    {
       name: "Preferences",
       defaultValue: () => {
-         return "0:0:0";
+         return "0-0-0";
       },
       updateValue: () => {
          const preferences = getPreferences();
 
          const selectedBackgrounds = preferences.selectedBackgrounds;
          return selectedBackgrounds.reduce((previousValue, currentValue, i) => {
-            const suffix = i + 1 < selectedBackgrounds.length ? ":" : "";
+            const suffix = i + 1 < selectedBackgrounds.length ? "-" : "";
             return previousValue + currentValue + suffix;
          }, "");
       },
       loadEvent: (savedValue: string) => {
-         const selectedBackgrounds = savedValue.split(":").map(Number) as [number, number, number];
+         const selectedBackgrounds = savedValue.split("-").map(Number) as [number, number, number];
          setPreferences({
             selectedBackgrounds: selectedBackgrounds
          });
@@ -332,11 +364,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(unlockedAchievementTotal);
       },
       loadEvent: (savedValue: string) => {
-         const bits = hexToDec(savedValue).toString(2).split("").reverse();
-
+         const bits = hexToBinaryArr(savedValue);
          bits.forEach((bit, i) => {
             const achievement = ACHIEVEMENTS[i];
-            if (bit === "1") achievement.isUnlocked = true;
+            if (bit === 1) achievement.isUnlocked = true;
          });
       }
    },
@@ -355,10 +386,9 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          }, 0));
       },
       loadEvent: (savedValue: string) => {
-         const boughtPacksData = hexToDec(savedValue).toString(2).split("").reverse();
-
+         const bits = hexToBinaryArr(savedValue);
          LOREM_PACKS.forEach((loremPack, i) => {
-            if (boughtPacksData[i] === "1") loremPack.isBought = true;
+            if (bits[i] === 1) loremPack.isBought = true;
          });
       }
    },
@@ -371,7 +401,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(Game.wordsTyped);
       },
       loadEvent: (savedValue: string) => {
-         Game.wordsTyped = hexToDec(savedValue);
+         Game.wordsTyped = Number(hexToDec(savedValue));
       }
    },
    {
@@ -388,8 +418,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
-         const bits = decimalToBinaryArr(hexToDec(savedValue));
-
+         const bits = hexToBinaryArr(savedValue);
          for (let i = 0; i < UPGRADES.length; i++) {
             const upgrade = UPGRADES[i];
             const bit = i <= bits.length ? bits[i] : 0;
@@ -412,7 +441,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
                }
             }
 
-            if (i < Game.settings.length - 1) result += ":";
+            if (i < Game.settings.length - 1) result += "-";
          }
 
          return result;
@@ -428,7 +457,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
                }
             }
 
-            if (i < Game.settings.length - 1) result += ":";
+            if (i < Game.settings.length - 1) result += "-";
          }
 
          return result;
@@ -441,7 +470,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
             return;
          }
 
-         const settingsData = savedValue.split(":");
+         const settingsData = savedValue.split("-");
          for (let i = 0; i < defaultSettings.length; i++) {
             const setting = defaultSettings[i];
             const dataVal = settingsData[i];
@@ -466,7 +495,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(Game.packets);
       },
       loadEvent: (savedValue: string) => {
-         Game.packets = hexToDec(savedValue);
+         Game.packets = Number(hexToDec(savedValue));
       }
    },
    {
@@ -483,7 +512,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(result);
       },
       loadEvent: (savedValue: string) => {
-         const bits = decimalToBinaryArr(hexToDec(savedValue));
+         const bits = hexToBinaryArr(savedValue);
          for (let i = 0; i < bits.length; i++) {
             BLACK_MARKET_SHOPS[i].isUnlocked = bits[i] === 1;
          }
@@ -502,7 +531,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(result);
       },
       loadEvent: (savedValue: string) => {
-         const bits = decimalToBinaryArr(hexToDec(savedValue));
+         const bits = hexToBinaryArr(savedValue);
          for (let i = 0; i < bits.length; i++) {
             POPUP_DATA[i].isUnlocked = bits[i] === 1;
          }
