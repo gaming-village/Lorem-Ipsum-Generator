@@ -9,7 +9,7 @@ import Mail from '../components/Mail';
 import Navbar, { setupNavBar, switchView } from '../components/Navbar';
 import WelcomeScreen, { previewType, showWelcomeScreen } from '../components/WelcomeScreen';
 import WindowsProgram from '../components/WindowsProgram';
-import { getElem, setupAudio } from '../utils';
+import { setupAudio } from '../utils';
 import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from '../devtools';
 import Game from '../Game';
 import { setupMail } from '../mail';
@@ -34,7 +34,10 @@ export function focusProgram(program: HTMLElement): void {
 const Home = () => {
    const updateViewSizes = () => {
       const views: HTMLElement[] = Array.from(document.getElementsByClassName("view") as HTMLCollectionOf<HTMLElement>);
-      const height = window.innerHeight - (getElem("top-bar") as HTMLElement).offsetHeight;
+
+      const topBar = document.getElementById("top-bar");
+      if (topBar === null) return;
+      const height = window.innerHeight - topBar.offsetHeight;
       for (const view of views) {
          view.style.height = `${height}px`;
       }

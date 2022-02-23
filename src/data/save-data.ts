@@ -139,10 +139,12 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
+         console.log(Game.lorem);
          return decToHex(Game.lorem);
       },
       loadEvent: (savedValue: string) => {
          const decVal = Number(hexToDec(savedValue));
+         console.log(decVal, savedValue);
          Game.lorem = decVal;
          Game.previousLorem = decVal;
       }
