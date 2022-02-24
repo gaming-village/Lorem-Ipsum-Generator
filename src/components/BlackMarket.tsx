@@ -90,8 +90,6 @@ const createFallingText = (blackMarket: HTMLElement): void => {
    fallingTexts.push(textAttributes);
 }
 
-let hasRenderListener = false;
-
 const BlackMarket = () => {
    const blackMarket = useRef(null);
    const [packets, setPackets] = useState(0);
@@ -124,12 +122,13 @@ const BlackMarket = () => {
          }
       }
 
-      if (!hasRenderListener) Game.createRenderListener(updateFunc);
-      hasRenderListener = true;
+      if (!mounted.current) Game.createRenderListener(updateFunc);
 
       mounted.current = true;
       return () => {
          mounted.current = false;
+
+         Game.removeRenderListener(updateFunc)
       }
    }, [lorem, packets]);
 

@@ -1,3 +1,17 @@
-.popup {
-   
+.popup .warning-container {
+   width: 80%;
+   margin: 0.5rem 0 0 50%;
+   display: flex;
+   align-items: center;
+   transform: translateX(-50%);
+}
+.popup .warning-container img {
+   --size: 40px;
+   width: var(--size);
+   height: var(--size);
+}
+.popup .warning-container p {
+   font-weight: 600;
+   font-size: 1.1rem;
+   margin: 0 0 0 10px;
 }

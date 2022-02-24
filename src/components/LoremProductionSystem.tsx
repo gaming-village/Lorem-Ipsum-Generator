@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
 import LOREM_PACKS, { SentenceStructure, StructurePart, Word } from '../data/lorem-pack-data';
 import Game from '../Game';
+import { createRandomPopup } from '../popups/Popup';
 import { createTooltip, removeTooltip } from '../tooltips';
-import { randItem } from '../utils';
+import { randInt, randItem } from '../utils';
 
 const wordEndingChars = [" ", "."];
 
@@ -216,6 +218,8 @@ const LoremSentence = ({ sentence, meaning, type }: LoremSentenceProps) => {
    );
 }
 
+let typesTilNextPopup = 100;
+
 let currentSentence: string | null = null;
 let currentSentenceMeaning: string | null = null;
 
@@ -230,6 +234,15 @@ const LoremProductionSystem = () => {
 
    useEffect(() => {
       type = (): void => {
+         if (typesTilNextPopup-- <= 0) {
+            const POPUP_CHANCE = 0.05;
+            if (Math.random() < POPUP_CHANCE) {
+               createRandomPopup();
+
+               typesTilNextPopup = randInt(30, 100);
+            }
+         }
+
          if (currentSentence === null) {
             if (upcomingSentence === null) {
                const [sentence, meaning] = getRandomSentence();

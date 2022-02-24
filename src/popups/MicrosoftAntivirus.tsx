@@ -2,11 +2,12 @@ import Button from "../components/Button";
 import Popup from "./Popup";
 
 import WarningIcon from "../images/icons/warning.png";
+import Game from "../Game";
 
 interface ElemProps {
-   closeFunc: () => void;
+   popup: MicrosoftAntivirus;
 }
-const Elem = ({ closeFunc }: ElemProps) => {
+const Elem = ({ popup }: ElemProps) => {
    return <>
       <div className="warning-container">
          <img alt="Warning!" src={WarningIcon} />
@@ -17,13 +18,19 @@ const Elem = ({ closeFunc }: ElemProps) => {
 
       <p>To fix them, you must upgrade your mainframe to System 32</p>
 
-      <Button onClick={closeFunc} isCentered={true}>Go away!</Button>
+      <Button onClick={() => popup.close()} isCentered={true}>Go away!</Button>
    </>;
 }
 
 class MicrosoftAntivirus extends Popup {
    protected instantiate(): JSX.Element {
-      return <Elem closeFunc={this.close} />;
+      return <Elem popup={this} />;
+   }
+
+   close(): void {
+      super.close();
+
+      Game.lorem += 3;
    }
 }
 

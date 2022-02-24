@@ -1,40 +1,75 @@
-import React, { useEffect, useState } from 'react';
-import POPUP_DATA, { PopupInfo } from '../data/popup-data';
-import Popup from '../popups/Popup';
+// import { useEffect, useState } from 'react';
 
-export let createPopup: ((popup: PopupInfo) => void) | null = null;
+// import POPUP_DATA, { PopupInfo } from '../data/popup-data';
+// import Popup from '../popups/Popup';
 
-setTimeout(() => {
-   if (createPopup !== null) createPopup(POPUP_DATA[0]);
-}, 500);
+// export let createPopup: ((popup: PopupInfo) => void) | null = null;
 
-const PopupContainer = () => {
-   const [popups, setPopups] = useState<Array<Popup>>([]);
+// let potentialPopups = new Array<PopupInfo>();
 
-   useEffect(() => {
-      createPopup = (popupInfo: PopupInfo): void => {
-         if (popupInfo.className === "") return;
-         console.log(popupInfo.name);
+// const fillPotentialPopups = (): void => {
+//    const newPotentialPopups = new Array<PopupInfo>();
+//    for (const popup of POPUP_DATA) {
+//       if (popup.isUnlocked && typeof popup.className !== "undefined") {
+//          newPotentialPopups.push(popup);
+//       }
+//    }
+//    potentialPopups = newPotentialPopups;
+// }
 
-         const popupClass = require("../popups/" + popupInfo.className).default;
-         const popup = new popupClass(popupInfo);
+// export function createRandomPopup(): void {
+//    if (potentialPopups.length === 0) {
+//       fillPotentialPopups();
 
-         const newPopups = popups.slice();
-         newPopups.push(popup);
-         setPopups(newPopups);
-      }
+//       if (potentialPopups.length === 0) {
+//          return;
+//       }
+//    }
 
-   }, [popups]);
+//    const idx = Math.floor(Math.random() * potentialPopups.length);
+//    const popup = potentialPopups[idx];
+//    potentialPopups.splice(idx, 1);
 
-   return (
-      <div id="popup-container">
-         {popups.map((popup, i) => {
-            // const a = popup.createElem(i);
-            // console.log(a.key);
-            return popup.createElem(i);
-         })}
-      </div>
-   );
-}
+//    console.log("a");
+//    createPopup!(popup);
+// }
 
-export default PopupContainer;
+// interface PopupData {
+//    popup: Popup;
+//    top: 
+// }
+// let popupBuffer = new Array<PopupData>();
+// const PopupContainer = () => {
+//    const [popups, setPopups] = useState<Array<Popup>>([]);
+
+//    const removePopup = (popup: Popup): void => {
+//       const newPopups = popups.slice();
+//       newPopups.splice(newPopups.indexOf(popup));
+//       setPopups(newPopups);
+//    }
+
+//    useEffect(() => {
+//       createPopup = (popupInfo: PopupInfo): void => {
+//          if (popupInfo.className === "") return;
+
+//          const popupClass = require("../popups/" + popupInfo.className).default;
+//          const popup = new popupClass(popupInfo);
+
+//          const newPopups = popups.slice();
+//          newPopups.push(popup);
+//          setPopups(newPopups);
+//       }
+//    }, [popups]);
+
+//    return (
+//       <div id="popup-container">
+//          {popups.map((popup, i) => {
+//             return popup.createElem(i, removePopup);
+//          })}
+//       </div>
+//    );
+// }
+
+// export default PopupContainer;
+
+export function awdaiwdawd() { return 1 }

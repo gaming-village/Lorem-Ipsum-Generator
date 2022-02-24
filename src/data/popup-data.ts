@@ -10,6 +10,11 @@ export interface PopupInfo {
       top: number;
       left: number;
    },
+   /** The actual popup's dimensions (optional) */
+   elemDimensions?: {
+      width?: string;
+      height?: string;
+   }
    isUnlocked?: boolean;
    readonly children: Array<string>;
 }
@@ -23,6 +28,9 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       displayPos: {
          top: 0,
          left: 0
+      },
+      elemDimensions: {
+         width: "20rem"
       },
       children: []
    },
@@ -84,10 +92,13 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       flavourText: "The survey is cold. Unfeeling. It does not care for your input. It cares only for hard, efficient autonomy.",
       cost: 20,
       iconSrc: "",
-      className: "",
+      className: "AnnualSurvey",
       displayPos: {
          top: 10,
          left: -7
+      },
+      elemDimensions: {
+         width: "20rem"
       },
       children: ["microsoft-antivirus"]
    },

@@ -154,6 +154,7 @@
    background-color: rgb(7, 30, 129);
 }
 .windows-program .title-bar span {
+   margin-right: 0.2rem;
    pointer-events: none;
    user-select: none;
 }
@@ -183,14 +184,17 @@
 .windows-program p {
    margin: 1rem 2px;
 }
-/* .windows-program .title-bar + p:first-of-type {
-   margin-top: 0.2rem;
-} */
+.windows-program .title-bar + p:first-of-type {
+   margin-top: 0.4rem;
+}
 .windows-program > p:last-child {
    margin-bottom: 0.2rem;
 }
-.windows-program .text-box, .windows-program input[type=text] {
-   width: calc(100% - 4px);
+.windows-program label {
+   margin-top: 0.5rem;
+   display: block;
+}
+.windows-program :is(.text-box, input[type=text]) {
    background-color: #fff;
    border: 2px solid;
    border-top-color: #000;
@@ -198,6 +202,12 @@
    border-bottom-color: #e5e5e5;
    border-left-color: #000;
    position: relative;
+}
+.windows-program .text-box {
+   width: calc(100% - 4px);
+}
+.windows-program input[type=text] {
+
 }
 .windows-program .text-box > :first-child {
    margin-top: 0.2rem;

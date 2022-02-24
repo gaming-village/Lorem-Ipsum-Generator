@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { NotificationContainer } from '../notifications';
 import BlackMarket from '../components/BlackMarket';
 import Computer from '../components/Computer';
@@ -17,6 +17,7 @@ import { setupPrograms } from '../programs';
 import { type } from '../components/LoremProductionSystem';
 
 import '../css/pages/home.css';
+import '../css/popups.css';
 
 export function focusProgram(program: HTMLElement): void {
    if (program === null) return;
@@ -70,8 +71,8 @@ const Home = () => {
       const ALL_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
       const ALL_LOREM_CHARS = ALL_LETTERS.concat([" ", "."]);
 
-      let keysDown: Array<string> = [];
-      document.addEventListener("keydown", event => {
+      const onKeyDown = (): void => {
+         const event = window.event as KeyboardEvent;
          const key = event.key;
 
          // Close focus when the Escape key is pressed
@@ -103,11 +104,18 @@ const Home = () => {
 
             if (typeof Game.applications.loremCounter !== "undefined") (Game.applications.loremCounter as LoremCounter).createTextEffect!();
          }
-      });
-      document.addEventListener("keyup", function(event) {
+      }
+
+      const keyUp = (): void => {
+         const event = window.event as KeyboardEvent;
          const key = event.key;
          keysDown.splice(keysDown.indexOf(key), 1);
-      });
+      }
+
+      let keysDown: Array<string> = [];
+      document.addEventListener("keydown", onKeyDown);
+
+      document.addEventListener("keyup", keyUp);
 
       document.addEventListener("mousedown", () => {
          const e = window.event!;
@@ -133,6 +141,11 @@ const Home = () => {
             }
          }
       });
+
+      return () => {
+         document.removeEventListener("keydown", onKeyDown);
+         document.removeEventListener("keyup", keyUp);
+      }
    }, []);
 
    return <>

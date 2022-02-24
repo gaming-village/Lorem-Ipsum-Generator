@@ -7,6 +7,7 @@ import Malware from '../pages/Malware';
 const Main = () => {
    return (
       <Routes>{/* The Switch decides which component to show based on the current URL.*/}
+         <Route path='/Lorem-Ipsum-Generator' element={<Home />}></Route>
          <Route path='/' element={<Home />}></Route>
          <Route path='/malware' element={<Malware />}></Route>
       </Routes>
