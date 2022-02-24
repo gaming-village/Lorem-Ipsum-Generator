@@ -99,8 +99,6 @@ const BlackMarket = () => {
    const mounted = useRef(false);
 
    useEffect(() => {
-      mounted.current = true;
-
       const updateFunc = (): void => {
          if (lorem !== Game.lorem && mounted.current) setLorem(Game.lorem);
          if (packets !== Game.packets && mounted.current) setPackets(Game.packets);
@@ -129,6 +127,7 @@ const BlackMarket = () => {
       if (!hasRenderListener) Game.createRenderListener(updateFunc);
       hasRenderListener = true;
 
+      mounted.current = true;
       return () => {
          mounted.current = false;
       }

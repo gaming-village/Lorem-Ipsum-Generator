@@ -1,10 +1,10 @@
 #welcome-screen {
    width: clamp(30%, 50%, 100%);
-   z-index: 3;
    position: absolute;
    top: 50%;
    left: 50%;
    transform: translate(-50%, -50%);
+   z-index: 4;
 }
 #welcome-screen h1 {
    margin: 0.5rem 0;

@@ -61,5 +61,29 @@ button, .button {
    left: 0;
    bottom: 0;
    right: 0;
-   z-index: 2;
+   z-index: 3;
+}
+
+.back-button {
+   color: #fff;
+   font: 700 1.1rem "PT Serif";
+   background-color: rgb(255, 84, 17);
+   padding: 0.1rem 1rem;
+   border: 1px solid rgb(255, 253, 228);
+   margin: 0.5rem 0 1rem;
+   box-shadow: 0 0 0 1px rgb(184 128 54), 0 0 6px 1px rgb(0 0 0 / 40%) inset;
+   cursor: pointer;
+   position: absolute;
+   bottom: 1rem;
+   left: 50%;
+   transform: translateX(-50%);
+}
+.back-button:hover {
+   box-shadow: none;
+}
+.back-button:active {
+   color: rgb(235, 233, 210);
+   border-color: rgb(235, 233, 210);
+   background-color: rgb(226, 81, 24);
+   box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.3) inset, 0 0 8px 1px #000;
 }

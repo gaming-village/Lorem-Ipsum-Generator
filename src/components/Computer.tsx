@@ -14,7 +14,7 @@ const Computer = () => {
 
          <TaskBar />
       </div>
-   )
+   );
 }
 
 export default Computer;

@@ -42,7 +42,6 @@ interface GameType {
    updateLorem: (loremDiff: number) => void;
    isInFocus: boolean;
    maskClickEvent: (() => void) | undefined;
-   setupMask: () => void;
    showMask: () => void;
    hideMask: () => void;
    reset: () => void;
@@ -152,11 +151,6 @@ const Game: GameType = {
    },
    isInFocus: false,
    maskClickEvent: undefined,
-   setupMask: function(): void {
-      getElem("mask").addEventListener("click", () => {
-         if (this.maskClickEvent) this.maskClickEvent();
-      });
-   },
    showMask: function(): void {
       getElem("mask").classList.remove("hidden");
    },

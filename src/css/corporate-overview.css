@@ -158,7 +158,7 @@
    top: 50%;
    left: 50%;
    transform: translate(-50%, -50%);
-   z-index: 3;
+   z-index: 4;
 }
 #promotion-screen .career-path-container {
    display: flex;
@@ -233,6 +233,8 @@
    margin-bottom: 0.5rem;
 }
 
+
+/* CAREER PATH */
 #career-path {
    --item-size: 4rem;
    --item-spacing-x: 50px;
@@ -244,10 +246,33 @@
    transform: translateX(calc(-50% + (var(--item-spacing-x) + var(--item-size)) * var(--offset) / 2));
 }
 #career-path .item {
-   width: var(--item-size);
-   height: var(--item-size);
+   width: calc(var(--item-size) - 4px);
+   height: calc(var(--item-size) - 4px);
+   margin-top: calc((4rem - var(--item-size)) / 2);
    display: inline-block;
    white-space: pre;
+}
+#career-path .item.previousJob {
+   font-weight: 600;
+   background-color: #eee;
+   border: 2px solid;
+   border-top-color: #fff;
+   border-right-color: #666;
+   border-bottom-color: #666;
+   border-left-color: #fff;
+}
+#career-path .item.nonSelected {
+   background-color: #aaa;
+}
+#career-path .item.unknown {
+   --item-size: 3rem;
+   background-color: #888;
+   border: 2px solid;
+   border-top-color: #000;
+   border-right-color: #eee;
+   border-bottom-color: #eee;
+   border-left-color: #000;
+   opacity: 0.9;
 }
 #career-path .item:not(:first-child) {
    margin-left: calc(var(--item-spacing-x) / 2);
@@ -255,19 +280,9 @@
 #career-path .item:not(:last-child) {
    margin-right: calc(var(--item-spacing-x) / 2);
 }
-#career-path .item.previousJob {
-   background-color: #fff;
-}
-#career-path .item.nonSelected {
-   background-color: #aaa;
-}
-#career-path .item.unknown {
-   background-color: #888;
-   opacity: 0.9;
-}
 
 #career-path .item span {
-   line-height: var(--item-size);
+   line-height: calc(var(--item-size) - 4px);
    white-space: pre;
    display: inline-block;
    margin-left: 50%;

@@ -11,7 +11,7 @@ interface TaskbarIconProps {
    application: Application;
 }
 const TaskbarIcon = ({ name, application }: TaskbarIconProps): JSX.Element => {
-   const [opened, setOpened] = useState<boolean>(false);
+   const [opened, setOpened] = useState<boolean>(application.isOpened);
 
    const clickEvent = () => {
       if (application.isOpened) {

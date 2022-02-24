@@ -9,13 +9,14 @@ interface FileInfo {
 
 export let createFile: (info: FileInfo) => void;
 
+const fileBuffer = new Array<FileInfo>();
 const FileSystem = () => {
    const [files, setFiles] = useState<Array<FileInfo>>(new Array<FileInfo>());
 
    useEffect(() => {
       createFile = (info: FileInfo): void => {
-         const newArr = files.slice();
-         newArr.push(info);
+         fileBuffer.push(info);
+         const newArr = fileBuffer.slice();
          setFiles(newArr);
       };
    });

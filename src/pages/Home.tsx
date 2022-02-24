@@ -1,16 +1,12 @@
 import React, { useEffect } from 'react';
 import { NotificationContainer } from '../notifications';
 import BlackMarket from '../components/BlackMarket';
-import Button from '../components/Button';
-import ButtonContainer from '../components/ButtonContainer';
 import Computer from '../components/Computer';
 import CorporateOverview from '../components/CorporateOverview';
 import Mail from '../components/Mail';
 import Navbar, { setupNavBar, switchView } from '../components/Navbar';
 import WelcomeScreen, { previewType, showWelcomeScreen } from '../components/WelcomeScreen';
-import WindowsProgram from '../components/WindowsProgram';
 import { setupAudio } from '../utils';
-import { devtoolsIsOpen, hideDevtools, openDevtools, setupDevtools } from '../devtools';
 import Game from '../Game';
 import { setupMail } from '../mail';
 import { getCurrentSave } from '../save';
@@ -63,15 +59,10 @@ const Home = () => {
       // Setup mail
       setupMail();
       
-      // Sets up the mask click event handler
-      Game.setupMask();
-      
       // Calculates the lorem made by workers while away and adds it to the lorem count
       Game.calculateIdleProfits();
       
       Game.loadLoremAchievements();
-      
-      setupDevtools();
       
       setupAudio();
 
@@ -82,15 +73,6 @@ const Home = () => {
       let keysDown: Array<string> = [];
       document.addEventListener("keydown", event => {
          const key = event.key;
-
-         // When ` is pressed, open the devtools
-         if (key === "`" && process.env.NODE_ENV === "development") {
-            if (devtoolsIsOpen()) {
-               hideDevtools();
-            } else {
-               openDevtools();
-            }
-         }
 
          // Close focus when the Escape key is pressed
          if (key === "Escape" && Game.isInFocus) {
@@ -155,42 +137,6 @@ const Home = () => {
 
    return <>
       <WelcomeScreen />
-
-      <WindowsProgram id="devtools" className="hidden" title="Devtools" titleIconSrc={require("../images/icons/settings.png").default}>
-         <>
-            <h2 className="resources">Resources</h2>
-
-            <div className="resources-tab">
-               <p>Add or set the lorem count.</p>
-               <input className="lorem-input" />
-               <ButtonContainer>
-                  <>
-                     <Button className="add-lorem">Add</Button>
-                     <Button className="set-lorem">Set</Button>
-                  </>
-               </ButtonContainer>
-            </div>
-
-            <h2 className="mail">Mail</h2>
-
-            <div className="mail-tab">
-               <p>Receive letter</p>
-
-               <select className="letter-select" name="Letters"></select>
-
-               <Button className="receive-letter-button">Receive</Button>
-
-               <p>Receive all letters</p>
-               <Button className="receive-all-letters-button">Receive all</Button>
-            </div>
-
-            <h2 className="data">Data</h2>
-
-            <div className="data-tab">
-               <Button className="reset-button" isCentered={true}>Reset</Button>
-            </div>
-         </>
-      </WindowsProgram>
 
       <NotificationContainer />
 
