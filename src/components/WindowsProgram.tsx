@@ -37,7 +37,7 @@ const WindowsProgram = React.forwardRef((props: ProgramProps, ref: Ref<HTMLDivEl
    }, [props.isDraggable]);
 
    return <div ref={ref} style={props.style} id={props.id} className={`windows-program ${props.className}`}>
-      <TitleBar ref={titlebarRef} buttonsAreDark={props.buttonsAreDark} minimizeFunc={props.minimizeFunc} closeFunc={props.closeFunc} titleIconSrc={props.titleIconSrc} titleStyle={props.titleStyle} title={props.title} uiButtons={props.uiButtons || new Array<UIButtonType>()} isDraggable={props.isDraggable || false} />
+      <TitleBar ref={titlebarRef} buttonsAreDark={props.buttonsAreDark} minimizeFunc={props.minimizeFunc} closeFunc={props.closeFunc} iconSrc={props.titleIconSrc} titleStyle={props.titleStyle} title={props.title} uiButtons={props.uiButtons || new Array<UIButtonType>()} isDraggable={props.isDraggable || false} />
       {props.children}
    </div>;
 });

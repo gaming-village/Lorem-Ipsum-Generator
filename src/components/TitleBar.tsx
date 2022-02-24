@@ -5,7 +5,7 @@ type UIButtonType = "minimize" | "close";
 interface TitleBarProps {
    title: string;
    titleStyle?: string;
-   titleIconSrc?: string;
+   iconSrc?: string;
    uiButtons: ReadonlyArray<UIButtonType>;
    buttonsAreDark?: boolean;
    minimizeFunc?: () => void;
@@ -22,8 +22,8 @@ const TitleBar = React.forwardRef((props: TitleBarProps, ref: LegacyRef<HTMLDivE
 
    return (
       <div ref={ref} style={titleStyle} className={`title-bar ${props.isDraggable ? "draggable" : ""}`}>
-         {props.titleIconSrc ? 
-         <img src={props.titleIconSrc} alt="" />
+         {props.iconSrc ? 
+         <img src={props.iconSrc} alt="" />
          : ""}
 
          <span>{props.title}</span>

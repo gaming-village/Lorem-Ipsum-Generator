@@ -206,9 +206,6 @@
 .windows-program .text-box {
    width: calc(100% - 4px);
 }
-.windows-program input[type=text] {
-
-}
 .windows-program .text-box > :first-child {
    margin-top: 0.2rem;
 }

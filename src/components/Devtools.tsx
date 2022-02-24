@@ -104,7 +104,7 @@ const Devtools = () => {
 
    return isVisible ? (
       <div id="devtools" className="windows-program">
-         <TitleBar title="Devtools" titleIconSrc={DevtoolsIcon} uiButtons={[]} isDraggable={false} />
+         <TitleBar title="Devtools" iconSrc={DevtoolsIcon} uiButtons={[]} isDraggable={false} />
 
          <h2 onClick={() => toggleTab("resources")}>Resources</h2>
 

@@ -7,17 +7,30 @@ import { getElem, randFloat } from "../utils";
 
 let popupKey = 0;
 const popups = new Array<Popup>();
+const popupElems = new Array<JSX.Element>();
 
 const updateVisiblePopups = (): void => {
    const container = document.getElementById("popup-container");
    ReactDOM.render(<>
-      {popups.map((popup, i) => popup.elem)}
+      {popups.map(popup => popup.elem)}
+      {popupElems.slice()}
    </>, container);
 }
 
 const createPopup = (popupInfo: PopupInfo): void => {
    const popupClass = require("../popups/" + popupInfo.className).default;
    new popupClass(popupInfo);
+}
+
+export function addPopupElem(elem: JSX.Element): void {
+   popupElems.push(elem);
+   updateVisiblePopups();
+}
+export function getPopupElemKey(): number {
+   return popupKey++;
+}
+export function removePopupElem(elem: JSX.Element): void {
+   popupElems.splice(popupElems.indexOf(elem), 1);
 }
 
 setTimeout(() => {
@@ -72,6 +85,10 @@ const PopupElem = ({ info, application, children }: PopupElemInfo) => {
    const top = randFloat(padding, 100 - padding);
 
    useEffect(() => {
+      application.getElem = (): HTMLElement => {
+         return elemRef.current!;
+      }
+
       // Position the popup at a random position in the screen
       const elem = elemRef.current! as HTMLElement;
 
@@ -129,6 +146,8 @@ abstract class Popup {
 
       updateVisiblePopups();
    }
+
+   getElem!: () => HTMLElement;
 
    protected abstract instantiate(): JSX.Element;
 
