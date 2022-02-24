@@ -30,7 +30,7 @@ const HEX_UNITS: { [key: number]: string } = {
    15: "F"
 };
 
-const hexToBinaryArr = (num: string): Array<number> => {
+const hexToArr = (num: string): Array<number> => {
    if (num === "0") return [0];
 
    const dec = hexToDec(num);
@@ -190,7 +190,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
-         const bits = hexToBinaryArr(savedValue);
+         const bits = hexToArr(savedValue);
          setUnlockedApplications(bits);
       }
    },
@@ -232,10 +232,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
                result += i;
             }
          }
-         return result;
+         return decToHex(result);
       },
       loadEvent: (savedValue: string) => {
-         const jobIndexes = savedValue.split("").map(Number);
+         const jobIndexes = hexToArr(savedValue)
 
          let i = -1;
          let previousTier = 1;
@@ -366,7 +366,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(unlockedAchievementTotal);
       },
       loadEvent: (savedValue: string) => {
-         const bits = hexToBinaryArr(savedValue);
+         const bits = hexToArr(savedValue);
          bits.forEach((bit, i) => {
             const achievement = ACHIEVEMENTS[i];
             if (bit === 1) achievement.isUnlocked = true;
@@ -388,7 +388,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          }, 0));
       },
       loadEvent: (savedValue: string) => {
-         const bits = hexToBinaryArr(savedValue);
+         const bits = hexToArr(savedValue);
          LOREM_PACKS.forEach((loremPack, i) => {
             if (bits[i] === 1) loremPack.isBought = true;
          });
@@ -420,7 +420,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
-         const bits = hexToBinaryArr(savedValue);
+         const bits = hexToArr(savedValue);
          for (let i = 0; i < UPGRADES.length; i++) {
             const upgrade = UPGRADES[i];
             const bit = i <= bits.length ? bits[i] : 0;
@@ -514,7 +514,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(result);
       },
       loadEvent: (savedValue: string) => {
-         const bits = hexToBinaryArr(savedValue);
+         const bits = hexToArr(savedValue);
          for (let i = 0; i < bits.length; i++) {
             BLACK_MARKET_SHOPS[i].isUnlocked = bits[i] === 1;
          }
@@ -533,7 +533,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(result);
       },
       loadEvent: (savedValue: string) => {
-         const bits = hexToBinaryArr(savedValue);
+         const bits = hexToArr(savedValue);
          for (let i = 0; i < bits.length; i++) {
             POPUP_DATA[i].isUnlocked = bits[i] === 1;
          }

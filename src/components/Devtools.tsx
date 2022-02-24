@@ -60,7 +60,8 @@ const Devtools = () => {
    }
 
    const addLorem = (): void => {
-      const input = packetInputRef.current;
+      const input = loremInputRef.current;
+      console.log(input);
       if (input !== null) {
          const amount = Number(input.value);
          
@@ -70,7 +71,7 @@ const Devtools = () => {
       }
    }
    const setLorem = (): void => {
-      const input = packetInputRef.current;
+      const input = loremInputRef.current;
       if (input !== null) {
          const amount = Number(input.value);
 

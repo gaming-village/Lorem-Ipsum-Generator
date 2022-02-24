@@ -3,6 +3,7 @@ import "../css/computer.css";
 import "../css/programs.css";
 import FileSystem from "./FileSystem";
 import LoremProductionSystem from "./LoremProductionSystem";
+import PopupContainer from "./PopupContainer";
 import TaskBar from "./Taskbar";
 
 const Computer = () => {
@@ -11,6 +12,8 @@ const Computer = () => {
          <LoremProductionSystem />
 
          <FileSystem />
+
+         <PopupContainer />
 
          <TaskBar />
       </div>
