@@ -45,8 +45,6 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
       }
    });
    
-   console.log(job);
-   console.log(Game.userInfo.job);
    const currentJobRequirements = JOB_TIER_DATA[job.tier - 1].requirements;
    const nextJobRequirements = JOB_TIER_DATA[job.tier].requirements;
    const canPromote = totalLoremTyped >= nextJobRequirements;

@@ -15,7 +15,7 @@ interface ButtonProps {
 /** A standardized button. Should only be used for non-custom buttons */
 const Button = (props: ButtonProps) => {
    const ref = useRef<HTMLButtonElement>(null);
-   let tooltip: HTMLElement | null = null;
+   const tooltip = useRef<HTMLElement | null>(null);
 
    const hoverTooltip = (): HTMLElement => {
       const buttonBounds = ref.current!.getBoundingClientRect();
@@ -24,20 +24,20 @@ const Button = (props: ButtonProps) => {
          top: buttonBounds.top + buttonBounds.height / 2 + "px"
       }
 
-      tooltip = createTooltip(pos, props.tooltipContent!());
-      return tooltip;
+      tooltip.current = createTooltip(pos, props.tooltipContent!());
+      return tooltip.current;
    }
 
    const closeTooltip = () => {
-      if (tooltip !== null) {
-         removeTooltip(tooltip);
-         tooltip = null;
+      if (tooltip.current !== null) {
+         removeTooltip(tooltip.current);
+         tooltip.current = null;
       }
    }
 
    useEffect(() => {
       return () => {
-         if (tooltip !== null) removeTooltip(tooltip);
+         if (tooltip.current !== null) removeTooltip(tooltip.current);
       }
    }, [tooltip]);
 
