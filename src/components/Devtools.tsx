@@ -61,7 +61,6 @@ const Devtools = () => {
 
    const addLorem = (): void => {
       const input = loremInputRef.current;
-      console.log(input);
       if (input !== null) {
          const amount = Number(input.value);
          

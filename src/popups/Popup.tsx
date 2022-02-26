@@ -30,7 +30,7 @@ let potentialPopups = new Array<PopupInfo>();
 const fillPotentialPopups = (): void => {
    const newPotentialPopups = new Array<PopupInfo>();
    for (const popup of POPUP_DATA) {
-      if (popup.isUnlocked && typeof popup.className !== "undefined") {
+      if (popup.isUnlocked && popup.className !== "") {
          newPotentialPopups.push(popup);
       }
    }

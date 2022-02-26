@@ -240,7 +240,8 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(result);
       },
       loadEvent: (savedValue: string) => {
-         const jobIndexes = hexToArr(savedValue)
+         const dec = hexToDec(savedValue);
+         const jobIndexes = dec.split("").map(Number);
 
          let i = -1;
          let previousTier = 1;
