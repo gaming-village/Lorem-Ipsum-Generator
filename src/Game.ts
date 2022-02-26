@@ -32,6 +32,7 @@ interface GameType {
    applications: { [key: string]: Application };
    programs: { [key: string]: Program };
    tick: () => void;
+   updateLorem: () => void;
    packets: number;
    packetExchangeRate: number;
    loadLoremAchievements: () => void;
@@ -39,7 +40,7 @@ interface GameType {
    updateMotivation: () => void;
    timeAtLastSave: number;
    calculateIdleProfits: () => void;
-   updateLorem: (loremDiff: number) => void;
+   displayLorem: (loremDiff: number) => void;
    isInFocus: boolean;
    maskClickEvent: (() => void) | undefined;
    showMask: () => void;
@@ -71,6 +72,16 @@ const Game: GameType = {
 
       for (const func of this.renderListeners) func();
 
+      if (window.location.pathname === "/") {  
+         this.updateLorem();
+      }
+
+      const SECONDS_BETWEEN_SAVES: number = 10;
+      if (this.ticks % (this.tps * SECONDS_BETWEEN_SAVES) === 0) {
+         updateSave();
+      }
+   },
+   updateLorem: function(): void {
       const workerProduction = calculateWorkerProduction();
       if (workerProduction > 0 && this.ticks % this.tps === 0) {
          this.lorem += workerProduction;
@@ -95,17 +106,12 @@ const Game: GameType = {
             }
          }
 
-         this.updateLorem(loremDiff);
+         this.displayLorem(loremDiff);
 
          const loremCounter = this.applications.loremCounter as LoremCounter;
          if (typeof loremCounter !== "undefined" && loremCounter.createTextEffect !== null) {
             loremCounter.createTextEffect();
          }
-      }
-
-      const SECONDS_BETWEEN_SAVES: number = 10;
-      if (this.ticks % (this.tps * SECONDS_BETWEEN_SAVES) === 0) {
-         updateSave();
       }
    },
    packets: 0,
@@ -144,7 +150,7 @@ const Game: GameType = {
          this.lorem += idleProduction;
       }
    },
-   updateLorem: function(loremDiff: number): void {
+   displayLorem: function(loremDiff: number): void {
       const loremCounter = this.applications.loremCounter as LoremCounter;
       if (typeof loremCounter !== "undefined" && loremCounter.updateLoremCount !== null) {
          loremCounter.updateLoremCount(this.lorem, loremDiff);

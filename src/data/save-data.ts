@@ -34,13 +34,18 @@ const hexToArr = (num: string): Array<number> => {
    if (num === "0") return [0];
 
    const dec = hexToDec(num);
-
+   
    let numTrailingZeros = 0;
    while (dec[numTrailingZeros] === "0") {
       numTrailingZeros++;
    }
+   
+   const trailingZeros = new Array<number>(numTrailingZeros);
+   trailingZeros.fill(0);
 
-   return ("0".repeat(numTrailingZeros) + Number(dec)).split("").map(Number);
+   const binary = Number(dec).toString(2).split("").map(Number).reverse();
+
+   return trailingZeros.concat(binary);
 }
 
 const decToHex = (rawNum: number | string): string => {

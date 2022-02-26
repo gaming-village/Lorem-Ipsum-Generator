@@ -15,9 +15,9 @@ const App = () => {
    loadSave(saveData);
    
    useEffect(() => {
-      // Set up the tick shenanigans
+      // Start ticks
       setInterval(() => Game.tick(), 1000 / Game.tps);
-
+      
       document.addEventListener("keydown", event => {
          const key = event.key;
 
