@@ -31,3 +31,21 @@
    color: #666;
    font-style: italic;
 }
+
+#lorem-container.blocked {
+   border: 2px solid red;
+}
+#lorem-container.blocked span {
+   color: #666 !important;
+}
+#lorem-container.blocked::after {
+   content: "BLOCKED";
+   color: #ff0000;
+   font-weight: 600;
+   background-color: #000;
+   padding: 0.1rem 0.5rem;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}

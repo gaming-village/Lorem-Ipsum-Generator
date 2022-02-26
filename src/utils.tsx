@@ -84,9 +84,20 @@ export function elemExists(id: string): boolean {
    return false;
 }
 
-export function roundNum(num: number, dpp: number = 2): number {
+export function roundNum(num: number, dpp: number = 2, showDecimalPlaces: boolean = false): string {
    const power = Math.pow(10, dpp)
-   return Math.round((num + Number.EPSILON) * power) / power;
+   const roundedNum = Math.round((num + Number.EPSILON) * power) / power;
+
+   if (showDecimalPlaces) {
+      if (!Number.isInteger(roundedNum)) {
+         const numDecimalPlaces = dpp - roundedNum.toString().split(".")[1].length;
+         
+         return roundedNum + "0".repeat(numDecimalPlaces);
+      } else {
+         return roundedNum + "." + "0".repeat(dpp);
+      }
+   }
+   return roundedNum.toString();
 }
 
 export function hashCode(str: string): number {

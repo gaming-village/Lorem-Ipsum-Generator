@@ -21,6 +21,7 @@ interface UserInfo {
 }
 interface GameType {
    version: string;
+   currentView: string;
    ticks: number;
    readonly tps: number;
    lorem: number;
@@ -31,8 +32,8 @@ interface GameType {
    settings: SettingsType;
    applications: { [key: string]: Application };
    programs: { [key: string]: Program };
-   tick: () => void;
-   updateLorem: () => void;
+   readonly tick: () => void;
+   readonly updateLorem: () => void;
    packets: number;
    packetExchangeRate: number;
    loadLoremAchievements: () => void;
@@ -57,6 +58,7 @@ interface GameType {
 
 const Game: GameType = {
    version: "0.1",
+   currentView: "computer",
    ticks: 0,
    tps: 20,
    lorem: 0,

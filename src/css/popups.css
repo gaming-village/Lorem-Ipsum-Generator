@@ -28,3 +28,11 @@
    margin: 5px 0 0 5px;
    float: left;
 }
+
+/* Lurem Impsir */
+.popup.lurem-impsir img.flushed-face {
+   --size: 100px;
+   width: calc(var(--size) * 257/196);
+   height: var(--size);
+   float: right;
+}

@@ -1,10 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
+import LoremCounter from '../classes/applications/LoremCounter';
 
 import LOREM_PACKS, { SentenceStructure, StructurePart, Word } from '../data/lorem-pack-data';
 import Game from '../Game';
-import { createRandomPopup } from '../popups/Popup';
+import LuremImpsir from '../popups/LuremImpsir';
+import { createRandomPopup, getPopups } from '../popups/Popup';
 import { createTooltip, removeTooltip } from '../tooltips';
 import { randInt, randItem } from '../utils';
+import { hasUpgrade } from './CorporateOverview';
+
+const calculateWordValue = (baseValue: number): number => {
+   let value = baseValue;
+   
+   if (hasUpgrade("Typewriter")) value *= 2;
+
+   return value;
+}
 
 const wordEndingChars = [" ", "."];
 
@@ -219,6 +230,15 @@ const LoremSentence = ({ sentence, meaning, type }: LoremSentenceProps) => {
    );
 }
 
+const canType = (): boolean => {
+   for (const popup of getPopups()) {
+      if (popup instanceof LuremImpsir) {
+         return false;
+      }
+   }
+   return true;
+}
+
 let typesTilNextPopup = 100;
 
 let currentSentence: string | null = null;
@@ -235,6 +255,9 @@ const LoremProductionSystem = () => {
 
    useEffect(() => {
       type = (): void => {
+         if (!canType()) return;
+
+         // Open a popup
          if (typesTilNextPopup-- <= 0) {
             const POPUP_CHANCE = 0.1;
             if (Math.random() < POPUP_CHANCE) {
@@ -244,7 +267,13 @@ const LoremProductionSystem = () => {
             }
          }
 
+         // Create the falling text effect
+         const loremCounter = Game.applications.loremCounter as LoremCounter;
+         if (loremCounter.createTextEffect !== null) loremCounter.createTextEffect();
+
+
          if (currentSentence === null) {
+            // Generate a new sentence
             if (upcomingSentence === null) {
                const [sentence, meaning] = getRandomSentence();
                upcomingSentence = sentence;
@@ -277,7 +306,7 @@ const LoremProductionSystem = () => {
             );
          }
 
-         const sentencePart = currentSentence.substring(0, currentIndex);
+         const sentencePart = currentSentence.substring(0, currentIndex + 1);
          bufferedContent![bufferedContent!.length - 1] = (
             <LoremSentence key={bufferedContent!.length} sentence={sentencePart} meaning={currentSentenceMeaning || "none"} type="regular" />
          );
@@ -287,7 +316,8 @@ const LoremProductionSystem = () => {
          if (wordEndingChars.includes(currentSentence[currentIndex + 1])) {
             const word = findWord(currentSentence, currentIndex);
 
-            Game.lorem += word.value;
+            const wordValue = calculateWordValue(word.value);
+            Game.lorem += wordValue;
          }
 
          if (currentIndex >= currentSentence.length) {
@@ -304,7 +334,7 @@ const LoremProductionSystem = () => {
       shownContent = bufferedContent.slice();
 
       // Create a preview of the remaining characters in the current sentence
-      const remainingSentence = currentSentence.substring(currentIndex, currentSentence.length);
+      const remainingSentence = currentSentence.substring(currentIndex + 1, currentSentence.length);
       if (remainingSentence.length > 0) {
          shownContent.push(
             <LoremSentence key={shownContent.length + 1} sentence={remainingSentence} meaning={currentSentenceMeaning!} type="upcoming" />

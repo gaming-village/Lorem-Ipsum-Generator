@@ -7,7 +7,6 @@ import Mail from '../components/Mail';
 import Navbar, { setupNavBar, switchView } from '../components/Navbar';
 import WelcomeScreen, { previewType, showWelcomeScreen } from '../components/WelcomeScreen';
 import Game from '../Game';
-import LoremCounter from '../classes/applications/LoremCounter';
 
 import { setupMail } from '../mail';
 import { getCurrentSave } from '../save';
@@ -56,15 +55,13 @@ const onKeyDown = (): void => {
    }
 
    // When any letter key or the space bar is pressed
-   if (ALL_LOREM_CHARS.includes(key) && !keysDown.includes(key)) {
+   if (ALL_LOREM_CHARS.includes(key) && !keysDown.includes(key) && Game.currentView === "computer") {
       if (previewType !== null) {
          previewType();
          return;
       }
       keysDown.push(key)
       type();
-
-      if (typeof Game.applications.loremCounter !== "undefined") (Game.applications.loremCounter as LoremCounter).createTextEffect!();
    }
 }
 

@@ -21,16 +21,21 @@ const ErrorPopup = ( { startPos, closeFunc }: ErrorPopupProps) => {
    };
 
    return <WindowsProgram closeFunc={() => closeFunc()} style={style} title={ERROR_TITLES[Math.floor(Math.random() * ERROR_TITLES.length)]} uiButtons={["close"]} titleIconSrc={WarningIcon}>
-      <p>Incorrect!</p>
+      <p style={{ fontWeight: 600, color: "#ff0000" }}>Incorrect!</p>
    </WindowsProgram>;
 }
 
 const createErrorPopups = async (elem: HTMLElement): Promise<void> => {
    const startPos = new Point(elem.offsetLeft + elem.offsetWidth/2, elem.offsetTop + elem.offsetHeight/2);
 
+   await wait(100);
+
    const errorAmount = randInt(4, 8);
    for (let i = 0; i < errorAmount; i++) {
       await wait(randInt(20, 50));
+
+      // Play the popup entrance sound when the elem appears
+      new CustomAudio("ding.wav");
 
       const container = document.createElement("div");
       document.getElementById("computer")?.appendChild(container);

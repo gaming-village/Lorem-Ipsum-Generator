@@ -8,6 +8,10 @@ import { CustomAudio, getElem, Point, randFloat } from "../utils";
 let popupKey = 0;
 const popups = new Array<Popup>();
 
+export function getPopups(): Array<Popup> {
+   return popups;
+}
+
 const updateVisiblePopups = (): void => {
    const container = document.getElementById("popup-container");
    ReactDOM.render(<>
@@ -31,6 +35,18 @@ const fillPotentialPopups = (): void => {
    const newPotentialPopups = new Array<PopupInfo>();
    for (const popup of POPUP_DATA) {
       if (popup.isUnlocked && popup.className !== "") {
+         // Make sure the popup isn't already visible if it's a single popup
+         if (popup.elem.isSingleElem) {
+            let hasFound = true;
+            for (const currentPopup of popups) {
+               if (currentPopup.name === popup.name)  {
+                  hasFound = true;
+                  break;
+               }
+            }
+            if (hasFound) continue;
+         }
+
          newPotentialPopups.push(popup);
       }
    }
@@ -52,6 +68,14 @@ export function createRandomPopup(): void {
 
    createPopup(popup);
 }
+
+setTimeout(() => {
+   for (const popup of POPUP_DATA) {
+      if (popup.className === "Rain") {
+         createPopup(popup);
+      }
+   }
+}, 100);
 
 interface PopupElemInfo {
    info: PopupInfo;
@@ -102,10 +126,7 @@ const PopupElem = ({ info, application, children }: PopupElemInfo) => {
          newPos.y = maxTop;
       }
 
-      setPos(new Point(
-         maxLeft,
-         maxTop
-      ));
+      setPos(newPos);
    // eslint-disable-next-line
    }, []);
 
@@ -117,13 +138,13 @@ const PopupElem = ({ info, application, children }: PopupElemInfo) => {
    }
 
    const style: React.CSSProperties = {
-      width: info.elemDimensions?.width,
-      height: info.elemDimensions?.height,
+      width: info.elem.dimensions?.width,
+      height: info.elem.dimensions?.height,
       left: pos.x + "%",
       top: pos.y + "%"
    };
    
-   return <WindowsProgram ref={elemRef} style={style} className={`popup ${info.name}`} title={info.name} titleIconSrc={iconSrc}>
+   return <WindowsProgram ref={elemRef} style={style} className={`popup ${info.name}`} title={info.elem.title} titleIconSrc={iconSrc}>
       {children}
    </WindowsProgram>;
 }
@@ -131,9 +152,11 @@ const PopupElem = ({ info, application, children }: PopupElemInfo) => {
 abstract class Popup {
    private info: PopupInfo;
    elem!: JSX.Element;
+   name: string;
 
    constructor(info: PopupInfo) {
       this.info = info;
+      this.name = info.name;
 
       popups.push(this);
 

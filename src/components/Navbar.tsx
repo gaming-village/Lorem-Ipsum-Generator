@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "./Button";
 import "../css/navbar.css";
 import { getElem } from "../utils";
+import Game from "../Game";
 
 export let switchView!: (view: number | string) => void;
 
@@ -54,6 +55,8 @@ const NavBar = () => {
    const [views, setViews] = useState(defaultViews.slice());
 
    const updateViewsArr = (elemID: string) => {
+      Game.currentView = elemID;
+
       const newViewArr = views.slice();
       for (const currentView of newViewArr) {
          currentView.isSelected = currentView.elemID === elemID;

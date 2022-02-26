@@ -5,6 +5,7 @@
    display: inline-block;
    transform: translate(-50%);
    z-index: 1;
+   pointer-events: none;
 }
 .notification {
    font: normal 1rem "MS Sans Serif";
@@ -22,6 +23,7 @@
    transform: translateX(-50%);
    white-space: nowrap;
    box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.4);
+   pointer-events: all;
 }
 .notification .top {
    height: 2rem;

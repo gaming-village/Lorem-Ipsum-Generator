@@ -10,10 +10,17 @@ export interface PopupInfo {
       top: number;
       left: number;
    },
+   /** Affects properties of instances of the popup */
+   elem: {
    /** The actual popup's dimensions (optional) */
-   elemDimensions?: {
-      width?: string;
-      height?: string;
+      dimensions?: {
+         width?: string;
+         height?: string;
+      }
+      /** The popup's titlebar text */
+      title: string;
+      /** If true, there can only be one of the popup visible at a time */
+      isSingleElem: boolean;
    }
    isUnlocked?: boolean;
    readonly children: Array<string>;
@@ -29,8 +36,12 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          top: 0,
          left: 0
       },
-      elemDimensions: {
-         width: "20rem"
+      elem: {
+         dimensions: {
+            width: "20rem"
+         },
+         title: "Macrosoft Antibus",
+         isSingleElem: false
       },
       children: []
    },
@@ -45,8 +56,12 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          top: 7,
          left: 10
       },
-      elemDimensions: {
-         width: "15rem"
+      elem: {
+         dimensions: {
+            width: "15rem"
+         },
+         title: "Error",
+         isSingleElem: false
       },
       children: ["microsoft-antivirus"]
    },
@@ -56,10 +71,14 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       flavourText: "Designed just in case users don't know their browser has occurred.",
       cost: 5,
       iconSrc: "",
-      className: "",
+      className: "Rain",
       displayPos: {
          top: -5.5,
          left: -10
+      },
+      elem: {
+         title: "Rain",
+         isSingleElem: true
       },
       children: ["microsoft-antivirus"]
    },
@@ -74,6 +93,10 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          top: -18,
          left: -4
       },
+      elem: {
+         title: "Chunky",
+         isSingleElem: true
+      },
       children: ["microsoft-antivirus"]
    },
    {
@@ -86,6 +109,10 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       displayPos: {
          top: -12,
          left: 7.5
+      },
+      elem: {
+         title: "Clippy",
+         isSingleElem: true
       },
       children: ["microsoft-antivirus"]
    },
@@ -100,8 +127,12 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          top: 10,
          left: -7
       },
-      elemDimensions: {
-         width: "20rem"
+      elem: {
+         dimensions: {
+            width: "20rem"
+         },
+         title: "2018 Annual Survey",
+         isSingleElem: false
       },
       children: ["microsoft-antivirus"]
    },
@@ -116,6 +147,10 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          top: 17,
          left: 4
       },
+      elem: {
+         title: "Free an-Droid",
+         isSingleElem: false
+      },
       children: ["browser-error"]
    },
    {
@@ -129,6 +164,10 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          top: 9,
          left: -16
       },
+      elem: {
+         title: "Adblock blocker",
+         isSingleElem: false
+      },
       children: ["annual-survey"]
    },
    {
@@ -137,10 +176,17 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       description: "Stops production of lorem ipsum until closed.",
       cost: 25,
       iconSrc: "",
-      className: "",
+      className: "LuremImpsir",
       displayPos: {
          top: -1.5,
          left: -17.5
+      },
+      elem: {
+         dimensions: {
+            width: "20rem"
+         },
+         title: "Lurem Ipmsir",
+         isSingleElem: false
       },
       children: ["rain"]
    },
@@ -155,6 +201,10 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          top: -27,
          left: -8
       },
+      elem: {
+         title: "Chunky virus",
+         isSingleElem: false
+      },
       children: ["chunky"]
    },
    {
@@ -166,6 +216,10 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       displayPos: {
          top: -18,
          left: -13
+      },
+      elem: {
+         title: "1,0000,000nd Visited!",
+         isSingleElem: false
       },
       children: ["rain"]
    },
@@ -180,6 +234,10 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
             top: -29,
             left: -0.5
       },
+      elem: {
+         title: "Banana Overload",
+         isSingleElem: false
+      },
       children: ["chunky"]
    },
    {
@@ -192,6 +250,10 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       displayPos: {
          top: -12,
          left: -18.5
+      },
+      elem: {
+         title: "Free R.A.M Download",
+         isSingleElem: false
       },
       children: ["rain"]
    },
@@ -206,6 +268,10 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          top: 23,
          left: -4.5
       },
+      elem: {
+         title: "Amason.com",
+         isSingleElem: false
+      },
       children: ["annual-survey"]
    },
    {
@@ -219,6 +285,10 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
             top: 20,
             left: 15
       },
+      elem: {
+         title: "The Expandinator",
+         isSingleElem: false
+      },
       children: ["browser-error"]
    },
    {
@@ -231,6 +301,10 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       displayPos: {
          top: 20,
          left: -11.5
+      },
+      elem: {
+         title: "monkecodecamp.gov.org.edu.au",
+         isSingleElem: false
       },
       children: ["annual-survey"]
    }
