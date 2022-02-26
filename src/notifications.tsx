@@ -17,8 +17,9 @@ export interface NotificationInfo {
 interface NotificationProps {
    info: NotificationInfo;
    closeFunc: (info: NotificationInfo) => void;
+   isClosing: boolean;
 }
-const Notification = ({ info, closeFunc }: NotificationProps) => {
+const Notification = ({ info, closeFunc, isClosing }: NotificationProps) => {
    let iconSrc;
    try {
       iconSrc = require(`./images/icons/${info.iconSrc}`).default;
@@ -33,7 +34,11 @@ const Notification = ({ info, closeFunc }: NotificationProps) => {
       info.onClick();
    }
 
-   return <div className={`notification${info.isClickable ? " clickable" : ""}`}>
+   let className = "notification";
+   if (info.isClickable) className += " clickable";
+   if (isClosing) className += " closing";
+
+   return <div className={className}>
       <>
          <div className="top">
             <img src={iconSrc} alt="" />
@@ -44,12 +49,12 @@ const Notification = ({ info, closeFunc }: NotificationProps) => {
          {info.caption ?
          <>
             <div className="seperator"></div>
-            <p className="caption" onClick={clickEvent}>{info.caption}</p>
+            <p className="caption" onClick={!isClosing ? clickEvent : undefined}>{info.caption}</p>
          </>
          : ""}
 
          {info.hasCloseButton ?
-         <UIButton onClick={() => closeFunc(info)} type="close" />
+         <UIButton onClick={!isClosing ? () => closeFunc(info) : undefined} type="close" />
          : ""}
       </>
    </div>;
@@ -60,11 +65,12 @@ export let createNotification: (info: NotificationInfo) => void;
 let notificationBuffer = new Array<NotificationInfo>();
 export const NotificationContainer = () => {
    const [notifications, setNotifications] = useState<Array<NotificationInfo>>(new Array<NotificationInfo>());
+   const [closingNotification, setClosingNotification] = useState<NotificationInfo | null>(null);
 
    useEffect(() => {
       createNotification = (info: NotificationInfo): void => {
          // Play chimes sound
-         new CustomAudio("notification.mp3");
+         new CustomAudio("notification-receive.mp3");
 
          notificationBuffer.push(info);
          setNotifications(notificationBuffer.slice());
@@ -72,12 +78,18 @@ export const NotificationContainer = () => {
    }, [notifications]);
 
    const closeFunc = (info: NotificationInfo): void => {
-      for (let i = 0; i < notificationBuffer.length; i++) {
-         if (notificationBuffer[i] === info) {
-            notificationBuffer.splice(i, 1);
-         }
-      }
-      setNotifications(notificationBuffer.slice());
+      // Play swoosh sound
+      new CustomAudio("notification-close.mp3");
+
+      setClosingNotification(info);
+      
+      const CLOSE_ANIMATION_DURATION = 400;
+      setTimeout(() => {
+         const idx = notificationBuffer.indexOf(info);
+         notificationBuffer.splice(idx, 1);
+         
+         setNotifications(notificationBuffer.slice());
+      }, CLOSE_ANIMATION_DURATION);
    }
 
    const closeAll = (): void => {
@@ -88,7 +100,7 @@ export const NotificationContainer = () => {
    const MAX_NOTIFICATIONS = 4;
    return <div id="notification-container">
       {notifications.map((notification, i) => {
-         return <Notification key={i} info={notification} closeFunc={closeFunc} />;
+         return <Notification key={i} info={notification} closeFunc={closeFunc} isClosing={notification === closingNotification} />;
       })}
       {notifications.length > MAX_NOTIFICATIONS ? <Button onClick={closeAll} isCentered={true}>Close All</Button> : ""}
    </div>;

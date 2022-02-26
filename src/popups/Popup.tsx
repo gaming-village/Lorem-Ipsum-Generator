@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import WindowsProgram from "../components/WindowsProgram";
 import POPUP_DATA, { PopupInfo } from "../data/popup-data";
 import QuestionmarkIcon from '../images/icons/questionmark.png';
-import { getElem, randFloat } from "../utils";
+import { CustomAudio, getElem, Point, randFloat } from "../utils";
 
 let popupKey = 0;
 const popups = new Array<Popup>();
@@ -21,7 +21,7 @@ const createPopup = (popupInfo: PopupInfo): void => {
 }
 
 setTimeout(() => {
-   createPopup(POPUP_DATA[5]);
+   createPopup(POPUP_DATA[1]);
 }, 100);
 
 const removePopup = (popup: Popup): void => {
@@ -63,13 +63,16 @@ interface PopupElemInfo {
    children: JSX.Element;
 }
 const PopupElem = ({ info, application, children }: PopupElemInfo) => {
-   const elemRef = useRef(null);
-
    /** % of each side where the popup won't spawn */
    const padding = 5;
 
-   const left = randFloat(padding, 100 - padding);
-   const top = randFloat(padding, 100 - padding);
+   const startPos = new Point(
+      randFloat(padding, 100 - padding),
+      randFloat(padding, 100 - padding)
+   );
+
+   const [pos, setPos] = useState<Point>(startPos);
+   const elemRef = useRef(null);
 
    useEffect(() => {
       application.getElem = (): HTMLElement => {
@@ -87,13 +90,28 @@ const PopupElem = ({ info, application, children }: PopupElemInfo) => {
       const maxLeft = 100 - padding - widthPercent;
       const maxTop = 100 - padding - heightPercent;
 
-      if (left > maxLeft) {
-         elem.style.left = maxLeft + "%";
+      application.move = (): void => {
+         setPos(new Point(
+            randFloat(padding, maxLeft),
+            randFloat(padding, maxTop)
+         ));
       }
-      if (top > maxTop) {  
-         elem.style.top = maxTop + "%";
+
+      const newPos = new Point(pos.x, pos.y);
+
+      if (pos.x > maxLeft) {
+         newPos.x = maxLeft;
       }
-   });
+      if (pos.y > maxTop) {  
+         newPos.y = maxTop;
+      }
+
+      setPos(new Point(
+         maxLeft,
+         maxTop
+      ));
+   // eslint-disable-next-line
+   }, []);
 
    let iconSrc!: string;
    try {
@@ -105,10 +123,11 @@ const PopupElem = ({ info, application, children }: PopupElemInfo) => {
    const style: React.CSSProperties = {
       width: info.elemDimensions?.width,
       height: info.elemDimensions?.height,
-      left: left + "%",
-      top: top + "%"
+      left: pos.x + "%",
+      top: pos.y + "%"
    };
-   return <WindowsProgram ref={elemRef} style={style} className="popup" title={info.name} titleIconSrc={iconSrc}>
+   
+   return <WindowsProgram ref={elemRef} style={style} className={`popup ${info.name}`} title={info.name} titleIconSrc={iconSrc}>
       {children}
    </WindowsProgram>;
 }
@@ -123,6 +142,9 @@ abstract class Popup {
       popups.push(this);
 
       this.createElem();
+
+      // Play ding sound
+      new CustomAudio("ding.wav");
    }
 
    createElem(): void {
@@ -138,15 +160,20 @@ abstract class Popup {
 
    protected abstract instantiate(): JSX.Element;
 
-   close(): void {
+   close(playAudio: boolean = true): void {
       if (typeof this === "undefined") {
          throw new Error("'this' keyword is undefined! You're probably not using an arrow function somewhere");
       }
+
+      // Play close sound
+      if (playAudio) new CustomAudio("popup-close.mp3");
 
       removePopup(this);
 
       updateVisiblePopups();
    }
+
+   move!: () => void;
 }
 
 export default Popup;

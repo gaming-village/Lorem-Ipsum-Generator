@@ -9,9 +9,14 @@ interface FileInfo {
 
 export let createFile: (info: FileInfo) => void;
 
-const fileBuffer = new Array<FileInfo>();
+let fileBuffer = new Array<FileInfo>();
 const FileSystem = () => {
-   const [files, setFiles] = useState<Array<FileInfo>>(new Array<FileInfo>());
+   const [files, setFiles] = useState<Array<FileInfo>>(fileBuffer);
+
+   const removeAllFiles = (): void => {
+      fileBuffer = new Array<FileInfo>();
+      setFiles(fileBuffer);
+   }
 
    useEffect(() => {
       createFile = (info: FileInfo): void => {
@@ -19,7 +24,11 @@ const FileSystem = () => {
          const newArr = fileBuffer.slice();
          setFiles(newArr);
       };
-   });
+
+      return () => {
+         removeAllFiles();
+      }
+   }, []);
 
    return <div id="file-system">
       {files.map((fileInfo, i) => {

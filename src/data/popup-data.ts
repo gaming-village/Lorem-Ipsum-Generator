@@ -40,10 +40,13 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       flavourText: "Mostly just made to annoy you.",
       cost: 2.5,
       iconSrc: "",
-      className: "",
+      className: "BrowserError",
       displayPos: {
          top: 7,
          left: 10
+      },
+      elemDimensions: {
+         width: "15rem"
       },
       children: ["microsoft-antivirus"]
    },

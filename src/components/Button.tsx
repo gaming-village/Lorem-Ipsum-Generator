@@ -39,7 +39,7 @@ const Button = (props: ButtonProps) => {
       return () => {
          if (tooltip !== null) removeTooltip(tooltip);
       }
-   });
+   }, [tooltip]);
 
    const shouldHover = typeof props.tooltipContent !== "undefined";
    return (

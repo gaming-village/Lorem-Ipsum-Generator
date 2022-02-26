@@ -235,11 +235,11 @@ const LoremProductionSystem = () => {
    useEffect(() => {
       type = (): void => {
          if (typesTilNextPopup-- <= 0) {
-            const POPUP_CHANCE = 0.05;
+            const POPUP_CHANCE = 0.1;
             if (Math.random() < POPUP_CHANCE) {
                createRandomPopup();
 
-               typesTilNextPopup = randInt(30, 100);
+               typesTilNextPopup = randInt(20, 100);
             }
          }
 

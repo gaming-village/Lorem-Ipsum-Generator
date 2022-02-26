@@ -6,12 +6,12 @@ import CorporateOverview from '../components/CorporateOverview';
 import Mail from '../components/Mail';
 import Navbar, { setupNavBar, switchView } from '../components/Navbar';
 import WelcomeScreen, { previewType, showWelcomeScreen } from '../components/WelcomeScreen';
-// import { setupAudio } from '../utils';
 import Game from '../Game';
+import LoremCounter from '../classes/applications/LoremCounter';
+
 import { setupMail } from '../mail';
 import { getCurrentSave } from '../save';
 import { setupApplications } from '../applications';
-import LoremCounter from '../classes/applications/LoremCounter';
 import { setupStartMenu } from '../start-menu';
 import { setupPrograms } from '../programs';
 import { type } from '../components/LoremProductionSystem';
@@ -28,24 +28,90 @@ export function focusProgram(program: HTMLElement): void {
    program.classList.add("in-focus");
 }
 
-const Home = () => {
-   const updateViewSizes = () => {
-      const views: HTMLElement[] = Array.from(document.getElementsByClassName("view") as HTMLCollectionOf<HTMLElement>);
+const keysDown = new Array<string>();
 
-      const topBar = document.getElementById("top-bar");
-      if (topBar === null) return;
-      const height = window.innerHeight - topBar.offsetHeight;
-      for (const view of views) {
-         view.style.height = `${height}px`;
-      }
-   };
+// Create a list of all keys which generate lorem when typed.
+const ALL_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const ALL_LOREM_CHARS = ALL_LETTERS.concat([" ", "."]);
+const onKeyDown = (): void => {
+   const event = window.event as KeyboardEvent;
+   const key = event.key;
 
-   useEffect(() => {
-      updateViewSizes();
-      window.addEventListener("resize", () => {
-         updateViewSizes();
-      });
+   // Close focus when the Escape key is pressed
+   if (key === "Escape" && Game.isInFocus) {
+      Game.maskClickEvent!();
+   }
+
+   // If the input is a number from 1-9 (keycodes 49-57) and the command key isn't held and the view exists
+   const VIEW_NUMS = "123456789".split("");
+   if (VIEW_NUMS.includes(key)) {
+      if (Game.isInFocus) return;
+
+      // On mac if the command key is pressed (switch tab) don't fire
+      if (window.navigator.appVersion.indexOf("Mac") !== -1 && event.metaKey) return;
+      // On windows if the ctrl key is pressed (switch tab) don't fire
+      else if (window.navigator.appVersion.indexOf("Win") !== -1 && event.ctrlKey) return;
       
+      switchView(Number(key) - 1);
+   }
+
+   // When any letter key or the space bar is pressed
+   if (ALL_LOREM_CHARS.includes(key) && !keysDown.includes(key)) {
+      if (previewType !== null) {
+         previewType();
+         return;
+      }
+      keysDown.push(key)
+      type();
+
+      if (typeof Game.applications.loremCounter !== "undefined") (Game.applications.loremCounter as LoremCounter).createTextEffect!();
+   }
+}
+
+const mouseDown = (): void => {
+   const e = window.event!;
+      
+   let shouldHidePrevious = true;
+   for (const target of e.composedPath()) {
+      const elem = target as HTMLElement;
+      if (elem.classList && elem.classList.contains("taskbar-icon")) {
+         shouldHidePrevious = false;
+         break;
+      }
+   }
+   if (shouldHidePrevious) {
+      const previouslySelectedProgram = document.querySelector(".windows-program.in-focus");
+      if (previouslySelectedProgram) previouslySelectedProgram.classList.remove("in-focus");
+   }
+
+   for (const target of e.composedPath()) {
+      const elem = target as HTMLElement;
+      if (typeof elem.classList !== "undefined" && elem.classList.contains("windows-program")) {
+         focusProgram(elem);
+         break;
+      }
+   }
+}
+
+const keyUp = (): void => {
+   const event = window.event as KeyboardEvent;
+   const key = event.key;
+   keysDown.splice(keysDown.indexOf(key), 1);
+}
+
+const updateViewSizes = () => {
+   const views: HTMLElement[] = Array.from(document.getElementsByClassName("view") as HTMLCollectionOf<HTMLElement>);
+
+   const topBar = document.getElementById("top-bar");
+   if (topBar === null) return;
+   const height = window.innerHeight - topBar.offsetHeight;
+   for (const view of views) {
+      view.style.height = `${height}px`;
+   }
+};
+
+const Home = () => {
+   useEffect(() => {
       setupApplications();
       
       const saveData = getCurrentSave();
@@ -64,87 +130,20 @@ const Home = () => {
       Game.calculateIdleProfits();
       
       Game.loadLoremAchievements();
-      
-      // setupAudio();
 
-      // Create a list of all keys which generate lorem when typed.
-      const ALL_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-      const ALL_LOREM_CHARS = ALL_LETTERS.concat([" ", "."]);
-
-      const onKeyDown = (): void => {
-         const event = window.event as KeyboardEvent;
-         const key = event.key;
-
-         // Close focus when the Escape key is pressed
-         if (key === "Escape" && Game.isInFocus) {
-            Game.maskClickEvent!();
-         }
-
-         // If the input is a number from 1-9 (keycodes 49-57) and the command key isn't held and the view exists
-         const VIEW_NUMS = "123456789".split("");
-         if (VIEW_NUMS.includes(key)) {
-            if (Game.isInFocus) return;
-
-            // On mac if the command key is pressed (switch tab) don't fire
-            if (window.navigator.appVersion.indexOf("Mac") !== -1 && event.metaKey) return;
-            // On windows if the ctrl key is pressed (switch tab) don't fire
-            else if (window.navigator.appVersion.indexOf("Win") !== -1 && event.ctrlKey) return;
-            
-            switchView(Number(key) - 1);
-         }
-
-         // When any letter key or the space bar is pressed
-         if (ALL_LOREM_CHARS.includes(key) && !keysDown.includes(key)) {
-            if (previewType !== null) {
-               previewType();
-               return;
-            }
-            keysDown.push(key)
-            type();
-
-            if (typeof Game.applications.loremCounter !== "undefined") (Game.applications.loremCounter as LoremCounter).createTextEffect!();
-         }
-      }
-
-      const keyUp = (): void => {
-         const event = window.event as KeyboardEvent;
-         const key = event.key;
-         keysDown.splice(keysDown.indexOf(key), 1);
-      }
-
-      let keysDown: Array<string> = [];
       document.addEventListener("keydown", onKeyDown);
-
       document.addEventListener("keyup", keyUp);
+      document.addEventListener("mousedown", mouseDown);
 
-      document.addEventListener("mousedown", () => {
-         const e = window.event!;
-      
-         let shouldHidePrevious = true;
-         for (const target of e.composedPath()) {
-            const elem = target as HTMLElement;
-            if (elem.classList && elem.classList.contains("taskbar-icon")) {
-               shouldHidePrevious = false;
-               break;
-            }
-         }
-         if (shouldHidePrevious) {
-            const previouslySelectedProgram = document.querySelector(".windows-program.in-focus");
-            if (previouslySelectedProgram) previouslySelectedProgram.classList.remove("in-focus");
-         }
-      
-         for (const target of e.composedPath()) {
-            const elem = target as HTMLElement;
-            if (typeof elem.classList !== "undefined" && elem.classList.contains("windows-program")) {
-               focusProgram(elem);
-               break;
-            }
-         }
-      });
+      updateViewSizes();
+      window.addEventListener("resize", () => updateViewSizes());
 
       return () => {
          document.removeEventListener("keydown", onKeyDown);
          document.removeEventListener("keyup", keyUp);
+         document.removeEventListener("mousedown", mouseDown);
+
+         window.removeEventListener("resize", updateViewSizes);
       }
    }, []);
 

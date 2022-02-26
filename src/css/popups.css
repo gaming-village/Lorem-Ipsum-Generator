@@ -15,3 +15,16 @@
    font-size: 1.1rem;
    margin: 0 0 0 10px;
 }
+
+
+
+/* ACTUAL POPUPS */
+
+/* Browser Error */
+.popup.browser-error img.bomb {
+   --size: 64px;
+   width: var(--size);
+   height: var(--size);
+   margin: 5px 0 0 5px;
+   float: left;
+}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "../components/Button";
 import WindowsProgram from "../components/WindowsProgram";
-import { Point, randFloat, randInt, wait } from "../utils";
+import { CustomAudio, Point, randFloat, randInt, wait } from "../utils";
 import Popup from "./Popup";
 
 import WarningIcon from "../images/icons/warning.png";
@@ -36,6 +36,9 @@ const createErrorPopups = async (elem: HTMLElement): Promise<void> => {
       document.getElementById("computer")?.appendChild(container);
 
       const close = (): void => {
+         // Play the close sound
+         new CustomAudio("popup-close.mp3");
+
          ReactDOM.unmountComponentAtNode(container);
          container.remove();
 
@@ -113,6 +116,12 @@ class AnnualSurvey extends Popup {
       return <Elem popup={this} />
    }
 
+   close(): void {
+      // Play the chord sound
+      new CustomAudio("chord.wav");
+
+      super.close(false);
+   }
 }
 
 export default AnnualSurvey;
