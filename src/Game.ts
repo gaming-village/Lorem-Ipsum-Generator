@@ -137,7 +137,8 @@ const Game: GameType = {
             title: "Idle profits",
             description: `While you were away your workers generated ${roundNum(idleProduction)} lorem.`,
             isClickable: false,
-            hasCloseButton: true
+            hasCloseButton: true,
+            playSound: false
          });
 
          this.lorem += idleProduction;

@@ -11,6 +11,7 @@ export interface NotificationInfo {
    caption?: string;
    isClickable?: boolean;
    hasCloseButton?: boolean;
+   playSound?: boolean;
    onClick?: () => void;
 }
 
@@ -70,7 +71,7 @@ export const NotificationContainer = () => {
    useEffect(() => {
       createNotification = (info: NotificationInfo): void => {
          // Play chimes sound
-         new CustomAudio("notification-receive.mp3");
+         if (info.playSound) new CustomAudio("notification-receive.mp3");
 
          notificationBuffer.push(info);
          setNotifications(notificationBuffer.slice());

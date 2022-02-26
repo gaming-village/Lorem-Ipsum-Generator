@@ -4,7 +4,6 @@ import BombImg from "../images/miscellaneous/bomb.png";
 import Button from "../components/Button";
 import Game from "../Game";
 import { PopupInfo } from "../data/popup-data";
-import { randInt } from "../utils";
 
 interface ElemProps {
    application: BrowserError;
@@ -42,7 +41,7 @@ class BrowserError extends Popup {
 
          this.move();
          this.createMoveTimer();
-      }, randInt(500, 2000));
+      }, 1000);
    }
 }
 

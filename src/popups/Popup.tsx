@@ -20,10 +20,6 @@ const createPopup = (popupInfo: PopupInfo): void => {
    new popupClass(popupInfo);
 }
 
-setTimeout(() => {
-   createPopup(POPUP_DATA[1]);
-}, 100);
-
 const removePopup = (popup: Popup): void => {
    const idx = popups.indexOf(popup);
    popups.splice(idx, 1);

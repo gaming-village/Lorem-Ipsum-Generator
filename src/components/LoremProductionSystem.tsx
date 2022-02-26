@@ -73,7 +73,7 @@ const sentenceStructureToEnglish = (sentenceStructure: SentenceStructure): [stri
    
    const structureParts: Array<[number, StructurePart]> = Object.entries(sentenceStructure.structure).map(([a, b]) => [Number(a), b]);
    for (const [id, structurePart] of structureParts) {
-      // Add it to the translation dictionary
+      // Find the word definition
       let word!: Word;
       for (const loremPack of LOREM_PACKS) {
          if (Game.wordsTyped >= loremPack.requirements.wordsTyped && typeof loremPack.contents.words !== "undefined") {
@@ -88,6 +88,7 @@ const sentenceStructureToEnglish = (sentenceStructure: SentenceStructure): [stri
             if (hasFound) break;
          }
       }
+      // Add it to the translation dictionary
       translationDict[id] = word.meaning;
 
       // If the word has already been parsed, don't bother
@@ -299,11 +300,11 @@ const LoremProductionSystem = () => {
    });
 
    let shownContent: Array<JSX.Element>;
-   if (bufferedContent !== null) {
+   if (bufferedContent !== null && currentSentence !== null) {
       shownContent = bufferedContent.slice();
 
       // Create a preview of the remaining characters in the current sentence
-      const remainingSentence = currentSentence!.substring(currentIndex, currentSentence!.length);
+      const remainingSentence = currentSentence.substring(currentIndex, currentSentence.length);
       if (remainingSentence.length > 0) {
          shownContent.push(
             <LoremSentence key={shownContent.length + 1} sentence={remainingSentence} meaning={currentSentenceMeaning!} type="upcoming" />
