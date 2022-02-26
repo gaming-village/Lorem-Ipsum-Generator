@@ -18,6 +18,10 @@
       opacity: 0;
    }
 }
+#loremCounter .effect-text.negative {
+   color: red;
+   font-weight: 600;
+}
 
 #achievementTracker .achievement-count {
    margin-bottom: 0;

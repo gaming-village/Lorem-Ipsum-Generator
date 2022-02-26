@@ -74,7 +74,7 @@ const Game: GameType = {
 
       for (const func of this.renderListeners) func();
 
-      if (window.location.pathname === "/") {  
+      if (window.location.pathname === "/" || window.location.pathname === "/Lorem-Ipsum-Generator") {
          this.updateLorem();
       }
 
@@ -112,7 +112,7 @@ const Game: GameType = {
 
          const loremCounter = this.applications.loremCounter as LoremCounter;
          if (typeof loremCounter !== "undefined" && loremCounter.createTextEffect !== null) {
-            loremCounter.createTextEffect();
+            loremCounter.createTextEffect(loremDiff < 0);
          }
       }
    },

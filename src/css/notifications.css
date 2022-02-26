@@ -7,6 +7,9 @@
    z-index: 1;
    pointer-events: none;
 }
+#notification-container * {
+   pointer-events: all;
+}
 .notification {
    font: normal 1rem "MS Sans Serif";
    background-color: #ddd;
@@ -23,7 +26,6 @@
    transform: translateX(-50%);
    white-space: nowrap;
    box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.4);
-   pointer-events: all;
 }
 .notification .top {
    height: 2rem;

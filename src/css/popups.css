@@ -36,3 +36,10 @@
    height: var(--size);
    float: right;
 }
+.lurem-impsir-falling-text {
+   color: #00ff00;
+   position: absolute;
+   transform: translateX(-50%);
+   text-shadow: 2px 2px 0 #000;
+   pointer-events: none;
+}

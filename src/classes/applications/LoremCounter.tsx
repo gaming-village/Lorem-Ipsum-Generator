@@ -3,12 +3,14 @@ import Game from "../../Game";
 import { randInt, randItem, roundNum } from "../../utils";
 import Application, { ApplicationCategory } from "./Application";
 
-const createEffectText = (container: HTMLElement): void => {
+const createEffectText = (container: HTMLElement, isNegative: boolean): void => {
    if (container === null) return;
    
    const text = document.createElement("span");
    container.appendChild(text);
    text.className = "effect-text";
+
+   if (isNegative) text.classList.add("negative");
 
    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.";
    text.innerHTML = randItem(chars.split(""));
@@ -30,8 +32,8 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
       application.updateLoremCount = (newVal: number): void => {
          setLorem(newVal);
       };
-      application.createTextEffect = (): void => {
-         createEffectText(loremCounter.current!);
+      application.createTextEffect = (isNegative = false): void => {
+         createEffectText(loremCounter.current!, isNegative);
       }
 
       return () => {
@@ -46,7 +48,7 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
 
 class LoremCounter extends Application {
    updateLoremCount: ((newVal: number, diff: number) => void) | null = null;
-   createTextEffect: (() => void) | null = null;
+   createTextEffect: ((isNegative?: boolean) => void) | null = null;
 
    constructor() {
       super({

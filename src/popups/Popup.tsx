@@ -81,8 +81,9 @@ interface PopupElemInfo {
    info: PopupInfo;
    application: Popup;
    children: JSX.Element;
+   closeFunc?: () => void;
 }
-const PopupElem = ({ info, application, children }: PopupElemInfo) => {
+const PopupElem = ({ info, application, children, closeFunc }: PopupElemInfo) => {
    /** % of each side where the popup won't spawn */
    const padding = 5;
 
@@ -144,7 +145,7 @@ const PopupElem = ({ info, application, children }: PopupElemInfo) => {
       top: pos.y + "%"
    };
    
-   return <WindowsProgram ref={elemRef} style={style} className={`popup ${info.name}`} title={info.elem.title} titleIconSrc={iconSrc}>
+   return <WindowsProgram ref={elemRef} style={style} className={`popup ${info.name}`} title={info.elem.title} titleIconSrc={iconSrc} uiButtons={typeof closeFunc !== "undefined" ? ["close"] : []} closeFunc={closeFunc}>
       {children}
    </WindowsProgram>;
 }
@@ -167,8 +168,10 @@ abstract class Popup {
    }
 
    createElem(): void {
+      const closeFunc = typeof this.closeButtonFunc !== "undefined" ? () => this.closeButtonFunc!() : undefined;
+
       const elemContent = this.instantiate();
-      this.elem = <PopupElem key={popupKey++} info={this.info} application={this}>
+      this.elem = <PopupElem key={popupKey++} info={this.info} application={this} closeFunc={closeFunc}>
          {elemContent}
       </PopupElem>;
 
@@ -193,6 +196,8 @@ abstract class Popup {
    }
 
    move!: () => void;
+
+   protected closeButtonFunc?(): void;
 }
 
 export default Popup;
