@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "./components/Button";
 import UIButton from "./components/UIButton";
 import "./css/notifications.css";
+import { CustomAudio } from "./utils";
 
 export interface NotificationInfo {
    iconSrc: string;
@@ -62,6 +63,9 @@ export const NotificationContainer = () => {
 
    useEffect(() => {
       createNotification = (info: NotificationInfo): void => {
+         // Play chimes sound
+         new CustomAudio("notification.mp3");
+
          notificationBuffer.push(info);
          setNotifications(notificationBuffer.slice());
       };

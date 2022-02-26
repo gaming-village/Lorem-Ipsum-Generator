@@ -30,41 +30,33 @@ export class Vector {
    }
 }
 
-const audioNames: ReadonlyArray<string> = ["win95-startup"];
-export const audioSources: { [key: typeof audioNames[number]]: CustomAudio } = {};
-export function setupAudio() {
-   for (const name of audioNames) {
-      audioSources[name] = new CustomAudio(name);
-   }
-}
-
 export class CustomAudio {
-   private sound: HTMLAudioElement;
-   private isPlaying: boolean = false;
+   private context!: AudioContext;
 
-   constructor(url: string) {
-      this.sound = document.createElement("audio");
-      this.sound.src = require("./audio/" + url + ".mp3").default;
-      this.sound.setAttribute("preload", "auto");
-      this.sound.setAttribute("controls", "none");
-      document.body.appendChild(this.sound);
-
-      this.sound.addEventListener("ended", () => this.stop());
-   }
-
-   play(): void {
-      if (this.isPlaying) {
-         this.sound.currentTime = 0;
-         return;
+   constructor(name: string) {
+      try {
+         this.context = new AudioContext();
+      } catch {
+         alert("Web Audio API is not supported in your browser!");
       }
 
-      this.sound.play();
-      this.isPlaying = true;
+      const path = require("./audio/" + name).default;
+      const audio = new Audio(path);
+
+      const source = this.context.createMediaElementSource(audio);
+      source.connect(this.context.destination);
+
+      audio.play();
+
+      audio.addEventListener("ended", () => this.remove(source, audio));
+
+      this.context.resume();
    }
 
-   stop(): void {
-      this.sound.currentTime = 0;
-      this.isPlaying = false;
+   private remove(source: MediaElementAudioSourceNode, audio: HTMLAudioElement): void {
+      source.disconnect();
+      audio.remove();
+      this.context.close();
    }
 }
 

@@ -7,30 +7,17 @@ import { getElem, randFloat } from "../utils";
 
 let popupKey = 0;
 const popups = new Array<Popup>();
-const popupElems = new Array<JSX.Element>();
 
 const updateVisiblePopups = (): void => {
    const container = document.getElementById("popup-container");
    ReactDOM.render(<>
       {popups.map(popup => popup.elem)}
-      {popupElems.slice()}
    </>, container);
 }
 
 const createPopup = (popupInfo: PopupInfo): void => {
    const popupClass = require("../popups/" + popupInfo.className).default;
    new popupClass(popupInfo);
-}
-
-export function addPopupElem(elem: JSX.Element): void {
-   popupElems.push(elem);
-   updateVisiblePopups();
-}
-export function getPopupElemKey(): number {
-   return popupKey++;
-}
-export function removePopupElem(elem: JSX.Element): void {
-   popupElems.splice(popupElems.indexOf(elem), 1);
 }
 
 setTimeout(() => {

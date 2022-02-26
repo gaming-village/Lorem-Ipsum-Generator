@@ -2,20 +2,18 @@ import { useState } from "react";
 import Button from "../components/Button";
 import WindowsProgram from "../components/WindowsProgram";
 import { Point, randFloat, randInt, wait } from "../utils";
-import Popup, { addPopupElem, getPopupElemKey, removePopupElem } from "./Popup";
+import Popup from "./Popup";
 
 import WarningIcon from "../images/icons/warning.png";
+import ReactDOM from "react-dom";
+import Game from "../Game";
 
 const ERROR_TITLES = ["ERROR", "warning!!1!"];
 interface ErrorPopupProps {
    startPos: Point;
-   closeFunc: (() => void) | undefined;
+   closeFunc: () => void;
 }
 const ErrorPopup = ( { startPos, closeFunc }: ErrorPopupProps) => {
-   // const close = (): void => {
-   //    console.log("a");
-   // }
-
    const style: React.CSSProperties = {
       top: startPos.y + randFloat(-15, 15) * 10 + "px",
       left: startPos.x + randFloat(-15, 15) * 10 + "px",
@@ -34,16 +32,19 @@ const createErrorPopups = async (elem: HTMLElement): Promise<void> => {
    for (let i = 0; i < errorAmount; i++) {
       await wait(randInt(20, 50));
 
-      let close: (() => void) | undefined;
+      const container = document.createElement("div");
+      document.getElementById("computer")?.appendChild(container);
 
-      const error = <ErrorPopup key={getPopupElemKey()} startPos={startPos} closeFunc={close} />;
+      const close = (): void => {
+         ReactDOM.unmountComponentAtNode(container);
+         container.remove();
 
-      // console.log
-      close = () => {
-         console.log("m");
+         Game.lorem += 1;
       }
 
-      addPopupElem(error);
+      const error = <ErrorPopup startPos={startPos} closeFunc={close} />;
+
+      ReactDOM.render(error, container);
    }
 }
 

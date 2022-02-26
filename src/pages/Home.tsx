@@ -6,7 +6,7 @@ import CorporateOverview from '../components/CorporateOverview';
 import Mail from '../components/Mail';
 import Navbar, { setupNavBar, switchView } from '../components/Navbar';
 import WelcomeScreen, { previewType, showWelcomeScreen } from '../components/WelcomeScreen';
-import { setupAudio } from '../utils';
+// import { setupAudio } from '../utils';
 import Game from '../Game';
 import { setupMail } from '../mail';
 import { getCurrentSave } from '../save';
@@ -65,7 +65,7 @@ const Home = () => {
       
       Game.loadLoremAchievements();
       
-      setupAudio();
+      // setupAudio();
 
       // Create a list of all keys which generate lorem when typed.
       const ALL_LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");

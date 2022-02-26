@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../css/corporate-overview.css";
 import { JOB_DATA, JOB_TIER_DATA, Job, UPGRADES, UpgradeInfo } from "../data/job-data";
 import Game from "../Game";
-import { audioSources, getPrefix, randItem, roundNum } from "../utils";
+import { CustomAudio, getPrefix, randItem, roundNum } from "../utils";
 import Button from "./Button";
 import ProgressBar from "./ProgressBar";
 import TitleBar from "./TitleBar";
@@ -582,8 +582,6 @@ const playPromotionAnimation = (): Promise<void> => {
    animation.id = "promotion-animation";
    document.body.appendChild(animation);
 
-   audioSources["win95-startup"].play();
-
    const ENTRANCE_DURATION = 1400;
    const EXIT_DURATION = 600;
 
@@ -639,6 +637,8 @@ const PromotionScreen = ({ job, promote }: PromotionScreenProps) => {
 
    const promotionAttempt = async (job: Job | null) => {
       if (job !== null) {
+         new CustomAudio("win95-startup.mp3");
+
          await playPromotionAnimation();
 
          promote(job);
