@@ -91,13 +91,12 @@ const Game: GameType = {
 
       if (this.previousLorem !== this.lorem) {
          const loremDiff: number = this.lorem - this.previousLorem;
-         this.previousLorem = this.lorem;
 
          // Add to the total lorem typed
          if (loremDiff > 0) this.totalLoremTyped += loremDiff;
 
          for (const letter of LOREM_LETTERS) {
-            if (this.lorem >= letter.requirement) {
+            if (this.lorem >= letter.requirement && this.previousLorem < letter.requirement) {
                receiveMail(letter.name);
             }
          }
@@ -114,6 +113,8 @@ const Game: GameType = {
          if (typeof loremCounter !== "undefined" && loremCounter.createTextEffect !== null) {
             loremCounter.createTextEffect(loremDiff < 0);
          }
+
+         this.previousLorem = this.lorem;
       }
    },
    packets: 0,
