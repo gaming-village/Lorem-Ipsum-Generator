@@ -117,17 +117,7 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>We have also implemented a Lorem Quota. Those who meet the quota shall be rewarded.</p>
       </>,
       folder: "inbox",
-      isCloseable: false,
-      // reward: {
-      //    name: "Lorem Quota",
-      //    imgSrc: "images/coin-icon.png",
-      //    reward: () => {
-      //       console.log("Unlocked the lorem quota");
-      //       // Game.loremQuota.unlock();
-      //       // updateMiscCookie();
-      //    },
-      //    isClaimed: false
-      // }
+      isCloseable: false
    },
    {
       name: "rumors",

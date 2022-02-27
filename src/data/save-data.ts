@@ -526,8 +526,6 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
-         console.log("bits:", bits);
-         console.log("black market shops:", BLACK_MARKET_SHOPS);
          for (let i = 0; i < bits.length; i++) {
             BLACK_MARKET_SHOPS[i].isUnlocked = bits[i] === 1;
          }

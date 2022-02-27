@@ -313,13 +313,11 @@ const LoremProductionSystem = () => {
          setContent(bufferedContent!.slice());
 
          // If a word has been completed, award lorem based on its value.
-         console.log(currentSentence, currentIndex);
          if (wordEndingChars.includes(currentSentence[currentIndex + 1])) {
-            console.log("detected word completion.");
             const word = findWord(currentSentence, currentIndex);
-            console.log("word:", word);
+            
             const wordValue = calculateWordValue(word.value);
-            console.log("value:", wordValue);
+            
             Game.lorem += wordValue;
          }
 
