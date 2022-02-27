@@ -313,6 +313,7 @@ const LoremProductionSystem = () => {
          setContent(bufferedContent!.slice());
 
          // If a word has been completed, award lorem based on its value.
+         console.log(currentSentence, currentIndex);
          if (wordEndingChars.includes(currentSentence[currentIndex + 1])) {
             const word = findWord(currentSentence, currentIndex);
 

@@ -34,8 +34,6 @@ const saveName: string = "save1";
 
 export function getCurrentSave(): string | null {
    const saveData = getCookie(saveName);
-   console.log("loading save:");
-   console.log(saveData);
    return saveData;
 }
 
