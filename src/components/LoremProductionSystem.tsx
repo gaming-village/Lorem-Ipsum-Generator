@@ -7,7 +7,7 @@ import LuremImpsir from '../popups/LuremImpsir';
 import { createRandomPopup, getPopups } from '../popups/Popup';
 import { createTooltip, removeTooltip } from '../tooltips';
 import { randInt, randItem } from '../utils';
-import { hasUpgrade } from './CorporateOverview';
+import { hasUpgrade } from './corporate-overview/CorporateOverview';
 
 const calculateWordValue = (baseValue: number): number => {
    let value = baseValue;

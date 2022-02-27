@@ -7,7 +7,7 @@ import { LOREM_LETTERS } from "./data/letter-data";
 import ACHIEVEMENTS from "./data/achievements-data";
 import { SettingsType } from "./classes/programs/Settings";
 import { JOB_DATA, Job } from "./data/job-data";
-import { calculateWorkerProduction, hasUpgrade } from "./components/CorporateOverview";
+import { calculateWorkerProduction, hasUpgrade } from "./components/corporate-overview/CorporateOverview";
 import Application from "./classes/applications/Application";
 import Program from "./classes/programs/Program";
 import LoremCounter from "./classes/applications/LoremCounter";

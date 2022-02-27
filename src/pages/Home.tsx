@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { NotificationContainer } from '../notifications';
 import BlackMarket from '../components/BlackMarket';
 import Computer from '../components/Computer';
-import CorporateOverview from '../components/CorporateOverview';
+import CorporateOverview from '../components/corporate-overview/CorporateOverview';
 import Mail from '../components/Mail';
 import Navbar, { setupNavBar, switchView } from '../components/Navbar';
 import WelcomeScreen, { previewType, showWelcomeScreen } from '../components/WelcomeScreen';
