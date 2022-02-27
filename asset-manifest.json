@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/Lorem-Ipsum-Generator/static/css/main.fafa4852.chunk.css",
-    "main.js": "/Lorem-Ipsum-Generator/static/js/main.47024944.chunk.js",
-    "main.js.map": "/Lorem-Ipsum-Generator/static/js/main.47024944.chunk.js.map",
-    "runtime-main.js": "/Lorem-Ipsum-Generator/static/js/runtime-main.d432d38d.js",
-    "runtime-main.js.map": "/Lorem-Ipsum-Generator/static/js/runtime-main.d432d38d.js.map",
-    "static/js/2.ef705311.chunk.js": "/Lorem-Ipsum-Generator/static/js/2.ef705311.chunk.js",
-    "static/js/2.ef705311.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/2.ef705311.chunk.js.map",
-    "static/js/3.a8ece1bb.chunk.js": "/Lorem-Ipsum-Generator/static/js/3.a8ece1bb.chunk.js",
-    "static/js/3.a8ece1bb.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/3.a8ece1bb.chunk.js.map",
+    "main.js": "/Lorem-Ipsum-Generator/static/js/main.42013d6b.chunk.js",
+    "main.js.map": "/Lorem-Ipsum-Generator/static/js/main.42013d6b.chunk.js.map",
+    "runtime-main.js": "/Lorem-Ipsum-Generator/static/js/runtime-main.da61c703.js",
+    "runtime-main.js.map": "/Lorem-Ipsum-Generator/static/js/runtime-main.da61c703.js.map",
+    "static/js/2.f82aa275.chunk.js": "/Lorem-Ipsum-Generator/static/js/2.f82aa275.chunk.js",
+    "static/js/2.f82aa275.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/2.f82aa275.chunk.js.map",
+    "static/js/3.a8980faa.chunk.js": "/Lorem-Ipsum-Generator/static/js/3.a8980faa.chunk.js",
+    "static/js/3.a8980faa.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/3.a8980faa.chunk.js.map",
     "index.html": "/Lorem-Ipsum-Generator/index.html",
     "static/css/main.fafa4852.chunk.css.map": "/Lorem-Ipsum-Generator/static/css/main.fafa4852.chunk.css.map",
-    "static/js/2.ef705311.chunk.js.LICENSE.txt": "/Lorem-Ipsum-Generator/static/js/2.ef705311.chunk.js.LICENSE.txt",
+    "static/js/2.f82aa275.chunk.js.LICENSE.txt": "/Lorem-Ipsum-Generator/static/js/2.f82aa275.chunk.js.LICENSE.txt",
     "static/media/malware.css": "/Lorem-Ipsum-Generator/static/media/binary.36d45f09.gif",
     "static/media/bliss.jpeg": "/Lorem-Ipsum-Generator/static/media/bliss.17ce657a.jpeg",
     "static/media/bomb.png": "/Lorem-Ipsum-Generator/static/media/bomb.83e78f49.png",
@@ -29,9 +29,9 @@
     "static/media/win95-startup.mp3": "/Lorem-Ipsum-Generator/static/media/win95-startup.e5b8c557.mp3"
   },
   "entrypoints": [
-    "static/js/runtime-main.d432d38d.js",
-    "static/js/2.ef705311.chunk.js",
+    "static/js/runtime-main.da61c703.js",
+    "static/js/2.f82aa275.chunk.js",
     "static/css/main.fafa4852.chunk.css",
-    "static/js/main.47024944.chunk.js"
+    "static/js/main.42013d6b.chunk.js"
   ]
 }
