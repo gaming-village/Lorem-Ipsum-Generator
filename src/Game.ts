@@ -74,8 +74,8 @@ const Game: GameType = {
 
       for (const func of this.renderListeners) func();
 
-      console.log(window.location.pathname);
-      if (window.location.pathname === "/" || window.location.pathname === "/Lorem-Ipsum-Generator") {
+      const homePaths = ["/", "/Lorem-Ipsum-Generator", "/Lorem-Ipsum-Generator/"]
+      if (homePaths.includes(window.location.pathname)) {
          this.updateLorem();
       }
 
