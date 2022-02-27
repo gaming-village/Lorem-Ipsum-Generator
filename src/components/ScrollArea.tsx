@@ -2,7 +2,7 @@ import React from "react";
 
 interface ScrollAreaProps {
    scrollType: "vertical" | "horizontal" | "both";
-   children?: JSX.Element;
+   children?: JSX.Element | Array<JSX.Element>;
 }
 
 const ScrollArea = (props: ScrollAreaProps) => {

@@ -12,7 +12,7 @@ const Section = (props: SectionProps) => {
          props.content :
          <span>{props.content}</span>}
       </div>
-   )
+   );
 }
 
 export default Section;

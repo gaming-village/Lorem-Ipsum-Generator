@@ -64,9 +64,9 @@ const backgroundInfo: ReadonlyArray<BackgroundCategory> = [
       ]
    },
    {
-      name: "Mail",
-      elementID: "mail",
-      description: "Change the mail background",
+      name: "Media",
+      elementID: "media",
+      description: "Change your media background",
       backgrounds: [
          {
             content: "straws.png",

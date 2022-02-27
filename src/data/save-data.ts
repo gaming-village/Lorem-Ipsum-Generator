@@ -97,6 +97,32 @@ const decToHex = (rawNum: number | string): string => {
    return "0".repeat(numLeadingZeros) + result;
 }
 
+const decToBin = (dec: number): Array<number> => {
+   // Find the highest corresponding binary power
+   let maxPower: number = 1;
+   for (let i = 0; ; i++) {
+      const newPower = Math.pow(2, i);
+      if (newPower > dec) {
+         break;
+      }
+      maxPower = newPower;
+   }
+   
+   const bits = new Array<number>();
+   let remainder = dec;
+   while (remainder > 0) {
+      const multiple = Math.floor(remainder / maxPower);
+      remainder -= multiple * maxPower;
+      bits.push(multiple);
+      maxPower /= 2;
+   }
+   while (maxPower >= 1) {
+      maxPower /= 2;
+      bits.push(0);
+   }
+   return bits;
+}
+
 const hexToDec = (num: string): string => {
    if (num === "0") return "0";
 
@@ -335,11 +361,13 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          const parts = savedValue.split("").map(Number);
 
          for (let i = 0; i < LETTERS.length; i++) {
-            const letter = LETTERS[0], part = parts[0] || 0;
+            const letter = LETTERS[i], part = parts[i] || 0;
+            if (part === 0) continue;
+            const bits = decToBin(part).reverse();
 
-            letter.isReceived = part % 1 === 0;
-            letter.isOpened = part % 1 === 0;
-            if (typeof letter.reward !== "undefined") letter.reward.isClaimed = part % 4 === 0;
+            letter.isReceived = bits[0] === 1;
+            letter.isOpened = (bits[1] || 0) === 1;
+            if (typeof letter.reward !== "undefined") letter.reward.isClaimed = (bits[2] || 0) === 1;
          }
       }
    },

@@ -1,6 +1,4 @@
-import React from "react";
 import List from "../components/List";
-import Game from "../Game";
 
 export interface LetterReward {
    readonly name: string;
@@ -10,7 +8,6 @@ export interface LetterReward {
 }
 
 export interface LetterInfo {
-   readonly name: string;
    readonly subject: string;
    readonly from: string;
    readonly body: JSX.Element;
@@ -63,7 +60,6 @@ export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
 
 const LETTERS: ReadonlyArray<LetterInfo> = [
    {
-      name: "introduction",
       subject: "Corporate Overview",
       from: "Lorem Corp",
       body: <>
@@ -72,11 +68,10 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>Of course, being a worthless intern, you have no workers.</p>
          <p>May your lorem generation be filled with suffering.</p>
       </>,
-      folder: "inbox",
+      folder: "Inbox",
       isCloseable: false
    },
    {
-      name: "freeIPhone",
       subject: "Steven Job - free An-Droid",
       from: "Apple Company",
       body: <>
@@ -86,11 +81,10 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>Regard of kind,</p>
          <p>an queen Of England</p>
       </>,
-      folder: "junkMail",
+      folder: "Junk Mail",
       isCloseable: false
    },
    {
-      name: "loremTips",
       subject: "Tips with Lorem Corp",
       from: "Lorem Corp",
       body: <>
@@ -104,11 +98,10 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
             </>
          </List>
       </>,
-      folder: "inbox",
+      folder: "Inbox",
       isCloseable: false
    },
    {
-      name: "motivationalLetter",
       subject: "Motivational Letter",
       from: "Lorem Corp",
       body: <>
@@ -116,22 +109,20 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>The Motivational Department of Lorem Corp would like to send a reminder that any suspicious activity will result in your immediate termination.</p>
          <p>We have also implemented a Lorem Quota. Those who meet the quota shall be rewarded.</p>
       </>,
-      folder: "inbox",
+      folder: "Inbox",
       isCloseable: false
    },
    {
-      name: "rumors",
       subject: "Addressing Rumors",
       from: "Lorem Corp",
       body: <>
          <p>Greetings employees.</p>
          <p>It has come to our attention that there are several fallacious claims of 'malware-infected' computers. Disregard them - our system is perfect and flawless.</p>
       </>,
-      folder: "inbox",
+      folder: "Inbox",
       isCloseable: false
    },
    {
-      name: "bomb",
       subject: "urgent Matters",
       from: "police",
       body: <>
@@ -139,76 +130,10 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <img style={{ width: "5rem", marginLeft: "50%", transform: "translateX(-50%)" }} src={require("../images/regular/bomb.jpeg").default} alt="" />
          <p>figure 1.0: bomb</p>
       </>,
-      folder: "junkMail",
+      folder: "Junk Mail",
       isCloseable: true
    },
    {
-      name: "test",
-      subject: "Test",
-      from: "obama",
-      body: <>
-         <p>Greetings from Australia.</p>
-         <p>I am gaming rn</p>
-      </>,
-      folder: "inbox",
-      isCloseable: false
-   },
-   {
-      name: "aaaaa",
-      subject: "aaaa",
-      from: "test2",
-      body: <>
-         <p>test1</p>
-         <p>test2</p>
-         <p>test3 TEST3</p>
-      </>,
-      folder: "inbox",
-      isCloseable: true,
-      reward: {
-         name: "10 Lorem",
-         imgSrc: "icons/scroll.png",
-         rewardOnClaim: () => {
-            Game.lorem = 0;
-         },
-         isClaimed: false
-      }
-   },
-   {
-      name: "long",
-      subject: "looooong boi",
-      from: "tall chad",
-      body: <>
-         <p>HEAD</p>
-         <p>neck</p>
-         <p>neck</p>
-         <p>body</p>
-         <p>body</p>
-         <p>body</p>
-         <p>body</p>
-         <p>feet</p>
-      </>,
-      folder: "junkMail",
-      isCloseable: true
-   },
-   {
-      name: "reeee",
-      subject: "This is a very long subject yes",
-      from: "longlad",
-      body: <>
-         <p>HEAD</p>
-         <p>neck</p>
-         <p>neck</p>
-         <p>body</p>
-         <p>body</p>
-         <p>body</p>
-         <p>body</p>
-         <p>feet</p>
-      </>,
-      folder: "deletedItems",
-      isCloseable: true
-   },
-   {
-      name: "socil",
       subject: "Social security issue !",
       from: "invalid.ASS.card@scamco.company.co",
       body: <>
@@ -217,11 +142,10 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>To avoid this stealing, please give us your money.</p>
          <p>I am apoligized for your inconvenience,,</p>
       </>,
-      folder: "junkMail",
+      folder: "Junk Mail",
       isCloseable: true
    },
    {
-      name: "aaa",
       subject: "Order delivery",
       from: "amzon.shipping@gmail.com",
       body: <>
@@ -232,11 +156,10 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p><b>Shipping preferences:</b> Throw my items at my door</p>
          <p>If you believe that this order is an error, please give me your money.</p>
       </>,
-      folder: "junkMail",
+      folder: "Junk Mail",
       isCloseable: true
    },
    {
-      name: "aab",
       subject: "Government is here",
       from: "The Government",
       body: <>
@@ -244,7 +167,7 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>If you don't not pay taxes, the IRS will eliminate you with Big gun.</p>
          <p>Pelase cotnact this page if you are in a confusion.</p>
       </>,
-      folder: "junkMail",
+      folder: "Junk Mail",
       isCloseable: true
    }
 ];

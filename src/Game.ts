@@ -1,6 +1,5 @@
 import { roundNum, getElem, getCurrentTime } from "./utils";
 import { updateSave } from "./save";
-import { receiveMail } from "./mail";
 import achievements, { Achievement } from "./data/achievements-data";
 import { unlockAchievement } from "./classes/applications/AchievementTracker";
 import { LOREM_LETTERS } from "./data/letter-data";
@@ -12,6 +11,7 @@ import Application from "./classes/applications/Application";
 import Program from "./classes/programs/Program";
 import LoremCounter from "./classes/applications/LoremCounter";
 import { createNotification } from "./notifications";
+import { receiveLetter } from "./components/media/Mail";
 
 interface UserInfo {
    workerNumber: number;
@@ -56,6 +56,14 @@ interface GameType {
    unblurScreen: () => void;
 }
 
+export function checkLoremLetters(): void {
+   for (const letter of LOREM_LETTERS) {
+      if (Game.lorem >= letter.requirement) {
+         receiveLetter(letter.name);
+      }
+   }
+}
+
 const Game: GameType = {
    version: "0.1",
    currentView: "computer",
@@ -96,11 +104,7 @@ const Game: GameType = {
          // Add to the total lorem typed
          if (loremDiff > 0) this.totalLoremTyped += loremDiff;
 
-         for (const letter of LOREM_LETTERS) {
-            if (this.lorem >= letter.requirement && this.previousLorem < letter.requirement) {
-               receiveMail(letter.name);
-            }
-         }
+         checkLoremLetters();
 
          for (const achievement of this.loremAchievements) {
             if (this.lorem >= achievement.requirements.lorem! && !achievement.isUnlocked) {

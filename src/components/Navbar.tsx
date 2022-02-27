@@ -19,8 +19,8 @@ const defaultViews: ReadonlyArray<ViewInfo> = [
       isSelected: true
    },
    {
-      elemID: "mail",
-      text: "Mail",
+      elemID: "media",
+      text: "Media",
       isSelected: false
    },
    {

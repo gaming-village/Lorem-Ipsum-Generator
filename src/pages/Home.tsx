@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
+
 import { NotificationContainer } from '../notifications';
 import BlackMarket from '../components/BlackMarket';
+import Media from '../components/media/Media';
 import Computer from '../components/Computer';
 import CorporateOverview from '../components/corporate-overview/CorporateOverview';
-import Mail from '../components/Mail';
 import Navbar, { setupNavBar, switchView } from '../components/Navbar';
 import WelcomeScreen, { previewType, showWelcomeScreen } from '../components/WelcomeScreen';
-import Game from '../Game';
 
-import { setupMail } from '../mail';
+import Game, { checkLoremLetters } from '../Game';
 import { getCurrentSave } from '../save';
 import { setupApplications } from '../applications';
 import { setupStartMenu } from '../start-menu';
@@ -119,9 +119,8 @@ const Home = () => {
       setupPrograms();
       
       setupNavBar();
-      
-      // Setup mail
-      setupMail();
+
+      checkLoremLetters();
       
       // Calculates the lorem made by workers while away and adds it to the lorem count
       Game.calculateIdleProfits();
@@ -152,7 +151,7 @@ const Home = () => {
       <Navbar />
       
       <Computer />
-      <Mail />
+      <Media />
       <CorporateOverview />
       <BlackMarket />
    </>;

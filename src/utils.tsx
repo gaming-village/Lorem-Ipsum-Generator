@@ -46,11 +46,11 @@ export class CustomAudio {
       const source = this.context.createMediaElementSource(audio);
       source.connect(this.context.destination);
 
+      this.context.resume();
       audio.play();
 
       audio.addEventListener("ended", () => this.remove(source, audio));
 
-      this.context.resume();
    }
 
    private remove(source: MediaElementAudioSourceNode, audio: HTMLAudioElement): void {
