@@ -29,7 +29,11 @@ interface PromotionScreenProps {
    promoteFunc: (newJob: Job) => void;
 }
 const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
-   console.log(job);
+   if (job.tier > JOB_TIER_DATA.length) {
+      console.log(job);
+      console.trace();
+      throw new Error("Tier exceed limit when promoting!");
+   }
    let nextJobs = new Array<Job>();
    for (const currentJob of JOB_DATA) {
       if (currentJob.tier < job.tier + 1 || (currentJob.requirement && currentJob.requirement !== job.name)) continue;
@@ -47,7 +51,7 @@ const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
    const careerPanels = nextJobs.map((currentJob, i) => {
       return <div onClick={() => switchSelectedJob(currentJob)} className={`career-panel${currentJob === selectedJob ? " selected" : ""}`} key={i}>
          <h3>{currentJob.name}</h3>
-         <div className="salary">Salary: {currentJob.salary}</div>
+         <div className="salary">Salary: {JOB_TIER_DATA[currentJob.tier - 1].salary}</div>
 
          <ul>
             {currentJob.benefits.map((benefit, j) => {

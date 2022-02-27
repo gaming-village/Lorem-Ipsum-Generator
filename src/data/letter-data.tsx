@@ -3,7 +3,7 @@ import List from "../components/List";
 export interface LetterReward {
    readonly name: string;
    readonly imgSrc: string;
-   readonly rewardOnClaim: Function;
+   readonly claimFunc: () => void;
    isClaimed: boolean;
 }
 
@@ -120,6 +120,23 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>It has come to our attention that there are several fallacious claims of 'malware-infected' computers. Disregard them - our system is perfect and flawless.</p>
       </>,
       folder: "Inbox",
+      isCloseable: false
+   },
+   {
+      subject: "Invitation",
+      from: "0b4m4",
+      body: <>
+         <p>...</p>
+      </>,
+      folder: "Inbox",
+      reward: {
+         name: "Black Market",
+         imgSrc: "",
+         claimFunc: () => {
+            
+         },
+         isClaimed: false
+      },
       isCloseable: false
    },
    {

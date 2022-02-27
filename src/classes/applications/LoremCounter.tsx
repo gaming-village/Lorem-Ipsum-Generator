@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Game from "../../Game";
 import { randInt, randItem, roundNum } from "../../utils";
 import Application, { ApplicationCategory } from "./Application";

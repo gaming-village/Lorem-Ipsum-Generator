@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { JOB_DATA, JOB_TIER_DATA, Job, UPGRADES, UpgradeInfo } from "../../data/job-data";
-import Game from "../../Game";
-import { getPrefix, randItem, roundNum } from "../../utils";
+
 import Button from "../Button";
-import ProgressBar from "../ProgressBar";
 import TitleBar from "../TitleBar";
 
-import "../../css/corporate-overview.css";
-import PromotionScreen from "./PromotionScreen";
 import ControlPanel from "./ControlPanel";
+import PromotionScreen from "./PromotionScreen";
+import ProfileSection from "./ProfileSection";
+
+import Game from "../../Game";
+import { JOB_DATA, JOB_TIER_DATA, Job, UPGRADES, UpgradeInfo } from "../../data/job-data";
+import { getPrefix, randItem, roundNum } from "../../utils";
+
+import "../../css/corporate-overview.css";
 
 const getJobsByTier = (tier: number): ReadonlyArray<Job> => {
    let jobs = new Array<Job>();
@@ -50,77 +53,9 @@ export function hasJob(name: string): boolean {
    return Game.userInfo.previousJobs.includes(job);
 }
 
-interface SectionProps {
+export interface SectionProps {
    job: Job;
    promoteFunc?: () => void
-}
-
-const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
-   const [totalLoremTyped, setTotalLoremTyped] = useState(Game.totalLoremTyped);
-   
-   useEffect(() => {
-      const updateTotalLoremTyped = () => {
-         setTotalLoremTyped(Game.totalLoremTyped);
-      }
-      
-      Game.createRenderListener(updateTotalLoremTyped);
-      
-      return () => {
-         Game.removeRenderListener(updateTotalLoremTyped);
-      }
-   });
-   
-   const currentJobRequirements = JOB_TIER_DATA[job.tier - 1].requirements;
-   const nextJobRequirements: number | null = job.tier < JOB_TIER_DATA.length ? JOB_TIER_DATA[job.tier].requirements : null;
-
-   const canPromote = nextJobRequirements !== null ? totalLoremTyped >= nextJobRequirements : false;
-   
-   const promote = (): void => {
-      if (canPromote) promoteFunc!();
-   }
-
-   return <>
-      <h2>ID Card</h2>
-
-      <div className="id-card">
-         <div className="job-occupation">WORKER</div>
-         <h3 className="worker-number">#4781347</h3>
-         <ul>
-            <li>Position: {job.name}</li>
-            <li>Salary: {job.salary}</li>
-         </ul>
-         <div className="footer">LoremCorp LLC&trade;</div>
-      </div>
-
-      <h2>Job Status</h2>
-
-      <p>You are currently {getPrefix(job.name)} {job.name}. {nextJobRequirements === null ? "You are at the highest job position current available." : undefined}</p>
-
-      <p className="promotion-progress">
-         {nextJobRequirements !== null ? (
-            `${roundNum(totalLoremTyped)} / ${nextJobRequirements}`
-         ) : (
-            "Max job tier!"
-         )}
-      </p>
-
-      <ProgressBar progress={nextJobRequirements !== null ? totalLoremTyped : currentJobRequirements + 1} start={currentJobRequirements} end={nextJobRequirements !== null ? nextJobRequirements : currentJobRequirements} />
-
-      {nextJobRequirements !== null ? <>
-      <div className="progress-bar-formatter">
-         <div>
-            <h3>{job.name}</h3>
-            <p>{currentJobRequirements} lorem generated</p>
-         </div>
-         <div>
-            <h3>???</h3>
-            <p>{nextJobRequirements} lorem generated</p>
-         </div>
-      </div>
-
-      <Button isDark={!canPromote} isFlashing={canPromote} isCentered={true} onClick={() => promote()}>Promote</Button>
-      </> : undefined}
-   </>;
 }
 
 /**
@@ -386,7 +321,8 @@ const CareerPathSection = () => {
  * @param worker The worker
  */
 const getSingularWorkerProduction = (worker: Job): number => {
-   let production = worker.loremProduction;
+   // Quick fun fact: this is actually the only place where ".loremProduction" is used!
+   let production = JOB_TIER_DATA[worker.tier - 1].loremProduction;
    
    if (hasJob("Employee")) {
       production *= 1.5;
@@ -410,9 +346,9 @@ export function calculateWorkerProduction(): number {
    return totalProduction;
 }
 
-const calculateWorkerCost = (worker: Job): number => {
+const calculateWorkerCost = (worker: Job, extraAmount?: number): number => {
    const initialCost = JOB_TIER_DATA[worker.tier - 1].initialCost;
-   const count = Game.userInfo.workers[worker.id];
+   const count = Game.userInfo.workers[worker.id] + (extraAmount || 0);
 
    let cost = initialCost * Math.pow(1.3, count);
 
@@ -425,16 +361,18 @@ const calculateWorkerCost = (worker: Job): number => {
 
 const calculateAffordAmount = (worker: Job): number => {
    let affordAmount = 0;
-   let total = Game.lorem;
-   while (true) {
-      const cost = calculateWorkerCost(worker);
 
-      if (cost > total) {
-         return affordAmount;
+   let totalCost = 0;
+   for (let i = 0; ; i++) {
+      const cost = calculateWorkerCost(worker, i);
+
+      if (totalCost + cost > Game.lorem) {
+         break;
       }
       affordAmount++;
-      total -= cost;
+      totalCost += cost;
    }
+   return affordAmount;
 }
 
 const WorkerSection = ({ job: worker }: SectionProps) => {
@@ -484,15 +422,17 @@ const WorkerSection = ({ job: worker }: SectionProps) => {
       <h2>Overview</h2>
 
       <p>You currently have {workerCount} {worker.name}{workerCount === 1 ? "" : "s"}, producing {roundNum(totalProduction)} lorem every second.</p>
-
       <p>Each {worker.name} produces {roundNum(singleWorkerProduction)} lorem every second.</p>
+
+      <h2>Description</h2>
+
+      <p>{worker.description}</p>
 
       <div className="separator"></div>
 
       <h2>Market</h2>
 
       <p>Purchase {worker.name}{workerCount === 1 ? "" : "s"} to increase your Lorem production.</p>
-
       <p>Costs <b>{roundNum(singleCost)}</b> lorem.</p>
 
       <div className="button-container">

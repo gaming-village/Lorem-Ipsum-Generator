@@ -305,21 +305,21 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       updateValue: () => {
          let returnVal = "";
          Object.values(Game.userInfo.workers).forEach((workerCount, i) => {
-            returnVal += workerCount.toString();
+            returnVal += decToHex(workerCount);
             if (i + 1 < JOB_DATA.length) returnVal += "-";
          });
          return returnVal;
       },
       loadEvent: (savedValue: string) => {
-         const workerCounts = savedValue.split("-").map(Number);
+         const workerCounts = savedValue.split("-").map(hexToDec).map(Number);
          for (let i = 0; i < JOB_DATA.length; i++) {
             const worker = JOB_DATA[i];
             const count = workerCounts[i];
 
-            if (!Number.isNaN(count)) {
+            if (!Number.isNaN(count) && typeof count !== "undefined") {
                Game.userInfo.workers[worker.id] = count;
             } else {
-               console.warn(`Worker '${worker.name} count was NaN! Setting to 0`);
+               console.warn(`Worker '${worker.name}' count was NaN or undefined! Setting to 0`);
                Game.userInfo.workers[worker.id] = 0;
             }
          }

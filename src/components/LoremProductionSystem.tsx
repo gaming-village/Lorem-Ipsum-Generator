@@ -9,18 +9,30 @@ import { createTooltip, removeTooltip } from '../tooltips';
 import { randInt, randItem } from '../utils';
 import { hasJob, hasUpgrade } from './corporate-overview/CorporateOverview';
 
-const calculateWordValue = (baseValue: number): number => {
+const applyValueModifiers = (baseValue: number): number => {
    let value = baseValue;
    
    if (hasUpgrade("Typewriter")) value *= 2;
+
    if (hasJob("Programmer")) value *= 1.5;
+   if (hasJob("Web Developer")) value *= 2;
+
+   return value;
+}
+
+const calculateWordValue = (baseValue: number, isCorrectLetter: boolean): number => {
+   let value = baseValue;
+   
+   value = applyValueModifiers(value);
+
+   if (isCorrectLetter && hasJob("Technician")) value *= 5;
 
    return value;
 }
 
 const wordEndingChars = [" ", "."];
 
-export let type: () => void;
+export let type: (key: string) => void;
 
 const findWord = (sentence: string, endIdx: number): Word => {
    let idx = endIdx;
@@ -255,7 +267,7 @@ const LoremProductionSystem = () => {
    const [content, setContent] = useState<Array<JSX.Element> | null>(null);
 
    useEffect(() => {
-      type = (): void => {
+      type = (key: string): void => {
          if (!canType()) return;
 
          // Open a popup
@@ -265,6 +277,14 @@ const LoremProductionSystem = () => {
                createRandomPopup();
 
                typesTilNextPopup = randInt(20, 100);
+            }
+         }
+
+         if (hasUpgrade("Touch Typing")) {
+            if (Math.random() < 0.1) {
+               const BASE_VALUE = 0.1;
+               const value = applyValueModifiers(BASE_VALUE);
+               Game.lorem += value;
             }
          }
 
@@ -317,7 +337,8 @@ const LoremProductionSystem = () => {
          if (wordEndingChars.includes(currentSentence[currentIndex + 1])) {
             const word = findWord(currentSentence, currentIndex);
             
-            const wordValue = calculateWordValue(word.value);
+            const isCorrectLetter = key.toLowerCase() === currentSentence[currentIndex].toLowerCase();
+            const wordValue = calculateWordValue(word.value, isCorrectLetter);
             
             Game.lorem += wordValue;
          }

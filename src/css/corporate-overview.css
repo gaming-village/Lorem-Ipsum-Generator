@@ -240,19 +240,18 @@
 /* CAREER PATH */
 #career-path {
    --item-size: 4rem;
-   --item-spacing-x: 50px;
+   --item-spacing-x: 25px;
 }
 #career-path .row {
    height: var(--item-size);
-   margin: 0.5rem 0 0.5rem 50%;
-   display: table;
-   transform: translateX(calc(-50% + (var(--item-spacing-x) + var(--item-size)) * var(--offset) / 2));
+   transform: translateX(calc((var(--item-spacing-x) + var(--item-size)) * var(--offset)));
+   display: flex;
+   justify-content: center;
+   align-items: center;
 }
 #career-path .item {
    width: calc(var(--item-size) - 4px);
    height: calc(var(--item-size) - 4px);
-   margin-top: calc((4rem - var(--item-size)) / 2);
-   display: inline-block;
    white-space: pre;
 }
 #career-path .item.previousJob {

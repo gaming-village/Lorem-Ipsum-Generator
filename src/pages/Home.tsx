@@ -61,7 +61,7 @@ const onKeyDown = (): void => {
          return;
       }
       keysDown.push(key)
-      type();
+      type(key);
    }
 }
 
