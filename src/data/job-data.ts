@@ -40,7 +40,7 @@ export interface Job {
    readonly tier: number;
 }
 export const JOB_DATA: ReadonlyArray<Job> = [
-   // TIER 1
+   /** TIER 1 **/
    {
       id: "interns",
       name: "Intern",
@@ -51,7 +51,8 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       loremProduction: 0.01,
       tier: 1
    },
-   // TIER 2
+
+   /** TIER 2 **/
    {
       id: "employees",
       name: "Employee",
@@ -67,12 +68,13 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       name: "Programmer",
       salary: "$9",
       benefits: [
-         "Increases lorem generated from typing by 2x."
+         "Increases lorem generated from typing by 1.5x."
       ],
       loremProduction: 0.05,
       tier: 2
    },
-   // TIER 3
+
+   /** TIER 3 **/
    {
       id: "managers",
       name: "Manager",
@@ -107,7 +109,8 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       loremProduction: 0.15,
       tier: 3
    },
-   // TIER 4
+
+   /** TIER 4 **/
    {
       id: "directors",
       name: "Director",

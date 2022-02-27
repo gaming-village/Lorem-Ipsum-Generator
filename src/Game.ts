@@ -93,9 +93,11 @@ const Game: GameType = {
       }
    },
    updateLorem: function(): void {
-      const workerProduction = calculateWorkerProduction();
-      if (workerProduction > 0 && this.ticks % this.tps === 0) {
-         this.lorem += workerProduction;
+      if (this.ticks % this.tps === 0) {
+         const workerProduction = calculateWorkerProduction();
+         if (workerProduction > 0) {
+            this.lorem += workerProduction;
+         }
       }
 
       if (this.previousLorem !== this.lorem) {
@@ -143,6 +145,14 @@ const Game: GameType = {
    timeAtLastSave: -1,
    calculateIdleProfits: function(): void {
       const secondsIdle = (getCurrentTime() - this.timeAtLastSave) / 1000;
+      
+      if (secondsIdle > 1000000) {
+         console.log(secondsIdle);
+         console.trace();
+         console.warn("you were idle for a very long time... probably an error");
+         return;
+      }
+
       const idleProduction = calculateWorkerProduction() * secondsIdle;
 
       if (idleProduction > 0) {

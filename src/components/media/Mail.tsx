@@ -38,7 +38,6 @@ export function receiveLetter(letterSubject: string): void {
    }
 
    if (!letter.isReceived) {
-      console.log(letter.subject);
       letter.isReceived = true;
 
       const clickEvent = (): void => {

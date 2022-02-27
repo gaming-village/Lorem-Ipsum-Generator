@@ -144,6 +144,9 @@
 .progress-bar-formatter p {
    margin: 0;
 }
+#corporate-overview .progress-bar-container {
+   margin-bottom: 0.3rem;
+}
 
 /* PROMOTION SCREEN */
 #promotion-screen {

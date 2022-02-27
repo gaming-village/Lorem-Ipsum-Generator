@@ -29,6 +29,7 @@ interface PromotionScreenProps {
    promoteFunc: (newJob: Job) => void;
 }
 const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
+   console.log(job);
    let nextJobs = new Array<Job>();
    for (const currentJob of JOB_DATA) {
       if (currentJob.tier < job.tier + 1 || (currentJob.requirement && currentJob.requirement !== job.name)) continue;
