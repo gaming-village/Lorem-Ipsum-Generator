@@ -69,14 +69,6 @@ export function createRandomPopup(): void {
    createPopup(popup);
 }
 
-setTimeout(() => {
-   for (const popup of POPUP_DATA) {
-      if (popup.className === "Rain") {
-         createPopup(popup);
-      }
-   }
-}, 100);
-
 interface PopupElemInfo {
    info: PopupInfo;
    application: Popup;

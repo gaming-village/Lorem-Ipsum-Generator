@@ -51,6 +51,11 @@ const hexToArr = (num: string): Array<number> => {
 const decToHex = (rawNum: number | string): string => {
    if (rawNum === 0) return "0";
 
+   if (typeof rawNum === "number" && isNaN(rawNum)) {
+      console.trace();
+      throw new Error("Tried to convert NaN to hex!");
+   }
+
    // Account for any leading 0's
    let numLeadingZeros = 0;
    if (typeof rawNum === "string") {
