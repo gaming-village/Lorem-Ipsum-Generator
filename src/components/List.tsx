@@ -2,7 +2,7 @@ import React from "react";
 
 interface ListProps {
    hasBulletPoints?: boolean;
-   children?: JSX.Element;
+   children?: JSX.Element | Array<JSX.Element>;
 }
 
 const defaultProps: ListProps = {

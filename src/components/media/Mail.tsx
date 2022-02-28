@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
+import Button from "../Button";
 import ScrollArea from "../ScrollArea";
 import WindowsProgram from "../WindowsProgram";
 import Section from "../Section";
@@ -91,8 +92,10 @@ const folderHasUnopened = (folder: FolderInfo): boolean => {
 interface LetterProps {
    letter: LetterInfo | null;
    closeFunc: () => void;
+   isClaimed: boolean;
+   claimFunc?: () => void;
 }
-const Letter = ({ letter, closeFunc }: LetterProps) => {
+const Letter = ({ letter, closeFunc, isClaimed,claimFunc }: LetterProps) => {
    return <WindowsProgram id="letter" title={letter !== null ? letter.subject + " - Microsoft Exchange" : "Microsoft Exchange"} uiButtons={["close"]} closeFunc={() => closeFunc()}>
       {letter !== null ? <>
          <table>
@@ -120,11 +123,19 @@ const Letter = ({ letter, closeFunc }: LetterProps) => {
             <p>- {letter.from}</p>
          </div>
 
-         <div id="reward-container" className="text-box">
-            {typeof letter.reward !== "undefined" ? (
-               <></>
-            ) : (
-               <p>This letter has no rewards!</p>
+         <div id="reward-container" className={`text-box${isClaimed ? " claimed" : ""}`}>
+            {typeof letter.reward !== "undefined" ? <>
+               <h3>Rewards</h3>
+
+               <ul>
+                  {letter.reward.items.map((item, i) => {
+                     return <li key={i}>{item}</li>;
+                  })}
+               </ul>
+
+               <Button onClick={() => claimFunc!()} isCentered={true} isDark={isClaimed} isFlashing={!isClaimed}>{!isClaimed ? "Claim All" : "Claimed!"}</Button>
+            </> : (
+               <p className="no-rewards-notice">This letter has no rewards!</p>
             )}
          </div>
       </> : <>
@@ -139,9 +150,11 @@ interface MailProps {
 }
 const Mail = ({ defaultLetter, closeFunc }: MailProps) => {
    const hasDefaultLetter = typeof defaultLetter !== "undefined";
+   
    const [currentFolder, setCurrentFolder] = useState<FolderInfo>(hasDefaultLetter ? getLetterFolder(defaultLetter) : FOLDERS[0]);
    const [currentLetters, setCurrentLetters] = useState<Array<LetterInfo>>(getLettersByFolder(currentFolder));
    const [currentLetter, setCurrentLetter] = useState<LetterInfo | null>(hasDefaultLetter ? defaultLetter : null);
+   const [letterIsClaimed, setLetterIsClaimed] = useState<boolean | null>(null);
 
    if (hasDefaultLetter) {
       defaultLetter.isOpened = true;
@@ -160,7 +173,17 @@ const Mail = ({ defaultLetter, closeFunc }: MailProps) => {
       newLetter.isOpened = true;
 
       setCurrentLetter(newLetter);
+      setLetterIsClaimed(typeof newLetter.reward !== "undefined" && newLetter.reward.isClaimed);
    }
+
+   /** Claim the current letter's reward */
+   const claimLetterReward = useCallback(() => {
+      const reward = currentLetter!.reward!;
+
+      reward.isClaimed = true;
+      reward.claimFunc();
+      setLetterIsClaimed(true);
+   }, [currentLetter]);
 
    const folderTree = <>
       <div className="folder root-folder">
@@ -206,7 +229,7 @@ const Mail = ({ defaultLetter, closeFunc }: MailProps) => {
       </div>;
    });
 
-   const letterElem = <Letter letter={currentLetter} closeFunc={closeLetter} />
+   const letterElem = <Letter letter={currentLetter} closeFunc={closeLetter} isClaimed={letterIsClaimed !== null ? letterIsClaimed : false} claimFunc={currentLetter !== null && currentLetter!.reward ? claimLetterReward : undefined} />
    
    return <>
       <WindowsProgram id="inbox" title="Inbox" uiButtons={["minimize"]} minimizeFunc={() => closeFunc()}>

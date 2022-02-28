@@ -8,7 +8,8 @@ import PromotionScreen from "./PromotionScreen";
 import ProfileSection from "./ProfileSection";
 
 import Game from "../../Game";
-import { JOB_DATA, JOB_TIER_DATA, Job, UPGRADES, UpgradeInfo } from "../../data/job-data";
+import { JOB_DATA, JOB_TIER_DATA, Job, } from "../../data/job-data";
+import UPGRADES, { UpgradeInfo } from "../../data/upgrade-data";
 import { getPrefix, randItem, roundNum } from "../../utils";
 
 import "../../css/corporate-overview.css";

@@ -8,8 +8,23 @@ interface PanelData {
    imgSrc: string;
    tree: ReadonlyArray<PanelData> | string | null;
 }
-
-const startMenuTree: ReadonlyArray<PanelData> = [
+const MENU_DATA: ReadonlyArray<PanelData> = [
+   {
+      name: "Church of Lorem",
+      imgSrc: "/images/church-of-lorem/temple.png",
+      tree: [
+         {
+            name: "The Oracle",
+            imgSrc: "/images/church-of-lorem/temple.png",
+            tree: "oracle"
+         },
+         {
+            name: "The Altar",
+            imgSrc: "/images/church-of-lorem/temple-os.png",
+            tree: "altar"
+         }
+      ]
+   },
    {
       name: "Applications",
       imgSrc: "/images/icons/picture.png",
@@ -75,15 +90,15 @@ const createPanel = (panelData: PanelData, panelContainer: HTMLElement) => {
       imgSrc = require("." + panelData.imgSrc).default;
    } catch {
       imgSrc = require("./images/icons/questionmark.png").default;
-   } finally {
-      panel.innerHTML = `
-      <img src=${imgSrc} alt="" />
-      <p>${panelData.name}</p>`;
-   
-      panelContainer.appendChild(panel);
-   
-      return panel;
    }
+
+   panel.innerHTML = `
+   <img src=${imgSrc} alt="" />
+   <p>${panelData.name}</p>`;
+
+   panelContainer.appendChild(panel);
+
+   return panel;
 }
 const createOpeningArrow = (panel: HTMLElement) => {
    const arrow = document.createElement("div");
@@ -182,7 +197,7 @@ const startMenuIsOpen = (): boolean => {
 }
 const openStartMenu = (): void => {
    const startMenu = createPanelContainer("start-menu");
-   populatePanelContainer(startMenu, startMenuTree);
+   populatePanelContainer(startMenu, MENU_DATA);
    closeMenuOnHoverOut(startMenu);
 
    const startButton = getElem("start-button")!;

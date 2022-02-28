@@ -25,7 +25,7 @@ const calculateWordValue = (baseValue: number, isCorrectLetter: boolean): number
    
    value = applyValueModifiers(value);
 
-   if (isCorrectLetter && hasJob("Technician")) value *= 5;
+   if (isCorrectLetter && hasJob("Technician")) value *= 7;
 
    return value;
 }

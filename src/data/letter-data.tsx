@@ -1,7 +1,9 @@
 import List from "../components/List";
 
+import { unlockView } from "../components/Navbar";
+
 export interface LetterReward {
-   readonly name: string;
+   readonly items: Array<string>;
    readonly imgSrc: string;
    readonly claimFunc: () => void;
    isClaimed: boolean;
@@ -39,6 +41,10 @@ export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
    {
       name: "Addressing Rumors",
       requirement: 30
+   },
+   {
+      name: "Invitation",
+      requirement: 50
    },
    {
       name: "urgent Matters",
@@ -91,11 +97,9 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>Greetings interns.</p>
          <p>To assist you in your time at Lorem Corp, our design team has envisioned a series of tips to help you in your lorem generation:</p>
          <List>
-            <>
-               <li>To maximize efficiency, reduce the amount of time spent sleeping and resting as that does not produce lorem.</li>
-               <li>Overtime shifts are one of the best ways to get ahead of your peers.</li>
-               <li>Unnecessary distractions such as 'friends' and 'family' may inhibit your ability to produce lorem. Consider removing them.</li>
-            </>
+            <li>To maximize efficiency, reduce the amount of time spent sleeping and resting as that does not produce lorem.</li>
+            <li>Overtime shifts are one of the best ways to get ahead of your peers.</li>
+            <li>Unnecessary distractions such as 'friends' and 'family' may inhibit your ability to produce lorem. Consider removing them.</li>
          </List>
       </>,
       folder: "Inbox",
@@ -130,10 +134,12 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
       </>,
       folder: "Inbox",
       reward: {
-         name: "Black Market",
+         items: [
+            "Access to the Black Market"
+         ],
          imgSrc: "",
          claimFunc: () => {
-            
+            unlockView("Black Market");
          },
          isClaimed: false
       },

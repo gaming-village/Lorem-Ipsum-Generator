@@ -10,9 +10,10 @@ interface ProgramElemProps {
    name: string;
    id: string;
    program: Program;
+   isChurchProgram: boolean;
    children: JSX.Element;
 }
-const ProgramElem = ({ name, id, program, children }: ProgramElemProps): JSX.Element => {
+const ProgramElem = ({ name, id, program, isChurchProgram, children }: ProgramElemProps): JSX.Element => {
    const [opened, setOpened] = useState<boolean>(false);
    const programRef = useRef(null);
 
@@ -27,7 +28,7 @@ const ProgramElem = ({ name, id, program, children }: ProgramElemProps): JSX.Ele
    const minimizeFunc = () => program.close();
    
    return opened ? (
-      <WindowsProgram ref={programRef} title={name} id={id} uiButtons={["minimize"]} isDraggable={true} minimizeFunc={minimizeFunc}>
+   <WindowsProgram className={isChurchProgram ? "church-of-lorem" : ""} ref={programRef} title={name} id={id} uiButtons={["minimize"]} isDraggable={true} minimizeFunc={minimizeFunc}>
          {children}
       </WindowsProgram>
    ) : <></>;
@@ -37,19 +38,22 @@ interface ProgramType {
    name: string;
    id: string;
    fileName: string;
+   isChurchProgram?: boolean;
 }
 abstract class Program {
    private readonly name: string;
    private readonly id: string;
    private readonly fileName: string;
+   readonly isChurchProgram: boolean;
 
    isOpened: boolean = false;
 
    setVisibility!: (newVal: boolean) => void;
-   constructor({ name, id, fileName }: ProgramType) {
+   constructor({ name, id, fileName, isChurchProgram = false }: ProgramType) {
       this.name = name;
       this.id = id;
       this.fileName = fileName;
+      this.isChurchProgram = isChurchProgram;
 
       this.createFile();
 
@@ -60,7 +64,7 @@ abstract class Program {
    }
 
    private createElem(elemContent: JSX.Element): void {
-      const elem = <ProgramElem id={this.id} name={this.name} program={this}>
+      const elem = <ProgramElem id={this.id} name={this.name} isChurchProgram={this.isChurchProgram} program={this}>
          {elemContent}
       </ProgramElem>;
 

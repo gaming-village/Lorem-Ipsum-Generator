@@ -5,7 +5,7 @@ import { getCurrentTime, randInt } from "../utils";
 import ACHIEVEMENTS from "./achievements-data";
 import LETTERS from "./letter-data";
 import LOREM_PACKS from "./lorem-pack-data";
-import { UPGRADES } from "./job-data";
+import UPGRADES from "./upgrade-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
 import { Job, JOB_DATA } from "./job-data";
 import { BLACK_MARKET_SHOPS } from "./black-market-data";
@@ -367,7 +367,14 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
 
             letter.isReceived = bits[0] === 1;
             letter.isOpened = (bits[1] || 0) === 1;
-            if (typeof letter.reward !== "undefined") letter.reward.isClaimed = (bits[2] || 0) === 1;
+            if (typeof letter.reward !== "undefined") {
+               letter.reward.isClaimed = (bits[2] || 0) === 1
+
+               // Unlock the black market
+               if (letter.subject === "Invitation" && letter.reward.isClaimed) {
+                  Game.misc.blackMarketIsUnlocked = true;
+               }
+            };
          }
       }
    },

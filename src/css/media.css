@@ -289,34 +289,26 @@
    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGklEQVR4AWMYxuA/SYphmETFhDX9x4mHGQAAcL4P8dQiMq8AAAAASUVORK5CYII=);
 }
 
-#letter .reward-container.claimed {
+#reward-container .no-rewards-notice {
+   text-align: center;
+   font-style: italic;
+}
+
+#reward-container h3 {
+   text-decoration: underline;
+   margin: 0;
+}
+#reward-container ul {
+   margin: 0.2rem 0 1rem;
+}
+#reward-container.claimed {
    background-color: #bbb;
-}
-#letter .reward {
-   height: 32px;
-   margin: 0 0.3rem 0.2rem;
-}
-#letter .icon-box {
-   width: 32px;
-   height: 32px;
-   background-color: var(--win95-bg-colour);
-   margin-top: -2px;
    border: 2px solid;
-   border-top-color: #fff;
-   border-right-color: #000;
-   border-bottom-color: #000;
-   border-left-color: #fff;
-   float: left;
+   border-top-color: #000;
+   border-right-color: #fff;
+   border-bottom-color: #fff;
+   border-left-color: #000;
 }
-#letter .icon-box img {
-   width: 32px;
-   height: 32px;
-}
-#letter .reward .text {
-   line-height: 32px;
-   margin-left: 0.3rem;
-   float: left;
-}
-#letter .reward-container button {
-   margin-bottom: 0.5rem;
+#reward-container button {
+   margin-bottom: 0.4rem;
 }

@@ -15,7 +15,7 @@ interface ProgramProps {
    id?: string;
    className?: string;
    style?: React.CSSProperties;
-   children?: JSX.Element;
+   children?: JSX.Element | Array<JSX.Element>;
 }
 
 const defaultProps: ProgramProps = {

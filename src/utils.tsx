@@ -50,13 +50,25 @@ export class CustomAudio {
       audio.play();
 
       audio.addEventListener("ended", () => this.remove(source, audio));
-
    }
 
    private remove(source: MediaElementAudioSourceNode, audio: HTMLAudioElement): void {
       source.disconnect();
       audio.remove();
       this.context.close();
+   }
+}
+
+export class CustomSound {
+   private context: AudioContext;
+
+   constructor() {
+      this.context = new AudioContext();
+      this.context.resume();
+
+      const oscillator = this.context.createOscillator();
+      oscillator.connect(this.context.destination);
+      oscillator.start();
    }
 }
 

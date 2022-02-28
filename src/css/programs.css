@@ -1,3 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
+
+/* THE CHURCH */
+.windows-program.church-of-lorem {
+   /* background-color: rgba(255, 255, 87); */
+}
+.windows-program.church-of-lorem * {
+   font-family: "JetBrains Mono" !important;
+}
+.windows-program.church-of-lorem .title-bar {
+   font-size: 0.95rem;
+   background-color: rgb(0, 0, 168) !important;
+}
+.windows-program.church-of-lorem p {
+   font-size: 0.95rem;
+}
+
+/* THE ORACLE */
+#sun {
+   --size: 8rem;
+   width: var(--size);
+   height: var(--size);
+   margin-left: 50%;
+   transform:
+      translate(-50%, var(--elevation))
+      rotate(var(--rotation));
+}
+
+
+
+
+
+
 /* PREFERENCES */
 #preferences .thumbnail-container {
    display: flex;

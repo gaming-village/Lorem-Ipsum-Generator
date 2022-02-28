@@ -35,25 +35,28 @@ interface GameType {
    readonly tick: () => void;
    readonly updateLorem: () => void;
    packets: number;
-   packetExchangeRate: number;
-   loadLoremAchievements: () => void;
+   readonly packetExchangeRate: number;
+   readonly loadLoremAchievements: () => void;
    motivation: number;
-   updateMotivation: () => void;
+   readonly updateMotivation: () => void;
    timeAtLastSave: number;
-   calculateIdleProfits: () => void;
-   displayLorem: (loremDiff: number) => void;
+   readonly calculateIdleProfits: () => void;
+   readonly displayLorem: (loremDiff: number) => void;
    isInFocus: boolean;
    maskClickEvent: (() => void) | undefined;
-   showMask: () => void;
-   hideMask: () => void;
-   reset: () => void;
-   userInfo: UserInfo;
+   readonly showMask: () => void;
+   readonly hideMask: () => void;
+   readonly reset: () => void;
+   readonly userInfo: UserInfo;
    renderListeners: Array<() => void>;
-   createRenderListener: (func: () => void) => void;
-   removeRenderListener: (func: () => void) => void;
-   hasRenderListener: (func: () => void) => boolean;
-   blurScreen: () => void;
-   unblurScreen: () => void;
+   readonly createRenderListener: (func: () => void) => void;
+   readonly removeRenderListener: (func: () => void) => void;
+   readonly hasRenderListener: (func: () => void) => boolean;
+   readonly blurScreen: () => void;
+   readonly unblurScreen: () => void;
+   readonly misc: {
+      blackMarketIsUnlocked: boolean;
+   }
 }
 
 export function checkLoremLetters(): void {
@@ -211,6 +214,9 @@ const Game: GameType = {
    },
    unblurScreen: () => {
       document.body.classList.remove("blurred");
+   },
+   misc: {
+      blackMarketIsUnlocked: false
    }
 };
 

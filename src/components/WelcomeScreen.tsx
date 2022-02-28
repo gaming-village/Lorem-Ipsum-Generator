@@ -91,31 +91,29 @@ const WelcomeScreen = () => {
 
    return stage === Stages.hidden ? <></> : (
       <WindowsProgram ref={welcomeScreenRef} id="welcome-screen" title="Welcome" uiButtons={["close"]} buttonsAreDark={section < sections.length - 1} closeFunc={section === sections.length - 1 ? () => close() : undefined}>
-         <>
-            <h1 style={{ textAlign: "center" }}>Welcome to LoremCorp&trade;!</h1>
+         <h1 style={{ textAlign: "center" }}>Welcome to LoremCorp&trade;!</h1>
 
-            <div className="formatter">
-               <div className="section-text">
-                  {sections[section].text}
-               </div>
-               <div className="nav">
-                  {sections.map((currentSection, i) => {
-                     let clickEvent;
-                     if (i === section + 1) {
-                        clickEvent = () => {
-                           setSection(section + 1);
-                        }
-                     }
-
-                     return <Button isCentered={true} isFlashing={i === section + 1} className={i !== section ? "dark" : ""} key={i} onClick={clickEvent}>{currentSection.name}</Button>
-                  })}
-
-                  <div className="separator"></div>
-
-                  <Button onClick={section === sections.length - 1 ? () => close() : undefined} isFlashing={section === sections.length - 1} isCentered={true} className={"dotted" + (section === sections.length - 1 ? "" : " dark")}>Close</Button>
-               </div>
+         <div className="formatter">
+            <div className="section-text">
+               {sections[section].text}
             </div>
-         </>
+            <div className="nav">
+               {sections.map((currentSection, i) => {
+                  let clickEvent;
+                  if (i === section + 1) {
+                     clickEvent = () => {
+                        setSection(section + 1);
+                     }
+                  }
+
+                  return <Button isCentered={true} isFlashing={i === section + 1} className={i !== section ? "dark" : ""} key={i} onClick={clickEvent}>{currentSection.name}</Button>
+               })}
+
+               <div className="separator"></div>
+
+               <Button onClick={section === sections.length - 1 ? () => close() : undefined} isFlashing={section === sections.length - 1} isCentered={true} className={"dotted" + (section === sections.length - 1 ? "" : " dark")}>Close</Button>
+            </div>
+         </div>
       </WindowsProgram>
    );
 };
