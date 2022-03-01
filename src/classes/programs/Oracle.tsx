@@ -7,12 +7,26 @@ import Button from "../../components/Button";
 import Program from "./Program";
 
 import Game from "../../Game";
+import { LOREM_PRECEPTS, PreceptInfo } from "../../data/church-of-lorem-data";
+import { randItem } from "../../utils";
 
 const Elem = () => {
    // Determines the current elevation and rotation of the sun (0-3)
    // Elevation oscillates 0-3 wait1 3-0 wait1 repeat, rotation constantly changing
    const [sunTicks, setSunTicks] = useState<number>(0);
+   const [precept, setPrecept] = useState<PreceptInfo | null>(null);
    const sunRef = useRef<HTMLImageElement>(null);
+
+   const generatePrecept = (): void => {
+      const potentialPrecepts = LOREM_PRECEPTS.slice();
+
+      const idx = precept !== null ? potentialPrecepts.indexOf(precept) : -1
+      if (idx !== -1) {
+         potentialPrecepts.splice(idx, 1);
+      }
+
+      setPrecept(randItem(potentialPrecepts));
+   }
 
    const updateSun = useCallback(() => {
       /** Phase of the sun from 0-7 */
@@ -51,9 +65,22 @@ const Elem = () => {
    }, [incrementTicks]);
 
    return <>
+      <div className="control-panel">
+         <Button onClick={generatePrecept}>Invoke Precept</Button>
+      </div>
+
       <img ref={sunRef} src={TheSun} alt="The Sun" id="sun" />
 
-      <Button>Invoke Precept</Button>
+      <div id="precept-area">
+         {precept !== null ? <>
+            <h3>{precept.name}</h3>
+            <p>{precept.content}</p>
+
+            <span className="precept-num">PRECEPT {LOREM_PRECEPTS.indexOf(precept) + 1}</span>
+         </> : (
+            <p className="message">(No precept invoked)</p>
+         )}
+      </div>
    </>;
 }
 

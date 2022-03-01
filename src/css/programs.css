@@ -2,7 +2,8 @@
 
 /* THE CHURCH */
 .windows-program.church-of-lorem {
-   /* background-color: rgba(255, 255, 87); */
+   background-color: rgba(255, 255, 87);
+   width: 25rem;
 }
 .windows-program.church-of-lorem * {
    font-family: "JetBrains Mono" !important;
@@ -14,8 +15,29 @@
 .windows-program.church-of-lorem p {
    font-size: 0.95rem;
 }
+.windows-program.church-of-lorem button {
+   font-size: 0.9rem;
+}
 
 /* THE ORACLE */
+#oracle .control-panel {
+   background-color: rgb(87, 255, 255);
+   border: 2px solid #fff;
+   box-shadow: 0 0 2px 2px #000;
+   padding: 0.1rem 0;
+   margin: 0.5rem;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+#oracle .control-panel button {
+   margin: 0 0.5rem;
+}
+#oracle .message {
+   text-align: center;
+   font-style: italic;
+   margin: 0;
+}
 #sun {
    --size: 8rem;
    width: var(--size);
@@ -24,6 +46,29 @@
    transform:
       translate(-50%, var(--elevation))
       rotate(var(--rotation));
+}
+#precept-area {
+   background-color: rgb(87, 255, 255);
+   border: 2px solid #fff;
+   box-shadow: 0 0 2px 2px #000;
+   margin: 0.5rem;
+   position: relative;
+}
+#precept-area h3 {
+   margin-top: 0.3rem;
+}
+#precept-area p {
+   margin-bottom: 1rem;
+}
+#oracle .precept-num {
+   color: #666;
+   text-decoration: underline;
+   font-size: 0.75rem;
+   font-style: italic;
+   position: absolute;
+   bottom: 0.1rem;
+   left: 50%;
+   transform: translateX(-50%);
 }
 
 
