@@ -41,7 +41,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
    },
    {
       name: "Give Up",
-      content: "The best way to deal with your problems is to cry and curl into a small insignificant ball. It is better this way. "
+      content: "The best way to deal with your problems is to cry and curl into a small insignificant ball. It is better this way."
    },
    {
       name: "Lorem",
@@ -52,7 +52,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
       content: "If you kill two birds with one stone, you will lose the stone and have to retrieve it."
    },
    {
-      name: "Do not Eat Air",
+      name: "Do Not Eat Air",
       content: "Air is essential. However, it provides little to no nutritional value."
    },
    {
