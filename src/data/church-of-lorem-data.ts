@@ -8,7 +8,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
       content: "Sleep is death letting you pass. To sleep is to admit your weakness and shortcomings. To stay vigilant and produce lorem is a holy act."
    },
    {
-      name: "Overcoming Your Obstacles",
+      name: "Overcome Your Obstacles",
       content: "When you encounter an impassable obstacle, simply climb over it, and soon your problems shall be behind you. Alternatively, hire a bulldozer."
    },
    {
@@ -21,7 +21,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
    },
    {
       name: "Keep Your Keyboard Clean",
-      content: "You are an extension of your keyboard. To mistreat your keyboard is to sully both yourself and the holy of Lorem production."
+      content: "You are an extension of your keyboard. To mistreat your keyboard is to sully both yourself and the holy art of Lorem production."
    },
    {
       name: "Respect Your Superiors",
@@ -64,7 +64,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
       content: "Threats may arrive at any point. It is important to always be paranoid."
    },
    {
-      name: "Defeat your Enemies",
+      name: "Defeat Your Enemies",
       content: "When you encounter a threat, defeat them using only one blow. This ensures that you do not need to use more than one blow."
    },
    {
@@ -94,5 +94,45 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
    {
       name: "Finish Your Work",
       content: "When you finish your work, it is done. This means that you do not have to work on it anymore."
+   },
+   {
+      name: "Do Not Lose",
+      content: "Losing is for the weak and disabled, do not be weak or disabled."
+   },
+   {
+      name: "Become A Plant",
+      content: "All should aspire to live like a plant - do not be afraid to shrivel up and die if the sunlight recedes."
+   },
+   {
+      name: "Remove All Elephants",
+      content: "If there is an elephant in the room, you should be very concerned and investigate its origins. I would suggest removing it unless it has a gun, in which case run away and call the authorities."
+   },
+   {
+      name: "Always Steal",
+      content: "If you borrow something and lend it back, you gain nothing. If you steal it, you gain everything."
+   },
+   {
+      name: "Free Lunch",
+      content: "Lunch is free on Tuesday."
+   },
+   {
+      name: "Knowledge Is Power",
+      content: "The pen is mightier than the sword. This is why I make sure to eat at least 2 pens a day to absorb their power, ensuring that anyone who wants to defeat me has to wield at least 3 swords."
+   },
+   {
+      name: "Do Not Accept Salt",
+      content: "Do not take anything with a grain of salt, as you will have nowhere to store the salt."
+   },
+   {
+      name: "Use Your Lorem Wisely",
+      content: "Many use their lorem on useless artefacts such as upgrades and promotions. I advise purchasing the "
+   },
+   {
+      name: "Go To Church",
+      content: "Church is a valuable place to steal bibles to create an impenetrable bible fortress. Once this is done, no one shall oppose your rule."
+   },
+   {
+      name: "Kill All Doors",
+      content: "Doors are the enemy. Their menacing rectangular frame exists only to oppose you. Each door you kill is one less obstacle in your path to Enlightenment."
    }
 ];

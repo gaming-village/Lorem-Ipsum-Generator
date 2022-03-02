@@ -532,8 +532,8 @@ const CorporateOverview = () => {
       Game.userInfo.job = job;
       Game.userInfo.previousJobs.push(job);
 
-      setJob(job);
       setState(State.regular);
+      setJob(job);
 
       Game.isInFocus = false;
       Game.hideMask();

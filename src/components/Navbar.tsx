@@ -89,7 +89,7 @@ const NavBar = () => {
          if (typeof view === "string") {
             updateViewsArr(view);
          } else {
-            if (view + 1 > VIEW_DATA.length) return;
+            if (view + 1 > views.length) return;
             updateViewsArr(views[view].elemID);
          }
 

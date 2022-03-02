@@ -71,7 +71,7 @@ export const NotificationContainer = () => {
    useEffect(() => {
       createNotification = (info: NotificationInfo): void => {
          // Play chimes sound
-         if (info.playSound || true) new CustomAudio("notification-receive.mp3");
+         if (typeof info.playSound !== "undefined" ? info.playSound : true) new CustomAudio("notification-receive.mp3");
 
          notificationBuffer.push(info);
          setNotifications(notificationBuffer.slice());

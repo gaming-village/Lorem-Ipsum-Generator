@@ -122,9 +122,6 @@ const Home = () => {
 
       checkLoremLetters();
       
-      // Calculates the lorem made by workers while away and adds it to the lorem count
-      Game.calculateIdleProfits();
-      
       Game.loadLoremAchievements();
 
       document.addEventListener("keydown", onKeyDown);

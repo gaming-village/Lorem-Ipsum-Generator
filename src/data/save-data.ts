@@ -203,6 +203,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(getCurrentTime());
       },
       updateValue: () => {
+         console.log("update val: ", getCurrentTime());
          return decToHex(getCurrentTime());
       },
       loadEvent: (savedValue: string) => {
