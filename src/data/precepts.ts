@@ -69,7 +69,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
    },
    {
       name: "The Troubles of Man",
-      content: "Lorem is not troubled by the common issues of humanity. Its' Characters are perfect and uniform, and not prone to aging or heart attacks."
+      content: "Lorem is not troubled by the common issues of humanity. Its' Characters are perfect and uniform, and not prone to aging, heart attacks or financial debt."
    },
    {
       name: "Do Not Use Your Eyes",
@@ -97,7 +97,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
    },
    {
       name: "Do Not Lose",
-      content: "Losing is for the weak and disabled, do not be weak or disabled."
+      content: "Losing is for the weak and feeble, do not be weak or feeble."
    },
    {
       name: "Become A Plant",
@@ -125,7 +125,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
    },
    {
       name: "Use Your Lorem Wisely",
-      content: "Many use their lorem on useless artefacts such as upgrades and promotions. I advise purchasing the "
+      content: "Many use their lorem on useless artifacts such as upgrades and promotions. I advise purchasing the finer things such as the Big Lorem Counter. It is very good."
    },
    {
       name: "Go To Church",

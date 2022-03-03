@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Game from "../../Game";
+import Application from "../applications/Application";
 import Program from "./Program";
 
 const Elem = (): JSX.Element => {
@@ -9,33 +10,35 @@ const Elem = (): JSX.Element => {
       setApplications(Object.values(Game.applications));
    }
 
-   const applicationTabs: ReadonlyArray<JSX.Element> = applications.map((application, i) => {
+   const applicationTabs: ReadonlyArray<JSX.Element> = applications.map((application: Application, i) => {
+      const info = application.info;
+
       let imgSrc;
       try {
-         imgSrc = require("../../images/application-icons/" + application.iconSrc).default;
+         imgSrc = require("../../images/application-icons/" + info.iconSrc).default;
       } catch {
          imgSrc = require("../../images/icons/questionmark.png").default;
       }
 
       const buy = (): void => {
-         if (!application.isUnlocked && Game.lorem > application.cost) {
-            Game.lorem -= application.cost;
+         if (!info.isUnlocked && Game.lorem > info.cost) {
+            Game.lorem -= info.cost;
             application.unlock();
          }
 
          update();
       }
 
-      return <div className={`tab ${application.isUnlocked ? "unlocked" : ""}`} key={i}>
+      return <div className={`tab ${info.isUnlocked ? "unlocked" : ""}`} key={i}>
          <div className="formatter">
             <div className="formatter">
                <img src={imgSrc} alt="Application icon preview" />
                <div>
-                  <p className="name">{application.name}</p>
-                  <p className="description">{application.description}</p>
+                  <p className="name">{info.name}</p>
+                  <p className="description">{info.description}</p>
                </div>
             </div>
-            <button onClick={buy} className={`button ${application.isUnlocked ? "dark" : ""}`}>{!application.isUnlocked ? application.cost + " Lorem" : "Bought"}</button>
+            <button onClick={buy} className={`button ${info.isUnlocked ? "dark" : ""}`}>{!info.isUnlocked ? info.cost + " Lorem" : "Bought"}</button>
          </div>
       </div>
    });

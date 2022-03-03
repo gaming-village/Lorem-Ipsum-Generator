@@ -106,12 +106,12 @@ const WelcomeScreen = () => {
                      }
                   }
 
-                  return <Button isCentered={true} isFlashing={i === section + 1} className={i !== section ? "dark" : ""} key={i} onClick={clickEvent}>{currentSection.name}</Button>
+                  return <Button isCentered isFlashing={i === section + 1} className={i !== section ? "dark" : ""} key={i} onClick={clickEvent}>{currentSection.name}</Button>
                })}
 
                <div className="separator"></div>
 
-               <Button onClick={section === sections.length - 1 ? () => close() : undefined} isFlashing={section === sections.length - 1} isCentered={true} className={"dotted" + (section === sections.length - 1 ? "" : " dark")}>Close</Button>
+               <Button onClick={section === sections.length - 1 ? () => close() : undefined} isFlashing={section === sections.length - 1} isCentered className={"dotted" + (section === sections.length - 1 ? "" : " dark")}>Close</Button>
             </div>
          </div>
       </WindowsProgram>

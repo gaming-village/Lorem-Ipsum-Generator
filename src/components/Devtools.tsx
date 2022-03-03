@@ -143,7 +143,7 @@ const Devtools = () => {
          <h2 onClick={() => toggleTab("data")}>Data</h2>
 
          <div className={!openedTabs.includes("data") ? "hidden" : ""}>
-            <Button onClick={reset} isCentered={true}>Reset</Button>
+            <Button onClick={reset} isCentered>Reset</Button>
          </div>
       </div>
    ) : <></>;

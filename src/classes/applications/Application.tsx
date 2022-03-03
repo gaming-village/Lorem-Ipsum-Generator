@@ -5,6 +5,7 @@ import { createFile } from "../../components/FileSystem";
 import WindowsProgram from "../../components/WindowsProgram";
 import Game from "../../Game";
 import { getElem } from "../../utils";
+import { ApplicationInfo } from "../../data/application-data";
 
 interface TaskbarIconProps {
    name: string;
@@ -55,53 +56,24 @@ const ApplicationElem = ({ title, id, application, children }: ApplicationElemPr
    const minimizeFunc = () => application.close();
    
    return visible ? (
-      <WindowsProgram ref={applicationRef} title={title} id={id} uiButtons={["minimize"]} isDraggable={true} minimizeFunc={minimizeFunc}>
+      <WindowsProgram ref={applicationRef} title={title} id={id} uiButtons={["minimize"]} isDraggable startsAtTopLeft minimizeFunc={minimizeFunc}>
          {children}
       </WindowsProgram>
    ) : <></>;
 }
 
-export enum ApplicationCategory {
-   lifestyle = "Lifestyle",
-   utility = "Utility"
-}
-interface ApplicationType {
-   name: string;
-   id: string;
-   fileName: string;
-   category: ApplicationCategory;
-   description: string;
-   iconSrc: string | null;
-   cost: number;
-   isUnlocked: boolean;
-   isOpenByDefault?: boolean;
-}
 abstract class Application {
-   private readonly name: string;
-   private readonly id: string;
-   private readonly fileName: string;
-   readonly category: ApplicationCategory;
-   readonly description: string;
-   readonly iconSrc: string | null;
-   readonly cost: number;
+   readonly info: ApplicationInfo;
 
    setVisibility!: (newVal: boolean) => void;
    setTaskbarStatus!: (newVal: boolean) => void;
 
-   isUnlocked: boolean;
    isOpened: boolean;
-   constructor({ name, id, fileName, category, description, iconSrc, cost, isUnlocked, isOpenByDefault = false }: ApplicationType) {
-      this.name = name;
-      this.id = id;
-      this.fileName = fileName;
-      this.category = category;
-      this.description = description;
-      this.iconSrc = iconSrc;
-      this.cost = cost;
-      this.isUnlocked = isUnlocked;
-      this.isOpened = isOpenByDefault;
+   constructor(info: ApplicationInfo) {
+      this.info = info;
+      this.isOpened = typeof info.isOpenByDefault !== "undefined" ? info.isOpenByDefault : false;
 
-      if (this.isUnlocked) {
+      if (info.isUnlocked) {
          this.createTaskbarIcon();
          this.createFile();
       }
@@ -109,11 +81,11 @@ abstract class Application {
       const elemContent = this.instantiate();
       this.createElem(elemContent);
       
-      Game.applications[id] = this;
+      Game.applications[info.id] = this;
    }
 
    private createElem(elemContent: JSX.Element): void {
-      const elem = <ApplicationElem id={this.id} title={this.name} application={this}>
+      const elem = <ApplicationElem id={this.info.id} title={this.info.name} application={this}>
          {elemContent}
       </ApplicationElem>;
 
@@ -128,7 +100,7 @@ abstract class Application {
    private createTaskbarIcon(): void {
       const taskbar = getElem("taskbar") as HTMLElement;
 
-      const icon = <TaskbarIcon name={this.name} application={this} />
+      const icon = <TaskbarIcon name={this.info.name} application={this} />
 
       const container = document.createElement("div");
       container.style.display = "inline";
@@ -142,16 +114,16 @@ abstract class Application {
       }
       
       createFile({
-         name: this.fileName,
+         name: this.info.fileName,
          extension: "exe",
          clickEvent: toggleApplicationVisibility
       });
    }
 
    unlock(): void {
-      if (this.isUnlocked) return;
+      if (this.info.isUnlocked) return;
 
-      this.isUnlocked = true;
+      this.info.isUnlocked = true;
       this.createTaskbarIcon();
       this.createFile();
    }

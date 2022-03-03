@@ -14,7 +14,7 @@ const Elem = ({ application }: ElemProps) => {
 
       <p>Your browser has occured! In order to prevent this, you are Downloading this viruse!</p>
 
-      <Button onClick={() => application.close()} isCentered={true}>no</Button>
+      <Button onClick={() => application.close()} isCentered>no</Button>
    </>;
 }
 

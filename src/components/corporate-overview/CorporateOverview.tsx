@@ -9,7 +9,7 @@ import ProfileSection from "./ProfileSection";
 
 import Game from "../../Game";
 import { JOB_DATA, JOB_TIER_DATA, Job, } from "../../data/job-data";
-import UPGRADES, { UpgradeInfo } from "../../data/upgrade-data";
+import UPGRADE_DATA, { UpgradeInfo } from "../../data/upgrade-data";
 import { getPrefix, randItem, roundNum } from "../../utils";
 
 import "../../css/corporate-overview.css";
@@ -65,7 +65,7 @@ export interface SectionProps {
  * @returns If the upgrade is owned.
  */
 export function hasUpgrade(name: string): boolean {
-   for (const upgrade of UPGRADES) {
+   for (const upgrade of UPGRADE_DATA) {
       if (upgrade.name === name) return upgrade.isBought || false;
    }
    throw new Error(`Upgrade '${name}' does not exist!`);
@@ -148,17 +148,10 @@ const UpgradesSection = ({ job }: SectionProps) => {
 
    let upgradeRow = new Array<JSX.Element>();
    let previousTier = 1;
-   for (let i = 0; i < UPGRADES.length; i++) {
-      const upgrade = UPGRADES[i];
+   for (let i = 0; i < UPGRADE_DATA.length; i++) {
+      const upgrade = UPGRADE_DATA[i];
 
       if (upgrade.tier > job.tier) {
-         if (upgradeRow.length > 0) {
-            content.push(
-               <div key={key++} className="upgrade-container">
-                  {upgradeRow}
-               </div>
-            );
-         }
          break;
       }
 
@@ -188,18 +181,34 @@ const UpgradesSection = ({ job }: SectionProps) => {
                }, "")}
             </div>
 
-            <Button onClick={canBuy && !isBought ? () => buyUpgrade(upgrade) : undefined} isFlashing={canBuy && !isBought} isDark={isBought} isCentered={true}>{isBought ? "Bought" : "Purchase"}</Button>
+            <Button onClick={canBuy && !isBought ? () => buyUpgrade(upgrade) : undefined} isFlashing={canBuy && !isBought} isDark={isBought} isCentered>{isBought ? "Bought" : "Purchase"}</Button>
          </div>
       );
 
       previousTier = upgrade.tier;
    }
+   if (upgradeRow.length > 0) {
+      content.push(
+         <div key={key++} className="upgrade-container">
+            {upgradeRow}
+         </div>
+      );
+   }
+
+   const numNextUpgrades = job.tier < JOB_TIER_DATA.length ? (
+      UPGRADE_DATA.reduce((previousValue, currentValue) => {
+         if (currentValue.tier === job.tier + 1) {
+            return previousValue + 1;
+         }
+         return previousValue;
+      }, 0)
+   ) : null;
 
    return <div id="upgrades">
       {content}
 
-      {job.tier < JOB_DATA[JOB_DATA.length - 1].tier ? (
-         <p className="notice">Get promoted to unlock more upgrades!</p>
+      {job.tier < JOB_TIER_DATA.length ? (
+         <p className="notice">Get promoted to unlock {numNextUpgrades!} more upgrade{numNextUpgrades! !== 1 ? "s" : ""}!</p>
       ) : ""}
    </div>;
 }
@@ -317,6 +326,30 @@ const CareerPathSection = () => {
    </div>
 }
 
+const getNonInternWorkerCount = (): number => {
+   let total = 0;
+   for (const worker of JOB_DATA) {
+      if (worker.name === "Intern") continue;
+      const count = Game.userInfo.workers[worker.id];
+      total += count;
+   }
+   return total;
+}
+
+/** Gets the total number of a worker's direct subordinates */
+const getSubordinateCount = (worker: Job): number => {
+   let subordinateCount = 0;
+   for (const currentWorker of JOB_DATA) {
+      if (currentWorker.tier > worker.tier) break;
+
+      if (currentWorker.tier === worker.tier - 1) {   
+         const count = Game.userInfo.workers[currentWorker.id];
+         subordinateCount += count;
+      }
+   }
+   return subordinateCount;
+}
+
 /**
  * Calculates how much one of a certain worker type would produce
  * @param worker The worker
@@ -324,12 +357,33 @@ const CareerPathSection = () => {
 const getSingularWorkerProduction = (worker: Job): number => {
    // Quick fun fact: this is actually the only place where ".loremProduction" is used!
    let production = JOB_TIER_DATA[worker.tier - 1].loremProduction;
+
+   if (worker.name === "Intern" && hasUpgrade("Disciplinary Techniques")) {
+      const nonInternCount = getNonInternWorkerCount();
+      production += 0.01 * nonInternCount;
+   }
    
    if (hasJob("Employee")) {
       production *= 1.5;
    }
+
    if (worker.name === "Intern" && hasJob("Manager")) {
       production *= 2;
+   }
+
+   if (hasUpgrade("Company Restructure")) {
+      production *= 1.1;
+   }
+
+   if (hasUpgrade("AGILE Development")) {
+      production *= 1.5;
+   }
+
+   if (hasUpgrade("Micro Management")) {
+      const subordinateCount = getSubordinateCount(worker);
+      if (subordinateCount > 0) {
+         production *= 1 + 0.1 * subordinateCount;
+      }
    }
 
    return production;
@@ -403,7 +457,7 @@ const WorkerSection = ({ job: worker }: SectionProps) => {
    
    const buyWorker = (num: number): void => {
       for (let i = 0; i < num; i++) {
-         const cost = calculateWorkerCost(worker);
+         const cost = calculateWorkerCost(worker, i);
          
          Game.lorem -= cost;
       }

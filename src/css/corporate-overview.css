@@ -291,10 +291,15 @@
    transform: translateX(-50%);
 }
 
+#upgrades .title-bar span {
+   max-width: unset;
+   margin-left: 50%;
+   transform: translateX(-50%);
+}
 #upgrades .upgrade-container {
    width: 100%;
    display: flex;
-   justify-content: space-around;
+   justify-content: space-evenly;
    align-items: center;
    margin: 0.5rem 0;
 }

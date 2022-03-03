@@ -18,7 +18,7 @@ const Elem = ({ popup }: ElemProps) => {
 
       <p>To fix them, you must upgrade your mainframe to System 32</p>
 
-      <Button onClick={() => popup.close()} isCentered={true}>Go away!</Button>
+      <Button onClick={() => popup.close()} isCentered>Go away!</Button>
    </>;
 }
 

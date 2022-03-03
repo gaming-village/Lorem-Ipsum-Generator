@@ -85,7 +85,7 @@ const Elem = ({ popup }: ElemProps) => {
             <p>You are todays lucky Visitor! <i>(June)</i></p>
             <p>Please complete this short survey and to say "Thanks You" we would offer the <b>50 dollers!</b></p>
 
-            <Button onClick={incrementState} isCentered={true}>Start survey</Button>
+            <Button onClick={incrementState} isCentered>Start survey</Button>
          </>
          break;
       }
@@ -105,7 +105,7 @@ const Elem = ({ popup }: ElemProps) => {
             <label htmlFor="annual-survey-colour">What is your favourite colour?</label>
             <input name="annual-survey-colour" type="range" min={1} max={8} defaultValue={3.5} step={3} />
 
-            <Button onClick={close} isCentered={true}>Submit survey</Button>
+            <Button onClick={close} isCentered>Submit survey</Button>
          </>
          break;
       }

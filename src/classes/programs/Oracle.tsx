@@ -7,7 +7,7 @@ import Button from "../../components/Button";
 import Program from "./Program";
 
 import Game from "../../Game";
-import { LOREM_PRECEPTS, PreceptInfo } from "../../data/church-of-lorem-data";
+import { LOREM_PRECEPTS, PreceptInfo } from "../../data/precepts";
 import { randItem } from "../../utils";
 
 const Elem = () => {

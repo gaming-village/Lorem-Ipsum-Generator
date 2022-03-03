@@ -73,7 +73,7 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
          </div>
       </div>
 
-      <Button isDark={!canPromote} isFlashing={canPromote} isCentered={true} onClick={() => promote()}>Promote</Button>
+      <Button isDark={!canPromote} isFlashing={canPromote} isCentered onClick={() => promote()}>Promote</Button>
       </> : undefined}
    </>;
 }

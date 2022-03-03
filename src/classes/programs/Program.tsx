@@ -28,7 +28,7 @@ const ProgramElem = ({ name, id, program, isChurchProgram, children }: ProgramEl
    const minimizeFunc = () => program.close();
    
    return opened ? (
-   <WindowsProgram className={isChurchProgram ? "church-of-lorem" : ""} ref={programRef} title={name} id={id} uiButtons={["minimize"]} isDraggable={true} minimizeFunc={minimizeFunc}>
+      <WindowsProgram className={isChurchProgram ? "church-of-lorem" : ""} ref={programRef} title={name} id={id} uiButtons={["minimize"]} isDraggable startsAtTopLeft minimizeFunc={minimizeFunc}>
          {children}
       </WindowsProgram>
    ) : <></>;

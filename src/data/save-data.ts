@@ -1,15 +1,15 @@
-import { setUnlockedApplications } from "../applications";
 import Game from "../Game";
 import { getPreferences, setPreferences } from "../classes/programs/Preferences";
 import { getCurrentTime, randInt } from "../utils";
-import ACHIEVEMENTS from "./achievements-data";
+import ACHIEVEMENTS from "./achievement-data";
 import LETTERS from "./letter-data";
 import LOREM_PACKS from "./lorem-pack-data";
-import UPGRADES from "./upgrade-data";
+import UPGRADE_DATA from "./upgrade-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
 import { Job, JOB_DATA } from "./job-data";
 import { BLACK_MARKET_SHOPS } from "./black-market-data";
 import POPUP_DATA from "./popup-data";
+import APPLICATION_DATA from "./application-data";
 
 const HEX_UNITS: { [key: number]: string } = {
    0: "0",
@@ -181,7 +181,6 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          const decVal = Number(hexToDec(savedValue));
-         console.log("mm: ", decVal);
          Game.lorem = decVal;
          Game.previousLorem = decVal;
       }
@@ -196,7 +195,6 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          Game.totalLoremTyped = Number(hexToDec(savedValue));
-         console.log("set total: ", Game.totalLoremTyped)
       }
    },
    {
@@ -205,7 +203,6 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return decToHex(getCurrentTime());
       },
       updateValue: () => {
-         console.log("update val: ", getCurrentTime());
          return decToHex(getCurrentTime());
       },
       loadEvent: (savedValue: string) => {
@@ -216,7 +213,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       name: "Unlocked applications",
       defaultValue: () => {
          let total = 0;
-         Object.values(Game.applications).forEach((application, i) => {
+         APPLICATION_DATA.forEach((application, i) => {
             if (application.isUnlocked) total += Math.pow(2, i);
          });
          return decToHex(total);
@@ -224,13 +221,16 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       updateValue: () => {
          let total = 0;
          Object.values(Game.applications).forEach((application, i) => {
-            if (application.isUnlocked) total += Math.pow(2, i);
+            if (application.info.isUnlocked) total += Math.pow(2, i);
          });
          return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
-         setUnlockedApplications(bits);
+         for (let i = 0; i < APPLICATION_DATA.length; i++) {
+            const applicationInfo = APPLICATION_DATA[i];
+            applicationInfo.isUnlocked = bits[i] === 1;
+         }
       }
    },
    {
@@ -362,7 +362,6 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          const parts = savedValue.split("").map(Number);
-         console.log(parts);
 
          for (let i = 0; i < LETTERS.length; i++) {
             const letter = LETTERS[i], part = parts[i] || 0;
@@ -463,16 +462,16 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       updateValue: () => {
          let total = 0;
-         for (let i = 0; i < UPGRADES.length; i++) {
-            const upgrade = UPGRADES[i];
+         for (let i = 0; i < UPGRADE_DATA.length; i++) {
+            const upgrade = UPGRADE_DATA[i];
             if (upgrade.isBought) total += Math.pow(2, i);
          }
          return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
-         for (let i = 0; i < UPGRADES.length; i++) {
-            const upgrade = UPGRADES[i];
+         for (let i = 0; i < UPGRADE_DATA.length; i++) {
+            const upgrade = UPGRADE_DATA[i];
             const bit = i <= bits.length ? bits[i] : 0;
             upgrade.isBought = bit === 1;
          }

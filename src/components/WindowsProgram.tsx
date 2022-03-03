@@ -1,4 +1,4 @@
-import React, { Ref, useEffect, useRef } from "react";
+import React, { Ref, RefObject, useEffect, useRef } from "react";
 import { dragElem } from "../utils";
 import TitleBar from "./TitleBar";
 
@@ -12,6 +12,7 @@ interface ProgramProps {
    minimizeFunc?: () => void;
    closeFunc?: () => void;
    isDraggable?: boolean;
+   startsAtTopLeft?: boolean;
    id?: string;
    className?: string;
    style?: React.CSSProperties;
@@ -34,7 +35,13 @@ const WindowsProgram = React.forwardRef((props: ProgramProps, ref: Ref<HTMLDivEl
       if (props.isDraggable) {
          dragElem((titlebarRef.current! as HTMLElement).parentElement!, titlebarRef.current!);
       }
-   }, [props.isDraggable]);
+
+      if (props.startsAtTopLeft) {
+         const elem = (ref as RefObject<HTMLDivElement>).current!;
+         elem.style.top = "0";
+         elem.style.left = "0";
+      }
+   }, [props.isDraggable, props.startsAtTopLeft, ref]);
 
    return <div ref={ref} style={props.style} id={props.id} className={`windows-program ${props.className}`}>
       <TitleBar ref={titlebarRef} buttonsAreDark={props.buttonsAreDark} minimizeFunc={props.minimizeFunc} closeFunc={props.closeFunc} iconSrc={props.titleIconSrc} titleStyle={props.titleStyle} title={props.title} uiButtons={props.uiButtons || new Array<UIButtonType>()} isDraggable={props.isDraggable || false} />

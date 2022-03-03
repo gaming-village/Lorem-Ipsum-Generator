@@ -1,22 +1,10 @@
-import "./css/applications.css";
-
-const fileNames: ReadonlyArray<string> = ["LoremCounter", "AchievementTracker"];
-let unlockInfo: Array<number> = fileNames.map(_ => 0);
-
-export function setUnlockedApplications(bitmap: Array<number>): void {
-   unlockInfo = bitmap;
-}
+import APPLICATION_DATA from "./data/application-data";
 
 export function setupApplications() {
-   const applications = fileNames.map(fileName => require("./classes/applications/" + fileName).default)
+   for (let i = 0; i < APPLICATION_DATA.length; i++) {
+      const applicationInfo = APPLICATION_DATA[i];
 
-   for (let i = 0; i < applications.length; i++) {
-      const application = applications[i];
-      new application(unlockInfo[i]);
-   }
-
-   // Loop again once Game.applications is filled
-   for (const application of applications) {
-      if (application.setup) application.setup();
+      const application = require("./classes/applications/" + applicationInfo.className).default;
+      new application(applicationInfo);
    }
 }

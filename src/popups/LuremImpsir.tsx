@@ -48,7 +48,7 @@ const Elem = ({ application }: ElemProps) => {
 
       <p>Try agian in the 5 seconds.</p>
 
-      <Button onClick={time > 0 ? undefined : () => application.close()} isCentered={true} isDark={time > 0}><>continue {time > 0 ? <i>{"(" + roundNum(time, undefined, true) + ")"}</i> : ""}</></Button>
+      <Button onClick={time > 0 ? undefined : () => application.close()} isCentered isDark={time > 0}><>continue {time > 0 ? <i>{"(" + roundNum(time, undefined, true) + ")"}</i> : ""}</></Button>
    </>
 }
 

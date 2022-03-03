@@ -1,9 +1,9 @@
 import { roundNum, getElem, getCurrentTime } from "./utils";
 import { updateSave } from "./save";
-import achievements, { Achievement } from "./data/achievements-data";
+import achievements, { Achievement } from "./data/achievement-data";
 import { unlockAchievement } from "./classes/applications/AchievementTracker";
 import { LOREM_LETTERS } from "./data/letter-data";
-import ACHIEVEMENTS from "./data/achievements-data";
+import ACHIEVEMENTS from "./data/achievement-data";
 import { SettingsType } from "./classes/programs/Settings";
 import { JOB_DATA, Job } from "./data/job-data";
 import { calculateWorkerProduction, hasUpgrade } from "./components/corporate-overview/CorporateOverview";
@@ -147,7 +147,6 @@ const Game: GameType = {
    },
    timeAtLastSave: -1,
    calculateIdleProfits: function(): void {
-      console.log("a");
       const secondsIdle = (getCurrentTime() - this.timeAtLastSave) / 1000;
       
       if (secondsIdle > 1000000) {

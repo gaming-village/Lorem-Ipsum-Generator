@@ -29,18 +29,25 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       loremProduction: 0.1
    },
    {
-      requirements: 100,
+      requirements: 150,
       salary: "$6000",
       benefits: [],
       initialCost: 75,
       loremProduction: 0.5
    },
    {
-      requirements: 500,
+      requirements: 1000,
       salary: "$50000",
       benefits: [],
       initialCost: 150,
       loremProduction: 3
+   },
+   {
+      requirements: 10000,
+      salary: "$150000",
+      benefits: [],
+      initialCost: 500,
+      loremProduction: 10
    }
 ];
 

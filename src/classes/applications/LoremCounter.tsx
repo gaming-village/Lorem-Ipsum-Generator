@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Game from "../../Game";
 import { randInt, randItem, roundNum } from "../../utils";
-import Application, { ApplicationCategory } from "./Application";
+import Application from "./Application";
 
 const createEffectText = (container: HTMLElement, isNegative: boolean): void => {
    if (container === null) return;
@@ -49,20 +49,6 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
 class LoremCounter extends Application {
    updateLoremCount: ((newVal: number, diff: number) => void) | null = null;
    createTextEffect: ((isNegative?: boolean) => void) | null = null;
-
-   constructor() {
-      super({
-         name: "Lorem Counter",
-         id: "loremCounter",
-         fileName: "lorem_counter",
-         category: ApplicationCategory.lifestyle,
-         description: "Counts your lorem.",
-         iconSrc: "lorem-counter.png",
-         cost: 0,
-         isUnlocked: true,
-         isOpenByDefault: true
-      });
-   }
 
    instantiate(): JSX.Element {
       return <Elem application={this} />;

@@ -59,7 +59,7 @@ const Media = () => {
          <TitleBar title="View Mail" uiButtons={[]} isDraggable={false} />
          <p>View all mail you have received.</p>
          
-         <Button onClick={openMail} isCentered={true}>Open Mail</Button>
+         <Button onClick={openMail} isCentered>Open Mail</Button>
       </div>
 
       {content}

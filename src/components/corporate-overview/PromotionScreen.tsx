@@ -90,7 +90,7 @@ const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
             {careerPanels}
          </div>
 
-         <Button onClick={() => promotionAttempt(nextJobs[0])} isCentered={true} isFlashing={true}>Continue</Button>
+         <Button onClick={() => promotionAttempt(nextJobs[0])} isCentered isFlashing>Continue</Button>
       </> : <>
          <p className="benefits">Benefits:</p>
          {promotionBenefits}
@@ -103,7 +103,7 @@ const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
 
          <p className="selected-label">Selected: <b>{selectedJob ? selectedJob.name : "None"}</b></p>
 
-         <Button isDark={selectedJob === null} isFlashing={selectedJob !== null} isCentered={true} onClick={() => promotionAttempt(selectedJob)}>Continue</Button>
+         <Button isDark={selectedJob === null} isFlashing={selectedJob !== null} isCentered onClick={() => promotionAttempt(selectedJob)}>Continue</Button>
       </>}
 
       <div className="footer">LoremCorp LLC&trade;</div>

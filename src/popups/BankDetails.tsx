@@ -1,8 +1,6 @@
 import { useRef, useState } from "react";
 import Button from "../components/Button";
 
-import WarningIcon from "../images/icons/warning.png";
-
 import { isPrime, randInt, randItem } from "../utils";
 import Game from "../Game";
 import Popup from "./Popup";
@@ -22,6 +20,9 @@ const validateInput = (userInput: string, inputType: number): string | true => {
 
    switch (inputType) {
       case 0: {
+         // Example of valid input:
+         // (!!!aaaaa)
+
          if (len !== 10) {
             return "The input must be 10 characters long.";
          }
@@ -42,6 +43,9 @@ const validateInput = (userInput: string, inputType: number): string | true => {
          break;
       }
       case 1: {
+         // Example of valid input:
+         // ake
+
          const seenChars = new Array<string>();
          let vowelCount = 0;
          let previousCharIsVowel = false;
@@ -77,9 +81,51 @@ const validateInput = (userInput: string, inputType: number): string | true => {
          break;
       }
       case 2: {
+         // Example of valid input:
+         // Pass123abc@
+
+         if (!userInput.toLowerCase().includes("pass")) {
+            return "Input must contain 'pass'!";
+         }
+
+         if (!userInput.includes("123")) {
+            return "Input must contain '123'!";
+         }
+
+         if (!userInput.includes("abc")) {
+            return "Input must contain 'abc'!";
+         }
+
+         if (userInput === userInput.toLowerCase()) {
+            return "Input must contain at least one capital letter!";
+         }
+
+         if (specialCharacters.length === 0) {
+            return "Input must contain at least one special character!";
+         }
+
+         if (len < 8) {
+            return "Input must be at least 8 characters long!";
+         }
+
          break;
       }
       case 3: {
+         const num = Number(userInput);
+         if (isNaN(num)) {
+            return "Input must be a number!";
+         }
+
+         if (!Number.isInteger(Math.sqrt(num))) {
+            return "Input must be a square number!";
+         }
+
+         for (const char of userInput.split("").map(Number)) {
+            if (!isPrime(char)) {
+               return "All digits of the input must be prime!";
+            }
+         }
+
          break;
       }
    }
@@ -90,39 +136,54 @@ interface ElemProps {
    popup: BankDetails;
 }
 const Elem = ({ popup }: ElemProps) => {
-   const [userInput, setUserInput] = useState<string>("");
-   const inputType = useRef(randInt(0, 2));
+   const [inputVal, setInputVal] = useState<string>("");
+   const [inputIsValid, setInputIsValid] = useState<string | true | null>(null);
+   const inputType = useRef(randInt(0, 4));
    const inputRef = useRef<HTMLInputElement>(null);
 
-   const updateInput = () => {
+   const updateInputVal = (): void => {
       const inputVal = inputRef.current!.value;
-      setUserInput(inputVal);
+      setInputVal(inputVal);
    }
 
-   const inputIsValid: string | true = validateInput(userInput, inputType.current);
+   const enterPress = (): void => {
+      const event = window.event as KeyboardEvent;
+      const key = event.key;
+      if (key === "Enter") {
+         submit();
+      }
+   }
+
+   const submit = (): void => {
+      const newInputIsValid = validateInput(inputVal, inputType.current);
+      setInputIsValid(newInputIsValid);
+
+      if (newInputIsValid === true) setTimeout(() => {
+         popup.close();
+      }, 1000);
+   }
 
    const BAD_ADJECTIVES = ["TERRIBLE", "HIDEOUS", "SICKENING", "AGONISING", "DREADFUL", "RANCID", "PATHETIC", "REPULSIVE", "HOPELESS", "ATROCIOUS", "ABHORRENT", "APPALLING", "AWFUL", "INSUFFERABLE", "ALARMING", "LAUGHABLE", "ABYSMAL", "ABOMINABLE", "REPUGNANT"];
    const randomAdjective = randItem(BAD_ADJECTIVES);
 
    return <>
-      <div className="warning-container">
-         <img src={WarningIcon} alt="Warning!" />
-         <p>In order to security your purchase, we reqiure the Details</p>
-      </div>
+      <p style={{textDecoration: "underline"}}>&gt; Give me bank acount detales below!</p>
 
-      <p style={{textDecoration: "underline"}}>&gt; Pls give me bank acount details below!</p>
-
-      <p>Current password strength: {typeof inputIsValid === "string" ? (
+      <p>Current password strength: {typeof inputIsValid === "string" || inputIsValid === null ? (
          <span style={{color: "#880000", fontWeight: 600}}>{randomAdjective}</span>
-      ) : ""}</p>
+      ) : (
+         <span style={{color: "#008800"}}>OKAY</span>
+      )}</p>
 
-      <input style={{marginLeft: "50%", transform: "translateX(-50%)"}} ref={inputRef} type="text" onChange={updateInput} />
+      <input onChange={updateInputVal} onKeyDown={enterPress} style={{marginLeft: "50%", transform: "translateX(-50%)"}} ref={inputRef} type="text" />
 
       {typeof inputIsValid === "string" ? (
          <p style={{color: "red"}}>ERROR: {inputIsValid}</p>
+      ) : inputIsValid === true ? (
+         <p style={{color: "lime", textAlign: "center", textShadow: "0 0 3px #000, 0 0 2px #000, 0 0 1px #000"}}>Accepted.</p>
       ) : undefined}
 
-      <Button onClick={inputIsValid === true ? () => popup.close() : undefined} isDark={typeof inputIsValid === "string"} isCentered>Submit</Button>
+      <Button isDark={inputIsValid === true} onClick={submit} isCentered>Submit</Button>
    </>;
 }
 

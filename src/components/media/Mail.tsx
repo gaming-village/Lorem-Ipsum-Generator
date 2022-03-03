@@ -133,7 +133,7 @@ const Letter = ({ letter, closeFunc, isClaimed,claimFunc }: LetterProps) => {
                   })}
                </ul>
 
-               <Button onClick={() => claimFunc!()} isCentered={true} isDark={isClaimed} isFlashing={!isClaimed}>{!isClaimed ? "Claim All" : "Claimed!"}</Button>
+               <Button onClick={() => claimFunc!()} isCentered isDark={isClaimed} isFlashing={!isClaimed}>{!isClaimed ? "Claim All" : "Claimed!"}</Button>
             </> : (
                <p className="no-rewards-notice">This letter has no rewards!</p>
             )}

@@ -1,6 +1,7 @@
 export interface UpgradeInfo {
    readonly name: string;
    readonly description: string;
+   readonly flavourText?: string;
    readonly requirements: {
       readonly lorem?: number;
       readonly workers?: { [key: string]: number };
@@ -8,7 +9,8 @@ export interface UpgradeInfo {
    readonly tier: number;
    isBought?: boolean;
 }
-const UPGRADES: Array<UpgradeInfo> = [
+const UPGRADE_DATA: Array<UpgradeInfo> = [
+   /** TIER 1 **/
    {
       name: "Typewriter",
       description: "Lorem generation through typing is doubled.",
@@ -17,6 +19,8 @@ const UPGRADES: Array<UpgradeInfo> = [
       },
       tier: 1
    },
+
+   /** TIER 2 **/
    {
       name: "Intern Motivation",
       description: "Achievements create motivation. Intern production is increased by motivation.",
@@ -36,8 +40,10 @@ const UPGRADES: Array<UpgradeInfo> = [
       },
       tier: 2
    },
+
+   /** TIER 3 **/
    {
-      name: "Corporate Heirarchy",
+      name: "Micro Management",
       description: "Each worker increases the productivity of their direct subordinates by 10%.",
       requirements: {
          lorem: 100,
@@ -53,19 +59,58 @@ const UPGRADES: Array<UpgradeInfo> = [
       description: "Each non-intern worker increases all intern's base lorem production by 0.01.",
       requirements: {
          workers: {
-            interns: 20
+            interns: 10
          }
       },
       tier: 3
    },
    {
-      name: "Mechanical Keyboard", 
-      description: "Typing has a small chance to create a random worker.",
+      name: "Mechanical Keyboard",
+      description: "Typing has a small chance to instantly complete a word.",
       requirements: {
          lorem: 200
       },
       tier: 3
+   },
+
+   /** TIER 4 **/
+   {
+      name: "AGILE Development",
+      description: "Workers generate 50% more lorem and get 50% less sleep.",
+      requirements: {
+         workers: {
+            interns: 15
+         }
+      },
+      tier: 4
+   },
+   {
+      name: "Company Restructure",
+      description: "All workers produce 10% more lorem.",
+      requirements: {
+         lorem: 200
+      },
+      tier: 4
+   },
+   {
+      name: "Planned Obsolescence",
+      description: "When enough characters have been typed, they all get sacrificed for more lorem.",
+      requirements: {
+         lorem: 1000
+      },
+      tier: 4
+   },
+
+   /** TIER 5 **/
+   {
+      name: "Sentient Keyboard",
+      description: "Typing is done automatically (but very slowly).",
+      flavourText: "Significant advances in science has allowed the consciousness of an intern to be placed into a keyboard, resulting in semi-automatic typing.",
+      requirements: {
+         lorem: 0
+      },
+      tier: 5
    }
 ];
 
-export default UPGRADES;
+export default UPGRADE_DATA;

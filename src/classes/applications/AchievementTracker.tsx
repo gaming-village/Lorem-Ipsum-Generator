@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Button from '../../components/Button';
-import ACHIEVEMENTS, { Achievement, AchievementCategory } from '../../data/achievements-data';
+import ACHIEVEMENTS, { Achievement, AchievementCategory } from '../../data/achievement-data';
 import { createNotification } from '../../notifications';
-import Application, { ApplicationCategory } from './Application';
+import Application from './Application';
 
 const findAchievement = (id: string): Achievement | null => {
    for (const achievement of ACHIEVEMENTS) {
@@ -181,11 +181,6 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
 
    const achievements = filterToElems(filterItems, displayType);
 
-   // let achievements!: ReadonlyArray<JSX.Element>;
-   // if (filterType === FilterTypes.category) {
-   //    achievements = categoryFilter(displayType);
-   // }
-
    const viewOptions = new Array<JSX.Element>();
    for (let i = 0; i < Object.keys(DisplayTypes).length; i++) {
       const displayName = Object.values(DisplayTypes)[i];
@@ -241,19 +236,6 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
 }
 
 class AchievementTracker extends Application {
-   constructor(isUnlocked: boolean) {
-      super({
-         name: "Achievement Tracker",
-         id: "achievementTracker",
-         fileName: "achievement_tracker",
-         category: ApplicationCategory.lifestyle,
-         description: "Keep track of how many meaningless tasks you have completed.",
-         iconSrc: "achievement-tracker.png",
-         cost: 5,
-         isUnlocked: isUnlocked
-      });
-   }
-
    instantiate(): JSX.Element {
       return <Elem application={this} />;
    }

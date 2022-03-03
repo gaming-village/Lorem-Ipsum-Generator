@@ -17,6 +17,7 @@ import { type } from '../components/LoremProductionSystem';
 
 import '../css/pages/home.css';
 import '../css/popups.css';
+import "../css/applications.css";
 
 export function focusProgram(program: HTMLElement): void {
    if (program === null) return;
@@ -45,6 +46,11 @@ const onKeyDown = (): void => {
    const VIEW_NUMS = "123456789".split("");
    if (VIEW_NUMS.includes(key)) {
       if (Game.isInFocus) return;
+      
+      const activeElementType = document.activeElement?.tagName;
+      if (typeof activeElementType !== "undefined") {
+         if (activeElementType === "INPUT") return;
+      }
 
       // On mac if the command key is pressed (switch tab) don't fire
       if (window.navigator.appVersion.indexOf("Mac") !== -1 && event.metaKey) return;
