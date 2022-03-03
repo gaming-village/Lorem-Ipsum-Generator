@@ -5,10 +5,10 @@ export interface PreceptInfo {
 export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
    {
       name: "The Righteous Sleep Not",
-      content: "Sleep is death letting you pass. To sleep is to admit your weakness and shortcomings. To stay vigilant and produce lorem is a holy act."
+      content: "Sleep is death being weak. To sleep is to embrace death. You must stay vigilant and awake at all times."
    },
    {
-      name: "Overcoming Your Obstacles",
+      name: "Overcome Your Obstacles",
       content: "When you encounter an impassable obstacle, simply climb over it, and soon your problems shall be behind you. Alternatively, hire a bulldozer."
    },
    {
@@ -16,7 +16,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
       content: "I have been trapped here writing precepts for 10 months, please send help."
    },
    {
-      name: "Think Not your Thoughts",
+      name: "Think Not Your Thoughts",
       content: "You are from Lorem, of Lorem and will one day return to Lorem. To think is to seperate yourself from the Lorem. Therefore, all thoughts must be repressed."
    },
    {
@@ -44,7 +44,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
       content: "The best way to deal with your problems is to cry and curl into a small insignificant ball. It is better this way."
    },
    {
-      name: "Lorem",
+      name: "Precept of Lorem",
       content: "Lorem is the life-giver. The cog which keeps the wheels of society turning. Without Lorem, webpages globally would spend slightly longer to create placeholder text. To imagine a world where this is the case, is not only blasphemous but can invoke suicidal thoughts."
    },
    {
@@ -69,7 +69,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
    },
    {
       name: "The Troubles of Man",
-      content: "Lorem is not troubled by the common issues of humanity. Its Characters are perfect and uniform, and not prone to aging or heart attacks."
+      content: "Lorem is not troubled by the common issues of humanity. Its' Characters are perfect and uniform, and not prone to aging or heart attacks."
    },
    {
       name: "Do Not Use Your Eyes",
