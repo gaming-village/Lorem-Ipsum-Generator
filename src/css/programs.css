@@ -58,7 +58,9 @@
    margin-top: 0.3rem;
 }
 #precept-area p {
-   margin-bottom: 1rem;
+   text-align: justify;
+   line-height: 1.2rem;
+   margin-bottom: 1.2rem;
 }
 #oracle .precept-num {
    color: #666;

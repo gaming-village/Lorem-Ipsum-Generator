@@ -55,7 +55,7 @@ abstract class Program {
       this.fileName = fileName;
       this.isChurchProgram = isChurchProgram;
 
-      this.createFile();
+      this.createFile(isChurchProgram);
 
       const elemContent = this.instantiate();
       this.createElem(elemContent);
@@ -76,14 +76,21 @@ abstract class Program {
 
    protected abstract instantiate(): JSX.Element;
 
-   private createFile(): void {
+   private createFile(isChurchProgram: boolean): void {
       const toggleProgramVisibility = (): void => {
          this.isOpened ? this.close() : this.open();
       }
 
+      let extension!: "exe" | "holyc";
+      if (isChurchProgram) {
+         extension = "holyc";
+      } else {
+         extension = "exe";
+      }
+
       createFile({
          name: this.fileName,
-         extension: "exe",
+         extension: extension,
          clickEvent: toggleProgramVisibility
       });
    }

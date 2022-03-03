@@ -3,7 +3,7 @@ import "../css/file-system.css";
 
 interface FileInfo {
    name: string;
-   extension: "exe";
+   extension: "exe" | "holyc";
    clickEvent?: () => void;
 }
 
@@ -37,6 +37,9 @@ const FileSystem = () => {
             case "exe": {
                iconSrc = require("../images/icons/program.png").default;
                break;
+            }
+            case "holyc": {
+               iconSrc = require("../images/church-of-lorem/temple.png").default;
             }
          }
 

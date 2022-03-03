@@ -181,6 +181,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          const decVal = Number(hexToDec(savedValue));
+         console.log("mm: ", decVal);
          Game.lorem = decVal;
          Game.previousLorem = decVal;
       }
@@ -195,6 +196,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          Game.totalLoremTyped = Number(hexToDec(savedValue));
+         console.log("set total: ", Game.totalLoremTyped)
       }
    },
    {
@@ -360,6 +362,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          const parts = savedValue.split("").map(Number);
+         console.log(parts);
 
          for (let i = 0; i < LETTERS.length; i++) {
             const letter = LETTERS[i], part = parts[i] || 0;

@@ -1,6 +1,7 @@
 import List from "../components/List";
 
 import { unlockView } from "../components/Navbar";
+import Game from "../Game";
 
 export interface LetterReward {
    readonly items: Array<string>;
@@ -140,6 +141,7 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          imgSrc: "",
          claimFunc: () => {
             unlockView("Black Market");
+            Game.misc.blackMarketIsUnlocked = true;
          },
          isClaimed: false
       },

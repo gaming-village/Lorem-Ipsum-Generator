@@ -16,7 +16,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
       content: "I have been trapped here writing precepts for 10 months, please send help."
    },
    {
-      name: "Think Not your Thoughts",
+      name: "Think Not Your Thoughts",
       content: "You are from Lorem, of Lorem and will one day return to Lorem. To think is to seperate yourself from the Lorem. Therefore, all thoughts must be repressed."
    },
    {
@@ -89,7 +89,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
    },
    {
       name: "Do Not Trust the Water",
-      content: "Water is fast and sneaky. It often attempts to arrive when you are not aware of it. I do not trust it."
+      content: "Water is fast and sneaky. It often attempts to arrive when I am not aware of it. I do not trust it."
    },
    {
       name: "Finish Your Work",

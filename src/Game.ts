@@ -147,6 +147,7 @@ const Game: GameType = {
    },
    timeAtLastSave: -1,
    calculateIdleProfits: function(): void {
+      console.log("a");
       const secondsIdle = (getCurrentTime() - this.timeAtLastSave) / 1000;
       
       if (secondsIdle > 1000000) {
