@@ -142,6 +142,14 @@ const PopupElem = ({ info, application, children, closeFunc }: PopupElemInfo) =>
    </WindowsProgram>;
 }
 
+setTimeout(() => {
+   for (const popup of POPUP_DATA) {
+      if (popup.className === "BankDetails") {
+         createPopup(popup);
+      }
+   }
+}, 100);
+
 abstract class Popup {
    private info: PopupInfo;
    elem!: JSX.Element;

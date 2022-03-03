@@ -263,12 +263,15 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       flavourText: "Your password is not strong enough.",
       cost: 60,
       iconSrc: "",
-      className: "",
+      className: "BankDetails",
       displayPos: {
          top: 23,
          left: -4.5
       },
       elem: {
+         dimensions: {
+            width: "25rem"
+         },
          title: "Amason.com",
          isSingleElem: false
       },

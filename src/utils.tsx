@@ -225,3 +225,12 @@ export function updateProgressBar(progressBarContainer: HTMLElement, progress: n
 export function clamp(value: number, min: number, max: number): number {
    return Math.max(Math.min(value, max), min);
 }
+
+export function isPrime(num: number): boolean {
+   if (num < 2) return false;
+
+   for (let i = 2; i <= Math.sqrt(num); i++) {
+      if (Number.isInteger(num / i)) return false;
+   }
+   return true;
+}

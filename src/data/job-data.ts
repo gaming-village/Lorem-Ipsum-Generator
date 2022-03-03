@@ -119,7 +119,7 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       benefits: [
          "Increases lorem generated from typing by 2x."
       ],
-      description: "Programmers work tirelessly to change text alignment and center div's, often working deep into the night to trying to figure out how to make a pull request.",
+      description: "Web Developers work tirelessly to change text alignment and center div's, often working deep into the night to trying to figure out how to make a pull request.",
       requirement: "Programmer",
       tier: 3
    },
