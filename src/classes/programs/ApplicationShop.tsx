@@ -21,7 +21,7 @@ const Elem = (): JSX.Element => {
       }
 
       const buy = (): void => {
-         if (!info.isUnlocked && Game.lorem > info.cost) {
+         if (!info.isUnlocked && Game.lorem >= info.cost) {
             Game.lorem -= info.cost;
             application.unlock();
          }

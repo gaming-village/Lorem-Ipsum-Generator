@@ -1,7 +1,8 @@
 import List from "../components/List";
 
-import { unlockView } from "../components/Navbar";
 import Game from "../Game";
+import { unlockView } from "../components/Navbar";
+import { unlockAchievement } from "../classes/applications/AchievementTracker";
 
 export interface LetterReward {
    readonly items: Array<string>;
@@ -71,8 +72,8 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
       from: "Lorem Corp",
       body: <>
          <p>Greetings Worker.</p>
-         <p>By now you may have noticed the "Corporate Overview" button at the top of your virtual machine. Click it to see an overview of your position here at Lorem Corp, and your workers.</p>
-         <p>Of course, being a worthless intern, you have no workers.</p>
+         <p>By now you may have noticed the "Corporate Overview" button at the top of your virtual machine. Click it to see an overview of your position here at Lorem Corp.</p>
+         <p>You will also be able to buy upgrades to assist with your lorem production.</p>
          <p>May your lorem generation be filled with suffering.</p>
       </>,
       folder: "Inbox",
@@ -142,6 +143,8 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          claimFunc: () => {
             unlockView("Black Market");
             Game.misc.blackMarketIsUnlocked = true;
+
+            unlockAchievement("Shady Sales");
          },
          isClaimed: false
       },

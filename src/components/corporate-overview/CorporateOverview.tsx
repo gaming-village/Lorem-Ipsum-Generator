@@ -292,11 +292,26 @@ const CareerPathSection = () => {
       const newRow = new Array<JSX.Element>();
       for (let j = 0; j < currentNode.children.length; j++) {
          const child = currentNode.children[j];
-         if (i > 0 && currentNode.children.length > 1 && child.status === "previousJob") {
-            if (j === 0) {
-               offset--;
-            } else {
-               offset++;
+
+         // Update the offset
+         if (i > 0 && child.status === "previousJob") {
+            switch (currentNode.children.length) {
+               case 2: {
+                  if (j === 0) {
+                     offset--;
+                  } else {
+                     offset++;
+                  }
+                  break;
+               }
+               case 3: {
+                  if (j === 0) {
+                     offset--
+                  } else if (j === 2) {
+                     offset++;
+                  }
+                  break;
+               }
             }
          }
 
@@ -322,6 +337,8 @@ const CareerPathSection = () => {
    }
 
    return <div id="career-path">
+      <p>View how your career has developed over the course of your time at LoremCorp.</p>
+
       {tree}
    </div>
 }
@@ -358,9 +375,15 @@ const getSingularWorkerProduction = (worker: Job): number => {
    // Quick fun fact: this is actually the only place where ".loremProduction" is used!
    let production = JOB_TIER_DATA[worker.tier - 1].loremProduction;
 
-   if (worker.name === "Intern" && hasUpgrade("Disciplinary Techniques")) {
-      const nonInternCount = getNonInternWorkerCount();
-      production += 0.01 * nonInternCount;
+   if (worker.name === "Intern")  {
+      if (hasUpgrade("Disciplinary Techniques")) {
+         const nonInternCount = getNonInternWorkerCount();
+         production += 0.01 * nonInternCount;
+      }
+
+      if (hasUpgrade("Intern Motivation")) {
+         production *= 1 + Game.misc.internMotivation / 100;
+      }
    }
    
    if (hasJob("Employee")) {

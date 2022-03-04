@@ -1,7 +1,7 @@
 import Game from "../Game";
 import { getPreferences, setPreferences } from "../classes/programs/Preferences";
 import { getCurrentTime, randInt } from "../utils";
-import ACHIEVEMENTS from "./achievement-data";
+import ACHIEVEMENT_DATA from "./achievement-data";
 import LETTERS from "./letter-data";
 import LOREM_PACKS from "./lorem-pack-data";
 import UPGRADE_DATA from "./upgrade-data";
@@ -403,21 +403,27 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       }
    },
    {
-      name: "Achievements",
+      name: "Unlocked achievements",
       defaultValue: () => {
          return "0";
       },
       updateValue: () => {
-         let unlockedAchievementTotal: number = 0;
-         ACHIEVEMENTS.forEach((achievement, i) => {
-            if (achievement.isUnlocked) unlockedAchievementTotal += Math.pow(2, i);
-         });
-         return decToHex(unlockedAchievementTotal);
+         let total = 0;
+         for (const achievement of ACHIEVEMENT_DATA) {
+            if (achievement.isUnlocked) {
+               total += Math.pow(2, achievement.id - 1);
+            }
+         }
+         return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
+         for (let i = 0; i < bits.length; i++) {
+            const achievement = ACHIEVEMENT_DATA[i];
+            achievement.isUnlocked = bits[i] === 1;
+         }
          bits.forEach((bit, i) => {
-            const achievement = ACHIEVEMENTS[i];
+            const achievement = ACHIEVEMENT_DATA[i];
             if (bit === 1) achievement.isUnlocked = true;
          });
       }

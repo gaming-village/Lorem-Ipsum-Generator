@@ -241,9 +241,11 @@
 #career-path {
    --item-size: 4rem;
    --item-spacing-x: 25px;
+   --row-spacing: 10px;
 }
 #career-path .row {
    height: var(--item-size);
+   margin: calc(var(--row-spacing) / 2) 0;
    transform: translateX(calc((var(--item-spacing-x) + var(--item-size)) * var(--offset)));
    display: flex;
    justify-content: center;

@@ -1,20 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../../components/Button';
-import ACHIEVEMENTS, { Achievement, AchievementCategory } from '../../data/achievement-data';
+import { hasUpgrade } from '../../components/corporate-overview/CorporateOverview';
+import ACHIEVEMENT_DATA, { AchievementInfo, AchievementCategory } from '../../data/achievement-data';
+import Game from '../../Game';
 import { createNotification } from '../../notifications';
+import { roundNum } from '../../utils';
 import Application from './Application';
 
-const findAchievement = (id: string): Achievement | null => {
-   for (const achievement of ACHIEVEMENTS) {
-      if (achievement.id === id) return achievement;
+let addAchievementToTracker: (achievement: AchievementInfo) => void;
+
+export function updateInternMotivation(): void {
+   // Get the number of unlocked achievment
+   let unlockedAchievements = 0;
+   for (const achievement of ACHIEVEMENT_DATA) {
+      if (achievement.isUnlocked) {
+         unlockedAchievements++;
+      }
+   }
+
+   Game.misc.internMotivation = unlockedAchievements * 5;
+}
+
+const findAchievement = (name: string): AchievementInfo | null => {
+   for (const achievement of ACHIEVEMENT_DATA) {
+      if (achievement.name === name) return achievement;
    }
    return null;
 }
-export function unlockAchievement(id: string): void {
-   const achievement = findAchievement(id);
+export function unlockAchievement(name: string): void {
+   const achievement = findAchievement(name);
    if (achievement === null) {
-      console.error(`Couldn't find an achievement with an id of '${id}'!`);
-      return;
+      throw new Error(`Couldn't find an achievement with a name of '${name}'!`);
    }
    if (achievement.isUnlocked) return;
 
@@ -28,6 +44,12 @@ export function unlockAchievement(id: string): void {
       isClickable: false,
       hasCloseButton: true
    });
+
+   if (typeof addAchievementToTracker !== "undefined") {
+      addAchievementToTracker(achievement);
+   }
+
+   updateInternMotivation();
 }
 
 enum FilterTypes {
@@ -41,16 +63,16 @@ enum DisplayTypes {
 
 interface FilterItem {
    type: "heading" | "achievement";
-   content: Achievement | string;
+   content: AchievementInfo | string;
 }
 
 const getCategoryFilter = (): ReadonlyArray<FilterItem> => {
    // Create the dictionary of sorted achievements.
-   const filteredAchievements: { [key: string]: Array<Achievement> } = {};
+   const filteredAchievements: { [key: string]: Array<AchievementInfo> } = {};
    for (const categoryName of Object.values(AchievementCategory)) {
-      filteredAchievements[categoryName] = new Array<Achievement>();
+      filteredAchievements[categoryName] = new Array<AchievementInfo>();
    }
-   for (const achievement of ACHIEVEMENTS) {
+   for (const achievement of ACHIEVEMENT_DATA) {
       filteredAchievements[achievement.category].push(achievement);
    }
 
@@ -74,10 +96,10 @@ const getCategoryFilter = (): ReadonlyArray<FilterItem> => {
 const getUnlockedFilter = (): ReadonlyArray<FilterItem> => {
    // Create the dictionary of sorted achievements.
    const filteredAchievements = {
-      "Unlocked": new Array<Achievement>(),
-      "Locked": new Array<Achievement>()
+      "Unlocked": new Array<AchievementInfo>(),
+      "Locked": new Array<AchievementInfo>()
    };
-   for (const achievement of ACHIEVEMENTS) {
+   for (const achievement of ACHIEVEMENT_DATA) {
       filteredAchievements[achievement.isUnlocked ? "Unlocked" : "Locked"].push(achievement);
    }
 
@@ -131,7 +153,7 @@ const filterToElems = (filterItems: ReadonlyArray<FilterItem>, displayType: Disp
          );
 
       } else if (item.type === "achievement") {
-         const achievement = item.content as Achievement;
+         const achievement = item.content as AchievementInfo;
          
          let achievementSrc;
          if (!achievement.isUnlocked) {
@@ -165,12 +187,30 @@ const filterToElems = (filterItems: ReadonlyArray<FilterItem>, displayType: Disp
    return elems;
 }
 
+/** Gets all unlocked achievements */
+const getUnlockedAchievements = (): Array<AchievementInfo> => {
+   const unlockedAchievements = new Array<AchievementInfo>();
+   for (const achievement of ACHIEVEMENT_DATA) {
+      if (achievement.isUnlocked) unlockedAchievements.push(achievement);
+   }
+   return unlockedAchievements;
+}
+
 interface ElemProps {
    application: AchievementTracker;
 }
 const Elem = ({ application }: ElemProps): JSX.Element => {
+   const [unlockedAchievements, setUnlockedAchievements] = useState<Array<AchievementInfo>>(getUnlockedAchievements());
    const [filterType, setFilterType] = useState<FilterTypes>(FilterTypes.category);
    const [displayType, setDisplayType] = useState<DisplayTypes>(DisplayTypes.strips);
+
+   useEffect(() => {
+      addAchievementToTracker = (achievement: AchievementInfo): void => {
+         const newUnlockedAchievements = unlockedAchievements.slice();
+         newUnlockedAchievements.push(achievement);
+         setUnlockedAchievements(newUnlockedAchievements);
+      }
+   }, [unlockedAchievements]);
 
    let filterItems!: ReadonlyArray<FilterItem>;
    if (filterType === FilterTypes.category) {
@@ -195,7 +235,7 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
          <div className={className} onClick={clickEvent} key={i}>
             <div className="name">{displayName}</div>
          </div>
-      )
+      );
    }
 
    const switchFilterType = (newFilterType: FilterTypes): void => {
@@ -209,8 +249,12 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
    return <div className="formatter">
       <div className="left-column">
          <h2>Overview</h2>
-         <p className="achievement-count">Achievements: 0/??? <i>(0%)</i></p>
-         <p className="motivation"></p>
+
+         <p className="achievement-count">Achievements: {unlockedAchievements.length}/{ACHIEVEMENT_DATA.length} <i>({roundNum(unlockedAchievements.length / ACHIEVEMENT_DATA.length * 100)}%)</i></p>
+
+         {hasUpgrade("Intern Motivation") ? (
+            <p className="motivation" style={{marginTop: "1rem"}}>Intern motivation: {Game.misc.internMotivation}</p>
+         ) : undefined}
 
          <h2>Display Mode</h2>
          <p className="caption">How the achievements are displayed.</p>

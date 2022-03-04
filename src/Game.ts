@@ -1,12 +1,11 @@
 import { roundNum, getElem, getCurrentTime } from "./utils";
 import { updateSave } from "./save";
-import achievements, { Achievement } from "./data/achievement-data";
+import achievements, { AchievementInfo } from "./data/achievement-data";
 import { unlockAchievement } from "./classes/applications/AchievementTracker";
 import { LOREM_LETTERS } from "./data/letter-data";
-import ACHIEVEMENTS from "./data/achievement-data";
 import { SettingsType } from "./classes/programs/Settings";
 import { JOB_DATA, Job } from "./data/job-data";
-import { calculateWorkerProduction, hasUpgrade } from "./components/corporate-overview/CorporateOverview";
+import { calculateWorkerProduction } from "./components/corporate-overview/CorporateOverview";
 import Application from "./classes/applications/Application";
 import Program from "./classes/programs/Program";
 import LoremCounter from "./classes/applications/LoremCounter";
@@ -28,7 +27,7 @@ interface GameType {
    totalLoremTyped: number;
    previousLorem: number;
    wordsTyped: number;
-   loremAchievements: Array<Achievement>;
+   loremAchievements: Array<AchievementInfo>;
    settings: SettingsType;
    applications: { [key: string]: Application };
    programs: { [key: string]: Program };
@@ -37,8 +36,6 @@ interface GameType {
    packets: number;
    readonly packetExchangeRate: number;
    readonly loadLoremAchievements: () => void;
-   motivation: number;
-   readonly updateMotivation: () => void;
    timeAtLastSave: number;
    readonly calculateIdleProfits: () => void;
    readonly displayLorem: (loremDiff: number) => void;
@@ -56,6 +53,7 @@ interface GameType {
    readonly unblurScreen: () => void;
    readonly misc: {
       blackMarketIsUnlocked: boolean;
+      internMotivation: number;
    }
 }
 
@@ -76,7 +74,7 @@ const Game: GameType = {
    totalLoremTyped: 0,
    previousLorem: 0,
    wordsTyped: 0,
-   loremAchievements: new Array<Achievement>(),
+   loremAchievements: new Array<AchievementInfo>(),
    settings: [],
    applications: {},
    programs: {},
@@ -112,8 +110,8 @@ const Game: GameType = {
          checkLoremLetters();
 
          for (const achievement of this.loremAchievements) {
-            if (this.lorem >= achievement.requirements.lorem! && !achievement.isUnlocked) {
-               unlockAchievement(achievement.id);
+            if (this.lorem >= achievement.requirements!.lorem! && !achievement.isUnlocked) {
+               unlockAchievement(achievement.name);
             }
          }
 
@@ -131,18 +129,9 @@ const Game: GameType = {
    packetExchangeRate: 0.1,
    loadLoremAchievements: function(): void {
       for (const achievement of achievements) {
-         if (Object.keys(achievement.requirements).includes("lorem")) {
+         if (typeof achievement.requirements !== "undefined" && Object.keys(achievement.requirements).includes("lorem")) {
             this.loremAchievements.push(achievement);
          }
-      }
-   },
-   motivation: 0,
-   updateMotivation: function(): void {
-      const unlockedAchievementCount = ACHIEVEMENTS.filter(achievement => achievement.isUnlocked).length;
-      this.motivation = Math.pow(unlockedAchievementCount, 0.8);
-
-      if (hasUpgrade("Intern Motivation")) {  
-         getElem("achievement-tracker").querySelector(".motivation")!.innerHTML = `Motivation: ${roundNum(this.motivation)}`;
       }
    },
    timeAtLastSave: -1,
@@ -216,7 +205,8 @@ const Game: GameType = {
       document.body.classList.remove("blurred");
    },
    misc: {
-      blackMarketIsUnlocked: false
+      blackMarketIsUnlocked: false,
+      internMotivation: 0
    }
 };
 

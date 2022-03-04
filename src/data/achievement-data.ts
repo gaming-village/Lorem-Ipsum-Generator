@@ -7,73 +7,72 @@ interface AchievementRequirements {
    readonly lorem?: number;
    readonly applications?: number;
 }
-export interface Achievement {
-   readonly id: string;
+export interface AchievementInfo {
    readonly name: string;
    readonly description: string;
    readonly category: AchievementCategory;
    readonly iconSrc: string;
-   readonly requirements: AchievementRequirements;
+   readonly requirements?: AchievementRequirements;
+   /** The achievement's unique identifier. Doesn't need to be in any pattern or order, just needs to be unique for every achievement */
+   readonly id: number;
    isUnlocked?: boolean;
 }
 
-const ACHIEVEMENTS: ReadonlyArray<Achievement> = [
+const ACHIEVEMENT_DATA: ReadonlyArray<AchievementInfo> = [
    {
-      id: "SO_IT_BEGINS",
       name: "So it begins...",
       description: "Generate your first lorem.",
       category: AchievementCategory.tiered,
       iconSrc: "picture.png",
       requirements: {
          lorem: 1
-      }
+      },
+      id: 1
    },
    {
-      id: "GETTING_SOMEWHERE",
       name: "Getting somewhere",
       description: "Generate 100 lorem.",
       category: AchievementCategory.tiered,
       iconSrc: "save.png",
       requirements: {
          lorem: 100
-      }
+      },
+      id: 2
    },
    {
-      id: "MICRO_MANAGEMENT",
       name: "Micro Management",
       description: "Generate 10000 lorem.",
       category: AchievementCategory.tiered,
       iconSrc: "save.png",
       requirements: {
          lorem: 10000
-      }
+      },
+      id: 3
    },
    {
-      id: "MICRO_TRANSACTIONS",
       name: "Micro Transactions",
       description: "Buy your first application.",
       category: AchievementCategory.tiered,
       iconSrc: "save.png",
       requirements: {
          applications: 1
-      }
+      },
+      id: 4
    },
    {
-      id: "FOOLS_GOLD",
       name: "Fool's Gold",
       description: "do something",
       category: AchievementCategory.challenge,
       iconSrc: "",
-      requirements: {}
+      id: 5
    },
    {
-      id: "SHADY_SALES",
       name: "Shady Sales",
       description: "Unlock the black market.",
       category: AchievementCategory.challenge,
       iconSrc: "white-letter.png",
-      requirements: {}
+      id: 6
    }
 ];
 
-export default ACHIEVEMENTS;
+export default ACHIEVEMENT_DATA;

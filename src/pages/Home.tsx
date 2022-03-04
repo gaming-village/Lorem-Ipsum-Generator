@@ -14,6 +14,7 @@ import { setupApplications } from '../applications';
 import { setupStartMenu } from '../start-menu';
 import { setupPrograms } from '../programs';
 import { type } from '../components/LoremProductionSystem';
+import { updateInternMotivation } from '../classes/applications/AchievementTracker';
 
 import '../css/pages/home.css';
 import '../css/popups.css';
@@ -127,6 +128,8 @@ const Home = () => {
       setupNavBar();
 
       checkLoremLetters();
+
+      updateInternMotivation();
       
       Game.loadLoremAchievements();
 

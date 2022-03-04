@@ -41,7 +41,7 @@ class BrowserError extends Popup {
 
          this.move();
          this.createMoveTimer();
-      }, 1000);
+      }, 1500);
    }
 }
 
