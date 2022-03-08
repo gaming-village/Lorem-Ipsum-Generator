@@ -1,18 +1,17 @@
 {
   "files": {
     "main.css": "/Lorem-Ipsum-Generator/static/css/main.3e0e1bf0.chunk.css",
-    "main.js": "/Lorem-Ipsum-Generator/static/js/main.206739a1.chunk.js",
-    "main.js.map": "/Lorem-Ipsum-Generator/static/js/main.206739a1.chunk.js.map",
-    "runtime-main.js": "/Lorem-Ipsum-Generator/static/js/runtime-main.a3e07f24.js",
-    "runtime-main.js.map": "/Lorem-Ipsum-Generator/static/js/runtime-main.a3e07f24.js.map",
+    "main.js": "/Lorem-Ipsum-Generator/static/js/main.e0bfa9ed.chunk.js",
+    "main.js.map": "/Lorem-Ipsum-Generator/static/js/main.e0bfa9ed.chunk.js.map",
+    "runtime-main.js": "/Lorem-Ipsum-Generator/static/js/runtime-main.dcaade8a.js",
+    "runtime-main.js.map": "/Lorem-Ipsum-Generator/static/js/runtime-main.dcaade8a.js.map",
     "static/js/2.90cd5701.chunk.js": "/Lorem-Ipsum-Generator/static/js/2.90cd5701.chunk.js",
     "static/js/2.90cd5701.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/2.90cd5701.chunk.js.map",
-    "static/js/3.b5a7fa6a.chunk.js": "/Lorem-Ipsum-Generator/static/js/3.b5a7fa6a.chunk.js",
-    "static/js/3.b5a7fa6a.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/3.b5a7fa6a.chunk.js.map",
+    "static/js/3.85d82922.chunk.js": "/Lorem-Ipsum-Generator/static/js/3.85d82922.chunk.js",
+    "static/js/3.85d82922.chunk.js.map": "/Lorem-Ipsum-Generator/static/js/3.85d82922.chunk.js.map",
     "index.html": "/Lorem-Ipsum-Generator/index.html",
     "static/css/main.3e0e1bf0.chunk.css.map": "/Lorem-Ipsum-Generator/static/css/main.3e0e1bf0.chunk.css.map",
     "static/js/2.90cd5701.chunk.js.LICENSE.txt": "/Lorem-Ipsum-Generator/static/js/2.90cd5701.chunk.js.LICENSE.txt",
-    "static/media/CONTRIBUTING.md": "/Lorem-Ipsum-Generator/static/media/CONTRIBUTING.2f9d7393.md",
     "static/media/Thumbs.db": "/Lorem-Ipsum-Generator/static/media/Thumbs.dc2df88a.db",
     "static/media/binary.gif": "/Lorem-Ipsum-Generator/static/media/binary.36d45f09.gif",
     "static/media/bliss.jpeg": "/Lorem-Ipsum-Generator/static/media/bliss.17ce657a.jpeg",
@@ -32,9 +31,9 @@
     "static/media/win95-startup.mp3": "/Lorem-Ipsum-Generator/static/media/win95-startup.e5b8c557.mp3"
   },
   "entrypoints": [
-    "static/js/runtime-main.a3e07f24.js",
+    "static/js/runtime-main.dcaade8a.js",
     "static/js/2.90cd5701.chunk.js",
     "static/css/main.3e0e1bf0.chunk.css",
-    "static/js/main.206739a1.chunk.js"
+    "static/js/main.e0bfa9ed.chunk.js"
   ]
 }
