@@ -6,4 +6,4 @@ _[CLICK HERE](https://gaming-village.github.io/Lorem-Ipsum-Generator/)_ to open 
 
 ## Contributing
 
-Before contributing to the project, please see _[CONTRIBUTING](CONTRIBUTING.md)_
+Before contributing to the project, please see _[CONTRIBUTING](CONTRIBUTING.md)_.
