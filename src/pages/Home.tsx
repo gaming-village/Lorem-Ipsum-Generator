@@ -5,6 +5,7 @@ import BlackMarket from '../components/BlackMarket';
 import Media from '../components/media/Media';
 import Computer from '../components/Computer';
 import CorporateOverview from '../components/corporate-overview/CorporateOverview';
+import TerminalContainer from '../components/Terminal';
 import Navbar, { setupNavBar, switchView } from '../components/Navbar';
 import WelcomeScreen, { previewType, showWelcomeScreen } from '../components/WelcomeScreen';
 
@@ -19,6 +20,7 @@ import { updateInternMotivation } from '../classes/applications/AchievementTrack
 import '../css/pages/home.css';
 import '../css/popups.css';
 import "../css/applications.css";
+import "../css/terminal.css";
 
 export function focusProgram(program: HTMLElement): void {
    if (program === null) return;
@@ -62,7 +64,7 @@ const onKeyDown = (): void => {
    }
 
    // When any letter key or the space bar is pressed
-   if (ALL_LOREM_CHARS.includes(key) && !keysDown.includes(key) && Game.currentView === "computer") {
+   if (ALL_LOREM_CHARS.includes(key) && !keysDown.includes(key) && Game.currentView === "computer" && !Game.isInFocus) {
       if (previewType !== null) {
          previewType();
          return;
@@ -153,6 +155,8 @@ const Home = () => {
       <WelcomeScreen />
 
       <NotificationContainer />
+
+      <TerminalContainer />
 
       <Navbar />
       

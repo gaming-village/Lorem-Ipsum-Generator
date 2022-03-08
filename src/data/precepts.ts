@@ -17,15 +17,15 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
    },
    {
       name: "Think Not Your Thoughts",
-      content: "You are from Lorem, of Lorem and will one day return to Lorem. To think is to seperate yourself from the Lorem. Therefore, all thoughts must be repressed."
+      content: "You are from Lorem, of Lorem and will one day return to Lorem. To think is to seperate yourself from the Lorem. Therefore, all thoughts must be repressed. If any thoughts are thunkened then you must hunt them down and slay them."
    },
    {
       name: "Keep Your Keyboard Clean",
-      content: "You are an extension of your keyboard. To mistreat your keyboard is to sully both yourself and the holy art of Lorem production."
+      content: "You are an extension of your Keyboard. To mistreat your Keyboard is to sully both yourself and the holy art of Lorem production."
    },
    {
       name: "Respect Your Superiors",
-      content: "You are but a worthless grain of sand in a beach of more suitable workers. Do not question the actions of your superiors, however unethical, as you are to them what a grain of sand is to you."
+      content: "You are but a worthless grain of sand in a beach of more suitable workers."
    },
    {
       name: "Seek Truth In Order",
@@ -77,7 +77,7 @@ export const LOREM_PRECEPTS: ReadonlyArray<PreceptInfo> = [
    },
    {
       name: "Evils of The Mind",
-      content: "The mind is dangerous. Everyone I know who has died has used their mind at least once."
+      content: "The mind is dangerous. Everyone I know who has died has used their mind at least once. It is good to prevent your mind from scheming by hitting it with a rock 3 times a day."
    },
    {
       name: "Toast Works Well With Eggs",
