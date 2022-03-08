@@ -428,7 +428,7 @@ const calculateWorkerCost = (worker: Job, extraAmount?: number): number => {
    const initialCost = JOB_TIER_DATA[worker.tier - 1].initialCost;
    const count = Game.userInfo.workers[worker.id] + (extraAmount || 0);
 
-   let cost = initialCost * Math.pow(1.3, count);
+   let cost = initialCost * Math.pow(1.1, count);
 
    if (hasJob("Manager")) {
       cost *= 0.9;

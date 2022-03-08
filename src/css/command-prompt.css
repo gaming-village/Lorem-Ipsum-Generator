@@ -5,28 +5,37 @@
 }
 
 #command-box {
-   min-height: 9rem;
-   max-height: 15rem;
    background-color: #000;
    margin: 3px;
+   overflow: hidden;
+}
+
+#command-box .messages {
+   min-height: 9rem;
+   max-height: 15rem;
+   overflow: auto;
+}
+#command-box .formatter {
+   min-height: 9rem;
    display: flex;
    flex-direction: column;
    justify-content: flex-end;
-   overflow: auto;
+   /* min-height: -webkit-max-content; */
 }
 
 #CommandPrompt .message {
    margin: 0 10px;
 }
 #CommandPrompt .message span {
-   font-size: 0.95rem;
+   font-size: 0.9rem;
    font-family: "Roboto Mono";
 }
 
 #CommandPrompt input {
+   width: 100%;
    font-family: "Roboto Mono";
+   font-size: 0.9rem;
    color: #fff;
-   max-width: 100%;
    background-color: #111;
    margin-top: 5px;
    border: none;

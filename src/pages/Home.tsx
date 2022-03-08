@@ -19,7 +19,7 @@ import { updateInternMotivation } from '../classes/applications/AchievementTrack
 import '../css/pages/home.css';
 import '../css/popups.css';
 import "../css/applications.css";
-import "../css/terminal.css";
+import "../css/command-prompt.css";
 
 export function focusProgram(program: HTMLElement): void {
    if (program === null) return;
