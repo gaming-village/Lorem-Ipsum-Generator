@@ -1,9 +1,9 @@
 import Popup from "./Popup";
 
-import BombImg from "../images/miscellaneous/bomb.png";
-import Button from "../components/Button";
-import Game from "../Game";
-import { PopupInfo } from "../data/popup-data";
+import BombImg from "../../images/miscellaneous/bomb.png";
+import Button from "../../components/Button";
+import Game from "../../Game";
+import { PopupInfo } from "../../data/popup-data";
 
 interface ElemProps {
    application: BrowserError;

@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import Button from "../components/Button";
+import Button from "../../components/Button";
 
-import { isPrime, randInt, randItem } from "../utils";
-import Game from "../Game";
+import { isPrime, randInt, randItem } from "../../utils";
+import Game from "../../Game";
 import Popup from "./Popup";
 
 const validateInput = (userInput: string, inputType: number): string | true => {

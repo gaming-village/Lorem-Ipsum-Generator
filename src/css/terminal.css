@@ -1,10 +1,35 @@
-#terminal {
-   z-index: 4;
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   transform: translate(-50%, -50%);
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap');
+
+#commandPrompt {
+   max-width: 30rem;
 }
-#terminal .title {
-   
+
+#command-box {
+   min-height: 9rem;
+   max-height: 15rem;
+   background-color: #000;
+   margin: 3px;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   overflow: auto;
+}
+
+#commandPrompt .message {
+   margin: 0 10px;
+}
+#commandPrompt .message span {
+   font-size: 0.95rem;
+   font-family: "Roboto Mono";
+}
+
+#commandPrompt input {
+   font-family: "Roboto Mono";
+   color: #fff;
+   max-width: 100%;
+   background-color: #111;
+   margin-top: 5px;
+   border: none;
+   border-top: 1px solid #666;
+   outline: none;
 }

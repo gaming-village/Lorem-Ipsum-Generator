@@ -1,12 +1,12 @@
 import { useState } from "react";
-import Button from "../components/Button";
-import WindowsProgram from "../components/WindowsProgram";
-import { CustomAudio, Point, randFloat, randInt, wait } from "../utils";
+import Button from "../../components/Button";
+import WindowsProgram from "../../components/WindowsProgram";
+import { CustomAudio, Point, randFloat, randInt, wait } from "../../utils";
 import Popup from "./Popup";
 
-import WarningIcon from "../images/icons/warning.png";
+import WarningIcon from "../../images/icons/warning.png";
 import ReactDOM from "react-dom";
-import Game from "../Game";
+import Game from "../../Game";
 
 const ERROR_TITLES = ["ERROR", "warning!!1!"];
 interface ErrorPopupProps {

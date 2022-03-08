@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import WindowsProgram from "../components/WindowsProgram";
-import POPUP_DATA, { PopupInfo } from "../data/popup-data";
-import QuestionmarkIcon from '../images/icons/questionmark.png';
-import { CustomAudio, getElem, Point, randFloat } from "../utils";
+import WindowsProgram from "../../components/WindowsProgram";
+import POPUP_DATA, { PopupInfo } from "../../data/popup-data";
+import QuestionmarkIcon from '../../images/icons/questionmark.png';
+import { CustomAudio, getElem, Point, randFloat } from "../../utils";
 
 let popupKey = 0;
 const popups = new Array<Popup>();
@@ -125,7 +125,7 @@ const PopupElem = ({ info, application, children, closeFunc }: PopupElemInfo) =>
 
    let iconSrc!: string;
    try {
-      iconSrc = require("../images/popup-icons/" + info.iconSrc).default;
+      iconSrc = require("../../images/popup-icons/" + info.iconSrc).default;
    } catch {
       iconSrc = QuestionmarkIcon;
    }

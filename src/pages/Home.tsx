@@ -5,7 +5,6 @@ import BlackMarket from '../components/BlackMarket';
 import Media from '../components/media/Media';
 import Computer from '../components/Computer';
 import CorporateOverview from '../components/corporate-overview/CorporateOverview';
-import TerminalContainer from '../components/Terminal';
 import Navbar, { setupNavBar, switchView } from '../components/Navbar';
 import WelcomeScreen, { previewType, showWelcomeScreen } from '../components/WelcomeScreen';
 
@@ -155,8 +154,6 @@ const Home = () => {
       <WelcomeScreen />
 
       <NotificationContainer />
-
-      <TerminalContainer />
 
       <Navbar />
       

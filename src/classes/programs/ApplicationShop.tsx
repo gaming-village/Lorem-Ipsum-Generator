@@ -1,52 +1,79 @@
 import { useState } from "react";
+import Button from "../../components/Button";
+import { ApplicationCategories } from "../../data/application-data";
 import Game from "../../Game";
 import Application from "../applications/Application";
 import Program from "./Program";
 
-const Elem = (): JSX.Element => {
-   const [applications, setApplications] = useState<Array<any>>(Object.values(Game.applications));
+interface ApplicationTabProps {
+   application: Application;
+   buyFunc: (application: Application) => void;
+}
+const ApplicationTab = ({application, buyFunc }: ApplicationTabProps): JSX.Element => {
+   const info = application.info;
 
-   const update = () => {
+   let imgSrc;
+   try {
+      imgSrc = require("../../images/application-icons/" + info.iconSrc).default;
+   } catch {
+      imgSrc = require("../../images/icons/questionmark.png").default;
+   }
+
+   return <div className={`tab${info.isUnlocked ? " unlocked" : ""}`}>
+      <div className="formatter">
+         <div className="formatter">
+            <img src={imgSrc} alt="Application icon preview" />
+            <div>
+               <p className="name">{info.name}</p>
+               <p className="description">{info.description}</p>
+            </div>
+         </div>
+
+         <Button onClick={() => buyFunc(application)} isDark={info.isUnlocked}>{!info.isUnlocked ? info.cost + " Lorem" : "Bought"}</Button>
+      </div>
+   </div>;
+}
+
+const Elem = (): JSX.Element => {
+   const [applications, setApplications] = useState<Array<Application>>(Object.values(Game.applications));
+
+   const buyApplication = (application: Application): void => {
+      if (!application.info.isUnlocked && Game.lorem >= application.info.cost) {
+         Game.lorem -= application.info.cost;
+         application.unlock();
+      }
+
       setApplications(Object.values(Game.applications));
    }
 
-   const applicationTabs: ReadonlyArray<JSX.Element> = applications.map((application: Application, i) => {
-      const info = application.info;
+   // Create the category container
+   const categories = Object.values(ApplicationCategories).reduce((previousValue, currentValue) => {
+      return { ...previousValue, [currentValue]: new Array<Application>() };
+   }, {}) as { [key: string]: Array<Application> };
 
-      let imgSrc;
-      try {
-         imgSrc = require("../../images/application-icons/" + info.iconSrc).default;
-      } catch {
-         imgSrc = require("../../images/icons/questionmark.png").default;
+   // Fill the category container
+   for (const application of applications) {
+      categories[application.info.category].push(application);
+   }
+
+   const applicationElems = new Array<JSX.Element>();
+   for (const [categoryName, categoryApplications] of Object.entries(categories)) {
+      // Create the header
+      applicationElems.push(
+         <h2 key={applicationElems.length}>{categoryName}</h2>
+      );
+
+      for (const application of categoryApplications) {
+         applicationElems.push(
+            <ApplicationTab application={application} buyFunc={buyApplication} key={applicationElems.length} />
+         );
       }
-
-      const buy = (): void => {
-         if (!info.isUnlocked && Game.lorem >= info.cost) {
-            Game.lorem -= info.cost;
-            application.unlock();
-         }
-
-         update();
-      }
-
-      return <div className={`tab ${info.isUnlocked ? "unlocked" : ""}`} key={i}>
-         <div className="formatter">
-            <div className="formatter">
-               <img src={imgSrc} alt="Application icon preview" />
-               <div>
-                  <p className="name">{info.name}</p>
-                  <p className="description">{info.description}</p>
-               </div>
-            </div>
-            <button onClick={buy} className={`button ${info.isUnlocked ? "dark" : ""}`}>{!info.isUnlocked ? info.cost + " Lorem" : "Bought"}</button>
-         </div>
-      </div>
-   });
+   }
 
    return <>
       <p>Purchase applications to enchance your productivity here at Lorem Corp.</p>
 
-      {applicationTabs}
+      {applicationElems}
    </>;
 }
 

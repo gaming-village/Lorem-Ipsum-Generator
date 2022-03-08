@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import Game from "../Game";
-import { randFloat, randInt, roundNum } from "../utils";
+import Game from "../../Game";
+import { randFloat, randInt, roundNum } from "../../utils";
 import Popup from "./Popup";
 
 interface FallingText {

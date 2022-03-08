@@ -1,4 +1,4 @@
-enum ApplicationCategory {
+export enum ApplicationCategories {
    lifestyle = "Lifestyle",
    utility = "Utility"
 }
@@ -11,7 +11,7 @@ export interface ApplicationInfo {
    id: string;
    /** What the file's name is */
    fileName: string;
-   category: ApplicationCategory;
+   category: ApplicationCategories;
    description: string;
    iconSrc: string;
    cost: number;
@@ -25,7 +25,7 @@ const APPLICATION_DATA: ReadonlyArray<ApplicationInfo> = [
       className: "LoremCounter",
       id: "loremCounter",
       fileName: "lorem_counter",
-      category: ApplicationCategory.lifestyle,
+      category: ApplicationCategories.lifestyle,
       description: "Counts your lorem.",
       iconSrc: "lorem-counter.png",
       cost: 0,
@@ -37,7 +37,7 @@ const APPLICATION_DATA: ReadonlyArray<ApplicationInfo> = [
       className: "AchievementTracker",
       id: "achievementTracker",
       fileName: "achievement_tracker",
-      category: ApplicationCategory.lifestyle,
+      category: ApplicationCategories.lifestyle,
       description: "Keep track of how many meaningless tasks you have completed.",
       iconSrc: "achievement-tracker.png",
       cost: 5,
@@ -47,10 +47,20 @@ const APPLICATION_DATA: ReadonlyArray<ApplicationInfo> = [
       className: "BigLoremCounter",
       id: "bigLoremCounter",
       fileName: "big_lorem_counter",
-      category: ApplicationCategory.lifestyle,
-      description: "Counts your lorem, but bigger and better.",
+      category: ApplicationCategories.lifestyle,
+      description: "Counts your lorem. Bigger and better.",
       iconSrc: "lorem-counter.png",
       cost: 25,
+   },
+   {
+      name: "Command Prompt",
+      className: "CommandPrompt",
+      id: "commandPrompt",
+      fileName: "command_prompt",
+      category: ApplicationCategories.utility,
+      description: "Hackerman.",
+      iconSrc: "lorem-counter.png",
+      cost: 100
    }
 ];
 

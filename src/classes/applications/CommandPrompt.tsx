@@ -1,23 +1,25 @@
 import { useEffect, useRef, useState } from "react";
-import Game from "../Game";
 
-interface TerminalParameter {
-   [key: string]: TerminalParameter | null | undefined;
+import WindowsProgram from "../../components/WindowsProgram";
+import Application from "./Application";
+
+interface Parameter {
+   [key: string]: Parameter | null | undefined;
    _anyStr?: null;
    _anyNum?: null;
 }
 
-interface TerminalCommand {
+interface Command {
    name: string;
    /** The function called when the command is entered */
    onEnter?: (writeLine: (rawMessage: string) => void, parameters?: Array<string>) => void;
    /** The number of words typed before the command becomes unlocked. Should only be present on commands which aren't dev commands or hidden */
    typedWordsRequirement?: number;
-   parameters?: TerminalParameter;
+   parameters?: Parameter;
    isDevCommand?: boolean;
    isHidden?: boolean;
 }
-const TERMINAL_COMMANDS: ReadonlyArray<TerminalCommand> = [
+const TERMINAL_COMMANDS: ReadonlyArray<Command> = [
    {
       name: "help",
       onEnter: (writeLine: (rawMessage: string) => void): void => {
@@ -41,32 +43,6 @@ const TERMINAL_COMMANDS: ReadonlyArray<TerminalCommand> = [
       typedWordsRequirement: 10
    },
    {
-      name: "lorem",
-      isDevCommand: true
-   },
-   {
-      name: "packets",
-      isDevCommand: true
-   },
-   {
-      name: "popups",
-      parameters: {
-         summon: {
-            all: null,
-            _anyStr: null
-         },
-         kill: {
-            all: null,
-            _anyStr: null
-         },
-         unlock: {
-            all: null,
-            _anyStr: null
-         }
-      },
-      isDevCommand: true
-   },
-   {
       name: "test",
       onEnter: (writeLine: (rawMessage: string) => void, parameters?: Array<string>): void => {
 
@@ -83,17 +59,17 @@ const TERMINAL_COMMANDS: ReadonlyArray<TerminalCommand> = [
    }
 ];
 
-const getCommand = (rawCommand: string): TerminalCommand | string => {
+const getCommand = (rawCommand: string): Command | string => {
    const baseCommand = rawCommand.split(" ")[0];
    for (const command of TERMINAL_COMMANDS) {
       if (command.name === baseCommand) {
          return command;
       }
    }
-   return `Error: '${baseCommand}' is not a command!`;
+   return `%rError: %d%1'${baseCommand}' %c$1is not a command! Enter 'help' to see all available commands.`;
 }
 
-const getParameters = (command: TerminalCommand, rawCommand: string): Array<string> | null => {
+const getParameters = (command: Command, rawCommand: string): Array<string> | null => {
    const parameters = rawCommand.split(" ");
    parameters.splice(0, 1);
    console.log(command);
@@ -106,14 +82,14 @@ const getParameters = (command: TerminalCommand, rawCommand: string): Array<stri
 }
 
 enum FORMAT_COLOURS {
-   r = "RED",
+   r = "#f53527",
    y = "YELLOW",
    g = "#03fc28",
    a = "#000",
+   c = "#999",
    d = "#bbb",
    f = "#fff"
 }
-
 enum FORMAT_DECORATION {
    // The underscore is needed because enums don't accpet numeric names
    _0 = "bold",
@@ -145,33 +121,43 @@ const formatMessage = (rawMessage: string, key: number): JSX.Element => {
       const char: string = CHARS[i];
       const previousChar: string | null = i > 0 ? CHARS[i - 1] : null;
 
-      if (previousChar === "%") {
+      if (previousChar === "%" || previousChar === "$") {
          spans.push(
             <span style={getCurrentStyle()} key={spans.length}>{currentSpan}</span>
          );
          
          // If the modifier is for colour
-         const colour = FORMAT_COLOURS[char as keyof typeof FORMAT_COLOURS];
-         if (typeof colour !== "undefined") {
-            currentStyle.colour = colour;
+         if (previousChar === "%") {
+            const colour = FORMAT_COLOURS[char as keyof typeof FORMAT_COLOURS];
+            if (typeof colour !== "undefined") {
+               currentStyle.colour = colour;
+            }
          }
 
          const decoration = FORMAT_DECORATION[("_" + char) as keyof typeof FORMAT_DECORATION];
          if (typeof decoration !== "undefined") {
             switch (decoration) {
                case "bold": {
-                  currentStyle.isBold = true;
+                  if (previousChar === "%") {
+                     currentStyle.isBold = true;
+                  } else {
+                     currentStyle.isBold = false;
+                  }
                   break;
                }
                case "italic": {
+                  if (previousChar === "%") {
                   currentStyle.isItalic = true;
+                  } else {
+                  currentStyle.isItalic = false;
+                  }
                   break;
                }
             }
          }
 
          currentSpan = "";
-      } else if (char !== "%") {
+      } else if (char !== "%" && char !== "$") {
          currentSpan += char;
       }
    }
@@ -179,13 +165,13 @@ const formatMessage = (rawMessage: string, key: number): JSX.Element => {
       <span style={getCurrentStyle()} key={spans.length}>{currentSpan}</span>
    );
 
-   return <div className="command" key={key}>
+   return <div className="message" key={key}>
       {spans}
    </div>;
 }
 
 let messageHistoryBuffer = new Array<string>();
-const Terminal = () => {
+const Elem = () => {
    const [messageHistory, setMessageHistory] = useState<Array<string>>(new Array<string>());
    const inputRef = useRef<HTMLInputElement>(null);
 
@@ -195,27 +181,18 @@ const Terminal = () => {
    }
 
    useEffect(() => {
-      Game.isInFocus = true;
-      Game.blurScreen();
-      Game.showMask();
-
-      // Force focus the element
+      // Force focus the input
       inputRef.current!.focus();
-
-      return () => {
-         Game.isInFocus = false;
-         Game.unblurScreen();
-         Game.hideMask();
-      }
    }, []);
 
    const enterKey = (): void => {
       const event = window.event as KeyboardEvent;
       if (event.key !== "Enter") return;
 
-      const rawCommand = inputRef.current!.value;
-      const command = getCommand(rawCommand);
+      const userInput = inputRef.current!.value;
+      if (userInput === "") return;
 
+      const command = getCommand(userInput);
       if (typeof command === "string") {
          messageHistoryBuffer.push(command);
       } else {
@@ -224,7 +201,7 @@ const Terminal = () => {
          if (typeof command.onEnter !== "undefined") {
             // If the command has parameters
             if (typeof command.parameters !== "undefined") {
-               const parameters = getParameters(command, rawCommand);
+               const parameters = getParameters(command, userInput);
                // If the parameters are valid
                if (parameters !== null) {
                   command.onEnter(writeLine, parameters);
@@ -240,31 +217,21 @@ const Terminal = () => {
       inputRef.current!.value = "";
    }
 
-   return <div id="terminal">
-      <div className="title">
-         <span>Terminal</span>
+   return <>
+      <div id="command-box">
+         {messageHistory.map((rawCommand, i) => {
+            return formatMessage(rawCommand, i);
+         })}
+
+         <input onKeyDown={enterKey} ref={inputRef} type="text" />
       </div>
-
-      {messageHistory.map((rawCommand, i) => {
-         return formatMessage(rawCommand, i);
-      })}
-
-      <input onKeyDown={enterKey} ref={inputRef} type="text" />
-   </div>;
+   </>;
 }
 
-export let openTerminal: () => void;
-
-const TerminalContainer = () => {
-   const [isOpen, setIsOpen] = useState(true);
-
-   useEffect(() => {
-      openTerminal = (): void => {
-         setIsOpen(true);
-      }
-   }, []);
-
-   return isOpen ? <Terminal /> : <></>;
+class CommandPrompt extends Application {
+   protected instantiate(): JSX.Element {
+      return <Elem />;
+   }
 }
 
-export default TerminalContainer;
+export default CommandPrompt;

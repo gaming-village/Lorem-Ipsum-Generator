@@ -1,11 +1,11 @@
 import Popup from "./Popup";
 
-import FlushedFace from "../images/miscellaneous/flushed.png";
-import WarningIcon from "../images/icons/warning.png";
-import Button from "../components/Button";
+import FlushedFace from "../../images/miscellaneous/flushed.png";
+import WarningIcon from "../../images/icons/warning.png";
+import Button from "../../components/Button";
 import { useEffect, useState } from "react";
-import Game from "../Game";
-import { roundNum } from "../utils";
+import Game from "../../Game";
+import { roundNum } from "../../utils";
 
 interface ElemProps {
    application: LuremImpsir;

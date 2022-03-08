@@ -1,8 +1,8 @@
-import Button from "../components/Button";
+import Button from "../../components/Button";
 import Popup from "./Popup";
 
-import WarningIcon from "../images/icons/warning.png";
-import Game from "../Game";
+import WarningIcon from "../../images/icons/warning.png";
+import Game from "../../Game";
 
 interface ElemProps {
    popup: MicrosoftAntivirus;

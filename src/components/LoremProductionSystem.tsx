@@ -3,8 +3,8 @@ import LoremCounter from '../classes/applications/LoremCounter';
 
 import LOREM_PACKS, { SentenceStructure, StructurePart, Word } from '../data/lorem-pack-data';
 import Game from '../Game';
-import LuremImpsir from '../popups/LuremImpsir';
-import { createRandomPopup, getPopups } from '../popups/Popup';
+import LuremImpsir from '../classes/popups/LuremImpsir';
+import { createRandomPopup, getPopups } from '../classes/popups/Popup';
 import { createTooltip, removeTooltip } from '../tooltips';
 import { randInt, randItem } from '../utils';
 import { hasJob, hasUpgrade } from './corporate-overview/CorporateOverview';
