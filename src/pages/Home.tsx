@@ -57,7 +57,7 @@ const onKeyDown = (): void => {
       // On mac if the command key is pressed (switch tab) don't fire
       if (window.navigator.appVersion.indexOf("Mac") !== -1 && event.metaKey) return;
       // On windows if the ctrl key is pressed (switch tab) don't fire
-      else if (window.navigator.appVersion.indexOf("Win") !== -1 && event.ctrlKey) return;
+      if (window.navigator.appVersion.indexOf("Win") !== -1 && event.ctrlKey) return;
       
       switchView(Number(key) - 1);
    }
