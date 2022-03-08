@@ -12,7 +12,7 @@ To edit the code, you will need to fork the project. Run `yarn install` to insta
 
 Before submitting code, make sure to run the game to make sure everything works as intended, and that your changes have not negatively affected any other  sectors of the game.
 
-## Style Conventions
+## Code Conventions
 
 - Use spaces around parentheses: `if (1 === 2) {`
 - Use camel case in Javascript (e.g. `myVariable`), and hyphens for classes, ID's and other HTML-ish stuff (e.g. `this-is-a-header`).
