@@ -289,7 +289,7 @@ const LoremProductionSystem = () => {
          }
 
          // Create the falling text effect
-         const loremCounter = Game.applications.loremCounter as LoremCounter;
+         const loremCounter = Game.applications.LoremCounter as LoremCounter;
          if (loremCounter.createTextEffect !== null) loremCounter.createTextEffect();
 
 

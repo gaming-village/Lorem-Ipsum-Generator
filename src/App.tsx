@@ -3,10 +3,15 @@ import Devtools from "./components/Devtools";
 import Main from "./components/Main";
 import { toggleDevtools } from "./components/Devtools";
 import Game from "./Game";
-import { getCurrentSave, getDefaultSave, loadSave } from "./save";
+import { getCurrentSave, getDefaultSave, loadSave, validateSaveData } from "./save";
 
 const App = () => {
    const maskRef = useRef(null);
+
+   // Ensure that the save data won't cause any problems
+   if (process.env.NODE_ENV === "development") {
+      validateSaveData();
+   }
 
    let saveData = getCurrentSave();
    if (saveData === null) {

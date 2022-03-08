@@ -81,11 +81,11 @@ abstract class Application {
       const elemContent = this.instantiate();
       this.createElem(elemContent);
       
-      Game.applications[info.id] = this;
+      Game.applications[info.className] = this;
    }
 
    private createElem(elemContent: JSX.Element): void {
-      const elem = <ApplicationElem id={this.info.id} title={this.info.name} application={this}>
+      const elem = <ApplicationElem id={this.info.className} title={this.info.name} application={this}>
          {elemContent}
       </ApplicationElem>;
 

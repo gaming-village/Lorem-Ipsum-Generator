@@ -1,9 +1,9 @@
-#loremCounter p {
+#LoremCounter p {
    text-align: center;
    position: relative;
    margin: 0;
 }
-#loremCounter .effect-text {
+#LoremCounter .effect-text {
    position: absolute;
    top: 0;
    animation: EffectTextDescend 0.5s linear infinite;
@@ -18,26 +18,26 @@
       opacity: 0;
    }
 }
-#loremCounter .effect-text.negative {
+#LoremCounter .effect-text.negative {
    color: red;
    font-weight: 600;
 }
 
-#achievementTracker .achievement-count {
+#AchievementTracker .achievement-count {
    margin-bottom: 0;
 }
-#achievementTracker .motivation {
+#AchievementTracker .motivation {
    margin-top: 0;
 }
-#achievementTracker .right-column {
+#AchievementTracker .right-column {
    width: 100%;
 }
-#achievementTracker .view-options-container {
+#AchievementTracker .view-options-container {
    margin: 1.5rem 0 1rem;
    display: flex;
    justify-content: space-evenly;
 }
-#achievementTracker .display-type {
+#AchievementTracker .display-type {
    background-color: #bbb;
    border: 2px solid;
    border-top-color: #000;
@@ -48,7 +48,7 @@
    position: relative;
    cursor: pointer;
 }
-#achievementTracker .display-type.selected {
+#AchievementTracker .display-type.selected {
    background-color: #ccc;
    border-top-color: #fff;
    border-right-color: #444;
@@ -56,24 +56,24 @@
    border-left-color: #fff;
    cursor: default;
 }
-#achievementTracker .display-type img {
+#AchievementTracker .display-type img {
    width: 32px;
    margin-bottom: -5px;
 }
-#achievementTracker .display-type:not(.selected) img {
+#AchievementTracker .display-type:not(.selected) img {
    opacity: 0.6;
 }
-#achievementTracker .display-type .name {
+#AchievementTracker .display-type .name {
    color: #444;
    font-weight: normal;
    font-style: italic;
 }
-#achievementTracker .display-type.selected .name {
+#AchievementTracker .display-type.selected .name {
    color: #444;
    font-weight: bold;
    font-style: normal;
 }
-#achievementTracker .achievement-container {
+#AchievementTracker .achievement-container {
    border: 2px solid;
    border-top-color: #fff;
    border-right-color: #000;
@@ -83,7 +83,7 @@
    padding: 4px;
    margin: 2px;
 }
-#achievementTracker .achievement {
+#AchievementTracker .achievement {
    background-color: #ddd;
    border: 2px solid;
    border-top-color: #fff;
@@ -95,13 +95,13 @@
    align-items: center;
    position: relative;
 }
-#achievementTracker .achievement-container:not(.compact) .achievement:first-child {
+#AchievementTracker .achievement-container:not(.compact) .achievement:first-child {
    margin-top: 0;
 }
-#achievementTracker .achievement-container:not(.compact) .achievement:last-child {
+#AchievementTracker .achievement-container:not(.compact) .achievement:last-child {
    margin-bottom: 0;
 }
-#achievementTracker .achievement.locked {
+#AchievementTracker .achievement.locked {
    color: #fff;
    text-shadow: 0 0 1px #000, 0 0 2px #000, 0 0 3px #000;
    border-top-color: #000;
@@ -114,16 +114,16 @@
    animation: bgSlide 7s infinite linear;
    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.6) inset;
 }
-#achievementTracker .achievement-container.compact {
+#AchievementTracker .achievement-container.compact {
    padding: 0;
    display: flex;
 }
-#achievementTracker .achievement-container.compact .achievement {
+#AchievementTracker .achievement-container.compact .achievement {
    width: 40px;
    height: 40px;
    margin: 3px;
 }
-#achievementTracker .achievement-container.compact .achievement :is(.name, .description) {
+#AchievementTracker .achievement-container.compact .achievement :is(.name, .description) {
    display: none;
 }
 @keyframes bgSlide {
@@ -134,43 +134,43 @@
       background-position-x: 64px;
    }
 }
-#achievementTracker h1 {
+#AchievementTracker h1 {
    font-size: 1.7rem;
    margin-bottom: 0;
 }
-#achievementTracker h2 {
+#AchievementTracker h2 {
    text-align: center;
 }
-#achievementTracker .achievement * {
+#AchievementTracker .achievement * {
    margin: 3px 5px;
 }
-#achievementTracker .achievement .icon {
+#AchievementTracker .achievement .icon {
    --size: 32px;
    width: var(--size);
    height: var(--size);
    background-size: var(--size) var(--size);
    image-rendering: pixelated;
 }
-#achievementTracker .achievement .name {
+#AchievementTracker .achievement .name {
    font-weight: bold;
    font-size: 1.1rem;
    margin: 0;
 }
-#achievementTracker .achievement .description {
+#AchievementTracker .achievement .description {
    font-size: 1.05rem;
    margin: 0;
 }
 
-#achievementTracker .display-type {
+#AchievementTracker .display-type {
    margin: 1px 0;
    height: 1.5rem;
    line-height: 1.5rem;
    cursor: pointer;
 }
-#achievementTracker .display-type:not(.selected):hover {
+#AchievementTracker .display-type:not(.selected):hover {
    animation: filterOptionHover 0.1s ease-in-out forwards;
 }
-#achievementTracker .display-type:not(.selected):not(:hover) {
+#AchievementTracker .display-type:not(.selected):not(:hover) {
    animation: filterOptionHover 0.1s ease-in-out forwards backwards;
 }
 @keyframes filterOptionHover {
@@ -184,14 +184,15 @@
    }
 }
 
+/* for chonky screens, use two columns */
 @media screen and (min-width: 60rem) {
-   #achievementTracker {
+   #AchievementTracker {
       min-width: 60rem;
    }
-   #achievementTracker .formatter {
+   #AchievementTracker .formatter {
       display: flex;
    }
-   #achievementTracker .seperator {
+   #AchievementTracker .seperator {
       width: 2px;
       background-color: #000;
       margin: 5px 10px;

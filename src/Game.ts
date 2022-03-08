@@ -117,7 +117,7 @@ const Game: GameType = {
 
          this.displayLorem(loremDiff);
 
-         const loremCounter = this.applications.loremCounter as LoremCounter;
+         const loremCounter = this.applications.LoremCounter as LoremCounter;
          if (typeof loremCounter !== "undefined" && loremCounter.createTextEffect !== null) {
             loremCounter.createTextEffect(loremDiff < 0);
          }
@@ -161,8 +161,8 @@ const Game: GameType = {
       }
    },
    displayLorem: function(loremDiff: number): void {
-      const loremCounter = this.applications.loremCounter as LoremCounter;
-      if (typeof loremCounter !== "undefined" && loremCounter.updateLoremCount !== null) {
+      const loremCounter = this.applications.LoremCounter as LoremCounter;
+      if (loremCounter.updateLoremCount !== null) {
          loremCounter.updateLoremCount(this.lorem, loremDiff);
       }
    },

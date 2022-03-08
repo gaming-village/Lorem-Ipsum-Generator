@@ -2,6 +2,8 @@
 
 import SAVE_COMPONENTS from "./data/save-data";
 
+import APPLICATION_DATA, { ApplicationInfo } from "./data/application-data";
+
 const getCookie = (cname: string): string | null => {
    var name = cname + "=";
    var decodedCookie = decodeURIComponent(document.cookie);
@@ -18,7 +20,7 @@ const getCookie = (cname: string): string | null => {
    return null;
 }
 
-function setCookie(name: string, value: string, exdays?: number): void {
+const setCookie = (name: string, value: string, exdays?: number): void => {
    let expires: string;
    if (exdays) {
       var d = new Date();
@@ -69,5 +71,38 @@ export function loadSave(saveData: string): void {
          loadSave(getDefaultSave());
          break;
       }
+   }
+}
+
+const findAvailableID = (): number => {
+   const ids = new Array<number>();
+   for (const application of APPLICATION_DATA) {
+      ids.push(application.id);
+   }
+
+   for (let i = 1; ; i++) {
+      if (!ids.includes(i)) return i;
+   }
+}
+
+/** [ONLY RUNS IN DEVELOPMENT MODE] Ensures that all save data is valid and won't cause issues. */
+export function validateSaveData(): void {
+   // Make sure all application data has a unique id
+   const seenApplications: { [key: number]: ApplicationInfo } = {};
+
+   for (const applicationInfo of APPLICATION_DATA) {
+      let applicationWithSameId: ApplicationInfo | undefined;
+      for (const [id, info] of Object.entries(seenApplications)) {
+         if (Number(id) === applicationInfo.id) {
+            applicationWithSameId = info;
+            break;
+         }
+      }
+
+      if (typeof applicationWithSameId !== "undefined") {
+         const nextAvailableID = findAvailableID();
+         throw new Error(`Applications '${applicationWithSameId.name}' and '${applicationInfo.name}' both have an id of ${applicationInfo.id}! The next available id is ${nextAvailableID}.`);
+      }
+      seenApplications[applicationInfo.id] = applicationInfo;
    }
 }

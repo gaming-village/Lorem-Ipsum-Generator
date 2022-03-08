@@ -213,16 +213,16 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       name: "Unlocked applications",
       defaultValue: () => {
          let total = 0;
-         APPLICATION_DATA.forEach((application, i) => {
-            if (application.isUnlocked) total += Math.pow(2, i);
-         });
+         for (const application of APPLICATION_DATA) {
+            if (application.isUnlocked) total += Math.pow(2, application.id - 1);
+         }
          return decToHex(total);
       },
       updateValue: () => {
          let total = 0;
-         Object.values(Game.applications).forEach((application, i) => {
-            if (application.info.isUnlocked) total += Math.pow(2, i);
-         });
+         for (const application of APPLICATION_DATA) {
+            if (application.isUnlocked) total += Math.pow(2, application.id - 1);
+         }
          return decToHex(total);
       },
       loadEvent: (savedValue: string) => {

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-import WindowsProgram from "../../components/WindowsProgram";
 import Application from "./Application";
 
 interface Parameter {
@@ -185,7 +184,7 @@ const Elem = () => {
       inputRef.current!.focus();
    }, []);
 
-   const enterKey = (): void => {
+   const inputKey = (): void => {
       const event = window.event as KeyboardEvent;
       if (event.key !== "Enter") return;
 
@@ -223,7 +222,7 @@ const Elem = () => {
             return formatMessage(rawCommand, i);
          })}
 
-         <input onKeyDown={enterKey} ref={inputRef} type="text" />
+         <input onKeyDown={inputKey} ref={inputRef} type="text" />
       </div>
    </>;
 }

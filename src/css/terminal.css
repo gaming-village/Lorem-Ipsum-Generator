@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap');
 
-#commandPrompt {
+#CommandPrompt {
    max-width: 30rem;
 }
 
@@ -15,15 +15,15 @@
    overflow: auto;
 }
 
-#commandPrompt .message {
+#CommandPrompt .message {
    margin: 0 10px;
 }
-#commandPrompt .message span {
+#CommandPrompt .message span {
    font-size: 0.95rem;
    font-family: "Roboto Mono";
 }
 
-#commandPrompt input {
+#CommandPrompt input {
    font-family: "Roboto Mono";
    color: #fff;
    max-width: 100%;
