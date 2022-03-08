@@ -26,9 +26,19 @@ const TERMINAL_COMMANDS: ReadonlyArray<Command> = [
 
          // Get all unlocked commands
          for (const command of TERMINAL_COMMANDS) {
-            if (!command.isDevCommand && !command.isHidden) {
-               writeLine(`%d - ${command.name}`);
+            let message = `%d - ${command.name}`;
+
+            if (process.env.NODE_ENV === "development") {
+               if (command.isDevCommand) {
+                  message += ` %y[DEV]`;
+               } else if (command.isHidden) {
+                  message += ` %r[HIDDEN]`;
+               }
+            } else if (command.isDevCommand || command.isHidden) {
+               continue;
             }
+
+            writeLine(message);
          }
       },
       typedWordsRequirement: 0
