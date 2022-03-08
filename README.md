@@ -1,8 +1,8 @@
 # Lorem Ipsum Generator
 
-An incremenetal game made using create-react-app and Typescript.
+An incremental game made using create-react-app and Typescript.
 
-[OPEN GAME](https://gaming-village.github.io/Lorem-Ipsum-Generator/)
+_[CLICK HERE](https://gaming-village.github.io/Lorem-Ipsum-Generator/)_ to open the game's most recent stable version.
 
 ## Contributing
 
