@@ -25,7 +25,7 @@ const defaultProps: ProgramProps = {
    titleStyle: "bold",
    uiButtons: [],
    isDraggable: true,
-   isAlwaysSelected: true,
+   isAlwaysSelected: false,
    id: "",
    className: ""
 }
@@ -46,7 +46,7 @@ const WindowsProgram = React.forwardRef((props: ProgramProps, ref: Ref<HTMLDivEl
    }, [props.isDraggable, props.startsAtTopLeft, ref]);
 
    return <div ref={ref} style={props.style} id={props.id} className={`windows-program ${props.className}`}>
-      <TitleBar ref={titlebarRef} buttonsAreDark={props.buttonsAreDark} minimizeFunc={props.minimizeFunc} closeFunc={props.closeFunc} iconSrc={props.titleIconSrc} titleStyle={props.titleStyle} title={props.title} uiButtons={props.uiButtons || new Array<UIButtonType>()} isDraggable={props.isDraggable || false} isAlwaysSelected={props.isAlwaysSelected || false} />
+      <TitleBar ref={titlebarRef} buttonsAreDark={props.buttonsAreDark} minimizeFunc={props.minimizeFunc} closeFunc={props.closeFunc} iconSrc={props.titleIconSrc} titleStyle={props.titleStyle} title={props.title} uiButtons={props.uiButtons || new Array<UIButtonType>()} isDraggable={props.isDraggable || false} isAlwaysSelected={typeof props.isAlwaysSelected !== "undefined" ? props.isAlwaysSelected : false} />
       {props.children}
    </div>;
 });

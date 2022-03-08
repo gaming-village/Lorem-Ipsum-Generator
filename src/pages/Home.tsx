@@ -63,13 +63,17 @@ const onKeyDown = (): void => {
    }
 
    // When any letter key or the space bar is pressed
-   if (ALL_LOREM_CHARS.includes(key) && !keysDown.includes(key) && Game.currentView === "computer" && !Game.isInFocus) {
+   if (ALL_LOREM_CHARS.includes(key) && !keysDown.includes(key) && Game.currentView === "computer") {
+      // The typing practice section from the Welcome Screen
       if (previewType !== null) {
          previewType();
          return;
       }
-      keysDown.push(key)
-      type(key);
+
+      if (!Game.isInFocus) {
+         keysDown.push(key)
+         type(key);
+      }
    }
 }
 
@@ -84,9 +88,10 @@ const mouseDown = (): void => {
          break;
       }
    }
+   
    if (shouldHidePrevious) {
       const previouslySelectedProgram = document.querySelector(".windows-program.in-focus");
-      if (previouslySelectedProgram) previouslySelectedProgram.classList.remove("in-focus");
+      if (previouslySelectedProgram !== null) previouslySelectedProgram.classList.remove("in-focus");
    }
 
    for (const target of e.composedPath()) {

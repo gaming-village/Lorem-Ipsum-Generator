@@ -10,4 +10,4 @@ Before contributing to the project, please see _[CONTRIBUTING](CONTRIBUTING.md)_
 
 ## Feedback and Suggestions
 
-All feedback and suggestions are appreciated. If you think of a new feature or  some part of the game is unbalanced or needs improvement, don't hesistate to make a suggestion [here](https://github.com/gaming-village/Lorem-Ipsum-Generator/discussions/new)
+All feedback and suggestions are appreciated. If you think of a new feature or  some part of the game is unbalanced or needs improvement, don't hesistate to make a suggestion [here](https://github.com/gaming-village/Lorem-Ipsum-Generator/discussions/new).
