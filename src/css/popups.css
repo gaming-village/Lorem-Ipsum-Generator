@@ -60,8 +60,19 @@
 .popup.chunky.hiding {
    animation: HidePopup 1s linear forwards;
 }
+.popup.chunky .chunky-img {
+   height: 10rem;
+   margin-left: 50%;
+   transform: translateX(-50%);
+}
 .popup.chunky .mood {
    text-align: center;
-   text-shadow: 1px 1px 0 #000;
    margin-bottom: 0;
+}
+.popup.chunky span:not(.placeholder) {
+   text-shadow: 1px 1px 0 #000;
+}
+.popup.chunky span.placeholder {
+   color: #666;
+   font-style: italic;
 }

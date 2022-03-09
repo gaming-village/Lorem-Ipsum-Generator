@@ -28,6 +28,11 @@ const getChunkyMood = (rage: number): [Mood, string] => {
    return [mood, moodName];
 }
 
+const getChunkyImgSrc = (rage: number): string => {
+   const i = Math.floor(rage * 3/100) + 1;
+   return require(`../../images/miscellaneous/chunky${i}.png`).default;
+}
+
 /** How angry chunky is. At 100% chunky will become enraged. */
 let chunkyRage = 0;
 
@@ -65,18 +70,22 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
       clickEvent();
    }, [clickEvent, rage]);
 
+   const chunkyImgSrc = getChunkyImgSrc(rage);
+
    return <>
       <div className="warning-container">
          <img src={WarningImage} alt="Warning!" />
          <p>Looks like Chunky found a virus!</p>
       </div>
 
+      <img src={chunkyImgSrc} className="chunky-img" alt="He has arrived" />
+
       <ProgressBar progress={rage} start={0} end={100} showProgress />
 
       <p className="mood">{hasPressedButton ? (
          <span style={{color: mood}}>Chunky is {moodName}.</span>
       ) : (
-         <span>[ ... ]</span>
+         <span className="placeholder">[ Awaiting response... ]</span>
       )}</p>
 
       <div className="button-container">
