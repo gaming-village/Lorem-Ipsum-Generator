@@ -41,3 +41,16 @@
    text-shadow: 2px 2px 0 #000;
    pointer-events: none;
 }
+
+/* RAM Download */
+.ram-download.hiding {
+   animation: RAMDownloadHide 1s linear forwards;
+}
+@keyframes RAMDownloadHide {
+   0% {
+      opacity: 1;
+   }
+   100% {
+      opacity: 0;
+   }
+}

@@ -260,12 +260,15 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       flavourText: "The first implementation of digital RAM download. Viruses not sold seperately.",
       cost: 35,
       iconSrc: "",
-      className: "",
+      className: "RAMDownload",
       displayPos: {
          top: -12,
          left: -18.5
       },
       elem: {
+         dimensions: {
+            width: "15rem"
+         },
          title: "Free R.A.M Download",
          isSingleElem: false
       },

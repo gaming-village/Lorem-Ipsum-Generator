@@ -68,6 +68,16 @@ const TERMINAL_COMMANDS: ReadonlyArray<Command> = [
    {
       name: "mac",
       isHidden: true
+   },
+   {
+      name: "obama",
+      onEnter: (_1): void => {
+         const allElems = document.querySelectorAll("*");
+         allElems.forEach(elem => {
+            elem.classList.add("obama");
+         })
+      },
+      isHidden: true
    }
 ];
 

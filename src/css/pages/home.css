@@ -2,6 +2,10 @@
    font-family: "MS Sans Serif", Arial, Helvetica, sans-serif;
 }
 
+.obama::before, .obama::after {
+   content: "obama";
+}
+
 .view {
    width: 100%;
    position: absolute;
@@ -345,11 +349,13 @@
    }
 }
 .progress-bar-container .label {
+   color: #000;
    font-weight: bold;
-   background-color: rgba(255, 255, 255, 0.5);
    position: absolute;
    top: 50%;
-   transform: translate(-50%, -150%);
+   left: 50%;
+   transform: translate(-50%, -50%);
+   backdrop-filter: blur(3px);
 }
 
 .line-trail {

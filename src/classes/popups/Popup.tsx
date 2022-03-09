@@ -142,6 +142,15 @@ const PopupElem = ({ info, application, children, closeFunc }: PopupElemInfo) =>
    </WindowsProgram>;
 }
 
+// setTimeout(() => {
+//    const popupClassName = "RAMDownload";
+//    for (const a of POPUP_DATA) {
+//       if (a.className === popupClassName) {
+//          createPopup(a);
+//       }
+//    }
+// }, 100);
+
 abstract class Popup {
    private info: PopupInfo;
    elem!: JSX.Element;
