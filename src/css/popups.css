@@ -86,8 +86,46 @@
    text-align: center;
 }
 .popup.chunky-plantation .banana {
-   --size: 64px;
+   --size: 32px;
    width: var(--size);
    height: var(--size);
    position: absolute;
+   cursor: pointer;
+}
+.popup.chunky-plantation .banana.anim-1 {
+   animation: BananaAnim1 linear infinite;
+}
+@keyframes BananaAnim1 {
+   0% {
+      transform: rotate(0deg);
+   }
+   100% {
+      transform: rotate(360deg);
+   }
+}
+.popup.chunky-plantation .banana.anim-2 {
+   animation: BananaAnim2 linear infinite;
+}
+@keyframes BananaAnim2 {
+   0% {
+      transform: rotate(0deg);
+   }
+   10% {
+      transform: rotate(20deg);
+   }
+   20% {
+      transform: rotate(-16deg);
+   }
+   30% {
+      transform: rotate(12deg);
+   }
+   40% {
+      transform: rotate(-8deg);
+   }
+   50% {
+      transform: rotate(4deg);
+   }
+   60% {
+      transform: rotate(0deg);
+   }
 }

@@ -12,17 +12,19 @@ interface BananaElemProps {
    pos: Point;
 }
 const BananaElem = ({ squashFunc, pos }: BananaElemProps): JSX.Element => {
+   const animType = randInt(1, 4);
    const style: React.CSSProperties = {
       left: pos.x + "%",
-      top: pos.y + "%"
+      top: pos.y + "%",
+      animationDuration: animType === 1 ? randFloat(2, 5) + "s" : randFloat(1, 2) + "s"
    };
 
-   return <img onClick={squashFunc} style={style} className="banana" src={BananaImg} alt="banan" />;
+   const className = "banana anim-" + animType;
+   return <img onClick={squashFunc} style={style} className={className} src={BananaImg} alt="banan" />;
 }
 
 const createBananas = (squashFunc: (banana: JSX.Element) => void): Array<JSX.Element> => {
-   // console.log("create");
-   const bananas = new Array<JSX.Element>();
+   const newBananas = new Array<JSX.Element>();
 
    const BANANA_COUNT = randInt(10, 20);
    for (let i = 0; i < BANANA_COUNT; i++) {
@@ -31,41 +33,70 @@ const createBananas = (squashFunc: (banana: JSX.Element) => void): Array<JSX.Ele
          randFloat(0, 100)
       );
 
+      let currentBanana: JSX.Element;
+
       const squash = (): void => {
-         squashFunc(bananas[i]);
+         squashFunc(currentBanana);
       }
 
-      bananas.push(
-         <BananaElem squashFunc={squash} pos={pos} key={i} />
-      );
+      currentBanana = <BananaElem squashFunc={squash} pos={pos} key={i} />;
+      newBananas.push(currentBanana);
    }
 
-   return bananas;
+   return newBananas;
 }
 
+let bananaBuffer: Array<JSX.Element> = new Array<JSX.Element>();
 interface ElemProps {
    popup: ChunkyPlantation;
 }
 const Elem = ({ popup }: ElemProps): JSX.Element => {
+   const close = useCallback(() => {
+      const WAIT_TIME = 2000;
+      setTimeout(() => {
+         popup.close();
+      }, WAIT_TIME);
+   }, [popup]);
+
+   const succeed = (): void => {
+      setHasSucceeded(true);
+
+      close();
+   }
+   const fail = useCallback(() => {
+      close();
+   }, [close]);
+
    const squashBanana = (banana: JSX.Element): void => {
-      const newBananas = bananas.slice();
-      newBananas.splice(newBananas.indexOf(banana), 1);
-      setBananas(newBananas);
+      bananaBuffer.splice(bananaBuffer.indexOf(banana), 1);
+      setBananas(bananaBuffer.slice());
+
+      if (bananaBuffer.length === 0) {
+         succeed();
+      }
    }
 
    const STARTING_TIME = 15;
    const [time, setTime] = useState(STARTING_TIME);
-   const [bananas, setBananas] = useState<Array<JSX.Element>>(createBananas(squashBanana));
+   const [bananas, setBananas] = useState<Array<JSX.Element>>(new Array<JSX.Element>());
+   const [hasSucceeded, setHasSucceeded] = useState<boolean>(false);
+
+   useEffect(() => {
+      bananaBuffer = createBananas(squashBanana);
+      setBananas(bananaBuffer.slice());
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []);
 
    const updateTime = useCallback(() => {
       const newTime = time - 1 / Game.tps;
 
       if (newTime <= 0) {
-         popup.close();
+         Game.removeRenderListener(updateTime);
+         fail();
       } else {
          setTime(newTime);
       }
-   }, [time, popup]);
+   }, [fail, time]);
 
    useEffect(() => {
       Game.createRenderListener(updateTime);
@@ -78,7 +109,11 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
    return <>
       <img src={PlantationTree} className="tree" alt="The Tree of Chunk" />
 
-      <div className="remaining-time">{roundNum(time, 1, true)} seconds remaining</div>
+      {hasSucceeded ? (
+         <div className="success-message">You gathered all bananas!</div>
+      ) : (
+         <div className="remaining-time">{roundNum(time, 1, true)} seconds remaining</div>
+      )}
 
       {bananas}
    </>;
