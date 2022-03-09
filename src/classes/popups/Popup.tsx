@@ -19,6 +19,10 @@ const updateVisiblePopups = (): void => {
    </>, container);
 }
 
+export function showExistingPopups(): void {
+   if (popups.length > 0) updateVisiblePopups();
+}
+
 const createPopup = (popupInfo: PopupInfo): void => {
    const popupClass = require("../popups/" + popupInfo.className).default;
    new popupClass(popupInfo);

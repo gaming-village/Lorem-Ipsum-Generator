@@ -103,6 +103,8 @@ export const NotificationContainer = () => {
       {notifications.map((notification, i) => {
          return <Notification key={i} info={notification} closeFunc={closeFunc} isClosing={notification === closingNotification} />;
       })}
-      {notifications.length > MAX_NOTIFICATIONS ? <Button onClick={closeAll} isCentered>Close All</Button> : ""}
+      {notifications.length > MAX_NOTIFICATIONS ? (
+         <Button onClick={closeAll} isCentered>Close All</Button>
+      ) : undefined}
    </div>;
 }
