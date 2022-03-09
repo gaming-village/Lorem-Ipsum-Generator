@@ -195,7 +195,7 @@ class BankDetails extends Popup {
    close(): void {
       super.close();
 
-      Game.lorem += 10;
+      Game.lorem += this.info.elem.loremReward!;
    }
 }
 

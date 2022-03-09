@@ -12,8 +12,8 @@ export interface PopupInfo {
    },
    /** Affects properties of instances of the popup */
    readonly elem: {
-   /** The actual popup's dimensions (optional) */
-   readonly dimensions?: {
+      /** The actual popup's dimensions (optional) */
+      readonly dimensions?: {
          readonly width?: string;
          readonly height?: string;
       }
@@ -21,6 +21,7 @@ export interface PopupInfo {
       readonly title: string;
       /** If true, there can only be one of the popup visible at a time */
       readonly isSingleElem: boolean;
+      readonly loremReward?: number;
    }
    isUnlocked?: boolean;
    readonly isChunkyPopup?: boolean;
@@ -44,7 +45,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
             width: "20rem"
          },
          title: "Macrosoft Antibus",
-         isSingleElem: false
+         isSingleElem: false,
+         loremReward: 5
       },
       children: [],
       id: 1
@@ -65,7 +67,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
             width: "15rem"
          },
          title: "Error",
-         isSingleElem: false
+         isSingleElem: false,
+         loremReward: 7
       },
       children: ["microsoft-antivirus"],
       id: 2
@@ -140,7 +143,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
             width: "20rem"
          },
          title: "2018 Annual Survey",
-         isSingleElem: false
+         isSingleElem: false,
+         loremReward: 15
       },
       children: ["microsoft-antivirus"],
       id: 6
@@ -158,7 +162,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       },
       elem: {
          title: "Free an-Droid",
-         isSingleElem: false
+         isSingleElem: false,
+         loremReward: 20
       },
       children: ["browser-error"],
       id: 7
@@ -176,7 +181,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       },
       elem: {
          title: "Adblock blocker",
-         isSingleElem: false
+         isSingleElem: false,
+         loremReward: 25
       },
       children: ["annual-survey"],
       id: 8
@@ -197,7 +203,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
             width: "20rem"
          },
          title: "Lurem Ipmsir",
-         isSingleElem: false
+         isSingleElem: false,
+         loremReward: 15
       },
       children: ["rain"],
       id: 9
@@ -233,21 +240,22 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       },
       elem: {
          title: "1,0000,000nd Visited!",
-         isSingleElem: false
+         isSingleElem: false,
+         loremReward: 25
       },
       children: ["rain"],
       id: 11
    },
    {
       name: "chunky-plantation",
-      className: "",
+      className: "ChunkyPlantation",
       description: "Generates 10-20 bananas which explode into points.",
       flavourText: "Chunky's banana plantation.",
       cost: 75,
       iconSrc: "",
       displayPos: {
-            top: -29,
-            left: -0.5
+         top: -29,
+         left: -0.5
       },
       elem: {
          title: "Banana Overload",
@@ -273,7 +281,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
             width: "15rem"
          },
          title: "Free R.A.M Download",
-         isSingleElem: false
+         isSingleElem: false,
+         loremReward: 30
       },
       children: ["rain"],
       id: 13
@@ -294,7 +303,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
             width: "25rem"
          },
          title: "Amason.com",
-         isSingleElem: false
+         isSingleElem: false,
+         loremReward: 35
       },
       children: ["annual-survey"],
       id: 14
@@ -307,12 +317,13 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       cost: 35,
       iconSrc: "",
       displayPos: {
-            top: 20,
-            left: 15
+         top: 20,
+         left: 15
       },
       elem: {
          title: "The Expandinator",
-         isSingleElem: false
+         isSingleElem: false,
+         loremReward: 20
       },
       children: ["browser-error"],
       id: 15
@@ -330,7 +341,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
       },
       elem: {
          title: "monkecodecamp.gov.org.edu.au",
-         isSingleElem: false
+         isSingleElem: false,
+         loremReward: 50
       },
       children: ["annual-survey"],
       id: 16

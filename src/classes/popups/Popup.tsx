@@ -43,7 +43,7 @@ const fillPotentialPopups = (): void => {
          if (popup.elem.isSingleElem) {
             let hasFound = false;
             for (const currentPopup of popups) {
-               if (currentPopup.name === popup.name)  {
+               if (currentPopup.info.name === popup.name)  {
                   hasFound = true;
                   break;
                }
@@ -147,7 +147,7 @@ const PopupElem = ({ info, application, children, closeFunc }: PopupElemInfo) =>
 }
 
 setTimeout(() => {
-   const popupClassName = "Chunky";
+   const popupClassName = "ChunkyPlantation";
    for (const a of POPUP_DATA) {
       if (a.className === popupClassName) {
          createPopup(a);
@@ -156,13 +156,11 @@ setTimeout(() => {
 }, 100);
 
 abstract class Popup {
-   private info: PopupInfo;
+   info: PopupInfo;
    elem!: JSX.Element;
-   name: string;
 
    constructor(info: PopupInfo) {
       this.info = info;
-      this.name = info.name;
 
       popups.push(this);
 

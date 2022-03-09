@@ -61,6 +61,12 @@ class LuremImpsir extends Popup {
    protected instantiate(): JSX.Element {
       return <Elem application={this} />
    }
+
+   close(): void {
+      super.close();
+
+      Game.lorem += this.info.elem.loremReward!;
+   }
 }
 
 export default LuremImpsir;

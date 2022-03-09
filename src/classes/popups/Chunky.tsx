@@ -3,16 +3,15 @@ import { useCallback, useState } from "react";
 import Button from "../../components/Button";
 import ProgressBar from "../../components/ProgressBar";
 
+import Game from "../../Game";
 import Popup from "./Popup";
 import { clamp, randInt } from "../../utils";
 
 import WarningImage from "../../images/icons/warning.png";
 
-// TODO: https://www.google.com/search?q=chunky+transparent+png&tbm=isch&ved=2ahUKEwipu_Cnqrj2AhUrUWwGHZ2kD9IQ2-cCegQIABAA&oq=chunky+transparent+png&gs_lcp=CgNpbWcQA1CvBljZCmCrC2gAcAB4AIABywGIAbAIkgEFMC41LjGYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=oj8oYqniGauiseMPncm-kA0&bih=882&biw=1680&rlz=1C5CHFA_enAU846AU846&safe=active&ssui=on#imgrc=7DFdvfjGu43zxM
-
 enum Mood {
-   appeased = "#00ff0d",
-   dissatisfied = "#b3ff00",
+   content = "#00ff0d",
+   displeased = "#b3ff00",
    angry = "#ffe70a",
    fuming = "#ff800a",
    enraged = "#c90000"
@@ -58,15 +57,23 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
       const RAGE_DECREASE_RANGE: [number, number] = [15, 30];
       const decreaseAmount = randInt(...RAGE_DECREASE_RANGE);
 
-      setRage(clamp(rage - decreaseAmount, 0, 100));
+      const newRage = clamp(rage - decreaseAmount, 0, 100);
+      chunkyRage = newRage;
+      setRage(newRage);
+
       clickEvent();
    }, [clickEvent, rage]);
 
    const close = useCallback(() => {
+      Game.lorem *= 1.1;
+
       const RAGE_INCREASE_RANGE: [number, number] = [10, 20]
       const increaseAmount = randInt(...RAGE_INCREASE_RANGE);
 
-      setRage(clamp(rage + increaseAmount, 0, 100));
+      const newRage = clamp(rage + increaseAmount, 0, 100);
+      chunkyRage = newRage;
+      setRage(newRage);
+
       clickEvent();
    }, [clickEvent, rage]);
 

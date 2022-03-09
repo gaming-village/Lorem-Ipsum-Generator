@@ -32,7 +32,7 @@ class BrowserError extends Popup {
    close(): void {
       super.close();
 
-      Game.lorem += 5;
+      Game.lorem += this.info.elem.loremReward!;
    }
 
    private createMoveTimer(): void {

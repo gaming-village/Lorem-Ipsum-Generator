@@ -83,6 +83,12 @@ class RAMDownload extends Popup {
    protected instantiate(): JSX.Element {
       return <Elem popup={this} />;
    }
+
+   close(): void {
+      super.close();
+
+      Game.lorem += this.info.elem.loremReward!;
+   }
 }
 
 export default RAMDownload;

@@ -84,12 +84,10 @@ const Elem = ({ application }: ElemProps) => {
    }, [stealLorem]);
 
    useEffect(() => {
-      console.log("create render listener");
       if (!Game.hasRenderListener(update)) Game.createRenderListener(update);
 
       return () => {
-      console.log("remove render listener");
-      Game.removeRenderListener(update);
+         Game.removeRenderListener(update);
       }
    }, [update]);
 

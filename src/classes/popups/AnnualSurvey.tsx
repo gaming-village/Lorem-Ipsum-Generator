@@ -25,7 +25,7 @@ const ErrorPopup = ( { startPos, closeFunc }: ErrorPopupProps) => {
    </WindowsProgram>;
 }
 
-const createErrorPopups = async (elem: HTMLElement): Promise<void> => {
+const createErrorPopups = async (elem: HTMLElement, totalLoremReward: number): Promise<void> => {
    const startPos = new Point(elem.offsetLeft + elem.offsetWidth/2, elem.offsetTop + elem.offsetHeight/2);
 
    await wait(100);
@@ -47,7 +47,8 @@ const createErrorPopups = async (elem: HTMLElement): Promise<void> => {
          ReactDOM.unmountComponentAtNode(container);
          container.remove();
 
-         Game.lorem += 1;
+         const loremReward = totalLoremReward / errorAmount;
+         Game.lorem += loremReward;
       }
 
       const error = <ErrorPopup startPos={startPos} closeFunc={close} />;
@@ -73,7 +74,7 @@ const Elem = ({ popup }: ElemProps) => {
    }
 
    const close = (): void => {
-      createErrorPopups(popup.getElem());
+      createErrorPopups(popup.getElem(), popup.info.elem.loremReward!);
       popup.close();
    }
 

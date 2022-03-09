@@ -76,3 +76,18 @@
    color: #666;
    font-style: italic;
 }
+
+/* Chunky plantation */
+.popup.chunky-plantation .tree {
+   height: 20rem;
+}
+.popup.chunky-plantation .remaining-time {
+   color: red;
+   text-align: center;
+}
+.popup.chunky-plantation .banana {
+   --size: 64px;
+   width: var(--size);
+   height: var(--size);
+   position: absolute;
+}

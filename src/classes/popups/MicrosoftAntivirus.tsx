@@ -30,7 +30,7 @@ class MicrosoftAntivirus extends Popup {
    close(): void {
       super.close();
 
-      Game.lorem += 3;
+      Game.lorem += this.info.elem.loremReward!;
    }
 }
 
