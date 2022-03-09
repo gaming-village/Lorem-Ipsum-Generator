@@ -15,11 +15,12 @@ import { setupStartMenu } from '../start-menu';
 import { setupPrograms } from '../programs';
 import { type } from '../components/LoremProductionSystem';
 import { updateInternMotivation } from '../classes/applications/AchievementTracker';
+import { showExistingPopups } from '../classes/popups/Popup';
 
 import '../css/pages/home.css';
 import '../css/popups.css';
 import "../css/applications.css";
-import "../css/terminal.css";
+import "../css/command-prompt.css";
 
 export function focusProgram(program: HTMLElement): void {
    if (program === null) return;
@@ -138,6 +139,8 @@ const Home = () => {
       updateInternMotivation();
       
       Game.loadLoremAchievements();
+
+      showExistingPopups();
 
       document.addEventListener("keydown", onKeyDown);
       document.addEventListener("keyup", keyUp);

@@ -9,7 +9,7 @@ import WhiteLetter from "../../images/icons/white-letter.png";
 import RootFolder from "../../images/icons/folder-container.png";
 import LetterImg from "../../images/icons/letter.png";
 
-import LETTERS, { LetterInfo } from "../../data/letter-data";
+import LETTER_DATA, { LetterInfo } from "../../data/letter-data";
 import { createNotification } from "../../notifications";
 import { forceOpenLetter } from "./Media";
 
@@ -31,7 +31,7 @@ const FOLDERS: ReadonlyArray<FolderInfo> = [
 export function receiveLetter(letterSubject: string): void {
    // Find the corresponding letter using the letter subject
    let letter!: LetterInfo;
-   for (const currentLetter of LETTERS) {
+   for (const currentLetter of LETTER_DATA) {
       if (currentLetter.subject === letterSubject) {
          letter = currentLetter;
          break;
@@ -71,7 +71,7 @@ const getLetterFolder = (letter: LetterInfo): FolderInfo => {
 
 const getLettersByFolder = (folder: FolderInfo): Array<LetterInfo> => {
    const folderLetters = new Array<LetterInfo>();
-   for (const letter of LETTERS) {
+   for (const letter of LETTER_DATA) {
       if (letter.isReceived && letter.folder === folder.name) {
          folderLetters.push(letter);
       }
@@ -81,7 +81,7 @@ const getLettersByFolder = (folder: FolderInfo): Array<LetterInfo> => {
 
 /** If a folder has a letter which is unopened */
 const folderHasUnopened = (folder: FolderInfo): boolean => {
-   for (const letter of LETTERS) {
+   for (const letter of LETTER_DATA) {
       if (letter.folder === folder.name && letter.isReceived && !letter.isOpened) {
          return true;
       }

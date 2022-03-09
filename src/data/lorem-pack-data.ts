@@ -52,6 +52,8 @@ export interface LoremPack {
    }
    readonly requirements: PackRequirements;
    isBought?: boolean;
+   /** The lorem pack's unique identifier. Doesn't need to be in any pattern or order, just needs to be unique for every lorem pack */
+   readonly id: number;
 }
 
 const LOREM_PACKS: ReadonlyArray<LoremPack> = [
@@ -111,7 +113,8 @@ const LOREM_PACKS: ReadonlyArray<LoremPack> = [
       requirements: {
          wordsTyped: 0
       },
-      isBought: true
+      isBought: true,
+      id: 1
    },
    // {
    //    name: "Beginner Pack",

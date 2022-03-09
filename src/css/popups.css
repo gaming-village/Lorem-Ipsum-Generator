@@ -1,5 +1,5 @@
 .popup .warning-container {
-   margin: 0.5rem 0 0 10%;
+   margin: 0.5rem 0 0 0;
    display: flex;
    align-items: center;
 }
@@ -10,8 +10,17 @@
 }
 .popup .warning-container p {
    font-weight: 600;
-   font-size: 1.1rem;
+   font-size: 1.05rem;
    margin: 0 0 0 10px;
+}
+
+@keyframes HidePopup {
+   0% {
+      opacity: 1;
+   }
+   100% {
+      opacity: 0;
+   }
 }
 
 
@@ -40,4 +49,30 @@
    transform: translateX(-50%);
    text-shadow: 2px 2px 0 #000;
    pointer-events: none;
+}
+
+/* RAM Download */
+.ram-download.hiding {
+   animation: HidePopup 1s linear forwards;
+}
+
+/* Chunky */
+.popup.chunky.hiding {
+   animation: HidePopup 1s linear forwards;
+}
+.popup.chunky .chunky-img {
+   height: 10rem;
+   margin-left: 50%;
+   transform: translateX(-50%);
+}
+.popup.chunky .mood {
+   text-align: center;
+   margin-bottom: 0;
+}
+.popup.chunky span:not(.placeholder) {
+   text-shadow: 1px 1px 0 #000;
+}
+.popup.chunky span.placeholder {
+   color: #666;
+   font-style: italic;
 }

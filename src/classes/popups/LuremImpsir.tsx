@@ -14,10 +14,9 @@ const Elem = ({ application }: ElemProps) => {
    const STOP_DURATION = 5;
    const [time, setTime] = useState(STOP_DURATION);
 
-   useEffect(() => {
-      const loremContainer = document.getElementById("lorem-container")!;
-      loremContainer.classList.add("blocked");
+   const loremContainer = document.getElementById("lorem-container");
 
+   useEffect(() => {
       const updateTimer = (): void => {
          const newTime = time - 1 / Game.tps;
          
@@ -27,11 +26,17 @@ const Elem = ({ application }: ElemProps) => {
       Game.createRenderListener(updateTimer);
 
       return () => {
-         loremContainer.classList.remove("blocked");
-
          if (Game.hasRenderListener(updateTimer)) Game.removeRenderListener(updateTimer);
       }
    }, [time]);
+
+   useEffect(() => {
+      if (loremContainer !== null) loremContainer.classList.add("blocked");
+
+      return () => {
+         if (loremContainer !== null) loremContainer.classList.remove("blocked");
+      }
+   }, [loremContainer]);
 
    return <>
       <div className="warning-container">

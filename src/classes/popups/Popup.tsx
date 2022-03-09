@@ -19,6 +19,10 @@ const updateVisiblePopups = (): void => {
    </>, container);
 }
 
+export function showExistingPopups(): void {
+   if (popups.length > 0) updateVisiblePopups();
+}
+
 const createPopup = (popupInfo: PopupInfo): void => {
    const popupClass = require("../popups/" + popupInfo.className).default;
    new popupClass(popupInfo);
@@ -37,7 +41,7 @@ const fillPotentialPopups = (): void => {
       if (popup.isUnlocked && popup.className !== "") {
          // Make sure the popup isn't already visible if it's a single popup
          if (popup.elem.isSingleElem) {
-            let hasFound = true;
+            let hasFound = false;
             for (const currentPopup of popups) {
                if (currentPopup.name === popup.name)  {
                   hasFound = true;
@@ -142,6 +146,15 @@ const PopupElem = ({ info, application, children, closeFunc }: PopupElemInfo) =>
    </WindowsProgram>;
 }
 
+setTimeout(() => {
+   const popupClassName = "Chunky";
+   for (const a of POPUP_DATA) {
+      if (a.className === popupClassName) {
+         createPopup(a);
+      }
+   }
+}, 100);
+
 abstract class Popup {
    private info: PopupInfo;
    elem!: JSX.Element;
@@ -179,12 +192,15 @@ abstract class Popup {
          throw new Error("'this' keyword is undefined! You're probably not using an arrow function somewhere");
       }
 
-      // Play close sound
-      if (playAudio) new CustomAudio("popup-close.mp3");
-
       removePopup(this);
 
-      updateVisiblePopups();
+      const container = document.getElementById("popup-container");
+      if (container !== null) {
+         updateVisiblePopups();
+
+         // Play close sound
+         if (playAudio) new CustomAudio("popup-close.mp3");
+      }
    }
 
    move!: () => void;

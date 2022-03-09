@@ -127,7 +127,7 @@
 
 /* APPLICATION SHOP */
 #applicationShop .tab {
-   width: clamp(0px, 75%, 100%);
+   width: 75%;
    background-color: #ddd;
    border: 2px solid;
    border-top-color: #fff;

@@ -26,20 +26,33 @@ const TERMINAL_COMMANDS: ReadonlyArray<Command> = [
 
          // Get all unlocked commands
          for (const command of TERMINAL_COMMANDS) {
-            if (!command.isDevCommand && !command.isHidden) {
-               writeLine(`%d - ${command.name}`);
+            let message = `%d - ${command.name}`;
+
+            if (process.env.NODE_ENV === "development") {
+               if (command.isDevCommand) {
+                  message += ` %y[DEV]`;
+               } else if (command.isHidden) {
+                  message += ` %r[HIDDEN]`;
+               }
+            } else if (command.isDevCommand || command.isHidden) {
+               continue;
             }
+
+            writeLine(message);
          }
       },
       typedWordsRequirement: 0
    },
    {
-      name: "exit",
-      typedWordsRequirement: 0
+      name: "clear",
+      onEnter: (_1): void => {
+         clearMessageHistory();
+      },
+      typedWordsRequirement: 10
    },
    {
-      name: "clear",
-      typedWordsRequirement: 10
+      name: "exit",
+      typedWordsRequirement: 0
    },
    {
       name: "test",
@@ -55,13 +68,23 @@ const TERMINAL_COMMANDS: ReadonlyArray<Command> = [
    {
       name: "mac",
       isHidden: true
+   },
+   {
+      name: "obama",
+      onEnter: (_1): void => {
+         const allElems = document.querySelectorAll("*");
+         allElems.forEach(elem => {
+            elem.classList.add("obama");
+         })
+      },
+      isHidden: true
    }
 ];
 
 const getCommand = (rawCommand: string): Command | string => {
    const baseCommand = rawCommand.split(" ")[0];
    for (const command of TERMINAL_COMMANDS) {
-      if (command.name === baseCommand) {
+      if (command.name === baseCommand && !(process.env.NODE_ENV !== "development" && command.isDevCommand)) {
          return command;
       }
    }
@@ -87,6 +110,7 @@ enum FORMAT_COLOURS {
    a = "#000",
    c = "#999",
    d = "#bbb",
+   e = "#ddd",
    f = "#fff"
 }
 enum FORMAT_DECORATION {
@@ -169,10 +193,17 @@ const formatMessage = (rawMessage: string, key: number): JSX.Element => {
    </div>;
 }
 
+let clearMessageHistory: () => void;
+
 let messageHistoryBuffer = new Array<string>();
 const Elem = () => {
-   const [messageHistory, setMessageHistory] = useState<Array<string>>(new Array<string>());
+   const [messageHistory, setMessageHistory] = useState<Array<string>>(messageHistoryBuffer.slice());
    const inputRef = useRef<HTMLInputElement>(null);
+
+   clearMessageHistory = (): void => {
+      messageHistoryBuffer = new Array<string>();
+      setMessageHistory(messageHistoryBuffer.slice());
+   }
 
    const writeLine = (rawMessage: string): void => {
       messageHistoryBuffer.push(rawMessage);
@@ -190,12 +221,15 @@ const Elem = () => {
 
       const userInput = inputRef.current!.value;
       if (userInput === "") return;
-
+      
       const command = getCommand(userInput);
       if (typeof command === "string") {
+         writeLine("%e> " + userInput);
+
          messageHistoryBuffer.push(command);
       } else {
-
+         writeLine("%g> " + userInput);
+         
          // If the user sent a valid command
          if (typeof command.onEnter !== "undefined") {
             // If the command has parameters
@@ -203,6 +237,7 @@ const Elem = () => {
                const parameters = getParameters(command, userInput);
                // If the parameters are valid
                if (parameters !== null) {
+                  console.log(clearMessageHistory);
                   command.onEnter(writeLine, parameters);
                }
             } else {
@@ -218,11 +253,15 @@ const Elem = () => {
 
    return <>
       <div id="command-box">
-         {messageHistory.map((rawCommand, i) => {
-            return formatMessage(rawCommand, i);
-         })}
+         <div className="messages">
+            <div className="formatter">
+               {messageHistory.map((rawCommand, i) => {
+                  return formatMessage(rawCommand, i);
+               })}
+            </div>
+         </div>
 
-         <input onKeyDown={inputKey} ref={inputRef} type="text" />
+         <input onKeyDown={inputKey} ref={inputRef} placeholder="Enter a command." type="text" />
       </div>
    </>;
 }
