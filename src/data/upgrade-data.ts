@@ -8,6 +8,8 @@ export interface UpgradeInfo {
    };
    readonly tier: number;
    isBought?: boolean;
+   /** The upgrade's unique identifier. Doesn't need to be in any pattern or order, just needs to be unique for every upgrade */
+   readonly id: number;
 }
 const UPGRADE_DATA: Array<UpgradeInfo> = [
    /** TIER 1 **/
@@ -17,7 +19,8 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
       requirements: {
          lorem: 5
       },
-      tier: 1
+      tier: 1,
+      id: 1
    },
 
    /** TIER 2 **/
@@ -30,7 +33,8 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
             interns: 5
          }
       },
-      tier: 2
+      tier: 2,
+      id: 2
    },
    {
       name: "Touch Typing",
@@ -38,7 +42,8 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
       requirements: {
          lorem: 50
       },
-      tier: 2
+      tier: 2,
+      id: 3
    },
 
    /** TIER 3 **/
@@ -52,7 +57,8 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
             employees: 1
          }
       },
-      tier: 3
+      tier: 3,
+      id: 4
    },
    {
       name: "Disciplinary Techniques",
@@ -62,7 +68,8 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
             interns: 10
          }
       },
-      tier: 3
+      tier: 3,
+      id: 5
    },
    {
       name: "Mechanical Keyboard",
@@ -70,7 +77,8 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
       requirements: {
          lorem: 200
       },
-      tier: 3
+      tier: 3,
+      id: 6
    },
 
    /** TIER 4 **/
@@ -82,7 +90,8 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
             interns: 15
          }
       },
-      tier: 4
+      tier: 4,
+      id: 7
    },
    {
       name: "Company Restructure",
@@ -90,7 +99,8 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
       requirements: {
          lorem: 200
       },
-      tier: 4
+      tier: 4,
+      id: 8
    },
    {
       name: "Planned Obsolescence",
@@ -98,7 +108,8 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
       requirements: {
          lorem: 1000
       },
-      tier: 4
+      tier: 4,
+      id: 9
    },
 
    /** TIER 5 **/
@@ -109,7 +120,8 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
       requirements: {
          lorem: 0
       },
-      tier: 5
+      tier: 5,
+      id: 10
    }
 ];
 

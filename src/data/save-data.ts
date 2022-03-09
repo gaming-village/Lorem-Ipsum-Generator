@@ -2,7 +2,7 @@ import Game from "../Game";
 import { getPreferences, setPreferences } from "../classes/programs/Preferences";
 import { getCurrentTime, randInt } from "../utils";
 import ACHIEVEMENT_DATA from "./achievement-data";
-import LETTERS from "./letter-data";
+import LETTER_DATA from "./letter-data";
 import LOREM_PACKS from "./lorem-pack-data";
 import UPGRADE_DATA from "./upgrade-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
@@ -227,9 +227,9 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
-         for (let i = 0; i < APPLICATION_DATA.length; i++) {
-            const applicationInfo = APPLICATION_DATA[i];
-            applicationInfo.isUnlocked = bits[i] === 1;
+         for (const application of APPLICATION_DATA) {
+            if (application.id > bits.length) continue;
+            application.isUnlocked = bits[application.id - 1] === 1;
          }
       }
    },
@@ -334,8 +334,8 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         let result = "";
-         for (const letter of LETTERS) {
+         let resultArr = new Array<number>();
+         for (const letter of LETTER_DATA) {
             let part = 0;
             if (letter.isReceived) {
                part += 1;
@@ -346,8 +346,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
                   }
                }
             }
-            result += part;
+            resultArr[letter.id - 1] = part;
          }
+
+         let result = resultArr.map(num => num.toString()).join("");
 
          // Remove trailing 0's
          let numTrailingZeros = 0;
@@ -363,8 +365,8 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       loadEvent: (savedValue: string) => {
          const parts = savedValue.split("").map(Number);
 
-         for (let i = 0; i < LETTERS.length; i++) {
-            const letter = LETTERS[i], part = parts[i] || 0;
+         for (let i = 0; i < LETTER_DATA.length; i++) {
+            const letter = LETTER_DATA[i], part = parts[i] || 0;
             if (part === 0) continue;
             const bits = decToBin(part).reverse();
 
@@ -418,35 +420,34 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
-         for (let i = 0; i < bits.length; i++) {
-            const achievement = ACHIEVEMENT_DATA[i];
-            achievement.isUnlocked = bits[i] === 1;
+         for (const achievement of ACHIEVEMENT_DATA) {
+            if (achievement.id > bits.length) continue;
+            achievement.isUnlocked = bits[achievement.id - 1] === 1;
          }
-         bits.forEach((bit, i) => {
-            const achievement = ACHIEVEMENT_DATA[i];
-            if (bit === 1) achievement.isUnlocked = true;
-         });
       }
    },
    {
       name: "Bought lorem packs",
       defaultValue: () => {
-         return decToHex(LOREM_PACKS.reduce((previousValue, loremPack, i) => {
-            if (loremPack.isBought) return previousValue + Math.pow(2, i);
-            return previousValue;
-         }, 0));
+         let total = 0;
+         for (const loremPack of LOREM_PACKS) {
+            if (loremPack.isBought) total += Math.pow(2, loremPack.id - 1);
+         }
+         return decToHex(total);
       },
       updateValue: () => {
-         return decToHex(LOREM_PACKS.reduce((previousValue, loremPack, i) => {
-            if (loremPack.isBought) return previousValue + Math.pow(2, i);
-            return previousValue;
-         }, 0));
+         let total = 0;
+         for (const loremPack of LOREM_PACKS) {
+            if (loremPack.isBought) total += Math.pow(2, loremPack.id - 1);
+         }
+         return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
-         LOREM_PACKS.forEach((loremPack, i) => {
-            if (bits[i] === 1) loremPack.isBought = true;
-         });
+         for (const loremPack of LOREM_PACKS) {
+            if (loremPack.id > bits.length) continue;
+            loremPack.isBought = bits[loremPack.id - 1] === 1;
+         }
       }
    },
    {
@@ -468,18 +469,16 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       updateValue: () => {
          let total = 0;
-         for (let i = 0; i < UPGRADE_DATA.length; i++) {
-            const upgrade = UPGRADE_DATA[i];
-            if (upgrade.isBought) total += Math.pow(2, i);
+         for (const upgrade of UPGRADE_DATA) {
+            if (upgrade.isBought) total += Math.pow(2, upgrade.id - 1);
          }
          return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
-         for (let i = 0; i < UPGRADE_DATA.length; i++) {
-            const upgrade = UPGRADE_DATA[i];
-            const bit = i <= bits.length ? bits[i] : 0;
-            upgrade.isBought = bit === 1;
+         for (const upgrade of UPGRADE_DATA) {
+            if (upgrade.id > bits.length) continue;
+            upgrade.isBought = bits[upgrade.id - 1] === 1;
          }
       }
    },
@@ -562,16 +561,16 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       updateValue: () => {
          let result = 0;
-         for (let i = 0; i < BLACK_MARKET_SHOPS.length; i++) {
-            const shop = BLACK_MARKET_SHOPS[i];
-            if (shop.isUnlocked) result += Math.pow(2, i);
+         for (const shop of BLACK_MARKET_SHOPS) {
+            if (shop.isUnlocked) result += Math.pow(2, shop.id - 1);
          }
          return decToHex(result);
       },
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
-         for (let i = 0; i < bits.length; i++) {
-            BLACK_MARKET_SHOPS[i].isUnlocked = bits[i] === 1;
+         for (const shop of BLACK_MARKET_SHOPS) {
+            if (shop.id > bits.length) break;
+            shop.isUnlocked = bits[shop.id - 1] === 1;
          }
       }
    },
@@ -582,15 +581,16 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       updateValue: () => {
          let result = 0;
-         for (let i = 0; i < POPUP_DATA.length; i++) {
-            if (POPUP_DATA[i].isUnlocked) result += Math.pow(2, i);
+         for (const popup of POPUP_DATA) {
+            if (popup.isUnlocked) result += Math.pow(2, popup.id - 1);
          }
          return decToHex(result);
       },
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
-         for (let i = 0; i < bits.length; i++) {
-            POPUP_DATA[i].isUnlocked = bits[i] === 1;
+         for (const popup of POPUP_DATA) {
+            if (popup.id > bits.length) break;
+            popup.isUnlocked = bits[popup.id - 1] === 1;
          }
       }
    }

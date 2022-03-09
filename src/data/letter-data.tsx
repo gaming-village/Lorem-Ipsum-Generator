@@ -20,6 +20,8 @@ export interface LetterInfo {
    readonly isCloseable: boolean;
    isReceived?: boolean;
    isOpened?: boolean;
+   /** The letter's unique identifier. Doesn't need to be in any order, just needs to be unique for every letter */
+   readonly id: number;
 }
 
 interface LoremLetter {
@@ -66,7 +68,7 @@ export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
    }
 ];
 
-const LETTERS: ReadonlyArray<LetterInfo> = [
+const LETTER_DATA: ReadonlyArray<LetterInfo> = [
    {
       subject: "Corporate Overview",
       from: "Lorem Corp",
@@ -77,7 +79,8 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>May your lorem generation be filled with suffering.</p>
       </>,
       folder: "Inbox",
-      isCloseable: false
+      isCloseable: false,
+      id: 1
    },
    {
       subject: "Steven Job - free An-Droid",
@@ -90,7 +93,8 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>an queen Of England</p>
       </>,
       folder: "Junk Mail",
-      isCloseable: false
+      isCloseable: false,
+      id: 2
    },
    {
       subject: "Tips with Lorem Corp",
@@ -105,7 +109,8 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          </List>
       </>,
       folder: "Inbox",
-      isCloseable: false
+      isCloseable: false,
+      id: 3
    },
    {
       subject: "Motivational Letter",
@@ -116,7 +121,8 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>We have also implemented a Lorem Quota. Those who meet the quota shall be rewarded.</p>
       </>,
       folder: "Inbox",
-      isCloseable: false
+      isCloseable: false,
+      id: 4
    },
    {
       subject: "Addressing Rumors",
@@ -126,7 +132,8 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>It has come to our attention that there are several fallacious claims of 'malware-infected' computers. Disregard them - our system is perfect and flawless.</p>
       </>,
       folder: "Inbox",
-      isCloseable: false
+      isCloseable: false,
+      id: 5
    },
    {
       subject: "Invitation",
@@ -148,7 +155,8 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          },
          isClaimed: false
       },
-      isCloseable: false
+      isCloseable: false,
+      id: 6
    },
    {
       subject: "urgent Matters",
@@ -159,7 +167,8 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>figure 1.0: bomb</p>
       </>,
       folder: "Junk Mail",
-      isCloseable: true
+      isCloseable: true,
+      id: 7
    },
    {
       subject: "Social security issue !",
@@ -171,7 +180,8 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>I am apoligized for your inconvenience,,</p>
       </>,
       folder: "Junk Mail",
-      isCloseable: true
+      isCloseable: true,
+      id: 8
    },
    {
       subject: "Order delivery",
@@ -185,7 +195,8 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>If you believe that this order is an error, please give me your money.</p>
       </>,
       folder: "Junk Mail",
-      isCloseable: true
+      isCloseable: true,
+      id: 9
    },
    {
       subject: "Government is here",
@@ -196,8 +207,9 @@ const LETTERS: ReadonlyArray<LetterInfo> = [
          <p>Pelase cotnact this page if you are in a confusion.</p>
       </>,
       folder: "Junk Mail",
-      isCloseable: true
+      isCloseable: true,
+      id: 10
    }
 ];
 
-export default LETTERS;
+export default LETTER_DATA;

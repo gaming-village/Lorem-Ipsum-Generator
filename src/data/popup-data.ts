@@ -24,6 +24,8 @@ export interface PopupInfo {
    }
    isUnlocked?: boolean;
    readonly children: Array<string>;
+   /** The popup's unique identifier. Doesn't need to be in any pattern or order, just needs to be unique for every popup */
+   readonly id: number;
 }
 const POPUP_DATA: ReadonlyArray<PopupInfo> = [
    {
@@ -43,7 +45,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Macrosoft Antibus",
          isSingleElem: false
       },
-      children: []
+      children: [],
+      id: 1
    },
    {
       name: "browser-error",
@@ -63,7 +66,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Error",
          isSingleElem: false
       },
-      children: ["microsoft-antivirus"]
+      children: ["microsoft-antivirus"],
+      id: 2
    },
    {
       name: "rain",
@@ -80,7 +84,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Rain",
          isSingleElem: true
       },
-      children: ["microsoft-antivirus"]
+      children: ["microsoft-antivirus"],
+      id: 3
    },
    {
       name: "chunky",
@@ -97,7 +102,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Chunky",
          isSingleElem: true
       },
-      children: ["microsoft-antivirus"]
+      children: ["microsoft-antivirus"],
+      id: 4
    },
    {
       name: "clippy",
@@ -114,7 +120,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Clippy",
          isSingleElem: true
       },
-      children: ["microsoft-antivirus"]
+      children: ["microsoft-antivirus"],
+      id: 5
    },
    {
       name: "annual-survey",
@@ -134,7 +141,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "2018 Annual Survey",
          isSingleElem: false
       },
-      children: ["microsoft-antivirus"]
+      children: ["microsoft-antivirus"],
+      id: 6
    },
    {
       name: "free-iPhone",
@@ -151,7 +159,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Free an-Droid",
          isSingleElem: false
       },
-      children: ["browser-error"]
+      children: ["browser-error"],
+      id: 7
    },
    {
       name: "adblock-blocker",
@@ -168,7 +177,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Adblock blocker",
          isSingleElem: false
       },
-      children: ["annual-survey"]
+      children: ["annual-survey"],
+      id: 8
    },
    {
       name: "lurem-impsir",
@@ -188,7 +198,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Lurem Ipmsir",
          isSingleElem: false
       },
-      children: ["rain"]
+      children: ["rain"],
+      id: 9
    },
    {
       name: "chunky-virus",
@@ -205,7 +216,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Chunky virus",
          isSingleElem: false
       },
-      children: ["chunky"]
+      children: ["chunky"],
+      id: 10
    },
    {
       name: "visitor",
@@ -221,7 +233,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "1,0000,000nd Visited!",
          isSingleElem: false
       },
-      children: ["rain"]
+      children: ["rain"],
+      id: 11
    },
    {
       name: "chunky-plantation",
@@ -238,7 +251,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Banana Overload",
          isSingleElem: false
       },
-      children: ["chunky"]
+      children: ["chunky"],
+      id: 12
    },
    {
       name: "ram-download",
@@ -255,7 +269,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Free R.A.M Download",
          isSingleElem: false
       },
-      children: ["rain"]
+      children: ["rain"],
+      id: 13
    },
    {
       name: "bank-details",
@@ -275,7 +290,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Amason.com",
          isSingleElem: false
       },
-      children: ["annual-survey"]
+      children: ["annual-survey"],
+      id: 14
    },
    {
       name: "expandinator",
@@ -292,7 +308,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "The Expandinator",
          isSingleElem: false
       },
-      children: ["browser-error"]
+      children: ["browser-error"],
+      id: 15
    },
    {
       name: "dev-hire",
@@ -309,7 +326,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "monkecodecamp.gov.org.edu.au",
          isSingleElem: false
       },
-      children: ["annual-survey"]
+      children: ["annual-survey"],
+      id: 16
    }
 ];
 
