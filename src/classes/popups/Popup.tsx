@@ -147,7 +147,7 @@ const PopupElem = ({ info, application, children, closeFunc }: PopupElemInfo) =>
 }
 
 setTimeout(() => {
-   const popupClassName = "ChunkyPlantation";
+   const popupClassName = "DevHire";
    for (const a of POPUP_DATA) {
       if (a.className === popupClassName) {
          createPopup(a);

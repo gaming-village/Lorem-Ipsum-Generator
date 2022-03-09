@@ -129,3 +129,39 @@
       transform: rotate(0deg);
    }
 }
+
+/* Dev Hire */
+.popup.dev-hire .code-monkey {
+   height: 5rem;
+   float: right;
+}
+.popup.dev-hire .rainbow-bg {
+   color: #fff;
+   border: 2px solid;
+   border-color: #ddd #000 #000 #ddd;
+   padding: 0.2rem 0.5rem;
+   display: inline-block;
+   margin-left: 50%;
+   transform: translateX(-50%);
+   white-space: pre;
+   cursor: pointer;
+}
+.popup.dev-hire .rainbow-bg:hover {
+   border-color: #fff #666 #666 #fff;
+   filter: brightness(1.1);
+}
+
+.popup.dev-hire .closing-screen {
+   background-color: #ddd;
+   border: 2px solid;
+   border-color: #fff #000 #000 #fff;
+   padding: 0.5rem;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}
+.popup.dev-hire .closing-screen p {
+   text-align: center;
+   margin: 0;
+}

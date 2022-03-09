@@ -330,7 +330,7 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
    },
    {
       name: "dev-hire",
-      className: "",
+      className: "DevHire",
       flavourText: "Made as a practical joke by the Devil to ruin the days of aspiring web developers.",
       description: "Shows multiple prompts when you try to close it.",
       cost: 175,
