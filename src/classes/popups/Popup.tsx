@@ -146,14 +146,14 @@ const PopupElem = ({ info, application, children, closeFunc }: PopupElemInfo) =>
    </WindowsProgram>;
 }
 
-// setTimeout(() => {
-//    const popupClassName = "RAMDownload";
-//    for (const a of POPUP_DATA) {
-//       if (a.className === popupClassName) {
-//          createPopup(a);
-//       }
-//    }
-// }, 100);
+setTimeout(() => {
+   const popupClassName = "RAMDownload";
+   for (const a of POPUP_DATA) {
+      if (a.className === popupClassName) {
+         createPopup(a);
+      }
+   }
+}, 100);
 
 abstract class Popup {
    private info: PopupInfo;
@@ -192,12 +192,15 @@ abstract class Popup {
          throw new Error("'this' keyword is undefined! You're probably not using an arrow function somewhere");
       }
 
-      // Play close sound
-      if (playAudio) new CustomAudio("popup-close.mp3");
-
       removePopup(this);
 
-      updateVisiblePopups();
+      const container = document.getElementById("popup-container");
+      if (container !== null) {
+         updateVisiblePopups();
+
+         // Play close sound
+         if (playAudio) new CustomAudio("popup-close.mp3");
+      }
    }
 
    move!: () => void;
