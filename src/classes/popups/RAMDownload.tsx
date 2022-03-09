@@ -31,7 +31,7 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
          newTime = 20;
       }
 
-      newTime = clamp(0, newTime, 20);
+      newTime = clamp(newTime, 0, 20);
 
       setTime(newTime);
    }, [time]);

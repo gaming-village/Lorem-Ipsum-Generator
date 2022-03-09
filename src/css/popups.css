@@ -1,5 +1,5 @@
 .popup .warning-container {
-   margin: 0.5rem 0 0 10%;
+   margin: 0.5rem 0 0 0;
    display: flex;
    align-items: center;
 }
@@ -10,8 +10,17 @@
 }
 .popup .warning-container p {
    font-weight: 600;
-   font-size: 1.1rem;
+   font-size: 1.05rem;
    margin: 0 0 0 10px;
+}
+
+@keyframes HidePopup {
+   0% {
+      opacity: 1;
+   }
+   100% {
+      opacity: 0;
+   }
 }
 
 
@@ -44,13 +53,15 @@
 
 /* RAM Download */
 .ram-download.hiding {
-   animation: RAMDownloadHide 1s linear forwards;
+   animation: HidePopup 1s linear forwards;
 }
-@keyframes RAMDownloadHide {
-   0% {
-      opacity: 1;
-   }
-   100% {
-      opacity: 0;
-   }
+
+/* Chunky */
+.popup.chunky.hiding {
+   animation: HidePopup 1s linear forwards;
+}
+.popup.chunky .mood {
+   text-align: center;
+   text-shadow: 1px 1px 0 #000;
+   margin-bottom: 0;
 }
