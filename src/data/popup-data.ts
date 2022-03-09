@@ -6,23 +6,24 @@ export interface PopupInfo {
    readonly iconSrc: string;
    readonly className: string;
    /** The item's position on the screen */
-   displayPos: {
-      top: number;
-      left: number;
+   readonly displayPos: {
+      readonly top: number;
+      readonly left: number;
    },
    /** Affects properties of instances of the popup */
-   elem: {
+   readonly elem: {
    /** The actual popup's dimensions (optional) */
-      dimensions?: {
-         width?: string;
-         height?: string;
+   readonly dimensions?: {
+         readonly width?: string;
+         readonly height?: string;
       }
       /** The popup's titlebar text */
-      title: string;
+      readonly title: string;
       /** If true, there can only be one of the popup visible at a time */
-      isSingleElem: boolean;
+      readonly isSingleElem: boolean;
    }
    isUnlocked?: boolean;
+   readonly isChunkyPopup?: boolean;
    readonly children: Array<string>;
 }
 const POPUP_DATA: ReadonlyArray<PopupInfo> = [
@@ -205,7 +206,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Chunky virus",
          isSingleElem: false
       },
-      children: ["chunky"]
+      children: ["chunky"],
+      isChunkyPopup: true
    },
    {
       name: "visitor",
@@ -238,7 +240,8 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
          title: "Banana Overload",
          isSingleElem: false
       },
-      children: ["chunky"]
+      children: ["chunky"],
+      isChunkyPopup: true
    },
    {
       name: "ram-download",
