@@ -37,7 +37,7 @@ const fillPotentialPopups = (): void => {
       if (popup.isUnlocked && popup.className !== "") {
          // Make sure the popup isn't already visible if it's a single popup
          if (popup.elem.isSingleElem) {
-            let hasFound = true;
+            let hasFound = false;
             for (const currentPopup of popups) {
                if (currentPopup.name === popup.name)  {
                   hasFound = true;
