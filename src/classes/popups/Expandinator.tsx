@@ -28,11 +28,6 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
          
          initialWidth.current = elem.offsetWidth;
          initialHeight.current = elem.offsetHeight;
-
-         initialPos.current = new Point(
-            elem.offsetLeft,
-            elem.offsetTop
-         );
       }
    }, [popup, popup.getElem]);
 
@@ -58,13 +53,20 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
          } else if (newTime > -ENDING_TIME) {
             // If already expanding
 
+            const elem = popup.getElem();
+
+            if (initialPos.current === null) {
+               initialPos.current = new Point(
+                  elem.offsetLeft,
+                  elem.offsetTop
+               );
+            }
+
             const computer = getElem("computer");
             const finalWidth = computer.offsetWidth;
             const finalHeight = computer.offsetHeight;
 
             const progress = -newTime / ENDING_TIME;
-
-            const elem = popup.getElem();
 
             elem.style.width = initialWidth.current! * (1 - progress) + finalWidth * progress + "px";
             elem.style.height = initialHeight.current! * (1 - progress) + finalHeight * progress + "px";
@@ -87,10 +89,10 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
       }
    }, [updateTime]);
 
-   return <div className={`content${stage !== Stage.Waiting ? " expanding" : ""}`}>
+   return <div className={`content${stage !== Stage.Waiting && time <= -1 / Game.tps ? " expanding" : ""}`}>
       <p><b>He expanding.</b></p>
 
-      <p>{roundNum(time, undefined, true)}</p>
+      <p className="time-remaining">{roundNum(Math.max(time, 0), undefined, true)}</p>
 
       <Button onClick={close} isCentered>Close</Button>
    </div>;
