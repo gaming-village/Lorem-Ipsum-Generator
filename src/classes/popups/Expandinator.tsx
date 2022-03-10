@@ -18,6 +18,7 @@ interface ElemProps {
 const Elem = ({ popup }: ElemProps): JSX.Element => {
    const [time, setTime] = useState(2.5);
    const [stage, setStage] = useState(Stage.Waiting);
+   
    const initialWidth = useRef<number | null>(null);
    const initialHeight = useRef<number | null>(null);
    const initialPos = useRef<Point | null>(null);

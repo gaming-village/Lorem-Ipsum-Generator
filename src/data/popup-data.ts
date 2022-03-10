@@ -230,7 +230,7 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
    },
    {
       name: "visitor",
-      className: "",
+      className: "Visitor",
       description: "Gives a random reward each appearance.",
       cost: 12,
       iconSrc: "",
