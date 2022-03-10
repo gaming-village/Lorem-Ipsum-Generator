@@ -99,7 +99,8 @@ const Elem = ({ application }: ElemProps) => {
    }, []);
 
    return <>
-      <p>It's raining! ({roundNum(loremStolen)})</p>
+      <p>It's raining!</p>
+      <p className="steal-amount">({roundNum(loremStolen, 1, true)} stolen)</p>
    </>;
 }
 

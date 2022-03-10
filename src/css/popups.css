@@ -43,6 +43,7 @@
    height: var(--size);
    float: right;
 }
+/* Falling text */
 .lurem-impsir-falling-text {
    color: #00ff00;
    position: absolute;
@@ -51,8 +52,20 @@
    pointer-events: none;
 }
 
+/* Rain */
+.popup.rain p {
+   margin: 0;
+}
+.popup.rain .steal-amount {
+   text-align: center;
+   text-shadow: 1px 1px 0 #000;
+   font-style: italic;
+   color: #00ff00;
+   margin-top: 0.3rem;
+}
+
 /* RAM Download */
-.ram-download.hiding {
+.popup.ram-download.hiding {
    animation: HidePopup 1s linear forwards;
 }
 

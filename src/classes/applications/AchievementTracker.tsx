@@ -53,6 +53,7 @@ export function unlockAchievement(name: string): void {
 }
 
 enum FilterTypes {
+   none = "None",
    category = "Category",
    unlocked = "Unlocked"
 }
@@ -64,6 +65,17 @@ enum DisplayTypes {
 interface FilterItem {
    type: "heading" | "achievement";
    content: AchievementInfo | string;
+}
+
+const getNoneFilter = (): ReadonlyArray<FilterItem> => {
+   const filterItems = new Array<FilterItem>();
+   for (const achievement of ACHIEVEMENT_DATA) {
+      filterItems.push({
+         type: "achievement",
+         content: achievement
+      });
+   }
+   return filterItems;
 }
 
 const getCategoryFilter = (): ReadonlyArray<FilterItem> => {
@@ -201,7 +213,7 @@ interface ElemProps {
 }
 const Elem = ({ application }: ElemProps): JSX.Element => {
    const [unlockedAchievements, setUnlockedAchievements] = useState<Array<AchievementInfo>>(getUnlockedAchievements());
-   const [filterType, setFilterType] = useState<FilterTypes>(FilterTypes.category);
+   const [filterType, setFilterType] = useState<FilterTypes>(FilterTypes.none);
    const [displayType, setDisplayType] = useState<DisplayTypes>(DisplayTypes.strips);
 
    useEffect(() => {
@@ -213,10 +225,19 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
    }, [unlockedAchievements]);
 
    let filterItems!: ReadonlyArray<FilterItem>;
-   if (filterType === FilterTypes.category) {
-      filterItems = getCategoryFilter();
-   } else if (filterType === FilterTypes.unlocked) {
-      filterItems = getUnlockedFilter();
+   switch (filterType) {
+      case FilterTypes.none: {
+         filterItems = getNoneFilter();
+         break;
+      }
+      case FilterTypes.category: {
+         filterItems = getCategoryFilter();
+         break;
+      }
+      case FilterTypes.unlocked: {
+         filterItems = getUnlockedFilter();
+         break;
+      }
    }
 
    const achievements = filterToElems(filterItems, displayType);
