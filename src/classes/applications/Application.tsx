@@ -49,6 +49,12 @@ const ApplicationElem = ({ title, id, application, children }: ApplicationElemPr
       if (application.isOpened) setVisible(true);
    }, [application.isOpened]);
 
+   useEffect(() => {
+      application.getElem = (): HTMLElement => {
+         return applicationRef.current!;
+      }
+   }, [application]);
+
    application.setVisibility = (newVal: boolean): void => {
       setVisible(newVal);
    }
@@ -143,6 +149,8 @@ abstract class Application {
       this.setVisibility(false);
       this.setTaskbarStatus(false);
    }
+
+   getElem!: () => HTMLElement;
 }
 
 export default Application;

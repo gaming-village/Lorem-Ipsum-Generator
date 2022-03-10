@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap');
+
 #LoremCounter p {
    text-align: center;
    position: relative;
@@ -198,4 +200,27 @@
       margin: 5px 10px;
       box-shadow: 2px 0 0 0 #fff;
    }
+}
+
+/* Big Lorem Counter */
+#BigLoremCounter .lorem-container {
+   --size: 11rem;
+   width: var(--size);
+   height: var(--size);
+   background-color: #fff;
+   margin-left: 50%;
+   transform: translateX(-50%);
+   position: relative;
+}
+#BigLoremCounter .lorem-count {
+   font: 600 1.2rem "Roboto Mono";
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}
+#BigLoremCounter .increment-text {
+   font: 400 1rem "Roboto Mono";
+   position: absolute;
+   pointer-events: none;
 }

@@ -28,6 +28,12 @@ export class Vector {
       const y = Math.sin(this.direction) * this.magnitude;
       return new Point(x, y);
    }
+
+   static randomUnit(): Vector {
+      const magnitude = 1;
+      const direction = randFloat(0, 360);
+      return new Vector(magnitude, direction);
+   }
 }
 
 export class CustomAudio {
