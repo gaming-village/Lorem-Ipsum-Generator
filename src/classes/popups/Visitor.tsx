@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Point, randFloat, randInt, randItem, Vector } from "../../utils";
+import { Point, randFloat, randItem, Vector } from "../../utils";
 
 import WarningImg from "../../images/icons/warning.png";
 
@@ -11,14 +11,18 @@ interface Confetti {
    position: Point;
    velocity: Vector;
    elem: HTMLElement;
+   /** How long the confetti has existed in seconds */
+   age: number;
 }
 const createConfettiElem = (container: HTMLElement): HTMLElement => {
    const confetti = document.createElement("div");
    confetti.className = "confetti"; 
    container.appendChild(confetti);
 
-   confetti.style.width = randFloat(10, 12.5) + "px";
-   confetti.style.height = randFloat(4.5, 4.75) + "px";
+   confetti.style.transform = "rotate(" + randFloat(0, 360) + "deg)";
+
+   confetti.style.width = randFloat(10, 15) + "px";
+   confetti.style.height = randFloat(3.5, 4.75) + "px";
 
    const COLOURS: ReadonlyArray<string> = ["red", "green", "blue", "yellow"];
    confetti.style.backgroundColor = randItem(COLOURS);
@@ -28,19 +32,20 @@ const createConfettiElem = (container: HTMLElement): HTMLElement => {
 
 const createConfettis = (container: HTMLElement): Array<Confetti> => {
    const confettis = new Array<Confetti>();
-   const count = randInt(10, 20);
+   const count = 30;
    for (let i = 0; i < count; i++) {
       const position = new Point(
          randFloat(0, 100),
          randFloat(0, 100)
       );
 
-      const velocity = new Vector(randFloat(25, 50), randFloat(-1, 1));
+      const velocity = new Vector(randFloat(25, 75), randFloat(-1, 1));
 
       confettis.push({
          position: position,
          velocity: velocity,
-         elem: createConfettiElem(container)
+         elem: createConfettiElem(container),
+         age: 0
       });
    }
    return confettis;
@@ -85,20 +90,32 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
 
    const rollCount = useRef<number>(0);
 
-   const claimReward = useCallback((): void => {
-      setStage(Stage.Opened);
+   const claimReward = useCallback((claimedReward: Reward): void => {
+      const rewardIsNumber = typeof claimedReward === "number";
+      if (rewardIsNumber) {
+         Game.lorem += claimedReward;
+      }
 
-      const elem = popup.getElem();
-      const newConfettis = createConfettis(elem);
-      setConfettis(newConfettis.slice());
+      if (!(rewardIsNumber && claimedReward < 0)) {
+         // Create confetti!
+         const elem = popup.getElem();
+         const newConfettis = createConfettis(elem);
+         setConfettis(newConfettis.slice());
+      }
    }, [popup]);
+
+   useEffect(() => {
+      if (stage === Stage.Opened) {
+         claimReward(reward!);
+      }
+   }, [claimReward, reward, stage]);
    
    const startRewardRoll = useCallback(() => {
       rollCount.current++;
 
       setTimeout(() => {
          if (rollCount.current === 25) {
-            claimReward();
+            setStage(Stage.Opened);
          } else {
             const newReward = getRandomReward(reward);
             setReward(newReward);
@@ -106,7 +123,7 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
             startRewardRoll();
          }
       }, Math.pow(rollCount.current, 1.3) * 5);
-   }, [claimReward, reward]);
+   }, [reward]);
 
    const openReward = useCallback(() => {
       setStage(Stage.Opening);
@@ -116,20 +133,18 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
    const updateConfettis = useCallback(() => {
       const confettisToRemove = new Array<Confetti>();
       for (const confetti of confettis) {
+         confetti.age += 1 / Game.tps;
+
          confetti.position = confetti.position.add(confetti.velocity.convertToPoint().multiply(1 / Game.tps));
          confetti.velocity.x *= 0.95;
-         confetti.velocity.y -= 1;
-         if (confetti.velocity.y <= 10 && confetti.velocity.y >= 0) {
-            confetti.velocity.y *= 0.9;
-         }
-         if (confetti.velocity.y < 0) {
-            confetti.velocity.y *= 1.05;
-         }
+
+         const gravity = 1 * Math.pow(confetti.age + 0.75, 2.5);
+         confetti.velocity.y -= gravity;
 
          confetti.elem.style.left = confetti.position.x + "%";
          confetti.elem.style.bottom = confetti.position.y + "%";
 
-         if (confetti.position.x <= -10 || confetti.position.x >= 110 || confetti.position.y <= -10 || confetti.position.y >= 110) {
+         if (confetti.position.x <= -10 || confetti.position.x >= 110 || confetti.position.y <= -10) {
             confettisToRemove.push(confetti);
          }
       }
@@ -173,9 +188,9 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
          <p>Congratulations</p>
       </div>
 
-      <p>You are our 1,00,,, visitor!</p>
+      <p style={{textAlign: "center"}}>You are our 1,00,,, visitor!</p>
 
-      <p>As reward, we give you free thing!</p>
+      <p style={{textAlign: "center"}}>As reward, we give you free thing!</p>
 
       <div className="rainbow-bg">
          <div className="box">
