@@ -27,7 +27,6 @@ const createConfettiElem = (container: HTMLElement): HTMLElement => {
 }
 
 const createConfettis = (container: HTMLElement): Array<Confetti> => {
-   console.log("start create");
    const confettis = new Array<Confetti>();
    const count = randInt(10, 20);
    for (let i = 0; i < count; i++) {
@@ -86,15 +85,15 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
 
    const rollCount = useRef<number>(0);
 
-   const claimReward = (): void => {
+   const claimReward = useCallback((): void => {
       setStage(Stage.Opened);
 
       const elem = popup.getElem();
       const newConfettis = createConfettis(elem);
       setConfettis(newConfettis.slice());
-   }
-
-   const startRewardRoll = (): void => {
+   }, [popup]);
+   
+   const startRewardRoll = useCallback(() => {
       rollCount.current++;
 
       setTimeout(() => {
@@ -107,12 +106,12 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
             startRewardRoll();
          }
       }, Math.pow(rollCount.current, 1.3) * 5);
-   }
+   }, [claimReward, reward]);
 
-   const openReward = (): void => {
+   const openReward = useCallback(() => {
       setStage(Stage.Opening);
       startRewardRoll();
-   }
+   }, [startRewardRoll]);
 
    const updateConfettis = useCallback(() => {
       const confettisToRemove = new Array<Confetti>();
@@ -181,7 +180,7 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
       <div className="rainbow-bg">
          <div className="box">
             {reward !== null ? typeof reward === "number" ? (
-               <span>{reward} lorem</span>
+               <span style={stage === Stage.Opened && reward < 0 ? { color: "red" } : undefined}>{reward} lorem</span>
             ) : (
                <span>{reward}</span>
             ) : (
