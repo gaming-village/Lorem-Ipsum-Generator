@@ -196,3 +196,29 @@
 .popup.expandinator .time-remaining {
    color: red;
 }
+
+/* Visitor */
+.popup.visitor .rainbow-bg {
+   --size: 4rem;
+   padding: 0.2rem;
+   border: 2px solid var(--win95-light-blue);
+   border-radius: 3px;
+   margin-left: 50%;
+   display: inline-block;
+   transform: translateX(-50%);
+}
+.popup.visitor .rainbow-bg .box {
+   width: var(--size);
+   height: var(--size);
+   background-color: #fffff0;
+}
+.popup.visitor .rainbow-bg .box span {
+   width: 100%;
+   text-align: center;
+   margin-top: calc(var(--size) / 2);
+   display: inline-block;
+   transform: translateY(-50%);
+}
+.popup.visitor .confetti {
+   position: absolute;
+}

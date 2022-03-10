@@ -50,9 +50,12 @@ const Elem = ({ application }: ElemProps): JSX.Element => {
          const newIncrementTexts = incrementTexts.slice();
          while (incrementTextsToRemove.length > 0) {
             const incrementText = incrementTextsToRemove[0];
-            newIncrementTexts.splice(newIncrementTexts.indexOf(incrementText));
+            incrementText.elem.remove();
+
+            newIncrementTexts.splice(newIncrementTexts.indexOf(incrementText), 1);
             incrementTextsToRemove.splice(0, 1);
          }
+         setIncrementTexts(newIncrementTexts);
       }
    }, [incrementTexts]);
 

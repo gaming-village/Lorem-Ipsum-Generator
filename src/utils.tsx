@@ -12,21 +12,56 @@ export class Point {
          this.y + point2.y
       );
    }
+
+   multiply(amount: number): Point {
+      return new Point(
+         this.x * amount,
+         this.y * amount
+      );
+   }
 }
 
 export class Vector {
    magnitude: number;
    direction: number;
 
+   private _x: number;
+   private _y: number;
+
+   get x(): number {
+      return this._x;
+   }
+   set x(newVal: number) {
+      this._x = newVal;
+      this.updateVectorVals();
+   }
+
+   get y(): number {
+      return this._y;
+   }
+   set y(newVal: number) {
+      this._y = newVal;
+      this.updateVectorVals();
+   }
+
    constructor(magnitude: number, direction: number) {
+      this.magnitude = magnitude;
+      this.direction = direction;
+
+      this._x = Math.sin(this.direction) * this.magnitude;
+      this._y = Math.cos(this.direction) * this.magnitude;
+   }
+
+   private updateVectorVals(): void {
+      const magnitude = Math.sqrt(Math.pow(this._x, 2) + Math.pow(this._y, 2));
+      const direction = Math.atan2(this._y, this._x) * 180/Math.PI;
+
       this.magnitude = magnitude;
       this.direction = direction;
    }
 
    convertToPoint(): Point {
-      const x = Math.cos(this.direction) * this.magnitude;
-      const y = Math.sin(this.direction) * this.magnitude;
-      return new Point(x, y);
+      return new Point(this._x, this._y);
    }
 
    static randomUnit(): Vector {

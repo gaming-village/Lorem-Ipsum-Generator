@@ -9,6 +9,7 @@ body {
 :root {
    --win95-bg-colour: #c3c7cb;
    --win95-dark-blue: rgb(7, 30, 129);
+   --win95-light-blue: #2b52ff;
 }
 body.blurred::after {
    content: "";

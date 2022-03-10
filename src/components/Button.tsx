@@ -8,7 +8,7 @@ interface ButtonProps {
    isCentered?: boolean;
    isFlashing?: boolean;
    isDark?: boolean;
-   children: JSX.Element | string;
+   children: JSX.Element | string | undefined;
    tooltipContent?: () => JSX.Element;
 }
 
