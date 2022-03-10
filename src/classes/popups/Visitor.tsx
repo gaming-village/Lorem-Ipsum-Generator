@@ -3,7 +3,7 @@ import { Point, randFloat, randItem, Vector } from "../../utils";
 
 import WarningImg from "../../images/icons/warning.png";
 
-import Popup from "./Popup";
+import Popup, { createRandomPopups } from "./Popup";
 import Button from "../../components/Button";
 import Game from "../../Game";
 
@@ -94,6 +94,13 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
       const rewardIsNumber = typeof claimedReward === "number";
       if (rewardIsNumber) {
          Game.lorem += claimedReward;
+      } else {
+         switch (claimedReward) {
+            case "Popup wave": {
+               createRandomPopups(3);
+               break;
+            }
+         }
       }
 
       if (!(rewardIsNumber && claimedReward < 0)) {

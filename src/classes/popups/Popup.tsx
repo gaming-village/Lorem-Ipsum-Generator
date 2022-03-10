@@ -73,6 +73,12 @@ export function createRandomPopup(): void {
    createPopup(popup);
 }
 
+export function createRandomPopups(amount: number): void {
+   for (let i = 0; i < amount; i++) {
+      createRandomPopup();
+   }
+}
+
 interface PopupElemInfo {
    info: PopupInfo;
    application: Popup;
