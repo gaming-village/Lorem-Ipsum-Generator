@@ -311,7 +311,7 @@ const POPUP_DATA: ReadonlyArray<PopupInfo> = [
    },
    {
       name: "expandinator",
-      className: "",
+      className: "Expandinator",
       flavourText: "Expande.",
       description: "Expands to fill the screen if not clicked fast enough.",
       cost: 35,
