@@ -45,13 +45,16 @@ const TERMINAL_COMMANDS: ReadonlyArray<Command> = [
    },
    {
       name: "clear",
-      onEnter: (_1): void => {
+      onEnter: (): void => {
          clearMessageHistory();
       },
       typedWordsRequirement: 10
    },
    {
       name: "exit",
+      onEnter: (): void => {
+         closeCommandPrompt();
+      },
       typedWordsRequirement: 0
    },
    {
@@ -194,15 +197,23 @@ const formatMessage = (rawMessage: string, key: number): JSX.Element => {
 }
 
 let clearMessageHistory: () => void;
+let closeCommandPrompt: () => void;
 
 let messageHistoryBuffer = new Array<string>();
-const Elem = () => {
+interface ElemProps {
+   application: CommandPrompt;
+}
+const Elem = ({ application }: ElemProps) => {
    const [messageHistory, setMessageHistory] = useState<Array<string>>(messageHistoryBuffer.slice());
    const inputRef = useRef<HTMLInputElement>(null);
 
    clearMessageHistory = (): void => {
       messageHistoryBuffer = new Array<string>();
       setMessageHistory(messageHistoryBuffer.slice());
+   }
+
+   closeCommandPrompt = (): void => {
+      application.close();
    }
 
    const writeLine = (rawMessage: string): void => {
@@ -268,7 +279,7 @@ const Elem = () => {
 
 class CommandPrompt extends Application {
    protected instantiate(): JSX.Element {
-      return <Elem />;
+      return <Elem application={this} />;
    }
 }
 
