@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import Button from "../Button";
 
-import { Job, JOB_DATA, JOB_TIER_DATA } from "../../data/job-data";
+import { JobInfo, JOB_DATA, JOB_TIER_DATA } from "../../data/job-data";
 import { CustomAudio } from "../../utils";
 
 const playPromotionAnimation = (): Promise<void> => {
@@ -25,8 +25,8 @@ const playPromotionAnimation = (): Promise<void> => {
 }
 
 interface PromotionScreenProps {
-   job: Job;
-   promoteFunc: (newJob: Job) => void;
+   job: JobInfo;
+   promoteFunc: (newJob: JobInfo) => void;
 }
 const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
    if (job.tier > JOB_TIER_DATA.length) {
@@ -34,17 +34,17 @@ const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
       console.trace();
       throw new Error("Tier exceed limit when promoting!");
    }
-   let nextJobs = new Array<Job>();
+   let nextJobs = new Array<JobInfo>();
    for (const currentJob of JOB_DATA) {
-      if (currentJob.tier < job.tier + 1 || (currentJob.requirement && currentJob.requirement !== job.name)) continue;
+      if (currentJob.tier < job.tier + 1 || (currentJob.previousJobRequirement && !currentJob.previousJobRequirement.includes(job.name))) continue;
       if (currentJob.tier > job.tier + 1) break;
 
       nextJobs.push(currentJob);
    }
 
-   const [selectedJob, setSelectedJob] = useState<Job | null>(nextJobs.length !== 1 ? null : nextJobs[0]);
+   const [selectedJob, setSelectedJob] = useState<JobInfo | null>(nextJobs.length !== 1 ? null : nextJobs[0]);
 
-   const switchSelectedJob = (newJob: Job) => {
+   const switchSelectedJob = (newJob: JobInfo) => {
       setSelectedJob(newJob);
    }
 
@@ -68,7 +68,7 @@ const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
       })}
    </ul>;
 
-   const promotionAttempt = async (job: Job | null) => {
+   const promotionAttempt = async (job: JobInfo | null) => {
       if (job !== null) {
          new CustomAudio("win95-startup.mp3");
 

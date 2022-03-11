@@ -26,31 +26,31 @@ export interface AchievementInfo {
 const ACHIEVEMENT_DATA: ReadonlyArray<AchievementInfo> = [
    {
       name: "So it begins...",
-      description: "Generate your first lorem.",
+      description: "Generate your first 10 lorem.",
       category: AchievementCategory.tiered,
       iconSrc: "picture.png",
       requirements: {
-         lorem: 1
+         lorem: 10
       },
       id: 1
    },
    {
       name: "Getting somewhere",
-      description: "Generate 100 lorem.",
+      description: "Generate 1000 lorem.",
       category: AchievementCategory.tiered,
       iconSrc: "save.png",
       requirements: {
-         lorem: 100
+         lorem: 1000
       },
       id: 2
    },
    {
       name: "Micro Management",
-      description: "Generate 10000 lorem.",
+      description: "Generate 100000 lorem.",
       category: AchievementCategory.tiered,
       iconSrc: "save.png",
       requirements: {
-         lorem: 10000
+         lorem: 100000
       },
       id: 3
    },

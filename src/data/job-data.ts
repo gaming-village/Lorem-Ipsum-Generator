@@ -51,15 +51,16 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
    }
 ];
 
-export interface Job {
+export interface JobInfo {
    readonly id: string;
    readonly name: string;
    readonly benefits: Array<string>;
    readonly description: string;
-   readonly requirement?: string;
+   /** When present, only the jobs listed will be able to promote into the job */
+   readonly previousJobRequirement?: ReadonlyArray<string>;
    readonly tier: number;
 }
-export const JOB_DATA: ReadonlyArray<Job> = [
+export const JOB_DATA: ReadonlyArray<JobInfo> = [
    /** TIER 1 **/
    {
       id: "interns",
@@ -107,7 +108,7 @@ export const JOB_DATA: ReadonlyArray<Job> = [
          "All workers are 10% cheaper."
       ],
       description: "The Manager spends its days perusing the lifeless office, ensuring that no soul in its presence enjoys but the slightest sliver of happiness - an exemplary leader.",
-      requirement: "Employee",
+      previousJobRequirement: ["Employee"],
       tier: 3
    },
    {
@@ -117,7 +118,7 @@ export const JOB_DATA: ReadonlyArray<Job> = [
          "Typing correct characters gives 7x as much lorem."
       ],
       description: "Despite its simple appearance, the Technician can do much more than plug power cables together - its superior intellect allows it to produce lorem at blistering speeds, with proper training.",
-      requirement: "Programmer",
+      previousJobRequirement: ["Programmer"],
       tier: 3
    },
    {
@@ -127,7 +128,7 @@ export const JOB_DATA: ReadonlyArray<Job> = [
          "Increases lorem generated from typing by 2x."
       ],
       description: "Web Developers work tirelessly to change text alignment and center div's, often working deep into the night to trying to figure out how to make a pull request.",
-      requirement: "Programmer",
+      previousJobRequirement: ["Programmer"],
       tier: 3
    },
    {
@@ -135,7 +136,7 @@ export const JOB_DATA: ReadonlyArray<Job> = [
       name: "Secret Agent",
       benefits: [],
       description: "",
-      requirement: "Janitor",
+      previousJobRequirement: ["Janitor"],
       tier: 3
    },
 
@@ -147,7 +148,7 @@ export const JOB_DATA: ReadonlyArray<Job> = [
          "Each worker increases the production of its direct subordinates by 2%."
       ],
       description: "An expert at both major-management and micro-management, the Director has evolved past its former husk of a self, becoming an integral part of the lorem production workflow.",
-      requirement: "Manager",
+      previousJobRequirement: ["Manager"],
       tier: 4
    },
    {
@@ -157,6 +158,28 @@ export const JOB_DATA: ReadonlyArray<Job> = [
          "TODO"
       ],
       description: "",
+      tier: 4
+   },
+
+   /** TIER 5 **/
+   {
+      id: "executives",
+      name: "Executive",
+      benefits: [
+         ""
+      ],
+      description: "",
+      previousJobRequirement: ["Director"],
+      tier: 5
+   },
+   {
+      id: "full-stack-developer",
+      name: "Full Stack Developer", 
+      benefits: [
+         ""
+      ],
+      description: "",
+      previousJobRequirement: ["Web Developer", "Technician"],
       tier: 4
    }
 ];

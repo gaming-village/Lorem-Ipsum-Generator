@@ -1,6 +1,6 @@
 import Button from "../Button";
 
-import { Job } from "../../data/job-data";
+import { JobInfo } from "../../data/job-data";
 import { sectionData, SectionType } from "./CorporateOverview";
 
 enum SectionCategories {
@@ -9,7 +9,7 @@ enum SectionCategories {
 }
 
 interface ControlPanelProps {
-   job: Job;
+   job: JobInfo;
    currentSection: SectionType;
    changeSectionFunc: (newSection: SectionType) => void;
 }

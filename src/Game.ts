@@ -4,7 +4,7 @@ import achievements, { AchievementInfo } from "./data/achievement-data";
 import { unlockAchievement } from "./classes/applications/AchievementTracker";
 import { LOREM_LETTERS } from "./data/letter-data";
 import { SettingsType } from "./classes/programs/Settings";
-import { JOB_DATA, Job } from "./data/job-data";
+import { JOB_DATA, JobInfo } from "./data/job-data";
 import { calculateWorkerProduction } from "./components/corporate-overview/CorporateOverview";
 import Application from "./classes/applications/Application";
 import Program from "./classes/programs/Program";
@@ -14,8 +14,8 @@ import { receiveLetter } from "./components/media/Mail";
 
 interface UserInfo {
    workerNumber: number;
-   job: Job;
-   previousJobs: Array<Job>;
+   job: JobInfo;
+   previousJobs: Array<JobInfo>;
    workers: { [key: string ]: number};
 }
 interface GameType {
@@ -195,7 +195,7 @@ const Game: GameType = {
    userInfo: {
       workerNumber: 0,
       job: JOB_DATA[0],
-      previousJobs: new Array<Job>(),
+      previousJobs: new Array<JobInfo>(),
       workers: {}
    },
    blurScreen: () => {

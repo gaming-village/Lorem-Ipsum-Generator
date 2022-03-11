@@ -6,7 +6,7 @@ import LETTER_DATA from "./letter-data";
 import LOREM_PACKS from "./lorem-pack-data";
 import UPGRADE_DATA from "./upgrade-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
-import { Job, JOB_DATA } from "./job-data";
+import { JobInfo, JOB_DATA } from "./job-data";
 import { BLACK_MARKET_SHOPS } from "./black-market-data";
 import POPUP_DATA from "./popup-data";
 import APPLICATION_DATA from "./application-data";
@@ -279,7 +279,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
 
          let i = -1;
          let previousTier = 1;
-         const previousJobs = new Array<Job>();
+         const previousJobs = new Array<JobInfo>();
          for (const job of JOB_DATA) {
             if (job.tier > jobIndexes.length) break;
 

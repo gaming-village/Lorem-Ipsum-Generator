@@ -8,14 +8,14 @@ import PromotionScreen from "./PromotionScreen";
 import ProfileSection from "./ProfileSection";
 
 import Game from "../../Game";
-import { JOB_DATA, JOB_TIER_DATA, Job, } from "../../data/job-data";
+import { JOB_DATA, JOB_TIER_DATA, JobInfo, } from "../../data/job-data";
 import UPGRADE_DATA, { UpgradeInfo } from "../../data/upgrade-data";
 import { getPrefix, randItem, roundNum } from "../../utils";
 
 import "../../css/corporate-overview.css";
 
-const getJobsByTier = (tier: number): ReadonlyArray<Job> => {
-   let jobs = new Array<Job>();
+const getJobsByTier = (tier: number): ReadonlyArray<JobInfo> => {
+   let jobs = new Array<JobInfo>();
    for (const currentJob of JOB_DATA) {
       if (currentJob.tier === tier) {
          jobs.push(currentJob);
@@ -24,7 +24,7 @@ const getJobsByTier = (tier: number): ReadonlyArray<Job> => {
    return jobs;
 }
 
-export function getRandomWorker(): Job {
+export function getRandomWorker(): JobInfo {
    let potentialJobs = Game.userInfo.previousJobs.slice();
    // Remove the current job
    potentialJobs.splice(potentialJobs.length - 1, 1);
@@ -38,7 +38,7 @@ export function getRandomWorker(): Job {
  */
 export function hasJob(name: string): boolean {
    // Find the job using the job name
-   let job: Job | undefined;
+   let job: JobInfo | undefined;
    for (const currentJob of JOB_DATA) {
       if (currentJob.name === name) {
          job = currentJob;
@@ -55,7 +55,7 @@ export function hasJob(name: string): boolean {
 }
 
 export interface SectionProps {
-   job: Job;
+   job: JobInfo;
    promoteFunc?: () => void
 }
 
@@ -79,7 +79,7 @@ const getUpgradeRequirements = (upgrade: UpgradeInfo): ReadonlyArray<string> => 
    if (typeof upgrade.requirements.workers !== "undefined") {
       for (const [workerID, count] of Object.entries(upgrade.requirements.workers)) {
          // Find the corresponding worker
-         let worker!: Job;
+         let worker!: JobInfo;
          for (const currentWorker of JOB_DATA) {
             if (currentWorker.id === workerID) {
                worker = currentWorker;
@@ -215,7 +215,7 @@ const UpgradesSection = ({ job }: SectionProps) => {
 
 interface CareerPathNode {
    status: "previousJob" | "nonSelected" | "unknown";
-   job: Job;
+   job: JobInfo;
    children: Array<CareerPathNode>
 }
 const CareerPathSection = () => {
@@ -236,7 +236,7 @@ const CareerPathSection = () => {
       for (const currentJob of tierJobs) {
          let newNode!: CareerPathNode;
 
-         const isInPath = typeof currentJob.requirement === "undefined" || currentJob.requirement === job.name;
+         const isInPath = typeof currentJob.previousJobRequirement === "undefined" || currentJob.previousJobRequirement.includes(job.name);
          if (!isInPath) continue;
 
          if (i === jobHistory.length - 1) {
@@ -354,7 +354,7 @@ const getNonInternWorkerCount = (): number => {
 }
 
 /** Gets the total number of a worker's direct subordinates */
-const getSubordinateCount = (worker: Job): number => {
+const getSubordinateCount = (worker: JobInfo): number => {
    let subordinateCount = 0;
    for (const currentWorker of JOB_DATA) {
       if (currentWorker.tier > worker.tier) break;
@@ -371,7 +371,7 @@ const getSubordinateCount = (worker: Job): number => {
  * Calculates how much one of a certain worker type would produce
  * @param worker The worker
  */
-const getSingularWorkerProduction = (worker: Job): number => {
+const getSingularWorkerProduction = (worker: JobInfo): number => {
    // Quick fun fact: this is actually the only place where ".loremProduction" is used!
    let production = JOB_TIER_DATA[worker.tier - 1].loremProduction;
 
@@ -424,7 +424,7 @@ export function calculateWorkerProduction(): number {
    return totalProduction;
 }
 
-const calculateWorkerCost = (worker: Job, extraAmount?: number): number => {
+const calculateWorkerCost = (worker: JobInfo, extraAmount?: number): number => {
    const initialCost = JOB_TIER_DATA[worker.tier - 1].initialCost;
    const count = Game.userInfo.workers[worker.id] + (extraAmount || 0);
 
@@ -437,7 +437,7 @@ const calculateWorkerCost = (worker: Job, extraAmount?: number): number => {
    return cost;
 }
 
-const calculateAffordAmount = (worker: Job): number => {
+const calculateAffordAmount = (worker: JobInfo): number => {
    let affordAmount = 0;
 
    let totalCost = 0;
@@ -531,16 +531,16 @@ export interface SectionType {
    type: "regular" | "custom";
    category: SectionCategories;
    shouldShow?: () => boolean;
-   getSection: (job: Job, promoteFunc?: () => void) => JSX.Element;
-   tooltipContent?: (job: Job) => JSX.Element;
+   getSection: (job: JobInfo, promoteFunc?: () => void) => JSX.Element;
+   tooltipContent?: (job: JobInfo) => JSX.Element;
 }
 export const sectionData: ReadonlyArray<SectionType> = [
    {
       name: "Profile",
       type: "regular",
       category: SectionCategories.general,
-      getSection: (job: Job, promoteFunc?: () => void) => <ProfileSection job={job} promoteFunc={promoteFunc} />,
-      tooltipContent: (job: Job) => {
+      getSection: (job: JobInfo, promoteFunc?: () => void) => <ProfileSection job={job} promoteFunc={promoteFunc} />,
+      tooltipContent: (job: JobInfo) => {
          const jobRequirements = JOB_TIER_DATA[job.tier - 1].requirements;
          const nextJobRequirements: number | null = job.tier < JOB_TIER_DATA.length ? JOB_TIER_DATA[job.tier].requirements : null;
 
@@ -557,7 +557,7 @@ export const sectionData: ReadonlyArray<SectionType> = [
       name: "Upgrades",
       type: "custom",
       category: SectionCategories.general,
-      getSection: (job: Job) => <UpgradesSection job={job} />
+      getSection: (job: JobInfo) => <UpgradesSection job={job} />
    },
    {
       name: "Career Path",
@@ -605,7 +605,7 @@ const CorporateOverview = () => {
       setCurrentSection(newSection);
    }
 
-   const promote = (job: Job) => {
+   const promote = (job: JobInfo) => {
       Game.userInfo.job = job;
       Game.userInfo.previousJobs.push(job);
 
