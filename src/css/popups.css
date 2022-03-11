@@ -198,6 +198,9 @@
 }
 
 /* Visitor */
+.popup.visitor.hiding {
+   animation: HidePopup 1s linear forwards;
+}
 .popup.visitor .rainbow-bg {
    --size: 4rem;
    padding: 0.2rem;

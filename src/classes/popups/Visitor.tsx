@@ -103,12 +103,23 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
          }
       }
 
+      const elem = popup.getElem();
+
       if (!(rewardIsNumber && claimedReward < 0)) {
          // Create confetti!
-         const elem = popup.getElem();
          const newConfettis = createConfettis(elem);
          setConfettis(newConfettis.slice());
       }
+
+      const WAIT_TIME = 2000;
+      const ANIMATION_DURATION = 1000;
+      setTimeout(() => {
+         elem.classList.add("hiding");
+
+         setTimeout(() => {
+            popup.close();
+         }, ANIMATION_DURATION);
+      }, WAIT_TIME);
    }, [popup]);
 
    useEffect(() => {

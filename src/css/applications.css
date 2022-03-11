@@ -223,4 +223,5 @@
    font: 400 1rem "Roboto Mono";
    position: absolute;
    pointer-events: none;
+   transform: translateX(-50%);
 }

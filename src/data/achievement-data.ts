@@ -6,6 +6,11 @@ export enum AchievementCategory {
 interface AchievementRequirements {
    readonly lorem?: number;
    readonly applications?: number;
+   readonly totalWorkerCount?: number;
+   readonly workers?: {
+      // tier: workerCount
+      [key: number]: number;
+   }
 }
 export interface AchievementInfo {
    readonly name: string;

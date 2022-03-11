@@ -152,14 +152,14 @@ const PopupElem = ({ info, application, children, closeFunc }: PopupElemInfo) =>
    </WindowsProgram>;
 }
 
-setTimeout(() => {
-   const popupClassName = "Visitor";
-   for (const a of POPUP_DATA) {
-      if (a.className === popupClassName) {
-         createPopup(a);
-      }
-   }
-}, 100);
+// setTimeout(() => {
+//    const popupClassName = "Visitor";
+//    for (const a of POPUP_DATA) {
+//       if (a.className === popupClassName) {
+//          createPopup(a);
+//       }
+//    }
+// }, 100);
 
 abstract class Popup {
    info: PopupInfo;
