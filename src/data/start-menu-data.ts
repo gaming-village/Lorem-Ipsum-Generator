@@ -16,7 +16,7 @@ const MENU_DATA: ReadonlyArray<MenuInfo> = [
          {
             name: "The Altar",
             iconSrc: "church-of-lorem/temple-os.png",
-            tree: "altar"
+            tree: null
          }
       ]
    },

@@ -7,6 +7,7 @@ import MENU_DATA, { MenuInfo } from "../data/start-menu-data";
 import Program from "../classes/programs/Program";
 import ReactDOM from "react-dom";
 import { Point } from "../utils";
+import { createTooltip, removeTooltip } from "../tooltips";
 
 export let showStartMenu: () => void;
 
@@ -24,6 +25,30 @@ MENU
   -> Panel
   -> Panel
 */
+
+const createError = (): void => {
+   const event = window.event as MouseEvent;
+
+   const position = {
+      left: event.clientX + 10 + "px",
+      top: event.clientY + "px"
+   };
+
+   const content = <>
+      <p>Looks like I haven't made this program yet...</p>
+      <p>Yell at me on github and I'll probably get around to it.</p>
+   </>;
+
+   const tooltip = createTooltip(position, content);
+
+   // Hide the tooltip when the user moves their mouse
+   const mouseMove = (): void => {
+      removeTooltip(tooltip);
+
+      window.removeEventListener("mousemove", mouseMove);
+   }
+   window.addEventListener("mousemove", mouseMove);
+}
 
 const getProgramVisibility = (programName: string): boolean => {
    const program = Game.programs[programName] as Program;
@@ -48,7 +73,7 @@ const Panel = ({ menu, openFunc, isOpened }: PanelProps): JSX.Element => {
    }
 
    const clickEvent = (): void => {
-      if (typeof menu.tree === "object") {
+      if (typeof menu.tree === "object" && menu.tree !== null) {
          const panel = panelRef.current!;
 
          // Calculate the position of the new menu
@@ -59,8 +84,14 @@ const Panel = ({ menu, openFunc, isOpened }: PanelProps): JSX.Element => {
          // Create the new menu
          openFunc(menu, position);
       } else {
-         // Toggle the program
-         toggleProgramVisibility(menu.tree as string);
+         if (typeof menu.tree === "string") {
+            // If the program exists, toggle its visibility
+            toggleProgramVisibility(menu.tree as string);
+         } else {
+            // If the program doesn't exist, show an error message
+            console.log("err");
+            createError();
+         }
       }
    }
 
@@ -75,7 +106,7 @@ const Panel = ({ menu, openFunc, isOpened }: PanelProps): JSX.Element => {
       <img src={iconSrc} alt="" />
       <p>{menu.name}</p>
 
-      { typeof menu.tree === "object" ? (
+      { typeof menu.tree === "object" && menu.tree !== null ? (
          <div className="arrow"></div>
       ) : undefined }
    </div>;
@@ -132,7 +163,7 @@ const createMenu = (panels: ReadonlyArray<MenuInfo>, parent: HTMLElement, positi
    menuContainers.push(container);
    parent.appendChild(container);
 
-   const menu = <Menu panels={panels} position={position} />
+   const menu = <Menu panels={panels} position={position} />;
 
    ReactDOM.render(menu, container);
 
@@ -145,10 +176,14 @@ let menuContainers = new Array<HTMLElement>();
 const StartMenu = (): JSX.Element => {
    const mouseMove = (): void => {
       const event = window.event as MouseEvent;
-      if ((event.target as HTMLElement).id === "computer") {
-         closeStartMenu();
-         closeStartMenuButton();
+      const path = event.composedPath();
+
+      for (const elem of path as Array<HTMLElement>) {
+         if (elem.id === "taskbar") return;
       }
+      
+      closeStartMenu();
+      closeStartMenuButton();
    }
 
    useEffect(() => {
