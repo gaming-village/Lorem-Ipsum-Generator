@@ -5,7 +5,7 @@ interface JobTierInfo {
    readonly salary: string;
    readonly benefits: Array<string>;
    /** The base cost to buy the worker */
-   readonly initialCost: number;
+   readonly baseCost: number;
    /** How much lorem the worker produces each second */
    readonly loremProduction: number;
 }
@@ -16,7 +16,7 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       benefits: [
          "Unlock the Upgrades panel."
       ],
-      initialCost: 10,
+      baseCost: 5,
       loremProduction: 0.01
    },
    {
@@ -25,30 +25,31 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       benefits: [
          "Ability to buy workers."
       ],
-      initialCost: 25,
+      baseCost: 25,
       loremProduction: 0.1
    },
    {
       requirements: 150,
       salary: "$6000",
       benefits: [
-         "Access to the start menu"
+         "Access to the start menu",
+         "Career Path section"
       ],
-      initialCost: 75,
+      baseCost: 75,
       loremProduction: 0.5
    },
    {
       requirements: 1000,
       salary: "$50000",
       benefits: [],
-      initialCost: 150,
+      baseCost: 150,
       loremProduction: 3
    },
    {
       requirements: 10000,
       salary: "$150000",
       benefits: [],
-      initialCost: 500,
+      baseCost: 500,
       loremProduction: 10
    }
 ];
@@ -93,13 +94,6 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       description: "Much like a monkey with a keyboard, the common Programmer spends its days aimlessly bashing its calloused fingers into the remnants of what used to be its keyboard.",
       tier: 2
    },
-   {
-      id: "janitors",
-      name: "Janitor",
-      benefits: [],
-      description: "Janitors are a crucial part of the Lorem ecosystem - without any janitors, Executives would have no-one to shout at, which is undoubtedly one of the most pressing issues in current times.",
-      tier: 2
-   },
 
    /** TIER 3 **/
    {
@@ -131,14 +125,6 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       ],
       description: "Web Developers work tirelessly to change text alignment and center div's, often working deep into the night to trying to figure out how to make a pull request.",
       previousJobRequirement: ["Programmer"],
-      tier: 3
-   },
-   {
-      id: "agents",
-      name: "Secret Agent",
-      benefits: [],
-      description: "",
-      previousJobRequirement: ["Janitor"],
       tier: 3
    },
 

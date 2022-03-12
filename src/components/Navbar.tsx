@@ -8,31 +8,32 @@ export let switchView!: (view: number | string) => void;
 
 interface ViewInfo {
    elemID: string;
-   text: string;
+   name: string;
    isSelected: boolean;
-   isCustom?: boolean;
+   isUnlockable?: boolean;
 }
 const VIEW_DATA: ReadonlyArray<ViewInfo> = [
    {
       elemID: "computer",
-      text: "Computer",
+      name: "Computer",
       isSelected: true
    },
    {
       elemID: "media",
-      text: "Media",
+      name: "Media",
       isSelected: false
    },
    {
       elemID: "corporate-overview",
-      text: "Corporate Overview",
-      isSelected: false
+      name: "Corporate Overview",
+      isSelected: false,
+      isUnlockable: true
    },
    {
       elemID: "black-market",
-      text: "Black Market",
+      name: "Black Market",
       isSelected: false,
-      isCustom: true
+      isUnlockable: true
    }
 ];
 
@@ -56,9 +57,9 @@ const getDefaultViews = (): Array<ViewInfo> => {
    // Remove the black market
    for (let i = 0; i < defaultViews.length; i++) {
       const view = defaultViews[i];
-      if (view.text === "Black Market") {
+      if (view.isUnlockable) {
          defaultViews.splice(i, 1);
-         i++;
+         i--;
       }
    }
 
@@ -69,7 +70,7 @@ export function setupNavBar(): void {
    updateVisibleViews(VIEW_DATA);
 }
 
-export let unlockView: (viewText: string) => void;
+export let unlockView: (viewName: string) => void;
 
 const NavBar = () => {
    const [views, setViews] = useState(getDefaultViews());
@@ -97,19 +98,19 @@ const NavBar = () => {
       }
    }, [updateViewsArr, views]);
 
-   const unlockViewFunc = useCallback((viewText: string) => {
+   const unlockViewFunc = useCallback((viewName: string) => {
       const newViewArr = views.slice();
 
       let view: ViewInfo | undefined;
       for (const currentView of VIEW_DATA) {
-         if (currentView.text === viewText) {
+         if (currentView.name === viewName) {
             view = currentView;
             break;
          }
       }
       
       if (typeof view === "undefined") {
-         throw new Error(`View with text 'viewText' doesn't exist!`);
+         throw new Error(`View with name ${viewName} doesn't exist!`);
       }
 
       if (newViewArr.indexOf(view) !== -1) {
@@ -121,17 +122,20 @@ const NavBar = () => {
    }, [views]);
 
    useEffect(() => {
-      unlockView = (viewText: string): void => {
-         unlockViewFunc(viewText);
+      unlockView = (viewName: string): void => {
+         unlockViewFunc(viewName);
       }
       
       if (Game.misc.blackMarketIsUnlocked) {
          unlockView("Black Market");
       }
+      if (Game.misc.corporateOverviewIsUnlocked) {
+         unlockView("Corporate Overview");
+      }
    }, [unlockViewFunc]);
 
    const navButtons = views.map((view, i) => {
-      return <Button onClick={() => switchView(i)} key={i} className={!view.isSelected ? "dark" : ""}>{view.text}</Button>;
+      return <Button onClick={() => switchView(i)} key={i} className={!view.isSelected ? "dark" : ""}>{view.name}</Button>;
    });
 
    return <div id="top-bar">

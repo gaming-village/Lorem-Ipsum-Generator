@@ -205,7 +205,7 @@
 }
 #promotion-screen .benefits {
    text-decoration: underline;
-   margin: 0.5rem 0 0.3rem;
+   margin: 0.75rem 0 0.3rem;
 }
 #promotion-screen ul {
    padding: 0 0 0 0.5rem;
@@ -221,7 +221,7 @@
 }
 #promotion-screen .choose-career-text {
    text-align: center;
-   margin-bottom: 0.3rem;
+   margin: 1.3rem 0 0.3rem;
 }
 #promotion-screen .footer {
    color: #666;

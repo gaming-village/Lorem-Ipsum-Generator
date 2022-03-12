@@ -7,6 +7,7 @@ interface ButtonProps {
    onClick?: MouseEventHandler;
    isCentered?: boolean;
    isFlashing?: boolean;
+   isDotted?: boolean;
    isDark?: boolean;
    children: JSX.Element | string | undefined;
    tooltipContent?: () => JSX.Element;
@@ -43,7 +44,7 @@ const Button = (props: ButtonProps) => {
 
    const shouldHover = typeof props.tooltipContent !== "undefined";
    return (
-      <button onMouseOver={shouldHover ? () => hoverTooltip() : undefined} onMouseOut={shouldHover ? () => closeTooltip() : undefined} ref={ref} onClick={props.onClick} id={props.id} className={`button${props.className ? " " + props.className : ""}${props.isCentered ? " centered" : ""}${props.isFlashing ? " flashing" : ""}${props.isDark ? " dark" : ""}`}>
+      <button onMouseOver={shouldHover ? () => hoverTooltip() : undefined} onMouseOut={shouldHover ? () => closeTooltip() : undefined} ref={ref} onClick={props.onClick} id={props.id} className={`button${props.className ? " " + props.className : ""}${props.isCentered ? " centered" : ""}${props.isFlashing ? " flashing" : ""}${props.isDark ? " dark" : ""}${props.isDotted ? " dotted" : ""}`}>
          {props.children}
       </button>
    );

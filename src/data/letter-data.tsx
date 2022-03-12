@@ -32,7 +32,7 @@ interface LoremLetter {
 export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
    {
       name: "Corporate Overview",
-      requirement: 10
+      requirement: 3
    },
    {
       name: "Steven Job - free An-Droid",
@@ -78,11 +78,22 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
       from: "Lorem Corp",
       body: <>
          <p>Greetings Worker.</p>
-         <p>By now you may have noticed the "Corporate Overview" button at the top of your virtual machine. Click it to see an overview of your position here at Lorem Corp.</p>
-         <p>You will also be able to buy upgrades to assist with your lorem production.</p>
+         <p>You have now acquainted yourself with the art of lorem production.</p>
+         <p>You have been given clearance to use the Corporate Overview tab. Use it to buy upgrades to assist with your lorem production.</p>
          <p>May your lorem generation be filled with suffering.</p>
       </>,
       folder: "Inbox",
+      reward: {
+         items: [
+            "Access to the Corporate Overview"
+         ],
+         imgSrc: "",
+         claimFunc: () => {
+            unlockView("Corporate Overview");
+            Game.misc.corporateOverviewIsUnlocked = true;
+         },
+         isClaimed: false
+      },
       isCloseable: false,
       id: 1
    },

@@ -54,6 +54,7 @@ interface GameType {
    readonly misc: {
       internMotivation: number;
       blackMarketIsUnlocked: boolean;
+      corporateOverviewIsUnlocked: boolean,
       startMenuIsUnlocked: boolean;
    }
 }
@@ -208,6 +209,7 @@ const Game: GameType = {
    misc: {
       internMotivation: 0,
       blackMarketIsUnlocked: false,
+      corporateOverviewIsUnlocked: false,
       startMenuIsUnlocked: false
    }
 };

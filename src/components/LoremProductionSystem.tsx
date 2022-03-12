@@ -7,7 +7,8 @@ import LuremImpsir from '../classes/popups/LuremImpsir';
 import { createRandomPopup, getPopups } from '../classes/popups/Popup';
 import { createTooltip, removeTooltip } from '../tooltips';
 import { randInt, randItem } from '../utils';
-import { hasJob, hasUpgrade } from './corporate-overview/CorporateOverview';
+import { hasJob } from './corporate-overview/CorporateOverview';
+import { hasUpgrade } from './corporate-overview/UpgradeSection';
 
 const applyValueModifiers = (baseValue: number): number => {
    let value = baseValue;

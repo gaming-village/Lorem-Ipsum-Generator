@@ -90,7 +90,7 @@ const WelcomeScreen = () => {
    }
 
    return stage === Stages.hidden ? <></> : (
-      <WindowsProgram ref={welcomeScreenRef} id="welcome-screen" title="Welcome" uiButtons={["close"]} buttonsAreDark={section < sections.length - 1} closeFunc={section === sections.length - 1 ? () => close() : undefined}>
+      <WindowsProgram ref={welcomeScreenRef} id="welcome-screen" title="Welcome" isAlwaysSelected>
          <h1 style={{ textAlign: "center" }}>Welcome to LoremCorp&trade;!</h1>
 
          <div className="formatter">
@@ -111,7 +111,7 @@ const WelcomeScreen = () => {
 
                <div className="separator"></div>
 
-               <Button onClick={section === sections.length - 1 ? () => close() : undefined} isFlashing={section === sections.length - 1} isCentered className={"dotted" + (section === sections.length - 1 ? "" : " dark")}>Close</Button>
+               <Button onClick={close} isFlashing={section === sections.length - 1} isCentered isDotted>Close</Button>
             </div>
          </div>
       </WindowsProgram>

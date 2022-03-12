@@ -4,7 +4,8 @@ export interface UpgradeInfo {
    readonly flavourText?: string;
    readonly requirements: {
       readonly lorem?: number;
-      readonly workers?: { [key: string]: number };
+      /** What workers are required for the upgrade. Key = worker tier, value = amount of workers */
+      readonly workers?: { [key: number]: number };
    };
    readonly tier: number;
    isBought?: boolean;
@@ -30,7 +31,7 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
       requirements: {
          lorem: 20,
          workers: {
-            interns: 5
+            1: 5
          }
       },
       tier: 2,
@@ -53,8 +54,8 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
       requirements: {
          lorem: 100,
          workers: {
-            interns: 10,
-            employees: 1
+            1: 10,
+            2: 1
          }
       },
       tier: 3,
@@ -65,7 +66,7 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
       description: "Each non-intern worker increases all intern's base lorem production by 0.01.",
       requirements: {
          workers: {
-            interns: 10
+            1: 10
          }
       },
       tier: 3,
@@ -87,7 +88,7 @@ const UPGRADE_DATA: Array<UpgradeInfo> = [
       description: "Workers generate 50% more lorem and get 50% less sleep.",
       requirements: {
          workers: {
-            interns: 15
+            1: 15
          }
       },
       tier: 4,

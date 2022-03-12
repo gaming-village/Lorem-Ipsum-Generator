@@ -9,6 +9,8 @@ export interface NotificationInfo {
    title: string;
    description: string;
    caption?: string;
+   /** Whether the caption should flash red or not */
+   captionIsFlashing?: boolean;
    isClickable?: boolean;
    hasCloseButton?: boolean;
    playSound?: boolean;
@@ -47,16 +49,14 @@ const Notification = ({ info, closeFunc, isClosing }: NotificationProps) => {
          </div>
          <p className="description">{info.description}</p>
          
-         {info.caption ?
-         <>
+         {info.caption ? <>
             <div className="seperator"></div>
-            <p className="caption" onClick={!isClosing ? clickEvent : undefined}>{info.caption}</p>
-         </>
-         : ""}
+            <p className={`caption${info.captionIsFlashing ? " flashing" : ""}`} onClick={!isClosing ? clickEvent : undefined}>{info.caption}</p>
+         </> : undefined}
 
-         {info.hasCloseButton ?
-         <UIButton onClick={!isClosing ? () => closeFunc(info) : undefined} type="close" />
-         : ""}
+         {info.hasCloseButton ? (
+            <UIButton onClick={!isClosing ? () => closeFunc(info) : undefined} type="close" />
+         ) : undefined}
       </>
    </div>;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Button from '../../components/Button';
-import { hasUpgrade } from '../../components/corporate-overview/CorporateOverview';
+import { hasUpgrade } from '../../components/corporate-overview/UpgradeSection';
 import ACHIEVEMENT_DATA, { AchievementInfo, AchievementCategory } from '../../data/achievement-data';
 import Game from '../../Game';
 import { createNotification } from '../../notifications';

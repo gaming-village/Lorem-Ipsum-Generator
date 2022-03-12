@@ -16,7 +16,7 @@ let closeStartMenu: () => void;
 
 /* Example Start Menu structure:
 
-MENU
+START MENU
   -> Panel
     -> MENU
       -> Panel
@@ -24,6 +24,7 @@ MENU
       -> Panel
   -> Panel
   -> Panel
+
 */
 
 const createError = (): void => {

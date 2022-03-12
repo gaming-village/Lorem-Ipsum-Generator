@@ -381,9 +381,13 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
             if (typeof letter.reward !== "undefined") {
                letter.reward.isClaimed = (bits[2] || 0) === 1
 
-               // Unlock the black market
+               // Unlock the Black Market
                if (letter.subject === "Invitation" && letter.reward.isClaimed) {
                   Game.misc.blackMarketIsUnlocked = true;
+               }
+               // Unlock the Corporate Overview
+               if (letter.subject === "Corporate Overview" && letter.reward.isClaimed) {
+                  Game.misc.corporateOverviewIsUnlocked = true;
                }
             };
          }
