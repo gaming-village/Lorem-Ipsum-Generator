@@ -48,7 +48,7 @@
    float: right;
 }
 
-.application-segment {
+.taskbar-item {
    height: calc(100% - 8px);
    background-color: #ccc;
    margin: 2px;
@@ -133,7 +133,9 @@
 }
 
 
-.start-menu-container {
+
+/* START MENU */
+#taskbar .menu {
    width: 10rem;
    background-color: #ccc;
    border: 2px solid;
@@ -143,42 +145,42 @@
    border-bottom-color: #000;
    position: absolute;
 }
-.start-menu-container .panel {
+#taskbar .menu .panel {
    --height: 2rem;
    width: 100%;
    height: var(--height);
    position: relative;
    cursor: pointer;
 }
-.start-menu-container .panel:hover {
+#taskbar .menu .panel:hover {
    background-color: #dadada;
 }
-.start-menu-container .panel:active {
+#taskbar .menu .panel:active {
    background-color: #c0c0c0;
 }
-.start-menu-container .panel.opened {
+#taskbar .menu .panel.opened {
    color: #fff;
    background-color: rgb(7, 30, 129);
 }
-.start-menu-container p {
+#taskbar .menu p {
    font-family: "MS Sans Serif";
    font-size: 0.95rem;
    margin: 0;
    left: 2.5rem;
 }
-.start-menu-container img {
+#taskbar .menu img {
    height: 24px;
    width: 24px;
    left: 0.5rem;
    image-rendering: pixelated;
 }
-.start-menu-container :is(p, img) {
+#taskbar .menu :is(p, img) {
    position: absolute;
    top: calc(var(--height) / 2);
    transform: translateY(-50%);
    user-select: none;
 }
-.start-menu-container .arrow {
+#taskbar .menu .arrow {
    width: 6px;
    height: 6px;
    border-top: 3px solid #000;
@@ -188,7 +190,7 @@
    top: 50%;
    transform: rotate(45deg) translateY(-50%);
 }
-.start-menu-container .panel.opened .arrow {
+#taskbar .menu .panel.opened .arrow {
    border-top-color: #fff;
    border-right-color: #fff;
 }

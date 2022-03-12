@@ -31,7 +31,9 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
    {
       requirements: 150,
       salary: "$6000",
-      benefits: [],
+      benefits: [
+         "Access to the start menu"
+      ],
       initialCost: 75,
       loremProduction: 0.5
    },

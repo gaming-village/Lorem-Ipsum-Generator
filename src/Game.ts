@@ -52,8 +52,9 @@ interface GameType {
    readonly blurScreen: () => void;
    readonly unblurScreen: () => void;
    readonly misc: {
-      blackMarketIsUnlocked: boolean;
       internMotivation: number;
+      blackMarketIsUnlocked: boolean;
+      startMenuIsUnlocked: boolean;
    }
 }
 
@@ -205,8 +206,9 @@ const Game: GameType = {
       document.body.classList.remove("blurred");
    },
    misc: {
+      internMotivation: 0,
       blackMarketIsUnlocked: false,
-      internMotivation: 0
+      startMenuIsUnlocked: false
    }
 };
 

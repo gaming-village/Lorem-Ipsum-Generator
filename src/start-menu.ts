@@ -120,7 +120,7 @@ const createPanelContainer = (id: string, parent?: Element, parentPanel?: HTMLEl
       panelContainer.style.top = top - 2 + "px";
       panelContainer.style.left = panelBounds.width + 2 + "px";
    } else {
-      // Root start menu panel container b
+      // Root start menu panel container
 
       panelContainer.id = id;
 

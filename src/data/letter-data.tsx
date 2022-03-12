@@ -31,10 +31,6 @@ interface LoremLetter {
 
 export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
    {
-      name: "Tips with Lorem Corp",
-      requirement: 5
-   },
-   {
       name: "Corporate Overview",
       requirement: 10
    },
@@ -55,8 +51,16 @@ export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
       requirement: 75
    },
    {
+      name: "Illegal Activities",
+      requirement: 100
+   },
+   {
       name: "Social security issue !",
       requirement: 200
+   },
+   {
+      name: "Tips with Lorem Corp",
+      requirement: 500
    },
    {
       name: "Order delivery",
@@ -209,6 +213,18 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
       folder: "Junk Mail",
       isCloseable: true,
       id: 10
+   },
+   {
+      subject: "Illegal Activities",
+      from: "Lorem Corp",
+      body: <>
+         <p>Dear worthless employees,</p>
+         <p>Our esteemed Enforcement Department has uncovered what seems to be a largescale anti-Lorem terrorist organization.</p>
+         <p>Any individual who is found to have ties to this extremist group will forfeit their time both in LoremCorp and on Earth. Consider this your first warning.</p>
+      </>,
+      folder: "Inbox",
+      isCloseable: true,
+      id: 11
    }
 ];
 

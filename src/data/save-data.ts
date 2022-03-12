@@ -298,6 +298,12 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
 
          Game.userInfo.previousJobs = previousJobs;
          Game.userInfo.job = previousJobs[previousJobs.length - 1];
+
+         // Check if the user has unlocked the start menu
+         const jobTier = jobIndexes.length;
+         if (jobTier >= 3) {
+            Game.misc.startMenuIsUnlocked = true;
+         }
       }
    },
    {

@@ -11,7 +11,6 @@ import WelcomeScreen, { previewType, showWelcomeScreen } from '../components/Wel
 import Game, { checkLoremLetters } from '../Game';
 import { getCurrentSave } from '../save';
 import { setupApplications } from '../applications';
-import { setupStartMenu } from '../start-menu';
 import { setupPrograms } from '../programs';
 import { type } from '../components/LoremProductionSystem';
 import { updateInternMotivation } from '../classes/applications/AchievementTracker';
@@ -21,6 +20,7 @@ import '../css/pages/home.css';
 import '../css/popups.css';
 import "../css/applications.css";
 import "../css/command-prompt.css";
+import "../css/taskbar.css";
 
 export function focusProgram(program: HTMLElement): void {
    if (program === null) return;
@@ -127,8 +127,6 @@ const Home = () => {
       
       const saveData = getCurrentSave();
       if (saveData === null) showWelcomeScreen();
-      
-      setupStartMenu();
       
       setupPrograms();
       

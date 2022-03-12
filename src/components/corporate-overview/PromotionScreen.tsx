@@ -2,8 +2,10 @@ import { useState } from "react";
 
 import Button from "../Button";
 
+import Game from "../../Game";
 import { JobInfo, JOB_DATA, JOB_TIER_DATA } from "../../data/job-data";
 import { CustomAudio } from "../../utils";
+import { showStartMenu } from "../Taskbar";
 
 const playPromotionAnimation = (): Promise<void> => {
    const animation = document.createElement("div");
@@ -68,13 +70,20 @@ const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
       })}
    </ul>;
 
-   const promotionAttempt = async (job: JobInfo | null) => {
+   const tryToPromote = async (job: JobInfo | null) => {
       if (job !== null) {
          new CustomAudio("win95-startup.mp3");
 
+         // Play the white flash effect
          await playPromotionAnimation();
 
          promoteFunc(job);
+
+         if (job.tier >= 3) {
+            // Unlock the start menu
+            Game.misc.startMenuIsUnlocked = true;
+            showStartMenu();
+         }
       }
    }
 
@@ -90,7 +99,7 @@ const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
             {careerPanels}
          </div>
 
-         <Button onClick={() => promotionAttempt(nextJobs[0])} isCentered isFlashing>Continue</Button>
+         <Button onClick={() => tryToPromote(nextJobs[0])} isCentered isFlashing>Continue</Button>
       </> : <>
          <p className="benefits">Benefits:</p>
          {promotionBenefits}
@@ -103,7 +112,7 @@ const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
 
          <p className="selected-label">Selected: <b>{selectedJob ? selectedJob.name : "None"}</b></p>
 
-         <Button isDark={selectedJob === null} isFlashing={selectedJob !== null} isCentered onClick={() => promotionAttempt(selectedJob)}>Continue</Button>
+         <Button isDark={selectedJob === null} isFlashing={selectedJob !== null} isCentered onClick={() => tryToPromote(selectedJob)}>Continue</Button>
       </>}
 
       <div className="footer">LoremCorp LLC&trade;</div>
