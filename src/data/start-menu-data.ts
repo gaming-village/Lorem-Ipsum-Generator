@@ -23,19 +23,7 @@ const MENU_DATA: ReadonlyArray<MenuInfo> = [
    {
       name: "Applications",
       iconSrc: "icons/picture.png",
-      tree: [
-         {
-            name: "Shop",
-            iconSrc: "icons/search-folder.png",
-            tree: "applicationShop"
-         },
-         {
-            name: "Status",
-            iconSrc: "icons/computer.png",
-            tree: null
-         }
-         // TODO: Manager/Management?
-      ]
+      tree: "applicationShop"
    },
    {
       name: "Preferences",

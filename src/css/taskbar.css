@@ -162,6 +162,10 @@
    color: #fff;
    background-color: rgb(7, 30, 129);
 }
+#taskbar .menu .panel.program-opened {
+   color: #fff;
+   background-color: #888;
+}
 #taskbar .menu p {
    font-family: "MS Sans Serif";
    font-size: 0.95rem;
@@ -181,10 +185,11 @@
    user-select: none;
 }
 #taskbar .menu .arrow {
-   width: 6px;
-   height: 6px;
-   border-top: 3px solid #000;
-   border-right: 3px solid #000;
+   --arrow-size: 7px;
+   width: 0;
+   height: 0;
+   border-right: var(--arrow-size) solid #000;
+   border-bottom: var(--arrow-size) solid transparent;
    position: absolute;
    right: 10px;
    top: 50%;

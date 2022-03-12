@@ -13,18 +13,23 @@ export let showStartMenu: () => void;
 let openStartMenu: () => void;
 let closeStartMenu: () => void;
 
-const toggleProgramVisibility = (programName: string): void => {
-   const program = Game.programs[programName] as Program;
-   program.isOpened ? program.close() : program.open();
-}
-
-/* STRUCTURE:
+/* Example Start Menu structure:
 
 MENU
   -> Panel
+    -> MENU
+      -> Panel
+      -> Panel
+      -> Panel
   -> Panel
   -> Panel
 */
+
+const getProgramVisibility = (programName: string): boolean => {
+   const program = Game.programs[programName] as Program;
+   if (typeof program === "undefined") return false;
+   return program.isOpened;
+}
 
 interface PanelProps {
    menu: MenuInfo;
@@ -33,6 +38,14 @@ interface PanelProps {
 }
 const Panel = ({ menu, openFunc, isOpened }: PanelProps): JSX.Element => {
    const panelRef = useRef<HTMLDivElement | null>(null);
+   const [programIsOpened, setProgramIsOpened] = useState<boolean>(typeof menu.tree === "string" ? getProgramVisibility(menu.tree) : false);
+
+   const toggleProgramVisibility = (programName: string): void => {
+      const program = Game.programs[programName] as Program;
+      program.isOpened ? program.close() : program.open();
+
+      setProgramIsOpened(program.isOpened);
+   }
 
    const clickEvent = (): void => {
       if (typeof menu.tree === "object") {
@@ -46,7 +59,7 @@ const Panel = ({ menu, openFunc, isOpened }: PanelProps): JSX.Element => {
          // Create the new menu
          openFunc(menu, position);
       } else {
-         // Open the program
+         // Toggle the program
          toggleProgramVisibility(menu.tree as string);
       }
    }
@@ -58,7 +71,7 @@ const Panel = ({ menu, openFunc, isOpened }: PanelProps): JSX.Element => {
       iconSrc = require("../images/icons/questionmark.png").default;
    }
 
-   return <div onClick={clickEvent} className={`panel${isOpened ? " opened" : ""}`} ref={panelRef}>
+   return <div onClick={clickEvent} className={`panel${isOpened ? " opened" : ""}${programIsOpened ? " program-opened" : ""}`} ref={panelRef}>
       <img src={iconSrc} alt="" />
       <p>{menu.name}</p>
 
@@ -126,12 +139,24 @@ const createMenu = (panels: ReadonlyArray<MenuInfo>, parent: HTMLElement, positi
    return container;
 }
 
+let closeStartMenuButton: () => void;
+
 let menuContainers = new Array<HTMLElement>();
 const StartMenu = (): JSX.Element => {
+   const mouseMove = (): void => {
+      const event = window.event as MouseEvent;
+      if ((event.target as HTMLElement).id === "computer") {
+         closeStartMenu();
+         closeStartMenuButton();
+      }
+   }
+
    useEffect(() => {
       openStartMenu = (): void => {
          const parent = document.getElementById("taskbar")!;
          createMenu(MENU_DATA.slice(), parent);
+
+         window.addEventListener("mousemove", mouseMove);
       }
 
       closeStartMenu = (): void => {
@@ -139,6 +164,8 @@ const StartMenu = (): JSX.Element => {
             ReactDOM.unmountComponentAtNode(container);
             container.remove();
          }
+
+         window.removeEventListener("mousemove", mouseMove);
       }
    }, []);
 
@@ -148,6 +175,10 @@ const StartMenu = (): JSX.Element => {
 const TaskBar = () => {
    const [startMenuIsUnlocked, setStartMenuIsUnlocked] = useState(Game.misc.startMenuIsUnlocked);
    const [startMenuIsOpened, setStartMenuIsOpened] = useState(false);
+
+   closeStartMenuButton = (): void => {
+      setStartMenuIsOpened(false);
+   }
 
    const toggleStartMenuVisibility = useCallback(() => {
       if (startMenuIsOpened) {
