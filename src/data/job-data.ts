@@ -16,7 +16,7 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       benefits: [
          "Unlock the Upgrades panel."
       ],
-      baseCost: 5,
+      baseCost: 10,
       loremProduction: 0.01
    },
    {
@@ -25,24 +25,24 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       benefits: [
          "Ability to buy workers."
       ],
-      baseCost: 25,
+      baseCost: 100,
       loremProduction: 0.1
    },
    {
-      requirements: 150,
+      requirements: 250,
       salary: "$6000",
       benefits: [
          "Access to the start menu",
          "Career Path section"
       ],
-      baseCost: 75,
+      baseCost: 1e3,
       loremProduction: 0.5
    },
    {
       requirements: 1000,
       salary: "$50000",
       benefits: [],
-      baseCost: 150,
+      baseCost: 1e4,
       loremProduction: 3
    },
    {

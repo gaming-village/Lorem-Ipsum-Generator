@@ -39,7 +39,7 @@
    }
 }
 
-#corporate-overview .formatter {
+#corporate-overview > .formatter {
    display: flex;
    position: absolute;
    top: 0;
@@ -293,6 +293,8 @@
    transform: translateX(-50%);
 }
 
+
+/* UPGRADES */
 #upgrades .title-bar span {
    max-width: unset;
    margin-left: 50%;
@@ -354,4 +356,80 @@
    margin-left: 50%;
    display: table;
    transform: translateX(-50%);
+}
+
+#all-upgrades {
+   width: 30rem;
+   max-width: unset;
+   max-height: 20rem;
+   margin: 1rem 0 2rem 50%;
+   margin-left: 50%;
+   position: relative;
+   transform: translateX(-50%);
+   overflow: auto;
+   cursor: unset !important;
+}
+#all-upgrades .minor-upgrade {
+   border: 2px solid;
+   border-color: #f5f5f5 #000 #000 #f5f5f5;
+   padding: 3px 5px;
+   margin: 1rem;
+   cursor: pointer;
+}
+#all-upgrades .minor-upgrade:hover {
+   border-color: #fff #666 #666 #fff;
+   background-color: #ddd;
+}
+#all-upgrades .minor-upgrade:active {
+   filter: brightness(0.95);
+}
+#all-upgrades .minor-upgrade .formatter {
+   height: 2rem;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+#all-upgrades .minor-upgrade .icon {
+   --size: 28px;
+   width: var(--size);
+   height: var(--size);
+}
+#all-upgrades .minor-upgrade .icon img {
+   width: var(--size);
+   height: var(--size);
+}
+#all-upgrades .minor-upgrade .name {
+   font-weight: bold;
+   margin: 0 0 0 0.3rem;
+}
+#all-upgrades .minor-upgrade .cost {
+   letter-spacing: 0.04rem;
+   font-weight: bold;
+   margin: 0;
+}
+#all-upgrades .minor-upgrade.can-afford .cost {
+   color: #00ff00;
+   text-shadow: 1px 1px 0 #000;
+}
+#all-upgrades .minor-upgrade:not(.can-afford) .cost {
+   color: #ff000d;
+}
+#all-upgrades .minor-upgrade .separator {
+   box-shadow: 0 1px 0 0 #fff;
+   margin: 0 0 0 50%;
+   pointer-events: none;
+}
+#all-upgrades .minor-upgrade .description {
+   margin: 0.5rem 0 0;
+}
+#all-upgrades .minor-upgrade .flavour-text {
+   color: #666;
+   font-style: italic;
+   font-weight: bold;
+   font-size: 0.9rem;
+   text-align: right;
+   margin: 0.5rem 0 0;
+}
+#all-upgrades .minor-upgrade .flavour-text::before, #all-upgrades .minor-upgrade .flavour-text::after {
+   content: '"';
 }

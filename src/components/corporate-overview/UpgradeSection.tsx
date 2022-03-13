@@ -4,9 +4,16 @@ import Button from "../Button";
 import TitleBar from "../TitleBar";
 
 import Game from "../../Game";
-import UPGRADE_DATA, { UpgradeInfo } from "../../data/upgrade-data";
-import { JobInfo, JOB_DATA, JOB_TIER_DATA } from "../../data/job-data";
+import { MAIN_UPGRADE_DATA, MinorUpgradeInfo, MINOR_UPGRADE_DATA, UpgradeInfo } from "../../data/upgrade-data";
+import { JOB_TIER_DATA } from "../../data/job-data";
 import { SectionProps } from "./CorporateOverview";
+
+let addUnlockedUpgrade: ((upgrade: MinorUpgradeInfo) => void) | null = null;
+
+export let additiveTypingProductionIncrease: number = 0;
+export let multiplicativeTypingProductionIncrease: number = 0;
+export let additiveWorkerProductionIncrease: number = 0;
+export let multiplicativeWorkerProductionIncrease: number = 0;
 
 /**
  * Used to find whether the user owns an upgrade or not.
@@ -14,7 +21,7 @@ import { SectionProps } from "./CorporateOverview";
  * @returns If the upgrade is owned.
  */
  export function hasUpgrade(name: string): boolean {
-   for (const upgrade of UPGRADE_DATA) {
+   for (const upgrade of MAIN_UPGRADE_DATA) {
       if (upgrade.name === name) return upgrade.isBought || false;
    }
    throw new Error(`Upgrade '${name}' does not exist!`);
@@ -23,22 +30,22 @@ import { SectionProps } from "./CorporateOverview";
 const getUpgradeRequirements = (upgrade: UpgradeInfo): ReadonlyArray<string> => {
    const upgradeRequirements = new Array<string>();
 
-   if (typeof upgrade.requirements.lorem !== "undefined") {
-      upgradeRequirements.push(`${upgrade.requirements.lorem} Lorem`);
+   if (typeof upgrade.costs.lorem !== "undefined") {
+      upgradeRequirements.push(`${upgrade.costs.lorem} Lorem`);
    }
 
-   if (typeof upgrade.requirements.workers !== "undefined") {
-      for (const [workerTier, count] of Object.entries(upgrade.requirements.workers)) {
+   if (typeof upgrade.costs.workers !== "undefined") {
+      for (const [workerTier, count] of Object.entries(upgrade.costs.workers)) {
          const worker = Game.userInfo.previousJobs[Number(workerTier) - 1];
 
-         upgradeRequirements.push(`${count} ${worker.name}${count !== 1 ? "s" : ""}`);
+         upgradeRequirements.push(`${count} ${worker.name}${Number(count) !== 1 ? "s" : ""}`);
       }
    }
    return upgradeRequirements;
 }
 
 const canBuyUpgrade = (upgrade: UpgradeInfo, lorem: number): boolean => {
-   for (const [type, requirement] of Object.entries(upgrade.requirements)) {
+   for (const [type, requirement] of Object.entries(upgrade.costs)) {
       switch (type) {
          case "lorem": {
             if (lorem < requirement) {
@@ -60,21 +67,136 @@ const canBuyUpgrade = (upgrade: UpgradeInfo, lorem: number): boolean => {
    return true;
 }
 
-const buyUpgrade = (upgrade: UpgradeInfo): void => {
-   upgrade.isBought = true;
-
-   if (typeof upgrade.requirements.lorem !== "undefined") {
-      Game.lorem -= upgrade.requirements.lorem;
-   }
-   if (typeof upgrade.requirements.workers !== "undefined") {
-      for (const [workerID, workerCount] of Object.entries(upgrade.requirements.workers)) {
-         Game.userInfo.workers[workerID] -= workerCount;
+export function updateUnlockedUpgrades(): void {
+   for (const upgrade of MINOR_UPGRADE_DATA) {
+      if (typeof upgrade.unlockRequirements.wordsTyped !== "undefined") {
+         if (Game.wordsTyped >= upgrade.unlockRequirements.wordsTyped) {
+            upgrade.isUnlocked = true;
+            if (addUnlockedUpgrade !== null) {
+               addUnlockedUpgrade(upgrade);
+            }
+         }
       }
    }
 }
 
+const applyUpgradeProductionBonuses = (upgrade: UpgradeInfo): void => {
+   // Calculate upgrade bonuses
+   if (typeof upgrade.effects?.additiveTypingProductionIncrease !== "undefined") {
+      additiveTypingProductionIncrease += upgrade.effects.additiveTypingProductionIncrease
+   }
+   if (typeof upgrade.effects?.multiplicativeTypingProductionIncrease !== "undefined") {
+      multiplicativeTypingProductionIncrease += upgrade.effects.multiplicativeTypingProductionIncrease
+   }
+   if (typeof upgrade.effects?.additiveWorkerProductionIncrease !== "undefined") {
+      additiveWorkerProductionIncrease += upgrade.effects.additiveWorkerProductionIncrease
+   }
+   if (typeof upgrade.effects?.multiplicativeWorkerProductionIncrease !== "undefined") {
+      multiplicativeWorkerProductionIncrease += upgrade.effects.multiplicativeWorkerProductionIncrease
+   }
+}
+
+export function calculateProductionBonuses(): void {
+   const allUpgrades = [...MAIN_UPGRADE_DATA, ...MINOR_UPGRADE_DATA];
+   for (const upgrade of allUpgrades) {
+      if (upgrade.isBought) {
+         applyUpgradeProductionBonuses(upgrade);
+      }
+   }
+}
+
+const buyUpgrade = (upgrade: UpgradeInfo): void => {
+   upgrade.isBought = true;
+
+   if (typeof upgrade.costs.lorem !== "undefined") {
+      Game.lorem -= upgrade.costs.lorem;
+   }
+
+   if (typeof upgrade.costs.workers !== "undefined") {
+      for (const [workerTier, workerCount] of Object.entries(upgrade.costs.workers)) {
+         const worker = Game.userInfo.previousJobs[Number(workerTier) - 1];
+         Game.userInfo.workers[worker.id] -= Number(workerCount);
+      }
+   }
+
+   applyUpgradeProductionBonuses(upgrade);
+}
+
+interface MinorUpgradeProps {
+   upgrade: MinorUpgradeInfo;
+}
+const MinorUpgrade = ({ upgrade }: MinorUpgradeProps): JSX.Element => {
+   const [isHovering, setIsHovering] = useState(false);
+
+   const mouseOver = (): void => {
+      setIsHovering(true);
+   }
+
+   const mouseOut = (): void => {
+      setIsHovering(false);
+   }
+
+   let iconSrc!: string;
+   try {
+      iconSrc = require("../../images/icons/" + upgrade.iconSrc).default;
+   } catch {
+      iconSrc = require("../../images/icons/questionmark.png").default;
+   }
+
+   const canAfford = Game.lorem >= upgrade.costs.lorem!;
+
+   return <div onClick={canAfford ? () => buyUpgrade(upgrade) : undefined} onMouseEnter={mouseOver} onMouseLeave={mouseOut} className={`minor-upgrade${canAfford ? " can-afford" : ""}`}>
+      <div className="formatter">
+         <div className="formatter">
+            <div className="icon">
+               <img src={iconSrc} alt={upgrade.iconSrc} />   
+            </div>
+
+            <p className="name">{upgrade.name}</p>
+         </div>
+
+         <p className="cost">{upgrade.costs.lorem!} lorem</p>
+      </div>
+
+      {isHovering ? <>
+         <div className="separator"></div>
+
+         <p className="description">{upgrade.description}</p>
+
+         {typeof upgrade.flavourText !== "undefined" ? (
+            <p className="flavour-text">{upgrade.flavourText}</p>
+         ) : undefined}
+      </> : undefined}
+   </div>;
+}
+
+const getUnlockedUpgrades = (): Array<MinorUpgradeInfo> => {
+   const unlockedUpgrades = new Array<MinorUpgradeInfo>();
+
+   for (const upgrade of MINOR_UPGRADE_DATA) {
+      if (upgrade.isUnlocked) {
+         unlockedUpgrades.push(upgrade);
+      }
+   }
+
+   return unlockedUpgrades;
+}
+
 const UpgradeSection = ({ job }: SectionProps) => {
    const [lorem, setLorem] = useState(Game.lorem);
+   const [unlockedUpgrades, setUnlockedUpgrades] = useState<Array<MinorUpgradeInfo>>(getUnlockedUpgrades());
+
+   useEffect(() => {
+      addUnlockedUpgrade = (upgrade: MinorUpgradeInfo) => {
+         const newUnlockedUpgrades = unlockedUpgrades.slice();
+         newUnlockedUpgrades.push(upgrade);
+         setUnlockedUpgrades(newUnlockedUpgrades);
+      }
+
+      return () => {
+         addUnlockedUpgrade = null;
+      }
+   }, [unlockedUpgrades]);
 
    useEffect(() => {
       const updateLoremCount = (): void => {
@@ -93,8 +215,8 @@ const UpgradeSection = ({ job }: SectionProps) => {
 
    let upgradeRow = new Array<JSX.Element>();
    let previousTier = 1;
-   for (let i = 0; i < UPGRADE_DATA.length; i++) {
-      const upgrade = UPGRADE_DATA[i];
+   for (let i = 0; i < MAIN_UPGRADE_DATA.length; i++) {
+      const upgrade = MAIN_UPGRADE_DATA[i];
 
       if (upgrade.tier > job.tier) {
          break;
@@ -112,7 +234,7 @@ const UpgradeSection = ({ job }: SectionProps) => {
 
       const upgradeRequirements = getUpgradeRequirements(upgrade);
       const canBuy = canBuyUpgrade(upgrade, lorem);
-      const isBought = hasUpgrade(upgrade.name);
+      const isBought = upgrade.isBought;
 
       upgradeRow.push(
          <div key={key++} className={`upgrade${isBought ? " bought" : ""}`}>
@@ -141,7 +263,7 @@ const UpgradeSection = ({ job }: SectionProps) => {
    }
 
    const numNextUpgrades = job.tier < JOB_TIER_DATA.length ? (
-      UPGRADE_DATA.reduce((previousValue, currentValue) => {
+      MAIN_UPGRADE_DATA.reduce((previousValue, currentValue) => {
          if (currentValue.tier === job.tier + 1) {
             return previousValue + 1;
          }
@@ -150,6 +272,15 @@ const UpgradeSection = ({ job }: SectionProps) => {
    ) : null;
 
    return <div id="upgrades">
+      <div id="all-upgrades" className="windows-program">
+         <div className="title-bar" style={{backgroundColor: "rgb(7, 30, 129)"}}>All Upgrades</div>
+
+         {MINOR_UPGRADE_DATA.map((upgrade, i) => {
+            if (upgrade.isBought || !unlockedUpgrades.includes(upgrade)) return undefined;
+            return <MinorUpgrade upgrade={upgrade} key={i} />
+         })}
+      </div>
+
       {content}
 
       {job.tier < JOB_TIER_DATA.length ? (

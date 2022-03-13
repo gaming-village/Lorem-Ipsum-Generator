@@ -21,6 +21,7 @@ import '../css/popups.css';
 import "../css/applications.css";
 import "../css/command-prompt.css";
 import "../css/taskbar.css";
+import { calculateProductionBonuses } from '../components/corporate-overview/UpgradeSection';
 
 export function focusProgram(program: HTMLElement): void {
    if (program === null) return;
@@ -42,7 +43,7 @@ const onKeyDown = (): void => {
 
    // Close focus when the Escape key is pressed
    if (key === "Escape" && Game.isInFocus) {
-      Game.maskClickEvent!();
+      if (typeof Game.maskClickEvent !== "undefined") Game.maskClickEvent();
    }
 
    // If the input is a number from 1-9 (keycodes 49-57) and the command key isn't held and the view exists
@@ -127,6 +128,8 @@ const Home = () => {
       
       const saveData = getCurrentSave();
       if (saveData === null) showWelcomeScreen();
+
+      calculateProductionBonuses();
       
       setupPrograms();
       

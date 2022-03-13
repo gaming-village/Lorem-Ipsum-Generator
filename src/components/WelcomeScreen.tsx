@@ -80,13 +80,12 @@ const WelcomeScreen = () => {
          const textBox = getElem("welcome-screen").querySelector(".text-box")!;
          textBox.innerHTML = lorem.substring(0, previewTextIndex + 1);
       }
-   } else {
-      previewType = null;
    }
 
    const close = () => {
       closeWelcomeScreen();
       setStage(Stages.hidden);
+      previewType = null;
    }
 
    return stage === Stages.hidden ? <></> : (

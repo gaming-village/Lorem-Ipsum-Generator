@@ -4,7 +4,7 @@ import { getCurrentTime, randInt } from "../utils";
 import ACHIEVEMENT_DATA from "./achievement-data";
 import LETTER_DATA from "./letter-data";
 import LOREM_PACKS from "./lorem-pack-data";
-import UPGRADE_DATA from "./upgrade-data";
+import { MAIN_UPGRADE_DATA, MINOR_UPGRADE_DATA } from "./upgrade-data";
 import { getDefaultSettings } from "../classes/programs/Settings";
 import { JobInfo, JOB_DATA } from "./job-data";
 import { BLACK_MARKET_SHOPS } from "./black-market-data";
@@ -63,6 +63,7 @@ const decToHex = (rawNum: number | string): string => {
          numLeadingZeros++;
       }
    }
+   const leadingZeros = "0".repeat(numLeadingZeros);
 
    const num = Number(rawNum);
 
@@ -85,16 +86,20 @@ const decToHex = (rawNum: number | string): string => {
       maxB16power = newPower;
    }
 
-   let result = "";
+   let hex = "";
    let remainder = num;
-   while (remainder > 0) {
+   while (maxB16power >= 1) {
       const multiple = Math.floor(remainder / maxB16power);
       remainder -= multiple * maxB16power;
-      result += HEX_UNITS[multiple];
+      hex += HEX_UNITS[multiple];
       maxB16power /= 16;
    }
 
-   return "0".repeat(numLeadingZeros) + result;
+   if (hex === "0") {
+      return leadingZeros;
+   }
+
+   return leadingZeros + hex;
 }
 
 const decToBin = (dec: number): Array<number> => {
@@ -479,16 +484,38 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       },
       updateValue: () => {
          let total = 0;
-         for (const upgrade of UPGRADE_DATA) {
+         const allUpgrades = [...MAIN_UPGRADE_DATA, ...MINOR_UPGRADE_DATA];
+         for (const upgrade of allUpgrades) {
             if (upgrade.isBought) total += Math.pow(2, upgrade.id - 1);
          }
          return decToHex(total);
       },
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
-         for (const upgrade of UPGRADE_DATA) {
+         const allUpgrades = [...MAIN_UPGRADE_DATA, ...MINOR_UPGRADE_DATA];
+         for (const upgrade of allUpgrades) {
             if (upgrade.id > bits.length) continue;
             upgrade.isBought = bits[upgrade.id - 1] === 1;
+         }
+      }
+   },
+   {
+      name: "Unlocked minor upgrades",
+      defaultValue: () => {
+         return "0";
+      },
+      updateValue: () => {
+         let total = 0;
+         for (const upgrade of MINOR_UPGRADE_DATA) {
+            if (upgrade.isUnlocked) total += Math.pow(2, upgrade.id - 1);
+         }
+         return decToHex(total);
+      },
+      loadEvent: (savedValue: string) => {
+         const bits = hexToArr(savedValue);
+         for (const upgrade of MINOR_UPGRADE_DATA) {
+            if (upgrade.id > bits.length) continue;
+            upgrade.isUnlocked = bits[upgrade.id - 1] === 1;
          }
       }
    },

@@ -8,12 +8,14 @@ import { createRandomPopup, getPopups } from '../classes/popups/Popup';
 import { createTooltip, removeTooltip } from '../tooltips';
 import { randInt, randItem } from '../utils';
 import { hasJob } from './corporate-overview/CorporateOverview';
-import { hasUpgrade } from './corporate-overview/UpgradeSection';
+import { additiveTypingProductionIncrease, hasUpgrade, multiplicativeTypingProductionIncrease, updateUnlockedUpgrades } from './corporate-overview/UpgradeSection';
 
 const applyValueModifiers = (baseValue: number): number => {
    let value = baseValue;
-   
-   if (hasUpgrade("Typewriter")) value *= 2;
+
+   value += additiveTypingProductionIncrease;
+
+   value *= 1 + multiplicativeTypingProductionIncrease;
 
    if (hasJob("Programmer")) value *= 1.5;
    if (hasJob("Web Developer")) value *= 2;
@@ -232,7 +234,7 @@ const LoremSentence = ({ sentence, meaning, type }: LoremSentenceProps) => {
       return () => {
          if (tooltip !== null) tooltip.remove();
       }
-   })
+   }, [tooltip]);
 
    let className = "";
    if (type === "upcoming") {
@@ -342,6 +344,9 @@ const LoremProductionSystem = () => {
             const wordValue = calculateWordValue(word.value, isCorrectLetter);
             
             Game.lorem += wordValue;
+
+            Game.wordsTyped++;
+            updateUnlockedUpgrades();
          }
 
          if (currentIndex >= currentSentence.length) {

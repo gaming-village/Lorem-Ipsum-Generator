@@ -80,7 +80,7 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          <p>Greetings Worker.</p>
          <p>You have now acquainted yourself with the art of lorem production.</p>
          <p>You have been given clearance to use the Corporate Overview tab. Use it to buy upgrades to assist with your lorem production.</p>
-         <p>May your lorem generation be filled with suffering.</p>
+         <p>May your lorem generation be filled with suffering,</p>
       </>,
       folder: "Inbox",
       reward: {
