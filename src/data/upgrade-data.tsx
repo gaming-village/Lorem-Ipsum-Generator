@@ -3,18 +3,20 @@ export interface UpgradeInfo {
    readonly description: JSX.Element;
    readonly flavourText?: string;
    readonly iconSrc: string;
-   /** Typical effects which upgrades usually have. Calculated automatically */
+   /** Typical effects which upgrades usually have. Calculated automatically, not computationally demanding */
    readonly effects?: {
       readonly additiveTypingProductionBonus?: number;
       readonly multiplicativeTypingProductionBonus?: number;
       readonly additiveWorkerProductionBonus?: number;
       readonly multiplicativeWorkerProductionBonus?: number;
+      /** Worker bonuses applied to individual types of workers */
       readonly individualWorkerBonuses?: {
          [key: number]: {
             readonly additiveBonus?: number;
             readonly multiplicativeBonus?: number;
          }
       };
+      /** Worker bonuses applied to all types of workers */
       readonly workerBonuses?: {
          readonly additive?: number;
          readonly multiplicative?: number;
@@ -39,9 +41,11 @@ export interface MinorUpgradeInfo extends UpgradeInfo {
       /** Name of the achievement required to unlock the upgrade */
       readonly achievement?: string;
       readonly wordsTyped?: number;
+      /** Amout of specific tiers of workers required to unlock the upgrade */
       readonly workers?: {
          [key: number]: number;
       }
+      readonly totalWorkers?: number;
    }
    isUnlocked?: boolean;
 }
@@ -276,5 +280,23 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          }
       },
       id: 16
+   },
+   {
+      name: "Motivation Gun",
+      description: <>All workers are 1.2x as effective.</>,
+      flavourText: "Fear is the greatest motivator.",
+      iconSrc: "",
+      effects: {
+         workerBonuses: {
+            multiplicative: 0.2
+         }
+      },
+      costs: {
+         lorem: 200
+      },
+      unlockRequirements: {
+         totalWorkers: 10
+      },
+      id: 17
    }
 ];

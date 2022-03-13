@@ -90,6 +90,11 @@ export function updateUnlockedTypingUpgrades(): void {
 }
 
 export function updateUnlockedWorkerUpgrades(): void {
+   let totalWorkerCount = 0;
+   for (const job of Game.userInfo.previousJobs) {
+      totalWorkerCount += Game.userInfo.workers[job.id];
+   }
+
    for (const upgrade of MINOR_UPGRADE_DATA) {
       if (typeof upgrade.unlockRequirements.workers !== "undefined") {
          for (const [workerTier, requiredCount] of Object.entries(upgrade.unlockRequirements.workers)) {
@@ -101,6 +106,15 @@ export function updateUnlockedWorkerUpgrades(): void {
                if (addUnlockedUpgrade !== null) {
                   addUnlockedUpgrade(upgrade);
                }
+            }
+         }
+      }
+
+      if (typeof upgrade.unlockRequirements.totalWorkers !== "undefined") {
+         if (totalWorkerCount >= upgrade.unlockRequirements.totalWorkers) {
+            upgrade.isUnlocked = true;
+            if (addUnlockedUpgrade !== null) {
+               addUnlockedUpgrade(upgrade);
             }
          }
       }
