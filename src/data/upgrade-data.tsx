@@ -1,6 +1,8 @@
+import Game from "../Game";
+
 export interface UpgradeInfo {
    readonly name: string;
-   readonly description: JSX.Element;
+   readonly description: JSX.Element | (() => JSX.Element);
    readonly flavourText?: string;
    readonly iconSrc: string;
    /** Typical effects which upgrades usually have. Calculated automatically, not computationally demanding */
@@ -9,6 +11,8 @@ export interface UpgradeInfo {
       readonly multiplicativeTypingProductionBonus?: number;
       readonly additiveWorkerProductionBonus?: number;
       readonly multiplicativeWorkerProductionBonus?: number;
+      /** Increases the number of characters that the user types each character type */
+      readonly typingSpeedIncrease?: number;
       /** Worker bonuses applied to individual types of workers */
       readonly individualWorkerBonuses?: {
          [key: number]: {
@@ -197,7 +201,7 @@ export const MAIN_UPGRADE_DATA: Array<MainUpgradeInfo> = [
 export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    {
       name: "'Motivational' Poster",
-      description: <>Typing is <b>1.3x</b> as effective.</>,
+      description: <>Each word gives <b>0.1</b> more lorem.</>,
       flavourText: "Give up!",
       iconSrc: "",
       effects: {
@@ -212,41 +216,9 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       id: 11
    },
    {
-      name: "Bigger Keys",
-      description: <>Each word gives <b>0.1</b> more lorem.</>,
-      flavourText: "Twice the surface area, twice the lorem!",
-      iconSrc: "",
-      effects: {
-         additiveTypingProductionBonus: 0.1
-      },
-      costs: {
-         lorem: 15
-      },
-      unlockRequirements: {
-         wordsTyped: 50
-      },
-      id: 12
-   },
-   {
-      name: "Suspicious Substances",
-      description: <>Typing is <b>1.5x</b> as effective.</>,
+      name: "Performance Enhancing Substances",
+      description: <>Each word gives <b>0.2</b> more lorem.</>,
       flavourText: "speeEEEEEEEEED",
-      iconSrc: "",
-      effects: {
-         multiplicativeTypingProductionBonus: 0.5
-      },
-      costs: {
-         lorem: 30
-      },
-      unlockRequirements: {
-         wordsTyped: 100
-      },
-      id: 13
-   },
-   {
-      name: "Ergonomic chair",
-      description: <>Typing is <b>1.5x</b> as effective.</>,
-      flavourText: "Your back will thank you later.",
       iconSrc: "",
       effects: {
          multiplicativeTypingProductionBonus: 0.5
@@ -255,9 +227,220 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          lorem: 50
       },
       unlockRequirements: {
-         wordsTyped: 200
+         wordsTyped: 100
+      },
+      id: 13
+   },
+   {
+      name: "Bigger Keys",
+      description: <>You type <b>1.3x</b> faster.</>,
+      flavourText: "Twice the surface area, twice the lorem!",
+      iconSrc: "",
+      effects: {
+         typingSpeedIncrease: 0.3
+      },
+      costs: {
+         lorem: 50
+      },
+      unlockRequirements: {
+         wordsTyped: 50
+      },
+      id: 12
+   },
+   {
+      name: "Reinforced Keys",
+      description: <>You type <b>1.3x</b> faster.</>,
+      flavourText: "Titanium keys... ouch.",
+      iconSrc: "",
+      effects: {
+         typingSpeedIncrease: 0.5
+      },
+      costs: {
+         lorem: 250
+      },
+      unlockRequirements: {
+         wordsTyped: 100
+      },
+      id: 18
+   },
+   {
+      name: "Spring-loaded Keys",
+      description: <>You type <b>1.3x</b> faster.</>,
+      iconSrc: "",
+      effects: {
+         typingSpeedIncrease: 0.5
+      },
+      costs: {
+         lorem: 1000
+      },
+      unlockRequirements: {
+         wordsTyped: 250
+      },
+      id: 21
+   },
+   {
+      name: "RGB Keys",
+      description: <>You type <b>1.3x</b> faster.</>,
+      iconSrc: "",
+      effects: {
+         typingSpeedIncrease: 0.3
+      },
+      costs: {
+         lorem: 2500
+      },
+      unlockRequirements: {
+         wordsTyped: 500
+      },
+      id: 22
+   },
+   {
+      name: "Ergonomic chair",
+      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      flavourText: "Your back will thank you later.",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 0.5
+      },
+      costs: {
+         lorem: 60
+      },
+      unlockRequirements: {
+         wordsTyped: 150
       },
       id: 14
+   },
+   {
+      name: "Wheelie chair",
+      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      flavourText: "Your chair now has wheels. You can spin around on it. Do you feel cool yet?",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 0.5
+      },
+      costs: {
+         lorem: 240
+      },
+      unlockRequirements: {
+         wordsTyped: 250
+      },
+      id: 23
+   },
+   {
+      name: "Extra wheels",
+      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      flavourText: "wheEEEEEEELS",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 0.5
+      },
+      costs: {
+         lorem: 720
+      },
+      unlockRequirements: {
+         wordsTyped: 450
+      },
+      id: 24
+   },
+   {
+      name: "Even more wheels",
+      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      flavourText: "Alright I swear this is the final wheel upgrade. Or IS IT? >:))",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 0.5
+      },
+      costs: {
+         lorem: 1500
+      },
+      unlockRequirements: {
+         wordsTyped: 700
+      },
+      id: 25
+   },
+   {
+      name: "Recursive wheels",
+      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      flavourText: "Your wheels... have WHEELS! This feels wrong.",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 0.5
+      },
+      costs: {
+         lorem: 4000
+      },
+      unlockRequirements: {
+         wordsTyped: 1000
+      },
+      id: 26
+   },
+   {
+      name: "Hoverchair",
+      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      flavourText: "This upgrade sounds cool, but in reality you just strapped a bunch of large fans to your chair. It looks stupid, but the performance benefits are undeniable.",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 0.5
+      },
+      costs: {
+         lorem: 8000
+      },
+      unlockRequirements: {
+         wordsTyped: 1300
+      },
+      id: 27
+   },
+   {
+      name: "Uber chair",
+      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      flavourText: "By absorbing nearby chairs, your chair grows in power. Be wary.",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 0.5
+      },
+      costs: {
+         lorem: 20000
+      },
+      unlockRequirements: {
+         wordsTyped: 1600
+      },
+      id: 28
+   },
+   {
+      name: "Motivation Gun",
+      description: <>All workers are 1.2x as effective.</>,
+      flavourText: "Fear is the greatest motivator.",
+      iconSrc: "",
+      effects: {
+         workerBonuses: {
+            multiplicative: 0.2
+         }
+      },
+      costs: {
+         lorem: 200
+      },
+      unlockRequirements: {
+         totalWorkers: 10
+      },
+      id: 17
+   },
+   // {
+   //    name: "Hidden Camera Servailence"
+   // }
+   {
+      name: "Finger Bracings",
+      description: <>Typing is <b>1.5x</b> as effective.</>,
+      flavourText: "Protects the most important organs in your body - your fingers.",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 0.5
+      },
+      costs: {
+         lorem: 1000
+      },
+      unlockRequirements: {
+         wordsTyped: 400
+      },
+      id: 19
    },
    {
       name: "Wage cages",
@@ -282,69 +465,50 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       id: 16
    },
    {
-      name: "Motivation Gun",
-      description: <>All workers are 1.2x as effective.</>,
-      flavourText: "Fear is the greatest motivator.",
+      name: "Intern Lava Moat",
+      description: <>Interns are <b>1.5x</b> as effective.</>,
+      flavourText: "The best way to prevent workers from leaving the office.",
       iconSrc: "",
       effects: {
-         workerBonuses: {
-            multiplicative: 0.2
+         individualWorkerBonuses: {
+            1: {
+               multiplicativeBonus: 0.5
+            }
+         }
+      },
+      costs: {
+         lorem: 800
+      },
+      unlockRequirements: {
+         workers: {
+            1: 10
+         }
+      },
+      id: 20
+   },
+   {
+      name: "Employee of the Month",
+      description: () => {
+         const tier2WorkerName = Game.userInfo.previousJobs[1].name;
+         return <>{tier2WorkerName}s are <b>1.5x</b> as effective.</>
+      },
+      flavourText: "Studies have shown that worker production can be increased significantly simply with a shiny piece of paper stapled to the wall.",
+      iconSrc: "",
+      effects: {
+         individualWorkerBonuses: {
+            2: {
+               multiplicativeBonus: 0.5
+            }
          }
       },
       costs: {
          lorem: 200
       },
       unlockRequirements: {
-         totalWorkers: 10
+         workers: {
+            2: 5
+         }
       },
-      id: 17
-   },
-   {
-      name: "Reinforced Keys",
-      description: <>Typing is <b>1.3x</b> as effective.</>,
-      flavourText: "Titanium keys... ouch.",
-      iconSrc: "",
-      effects: {
-         multiplicativeTypingProductionBonus: 0.3
-      },
-      costs: {
-         lorem: 500
-      },
-      unlockRequirements: {
-         wordsTyped: 300
-      },
-      id: 18
-   },
-   {
-      name: "Finger Bracings",
-      description: <>Typing is <b>1.5x</b> as effective.</>,
-      flavourText: "Your poor fingers.",
-      iconSrc: "",
-      effects: {
-         multiplicativeTypingProductionBonus: 0.5
-      },
-      costs: {
-         lorem: 1000
-      },
-      unlockRequirements: {
-         wordsTyped: 400
-      },
-      id: 19
-   },
-   {
-      name: "Lava Moat",
-      description: <>All workers are 1.2x as effective.</>,
-      flavourText: "The best way to keep workers at the office is to prevent them from leaving with a lava moat.",
-      iconSrc: "",
-      effects: {
-         multiplicativeWorkerProductionBonus: 0.2
-      },
-      costs: {
-         lorem: 800
-      },
-      unlockRequirements: {
-         totalWorkers: 25
-      },
-      id: 20
+      id: 29
    }
 ];

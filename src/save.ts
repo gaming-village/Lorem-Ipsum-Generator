@@ -2,7 +2,8 @@
 
 import SAVE_COMPONENTS from "./data/save-data";
 
-import APPLICATION_DATA, { ApplicationInfo } from "./data/application-data";
+import APPLICATION_DATA from "./data/application-data";
+import { MAIN_UPGRADE_DATA, MINOR_UPGRADE_DATA } from "./data/upgrade-data";
 
 const getCookie = (cname: string): string | null => {
    var name = cname + "=";
@@ -74,9 +75,16 @@ export function loadSave(saveData: string): void {
    }
 }
 
-const findAvailableID = (): number => {
+
+interface SaveElement {
+   id: number;
+}
+type SaveObject = ReadonlyArray<SaveElement>;
+
+/** Finds the smallest ID in a save object which isn't taken. */
+const findAvailableID = (saveObject: SaveObject): number => {
    const ids = new Array<number>();
-   for (const application of APPLICATION_DATA) {
+   for (const application of saveObject) {
       ids.push(application.id);
    }
 
@@ -85,24 +93,27 @@ const findAvailableID = (): number => {
    }
 }
 
+/** Checks a save object and ensures that its ID's are all correctly placed. */
+const validateSaveObject = (objectName: string, saveObject: SaveObject): void => {
+   const seenIDS = new Array<number>();
+
+   for (const element of saveObject) {
+      // Prevent ID's < 1
+      if (element.id < 1) {
+         throw new Error(`An element in ${objectName} has an ID less than 1. All ID's must be above 0.`);
+      }
+      // Prevent duplicate ID's
+      if (seenIDS.includes(element.id)) {
+         const nextAvailableID = findAvailableID(saveObject);
+         throw new Error(`More than one element in ${objectName} has an id of ${element.id}! Consider changing one to the next available ID of ${nextAvailableID}`);
+      }
+      seenIDS.push(element.id);
+   }
+}
+
 /** [ONLY RUNS IN DEVELOPMENT MODE] Ensures that all save data is valid and won't cause issues. */
 export function validateSaveData(): void {
-   // Make sure all application data has a unique id
-   const seenApplications: { [key: number]: ApplicationInfo } = {};
-
-   for (const applicationInfo of APPLICATION_DATA) {
-      let applicationWithSameId: ApplicationInfo | undefined;
-      for (const [id, info] of Object.entries(seenApplications)) {
-         if (Number(id) === applicationInfo.id) {
-            applicationWithSameId = info;
-            break;
-         }
-      }
-
-      if (typeof applicationWithSameId !== "undefined") {
-         const nextAvailableID = findAvailableID();
-         throw new Error(`Applications '${applicationWithSameId.name}' and '${applicationInfo.name}' both have an id of ${applicationInfo.id}! The next available id is ${nextAvailableID}.`);
-      }
-      seenApplications[applicationInfo.id] = applicationInfo;
-   }
+   validateSaveObject("Application Data", APPLICATION_DATA);
+   const allUpgrades = [ ...MAIN_UPGRADE_DATA, ...MINOR_UPGRADE_DATA ];
+   validateSaveObject("All Upgrades", allUpgrades);
 }

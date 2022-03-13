@@ -130,6 +130,10 @@ const PopupElem = ({ info, application, children, closeFunc }: PopupElemInfo) =>
       }
 
       setPos(newPos);
+
+      return () => {
+         application.move = null;
+      }
    // eslint-disable-next-line
    }, []);
 
@@ -207,7 +211,7 @@ abstract class Popup {
       }
    }
 
-   move!: () => void;
+   move: (() => void) | null = null;
 
    protected closeButtonFunc?(): void;
 }

@@ -39,7 +39,7 @@ class BrowserError extends Popup {
       setTimeout(() => {
          if (this.getElem() === null) return;
 
-         this.move();
+         if (this.move !== null) this.move();
          this.createMoveTimer();
       }, 1500);
    }
