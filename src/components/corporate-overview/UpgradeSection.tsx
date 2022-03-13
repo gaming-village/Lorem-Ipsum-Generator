@@ -5,15 +5,24 @@ import TitleBar from "../TitleBar";
 
 import Game from "../../Game";
 import { MAIN_UPGRADE_DATA, MinorUpgradeInfo, MINOR_UPGRADE_DATA, UpgradeInfo } from "../../data/upgrade-data";
-import { JOB_TIER_DATA } from "../../data/job-data";
+import { JOB_DATA, JOB_TIER_DATA } from "../../data/job-data";
 import { SectionProps } from "./CorporateOverview";
 
 let addUnlockedUpgrade: ((upgrade: MinorUpgradeInfo) => void) | null = null;
 
-export let additiveTypingProductionIncrease: number = 0;
-export let multiplicativeTypingProductionIncrease: number = 0;
-export let additiveWorkerProductionIncrease: number = 0;
-export let multiplicativeWorkerProductionIncrease: number = 0;
+export let additiveTypingProductionBonus: number = 0;
+export let multiplicativeTypingProductionBonus: number = 0;
+export let additiveWorkerProductionBonus: number = 0;
+export let multiplicativeWorkerProductionBonus: number = 0;
+
+export let individualWorkerProductionBonuses: { [key: string]: { additiveBonus: number, multiplicativeBonus: number } } = JOB_DATA.reduce((previousValue, currentValue) => {
+   return { ...previousValue, [currentValue.id]: { additiveBonus: 0, multiplicativeBonus: 0 } };
+}, {});
+
+export let workerProductionBonuses = {
+   additive: 0,
+   multiplicative: 0
+};
 
 /**
  * Used to find whether the user owns an upgrade or not.
@@ -67,7 +76,7 @@ const canBuyUpgrade = (upgrade: UpgradeInfo, lorem: number): boolean => {
    return true;
 }
 
-export function updateUnlockedUpgrades(): void {
+export function updateUnlockedTypingUpgrades(): void {
    for (const upgrade of MINOR_UPGRADE_DATA) {
       if (typeof upgrade.unlockRequirements.wordsTyped !== "undefined") {
          if (Game.wordsTyped >= upgrade.unlockRequirements.wordsTyped) {
@@ -80,19 +89,68 @@ export function updateUnlockedUpgrades(): void {
    }
 }
 
+export function updateUnlockedWorkerUpgrades(): void {
+   for (const upgrade of MINOR_UPGRADE_DATA) {
+      if (typeof upgrade.unlockRequirements.workers !== "undefined") {
+         for (const [workerTier, requiredCount] of Object.entries(upgrade.unlockRequirements.workers)) {
+            if (Number(workerTier) > Game.userInfo.previousJobs.length) continue;
+            const worker = Game.userInfo.previousJobs[Number(workerTier) - 1];
+
+            if (Game.userInfo.workers[worker.id] >= Number(requiredCount)) {
+               upgrade.isUnlocked = true;
+               if (addUnlockedUpgrade !== null) {
+                  addUnlockedUpgrade(upgrade);
+               }
+            }
+         }
+      }
+   }
+}
+
 const applyUpgradeProductionBonuses = (upgrade: UpgradeInfo): void => {
    // Calculate upgrade bonuses
-   if (typeof upgrade.effects?.additiveTypingProductionIncrease !== "undefined") {
-      additiveTypingProductionIncrease += upgrade.effects.additiveTypingProductionIncrease
+
+   if (typeof upgrade.effects?.additiveTypingProductionBonus !== "undefined") {
+      additiveTypingProductionBonus += upgrade.effects.additiveTypingProductionBonus
    }
-   if (typeof upgrade.effects?.multiplicativeTypingProductionIncrease !== "undefined") {
-      multiplicativeTypingProductionIncrease += upgrade.effects.multiplicativeTypingProductionIncrease
+   if (typeof upgrade.effects?.multiplicativeTypingProductionBonus !== "undefined") {
+      multiplicativeTypingProductionBonus += upgrade.effects.multiplicativeTypingProductionBonus
    }
-   if (typeof upgrade.effects?.additiveWorkerProductionIncrease !== "undefined") {
-      additiveWorkerProductionIncrease += upgrade.effects.additiveWorkerProductionIncrease
+   if (typeof upgrade.effects?.additiveWorkerProductionBonus !== "undefined") {
+      additiveWorkerProductionBonus += upgrade.effects.additiveWorkerProductionBonus
    }
-   if (typeof upgrade.effects?.multiplicativeWorkerProductionIncrease !== "undefined") {
-      multiplicativeWorkerProductionIncrease += upgrade.effects.multiplicativeWorkerProductionIncrease
+   if (typeof upgrade.effects?.multiplicativeWorkerProductionBonus !== "undefined") {
+      multiplicativeWorkerProductionBonus += upgrade.effects.multiplicativeWorkerProductionBonus
+   }
+
+   // Individual worker production bonuses
+   if (typeof upgrade.effects?.individualWorkerBonuses !== "undefined") {
+      for (const [workerTier, bonuses] of Object.entries(upgrade.effects.individualWorkerBonuses)) {
+         if (Number(workerTier) > Game.userInfo.previousJobs.length) continue;
+         
+         const worker = Game.userInfo.previousJobs[Number(workerTier) - 1];
+
+         // Apply bonuses
+         if (typeof bonuses.additiveBonus !== "undefined") {
+            individualWorkerProductionBonuses[worker.id].additiveBonus += bonuses.additiveBonus;
+         }
+         if (typeof bonuses.multiplicativeBonus !== "undefined") {
+            individualWorkerProductionBonuses[worker.id].multiplicativeBonus += bonuses.multiplicativeBonus;
+         }
+      }
+   }
+
+   // Overall worker production bonuses
+   if (typeof upgrade.effects?.workerBonuses !== "undefined") {
+      // Additive bonuses
+      if (typeof upgrade.effects.workerBonuses.additive !== "undefined") {
+         workerProductionBonuses.additive += upgrade.effects.workerBonuses.additive;
+      }
+
+      // Multiplicative bonuses
+      if (typeof upgrade.effects.workerBonuses.multiplicative !== "undefined") {
+         workerProductionBonuses.multiplicative += upgrade.effects.workerBonuses.multiplicative;
+      }
    }
 }
 

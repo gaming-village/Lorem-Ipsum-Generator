@@ -246,7 +246,7 @@
 #career-path .row {
    height: var(--item-size);
    margin: calc(var(--row-spacing) / 2) 0;
-   transform: translateX(calc((var(--item-spacing-x) + var(--item-size)) * var(--offset)));
+   transform: translateX(calc((var(--item-spacing-x) + var(--item-size)) * var(--offset) / 2));
    display: flex;
    justify-content: center;
    align-items: center;

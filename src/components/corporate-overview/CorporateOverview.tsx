@@ -5,23 +5,14 @@ import Button from "../Button";
 import ControlPanel from "./ControlPanel";
 import PromotionScreen from "./PromotionScreen";
 import ProfileSection from "./ProfileSection";
-import UpgradeSection, { hasUpgrade } from "./UpgradeSection";
+import UpgradeSection, { hasUpgrade, individualWorkerProductionBonuses, updateUnlockedWorkerUpgrades, workerProductionBonuses } from "./UpgradeSection";
+import CareerPathSection from "./CareerPathSection";
 
 import Game from "../../Game";
 import { JOB_DATA, JOB_TIER_DATA, JobInfo, } from "../../data/job-data";
 import { getPrefix, randItem, roundNum } from "../../utils";
 
 import "../../css/corporate-overview.css";
-
-const getJobsByTier = (tier: number): ReadonlyArray<JobInfo> => {
-   let jobs = new Array<JobInfo>();
-   for (const currentJob of JOB_DATA) {
-      if (currentJob.tier === tier) {
-         jobs.push(currentJob);
-      } else if (currentJob.tier > tier) break;
-   }
-   return jobs;
-}
 
 export function getRandomWorker(): JobInfo {
    let potentialJobs = Game.userInfo.previousJobs.slice();
@@ -58,136 +49,6 @@ export interface SectionProps {
    promoteFunc?: () => void
 }
 
-interface CareerPathNode {
-   status: "previousJob" | "nonSelected" | "unknown";
-   job: JobInfo;
-   children: Array<CareerPathNode>
-}
-const CareerPathSection = () => {
-   const jobHistory = Game.userInfo.previousJobs;
-   // Create the tree
-   const careerPathTree: CareerPathNode = {
-      status: "previousJob",
-      job: JOB_DATA[0],
-      children: new Array<CareerPathNode>()
-   };
-   let previousNode: CareerPathNode = careerPathTree;
-   for (let i = 0; i < jobHistory.length; i++) {
-      const job = jobHistory[i];
-      const nextJob = jobHistory[i + 1];
-
-      let nextNode!: CareerPathNode;
-      const tierJobs = getJobsByTier(job.tier + 1);
-      for (const currentJob of tierJobs) {
-         let newNode!: CareerPathNode;
-
-         const isInPath = typeof currentJob.previousJobRequirement === "undefined" || currentJob.previousJobRequirement.includes(job.name);
-         if (!isInPath) continue;
-
-         if (i === jobHistory.length - 1) {
-            newNode = {
-               status: "unknown",
-               job: currentJob,
-               children: new Array<CareerPathNode>()
-            };
-         } else if (currentJob === nextJob) {
-            newNode = {
-               status: "previousJob",
-               job: currentJob,
-               children: new Array<CareerPathNode>()
-            }
-
-            nextNode = newNode;
-         } else {
-            newNode = {
-               status: "nonSelected",
-               job: currentJob,
-               children: new Array<CareerPathNode>()
-            }
-         }
-         
-         previousNode.children.push(newNode);
-      }
-      
-      previousNode = nextNode;
-   }
-
-   // Won't actually be created
-   const baseNode: CareerPathNode = {
-      status: "unknown",
-      job: JOB_DATA[0],
-      children: [careerPathTree]
-   };
-
-   // Make the JSX
-   let key = 0;
-   const tree = new Array<JSX.Element>();
-   let currentNode: CareerPathNode = baseNode;
-   let offset = 0;
-   for (let i = 0; ; i++) {
-      if (typeof currentNode === "undefined" || currentNode.children.length === 0) {
-         break;
-      }
-
-      const rowStyle = {
-         "--offset": offset
-      } as React.CSSProperties;
-      
-      let nextNode!: CareerPathNode;
-      const newRow = new Array<JSX.Element>();
-      for (let j = 0; j < currentNode.children.length; j++) {
-         const child = currentNode.children[j];
-
-         // Update the offset
-         if (i > 0 && child.status === "previousJob") {
-            switch (currentNode.children.length) {
-               case 2: {
-                  if (j === 0) {
-                     offset--;
-                  } else {
-                     offset++;
-                  }
-                  break;
-               }
-               case 3: {
-                  if (j === 0) {
-                     offset--
-                  } else if (j === 2) {
-                     offset++;
-                  }
-                  break;
-               }
-            }
-         }
-
-         const className = `item ${child.status}`;
-         newRow.push(
-            <div key={key++} className={className}>
-               <span>{child.status === "unknown" ? "???" : child.job.name}</span>
-            </div>
-         );
-
-         if (child.status === "previousJob") {
-            nextNode = child;
-         }
-      }
-
-      tree.push(
-         <div key={key++} className="row" style={rowStyle}>
-            {newRow}
-         </div>
-      );
-
-      currentNode = nextNode;
-   }
-
-   return <div id="career-path">
-      <p>View how your career has developed over the course of your time at LoremCorp.</p>
-
-      {tree}
-   </div>
-}
-
 const getNonInternWorkerCount = (): number => {
    let total = 0;
    for (const worker of JOB_DATA) {
@@ -212,6 +73,17 @@ const getSubordinateCount = (worker: JobInfo): number => {
    return subordinateCount;
 }
 
+/*
+export let individualWorkerProductionBonuses: { [key: string]: { additiveBonus: number, multiplicativeBonus: number } } = JOB_DATA.reduce((previousValue, currentValue) => {
+   return { ...previousValue, [currentValue.id]: { additiveBonus: 0, multiplicativeBonus: 0 } };
+}, {});
+
+export let workerProductionBonuses = {
+   additive: 0,
+   multiplicative: 0
+};
+*/
+
 /**
  * Calculates how much one of a certain worker type would produce
  * @param worker The worker
@@ -230,6 +102,12 @@ const getSingularWorkerProduction = (worker: JobInfo): number => {
          production *= 1 + Game.misc.internMotivation / 100;
       }
    }
+
+   production += workerProductionBonuses.additive;
+   production += individualWorkerProductionBonuses[worker.id].additiveBonus;
+
+   production *= 1 + workerProductionBonuses.multiplicative;
+   production *= 1 + individualWorkerProductionBonuses[worker.id].multiplicativeBonus;
    
    if (hasJob("Employee")) {
       production *= 1.5;
@@ -237,14 +115,6 @@ const getSingularWorkerProduction = (worker: JobInfo): number => {
 
    if (worker.name === "Intern" && hasJob("Manager")) {
       production *= 2;
-   }
-
-   if (hasUpgrade("Company Restructure")) {
-      production *= 1.1;
-   }
-
-   if (hasUpgrade("AGILE Development")) {
-      production *= 1.5;
    }
 
    if (hasUpgrade("Micro Management")) {
@@ -332,6 +202,8 @@ const WorkerSection = ({ job: worker }: SectionProps) => {
       }
 
       Game.userInfo.workers[worker.id] += num;
+
+      updateUnlockedWorkerUpgrades();
    }
 
    const buySingularWorker = () => {

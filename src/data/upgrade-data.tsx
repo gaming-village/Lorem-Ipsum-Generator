@@ -5,15 +5,19 @@ export interface UpgradeInfo {
    readonly iconSrc: string;
    /** Typical effects which upgrades usually have. Calculated automatically */
    readonly effects?: {
-      additiveTypingProductionIncrease?: number;
-      multiplicativeTypingProductionIncrease?: number;
-      additiveWorkerProductionIncrease?: number;
-      multiplicativeWorkerProductionIncrease?: number;
-      workerBonuses?: {
+      readonly additiveTypingProductionBonus?: number;
+      readonly multiplicativeTypingProductionBonus?: number;
+      readonly additiveWorkerProductionBonus?: number;
+      readonly multiplicativeWorkerProductionBonus?: number;
+      readonly individualWorkerBonuses?: {
          [key: number]: {
-            additiveIncrease?: number;
-            multiplicativeIncrease?: number;
+            readonly additiveBonus?: number;
+            readonly multiplicativeBonus?: number;
          }
+      };
+      readonly workerBonuses?: {
+         readonly additive?: number;
+         readonly multiplicative?: number;
       }
    }
    readonly costs: {
@@ -49,7 +53,7 @@ export const MAIN_UPGRADE_DATA: Array<MainUpgradeInfo> = [
       description: <>Typing is <b>twice</b> as effective.</>,
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionIncrease: 1
+         multiplicativeTypingProductionBonus: 1
       },
       costs: {
          lorem: 10
@@ -127,7 +131,7 @@ export const MAIN_UPGRADE_DATA: Array<MainUpgradeInfo> = [
       description: <>Workers generate 50% more lorem and get 50% less sleep.</>,
       iconSrc: "",
       effects: {
-         multiplicativeWorkerProductionIncrease: 0.5
+         multiplicativeWorkerProductionBonus: 0.5
       },
       costs: {
          workers: {
@@ -139,10 +143,10 @@ export const MAIN_UPGRADE_DATA: Array<MainUpgradeInfo> = [
    },
    {
       name: "Company Restructure",
-      description: <>All workers produce 50% more lorem.</>,
+      description: <>All workers are twice as effective.</>,
       iconSrc: "",
       effects: {
-         multiplicativeWorkerProductionIncrease: 0.5
+         multiplicativeWorkerProductionBonus: 1
       },
       costs: {
          lorem: 200
@@ -193,7 +197,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       flavourText: "Give up!",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionIncrease: 0.3
+         multiplicativeTypingProductionBonus: 0.3
       },
       costs: {
          lorem: 10
@@ -209,7 +213,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       flavourText: "Twice the surface area, twice the lorem!",
       iconSrc: "",
       effects: {
-         additiveTypingProductionIncrease: 0.1
+         additiveTypingProductionBonus: 0.1
       },
       costs: {
          lorem: 15
@@ -225,7 +229,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       flavourText: "speeEEEEEEEEED",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionIncrease: 0.5
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
          lorem: 30
@@ -241,7 +245,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       flavourText: "Your back will thank you later.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionIncrease: 0.5
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
          lorem: 50
@@ -254,12 +258,12 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    {
       name: "Wage cages",
       description: <>Interns are <b>1.5x</b> as effective.</>,
-      flavourText: "",
+      flavourText: "'Please... no water... help...' - Intern #172934, 2003 - 2020",
       iconSrc: "",
       effects: {
-         workerBonuses: {
+         individualWorkerBonuses: {
             1: {
-               multiplicativeIncrease: 0.5
+               multiplicativeBonus: 0.5
             }
          }
       },

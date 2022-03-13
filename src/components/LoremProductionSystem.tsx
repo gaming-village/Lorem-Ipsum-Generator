@@ -8,14 +8,14 @@ import { createRandomPopup, getPopups } from '../classes/popups/Popup';
 import { createTooltip, removeTooltip } from '../tooltips';
 import { randInt, randItem } from '../utils';
 import { hasJob } from './corporate-overview/CorporateOverview';
-import { additiveTypingProductionIncrease, hasUpgrade, multiplicativeTypingProductionIncrease, updateUnlockedUpgrades } from './corporate-overview/UpgradeSection';
+import { additiveTypingProductionBonus, hasUpgrade, multiplicativeTypingProductionBonus, updateUnlockedTypingUpgrades } from './corporate-overview/UpgradeSection';
 
 const applyValueModifiers = (baseValue: number): number => {
    let value = baseValue;
 
-   value += additiveTypingProductionIncrease;
+   value += additiveTypingProductionBonus;
 
-   value *= 1 + multiplicativeTypingProductionIncrease;
+   value *= 1 + multiplicativeTypingProductionBonus;
 
    if (hasJob("Programmer")) value *= 1.5;
    if (hasJob("Web Developer")) value *= 2;
@@ -346,7 +346,7 @@ const LoremProductionSystem = () => {
             Game.lorem += wordValue;
 
             Game.wordsTyped++;
-            updateUnlockedUpgrades();
+            updateUnlockedTypingUpgrades();
          }
 
          if (currentIndex >= currentSentence.length) {
