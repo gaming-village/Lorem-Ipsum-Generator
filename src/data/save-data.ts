@@ -347,7 +347,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         let resultArr = new Array<number>();
+         let resultArr = new Array<number>(LETTER_DATA.length);
          for (const letter of LETTER_DATA) {
             let part = 0;
             if (letter.isReceived) {
@@ -363,7 +363,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          }
 
          let result = resultArr.map(num => num.toString()).join("");
-
+         
          // Remove trailing 0's
          let numTrailingZeros = 0;
          while (result[result.length - numTrailingZeros - 1] === "0") {
@@ -378,9 +378,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       loadEvent: (savedValue: string) => {
          const parts = savedValue.split("").map(Number);
 
-         for (let i = 0; i < LETTER_DATA.length; i++) {
-            const letter = LETTER_DATA[i], part = parts[i] || 0;
-            if (part === 0) continue;
+         for (const letter of LETTER_DATA) {
+            if (letter.id > parts.length) continue;
+
+            const part = parts[letter.id - 1];
             const bits = decToBin(part).reverse();
 
             letter.isReceived = bits[0] === 1;
@@ -608,7 +609,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
          for (const shop of BLACK_MARKET_SHOPS) {
-            if (shop.id > bits.length) break;
+            if (shop.id > bits.length) continue;
             shop.isUnlocked = bits[shop.id - 1] === 1;
          }
       }
@@ -628,7 +629,7 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
       loadEvent: (savedValue: string) => {
          const bits = hexToArr(savedValue);
          for (const popup of POPUP_DATA) {
-            if (popup.id > bits.length) break;
+            if (popup.id > bits.length) continue;
             popup.isUnlocked = bits[popup.id - 1] === 1;
          }
       }
