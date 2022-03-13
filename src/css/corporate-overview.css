@@ -11,10 +11,10 @@
 }
 #corporate-overview .separator {
    width: 80%;
-   height: 1.5px;
+   height: 2px;
    background-color: #000;
    margin: 1rem 0 1rem 50%;
-   border-bottom: 1.5px solid #fff;
+   border-bottom: 2px solid #fff;
    transform: translateX(-50%);
 }
 #promotion-animation {
@@ -379,16 +379,22 @@
 }
 #all-upgrades .minor-upgrade {
    border: 2px solid;
-   border-color: #f5f5f5 #000 #000 #f5f5f5;
+   border-color: #f5f5f5 #666 #666 #f5f5f5;
    padding: 3px 5px;
    margin: 1rem;
+}
+#all-upgrades .minor-upgrade:not(.can-afford) {
+   border-color: #666 #000 #000 #666;
+   background-color: #aaa;
+}
+#all-upgrades .minor-upgrade.can-afford {
    cursor: pointer;
 }
-#all-upgrades .minor-upgrade:hover {
-   border-color: #fff #666 #666 #fff;
+#all-upgrades .minor-upgrade.can-afford:hover {
+   border-color: #fff #999 #999 #fff;
    background-color: #ddd;
 }
-#all-upgrades .minor-upgrade:active {
+#all-upgrades .minor-upgrade.can-afford:active {
    filter: brightness(0.95);
 }
 #all-upgrades .minor-upgrade .formatter {
@@ -407,8 +413,12 @@
    height: var(--size);
 }
 #all-upgrades .minor-upgrade .name {
+   font-style: italic;
    font-weight: bold;
    margin: 0 0 0 0.3rem;
+}
+#all-upgrades .minor-upgrade:not(.can-afford) .name {
+   color: #444;
 }
 #all-upgrades .minor-upgrade .cost {
    letter-spacing: 0.04rem;
@@ -423,9 +433,11 @@
    color: #ff000d;
 }
 #all-upgrades .minor-upgrade .separator {
-   box-shadow: 0 1px 0 0 #fff;
    margin: 0 0 0 50%;
    pointer-events: none;
+}
+#all-upgrades .minor-upgrade:not(.can-afford) .separator {
+   border-color: #ccc;
 }
 #all-upgrades .minor-upgrade .description {
    margin: 0.5rem 0 0;

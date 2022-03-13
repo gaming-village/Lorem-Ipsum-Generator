@@ -8,7 +8,7 @@ import { createRandomPopup, getPopups } from '../classes/popups/Popup';
 import { createTooltip, removeTooltip } from '../tooltips';
 import { randInt, randItem } from '../utils';
 import { hasJob } from './corporate-overview/CorporateOverview';
-import { additiveTypingProductionBonus, hasUpgrade, multiplicativeTypingProductionBonus, updateUnlockedTypingUpgrades } from './corporate-overview/UpgradeSection';
+import { additiveTypingProductionBonus, hasUpgrade, multiplicativeTypingProductionBonus, typingSpeedBonus, updateUnlockedTypingUpgrades } from './corporate-overview/UpgradeSection';
 
 const applyValueModifiers = (baseValue: number): number => {
    let value = baseValue;
@@ -282,8 +282,18 @@ const LoremProductionSystem = () => {
       type = (key: string): void => {
          if (!canType()) return;
 
+         const charsPerType = 1 + typingSpeedBonus;
+         
+         if (currentSentence !== null && currentIndex >= currentSentence.length) {
+            currentIndex -= currentSentence.length;
+            currentSentence = null;
+         } else {
+            currentIndex += charsPerType;
+         }
+
          // Open a popup
-         if (typesTilNextPopup-- <= 0) {
+         typesTilNextPopup -= charsPerType;
+         if (typesTilNextPopup <= 0) {
             const POPUP_CHANCE = 0.1;
             if (Math.random() < POPUP_CHANCE) {
                createRandomPopup();
@@ -304,12 +314,11 @@ const LoremProductionSystem = () => {
          const loremCounter = Game.applications.LoremCounter as LoremCounter;
          if (loremCounter.createTextEffect !== null) loremCounter.createTextEffect();
 
-
          if (currentSentence === null) {
             // Generate a new sentence
             if (upcomingSentence === null) {
                const [sentence, meaning] = getRandomSentence();
-               upcomingSentence = sentence;
+               upcomingSentence = sentence + " ";
                upcomingSentenceMeaning = meaning;
             }
 
@@ -318,52 +327,45 @@ const LoremProductionSystem = () => {
             
             {
                const [sentence, meaning] = getRandomSentence();
-               upcomingSentence = sentence;
+               upcomingSentence = sentence + " ";
                upcomingSentenceMeaning = meaning;
             }
 
             if (content === null) {
                bufferedContent = new Array<JSX.Element>();
-            } else {
-               bufferedContent?.push(<span key={bufferedContent.length + 1}> </span>);
             }
-            setContent(bufferedContent);
-         }
 
-         // Add the next letter to the content.
-         // e.g. "Lorem ipsu" becomes "Lorem ipsum"
-
-         if (currentIndex === 0) {
+            // Prepare for the next sentence
             bufferedContent?.push(
                <LoremSentence key={bufferedContent.length} sentence="" meaning="" type="regular" />
             );
          }
 
-         const sentencePart = currentSentence.substring(0, currentIndex + 1);
+         // Add the next letter to the content.
+         // e.g. "Lorem ipsu" becomes "Lorem ipsum"
+         const sentencePart = currentSentence.substring(0, currentIndex);
          bufferedContent![bufferedContent!.length - 1] = (
-
             <LoremSentence key={bufferedContent!.length} sentence={sentencePart} meaning={currentSentenceMeaning || "none"} type="regular" showFunc={shouldShowTooltip} n={bufferedContent!.length} />
          );
+         
+         // Update the sentences
          setContent(bufferedContent!.slice());
 
-         // If a word has been completed, award lorem based on its value.
-         if (wordEndingChars.includes(currentSentence[currentIndex + 1])) {
-            const word = findWord(currentSentence, currentIndex);
-            
-            const isCorrectLetter = key.toLowerCase() === currentSentence[currentIndex].toLowerCase();
-            const wordValue = calculateWordValue(word.value, isCorrectLetter);
-            
-            Game.lorem += wordValue;
+         // Check if any words have been completed.
+         for (let idx = currentIndex - charsPerType; idx < currentIndex; idx++) {
+            if (!wordEndingChars.includes(currentSentence[idx]) && wordEndingChars.includes(currentSentence[idx + 1])) {
+               // Award lorem based on its value
 
-            Game.wordsTyped++;
-            updateUnlockedTypingUpgrades();
-         }
-
-         if (currentIndex >= currentSentence.length) {
-            currentSentence = null;
-            currentIndex = 0;
-         } else {  
-            currentIndex++;
+               const word = findWord(currentSentence, idx);
+            
+               const isCorrectLetter = key.toLowerCase() === currentSentence[idx].toLowerCase();
+               const wordValue = calculateWordValue(word.value, isCorrectLetter);
+               
+               Game.lorem += wordValue;
+   
+               Game.wordsTyped++;
+               updateUnlockedTypingUpgrades();
+            }
          }
       }
    });
@@ -373,7 +375,7 @@ const LoremProductionSystem = () => {
       shownContent = bufferedContent.slice();
 
       // Create a preview of the remaining characters in the current sentence
-      const remainingSentence = currentSentence.substring(currentIndex + 1, currentSentence.length);
+      const remainingSentence = currentSentence.substring(currentIndex, currentSentence.length);
       if (remainingSentence.length > 0) {
          shownContent.push(
             <LoremSentence key={shownContent.length + 1} sentence={remainingSentence} meaning={currentSentenceMeaning!} type="upcoming" showFunc={shouldShowTooltip} n={bufferedContent!.length} />

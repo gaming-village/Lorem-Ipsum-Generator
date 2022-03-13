@@ -10,6 +10,8 @@ import { SectionProps } from "./CorporateOverview";
 
 let addUnlockedUpgrade: ((upgrade: MinorUpgradeInfo) => void) | null = null;
 
+export let typingSpeedBonus: number = 0;
+
 export let additiveTypingProductionBonus: number = 0;
 export let multiplicativeTypingProductionBonus: number = 0;
 export let additiveWorkerProductionBonus: number = 0;
@@ -121,15 +123,17 @@ export function updateUnlockedWorkerUpgrades(): void {
    }
 }
 
+/** Calculates and applies an upgrade's bonuses */
 const applyUpgradeProductionBonuses = (upgrade: UpgradeInfo): void => {
-   // Calculate upgrade bonuses
-
+   // Typing bonuses
    if (typeof upgrade.effects?.additiveTypingProductionBonus !== "undefined") {
       additiveTypingProductionBonus += upgrade.effects.additiveTypingProductionBonus
    }
    if (typeof upgrade.effects?.multiplicativeTypingProductionBonus !== "undefined") {
       multiplicativeTypingProductionBonus += upgrade.effects.multiplicativeTypingProductionBonus
    }
+
+   // Worker production bonuses
    if (typeof upgrade.effects?.additiveWorkerProductionBonus !== "undefined") {
       additiveWorkerProductionBonus += upgrade.effects.additiveWorkerProductionBonus
    }
@@ -165,6 +169,11 @@ const applyUpgradeProductionBonuses = (upgrade: UpgradeInfo): void => {
       if (typeof upgrade.effects.workerBonuses.multiplicative !== "undefined") {
          workerProductionBonuses.multiplicative += upgrade.effects.workerBonuses.multiplicative;
       }
+   }
+
+   // Typing speed bonus
+   if (typeof upgrade.effects?.typingSpeedBonus !== "undefined") {
+      typingSpeedBonus += upgrade.effects.typingSpeedBonus;
    }
 }
 
@@ -254,12 +263,53 @@ const getUnlockedUpgrades = (): Array<MinorUpgradeInfo> => {
    return unlockedUpgrades;
 }
 
+/** Returns a list of all unlocked upgrades, sorted in terms of lorem cost */
+const getBuyableUpgrades = (unlockedUpgrades: Array<MinorUpgradeInfo>): Array<MinorUpgradeInfo> => {
+   const buyableUpgrades = new Array<MinorUpgradeInfo>();
+
+   // Get all buyable upgrades
+   for (const upgrade of unlockedUpgrades) {
+      if (!upgrade.isBought) {
+         buyableUpgrades.push(upgrade);
+      }
+   }
+
+   // Sort the array in terms of lorem count
+   const sortedUpgrades = new Array<MinorUpgradeInfo>();
+
+   for (const upgrade of buyableUpgrades) {
+      if (sortedUpgrades.length === 0) {
+         sortedUpgrades.push(upgrade);
+      } else {
+         let hasInsertedUpgrade = false;
+         for (let i = 0; i < sortedUpgrades.length; i++) {
+            const upgrade2 = sortedUpgrades[i];
+
+            if (upgrade2.costs.lorem! > upgrade.costs.lorem!) {
+               sortedUpgrades.splice(i, 0, upgrade);
+               hasInsertedUpgrade = true;
+               break;
+            }
+         }
+
+         // If there are no upgrades more expensive than it, add it to the end of the array
+         if (!hasInsertedUpgrade) {
+            sortedUpgrades.push(upgrade);
+         }
+      }
+   }
+
+   return sortedUpgrades;
+}
+
 const UpgradeSection = ({ job }: SectionProps) => {
    const [lorem, setLorem] = useState(Game.lorem);
    const [unlockedUpgrades, setUnlockedUpgrades] = useState<Array<MinorUpgradeInfo>>(getUnlockedUpgrades());
 
    useEffect(() => {
       addUnlockedUpgrade = (upgrade: MinorUpgradeInfo) => {
+         if (unlockedUpgrades.includes(upgrade)) return;
+         
          const newUnlockedUpgrades = unlockedUpgrades.slice();
          newUnlockedUpgrades.push(upgrade);
          setUnlockedUpgrades(newUnlockedUpgrades);
@@ -343,12 +393,13 @@ const UpgradeSection = ({ job }: SectionProps) => {
       }, 0)
    ) : null;
 
+   const buyableUpgrades = getBuyableUpgrades(unlockedUpgrades);
+
    return <div id="upgrades">
       <div id="all-upgrades" className="windows-program">
          <div className="title-bar" style={{backgroundColor: "rgb(7, 30, 129)"}}>Minor Upgrades</div>
 
-         {MINOR_UPGRADE_DATA.map((upgrade, i) => {
-            if (upgrade.isBought || !unlockedUpgrades.includes(upgrade)) return undefined;
+         {buyableUpgrades.map((upgrade, i) => {
             return <MinorUpgrade upgrade={upgrade} key={i} />
          })}
       </div>

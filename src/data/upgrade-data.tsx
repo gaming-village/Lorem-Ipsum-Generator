@@ -12,7 +12,7 @@ export interface UpgradeInfo {
       readonly additiveWorkerProductionBonus?: number;
       readonly multiplicativeWorkerProductionBonus?: number;
       /** Increases the number of characters that the user types each character type */
-      readonly typingSpeedIncrease?: number;
+      readonly typingSpeedBonus?: number;
       /** Worker bonuses applied to individual types of workers */
       readonly individualWorkerBonuses?: {
          [key: number]: {
@@ -237,7 +237,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       flavourText: "Twice the surface area, twice the lorem!",
       iconSrc: "",
       effects: {
-         typingSpeedIncrease: 0.3
+         typingSpeedBonus: 0.3
       },
       costs: {
          lorem: 50
@@ -253,7 +253,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       flavourText: "Titanium keys... ouch.",
       iconSrc: "",
       effects: {
-         typingSpeedIncrease: 0.5
+         typingSpeedBonus: 0.5
       },
       costs: {
          lorem: 250
@@ -268,7 +268,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       description: <>You type <b>1.3x</b> faster.</>,
       iconSrc: "",
       effects: {
-         typingSpeedIncrease: 0.5
+         typingSpeedBonus: 0.5
       },
       costs: {
          lorem: 1000
@@ -283,7 +283,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       description: <>You type <b>1.3x</b> faster.</>,
       iconSrc: "",
       effects: {
-         typingSpeedIncrease: 0.3
+         typingSpeedBonus: 0.3
       },
       costs: {
          lorem: 2500
@@ -485,6 +485,28 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          }
       },
       id: 20
+   },
+   {
+      name: "Artificial Sunlight",
+      description: <>Interns are <b>1.5x</b> as effective.</>,
+      flavourText: "80% Vitamin D, 10% Plutonium, 6% Sawdust, 4% Cyanide. Side effects include: Death. Lots of death.",
+      iconSrc: "",
+      effects: {
+         individualWorkerBonuses: {
+            1: {
+               multiplicativeBonus: 0.5
+            }
+         }
+      },
+      costs: {
+         lorem: 2000
+      },
+      unlockRequirements: {
+         workers: {
+            1: 20
+         }
+      },
+      id: 30
    },
    {
       name: "Employee of the Month",
