@@ -14,7 +14,7 @@ interface AchievementRequirements {
 }
 export interface AchievementInfo {
    readonly name: string;
-   readonly description: string;
+   readonly description: JSX.Element;
    readonly category: AchievementCategory;
    readonly iconSrc: string;
    readonly requirements?: AchievementRequirements;
@@ -26,7 +26,7 @@ export interface AchievementInfo {
 const ACHIEVEMENT_DATA: ReadonlyArray<AchievementInfo> = [
    {
       name: "So it begins...",
-      description: "Generate your first 10 lorem.",
+      description: <>Generate your first 10 lorem.</>,
       category: AchievementCategory.tiered,
       iconSrc: "picture.png",
       requirements: {
@@ -36,7 +36,7 @@ const ACHIEVEMENT_DATA: ReadonlyArray<AchievementInfo> = [
    },
    {
       name: "Getting somewhere",
-      description: "Generate 1000 lorem.",
+      description: <>Generate 1000 lorem.</>,
       category: AchievementCategory.tiered,
       iconSrc: "save.png",
       requirements: {
@@ -46,7 +46,7 @@ const ACHIEVEMENT_DATA: ReadonlyArray<AchievementInfo> = [
    },
    {
       name: "Micro Management",
-      description: "Generate 100000 lorem.",
+      description: <>Generate 100000 lorem.</>,
       category: AchievementCategory.tiered,
       iconSrc: "save.png",
       requirements: {
@@ -56,7 +56,7 @@ const ACHIEVEMENT_DATA: ReadonlyArray<AchievementInfo> = [
    },
    {
       name: "Micro Transactions",
-      description: "Buy your first application.",
+      description: <>Buy your first application.</>,
       category: AchievementCategory.tiered,
       iconSrc: "save.png",
       requirements: {
@@ -66,14 +66,14 @@ const ACHIEVEMENT_DATA: ReadonlyArray<AchievementInfo> = [
    },
    {
       name: "Fool's Gold",
-      description: "do something",
+      description: <>do something</>,
       category: AchievementCategory.challenge,
       iconSrc: "",
       id: 5
    },
    {
       name: "Shady Sales",
-      description: "Unlock the black market.",
+      description: <>Unlock the black market.</>,
       category: AchievementCategory.challenge,
       iconSrc: "white-letter.png",
       id: 6

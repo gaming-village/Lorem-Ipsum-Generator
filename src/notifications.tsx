@@ -7,7 +7,7 @@ import { CustomAudio } from "./utils";
 export interface NotificationInfo {
    iconSrc: string;
    title: string;
-   description: string;
+   description: JSX.Element;
    caption?: string;
    /** Whether the caption should flash red or not */
    captionIsFlashing?: boolean;

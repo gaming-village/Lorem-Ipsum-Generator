@@ -48,7 +48,7 @@ export function receiveLetter(letterSubject: string): void {
       createNotification({
          iconSrc: "folder.png",
          title: letter.subject,
-         description: "You've got mail!",
+         description: <>You've got mail!</>,
          caption: "Click to open",
          isClickable: true,
          hasCloseButton: true,

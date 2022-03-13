@@ -150,6 +150,7 @@
 
 /* PROMOTION SCREEN */
 #promotion-screen {
+   min-width: 10rem;
    background-color: #ccc;
    border: 2px solid;
    border-top-color: #fff;
@@ -203,10 +204,6 @@
    text-align: center;
    margin-bottom: 0.2rem;
 }
-#promotion-screen .benefits {
-   text-decoration: underline;
-   margin: 0.75rem 0 0.3rem;
-}
 #promotion-screen ul {
    padding: 0 0 0 0.5rem;
    margin: 0;
@@ -233,6 +230,17 @@
 }
 #promotion-screen .selected-label {
    text-align: center;
+   margin-bottom: 0.5rem;
+}
+#promotion-screen .benefits {
+   font-weight: bold;
+   text-decoration: underline;
+   margin: 0.75rem 0 0.3rem;
+}
+#promotion-screen .benefit-list {
+   margin-bottom: 1rem;
+}
+#promotion-screen .promote-button {
    margin-bottom: 0.5rem;
 }
 

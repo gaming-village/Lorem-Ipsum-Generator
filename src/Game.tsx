@@ -153,7 +153,7 @@ const Game: GameType = {
          createNotification({
             iconSrc: "save.png",
             title: "Idle profits",
-            description: `While you were away your workers generated <b>${roundNum(idleProduction)}</b> lorem.`,
+            description: <>While you were away your workers generated <b>{roundNum(idleProduction)}</b> lorem.</>,
             isClickable: false,
             hasCloseButton: true,
             playSound: false

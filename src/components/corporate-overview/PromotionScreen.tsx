@@ -26,16 +26,12 @@ const playPromotionAnimation = (): Promise<void> => {
    });
 }
 
-interface PromotionScreenProps {
-   job: JobInfo;
-   promoteFunc: (newJob: JobInfo) => void;
+enum Stage {
+   JobSelection,
+   Benefits
 }
-const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
-   if (job.tier > JOB_TIER_DATA.length) {
-      console.log(job);
-      console.trace();
-      throw new Error("Tier exceed limit when promoting!");
-   }
+
+const getNextJobs = (job: JobInfo): Array<JobInfo> => {
    let nextJobs = new Array<JobInfo>();
    for (const currentJob of JOB_DATA) {
       if (currentJob.tier < job.tier + 1 || (currentJob.previousJobRequirement && !currentJob.previousJobRequirement.includes(job.name))) continue;
@@ -43,11 +39,24 @@ const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
 
       nextJobs.push(currentJob);
    }
+   return nextJobs;
+}
 
+interface PromotionScreenProps {
+   job: JobInfo;
+   promoteFunc: (newJob: JobInfo) => void;
+}
+const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
+   const nextJobs = getNextJobs(job);
    const [selectedJob, setSelectedJob] = useState<JobInfo | null>(nextJobs.length !== 1 ? null : nextJobs[0]);
+   const [stage, setStage] = useState<Stage>(Stage.JobSelection);
 
    const switchSelectedJob = (newJob: JobInfo) => {
       setSelectedJob(newJob);
+   }
+
+   const advanceStage = (): void => {
+      setStage(stage => stage + 1);
    }
 
    const careerPanels = nextJobs.map((currentJob, i) => {
@@ -64,56 +73,57 @@ const PromotionScreen = ({ job, promoteFunc }: PromotionScreenProps) => {
    });
 
    const promotionBenefitData = JOB_TIER_DATA[job.tier].benefits;
-   const promotionBenefits = <ul>
+   const promotionBenefits = <ul className="benefit-list">
       {promotionBenefitData.map((benefit, i) => {
          return <li key={i}>{benefit}</li>
       })}
    </ul>;
 
-   const tryToPromote = async (job: JobInfo | null) => {
-      if (job !== null) {
-         new CustomAudio("win95-startup.mp3");
+   const promote = async () => {
+      new CustomAudio("win95-startup.mp3");
 
-         // Play the white flash effect
-         await playPromotionAnimation();
+      // Play the white flash effect
+      await playPromotionAnimation();
 
-         promoteFunc(job);
+      promoteFunc(selectedJob!);
 
-         if (job.tier >= 3) {
-            // Unlock the start menu
-            Game.misc.startMenuIsUnlocked = true;
-            showStartMenu();
-         }
+      if (selectedJob!.tier >= 3) {
+         // Unlock the start menu
+         Game.misc.startMenuIsUnlocked = true;
+         showStartMenu();
       }
    }
 
    return <div id="promotion-screen" className={nextJobs.length === 1 ? "single-option" : ""}>
-      <h1>You've been promoted!</h1>
+      {stage === Stage.JobSelection ? <>
+         <h1>You've been promoted!</h1>
 
-      {nextJobs.length === 1 ? <>
-         <p>New job:</p>
+         {nextJobs.length === 1 ? <>
+            <p>New job:</p>
 
-         {promotionBenefits}
+            <div className="career-path-container">
+               {careerPanels}
+            </div>
 
-         <div className="career-path-container">
-            {careerPanels}
-         </div>
+            <Button onClick={advanceStage} isCentered isFlashing>Continue</Button>
+         </> : <>
+            <p className="choose-career-text">Choose your career path:</p>
 
-         <Button onClick={() => tryToPromote(nextJobs[0])} isCentered isFlashing>Continue</Button>
+            <div className="career-path-container">
+               {careerPanels}
+            </div>
+
+            <p className="selected-label">Selected: <b>{selectedJob ? selectedJob.name : "None"}</b></p>
+
+            <Button isDark={selectedJob === null} isFlashing={selectedJob !== null} onClick={selectedJob !== null ? advanceStage : undefined} isCentered>Continue</Button>
+         </>}
       </> : <>
-         <p className="benefits">Benefits:</p>
+         <p className="benefits">You will also unlock:</p>
+
          {promotionBenefits}
 
-         <p className="choose-career-text">Choose your career path:</p>
-
-         <div className="career-path-container">
-            {careerPanels}
-         </div>
-
-         <p className="selected-label">Selected: <b>{selectedJob ? selectedJob.name : "None"}</b></p>
-
-         <Button isDark={selectedJob === null} isFlashing={selectedJob !== null} isCentered onClick={() => tryToPromote(selectedJob)}>Continue</Button>
-      </>}
+         <Button className="promote-button" onClick={promote} isCentered isFlashing>Promote</Button>
+      </>} 
 
       <div className="footer">LoremCorp LLC&trade;</div>
    </div>;

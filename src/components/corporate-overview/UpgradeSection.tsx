@@ -345,7 +345,7 @@ const UpgradeSection = ({ job }: SectionProps) => {
 
    return <div id="upgrades">
       <div id="all-upgrades" className="windows-program">
-         <div className="title-bar" style={{backgroundColor: "rgb(7, 30, 129)"}}>All Upgrades</div>
+         <div className="title-bar" style={{backgroundColor: "rgb(7, 30, 129)"}}>Minor Upgrades</div>
 
          {MINOR_UPGRADE_DATA.map((upgrade, i) => {
             if (upgrade.isBought || !unlockedUpgrades.includes(upgrade)) return undefined;

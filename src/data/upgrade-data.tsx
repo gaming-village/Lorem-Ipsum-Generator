@@ -298,5 +298,53 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          totalWorkers: 10
       },
       id: 17
+   },
+   {
+      name: "Reinforced Keys",
+      description: <>Typing is <b>1.3x</b> as effective.</>,
+      flavourText: "Titanium keys... ouch.",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 0.3
+      },
+      costs: {
+         lorem: 500
+      },
+      unlockRequirements: {
+         wordsTyped: 300
+      },
+      id: 18
+   },
+   {
+      name: "Finger Bracings",
+      description: <>Typing is <b>1.5x</b> as effective.</>,
+      flavourText: "Your poor fingers.",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 0.5
+      },
+      costs: {
+         lorem: 1000
+      },
+      unlockRequirements: {
+         wordsTyped: 400
+      },
+      id: 19
+   },
+   {
+      name: "Lava Moat",
+      description: <>All workers are 1.2x as effective.</>,
+      flavourText: "The best way to keep workers at the office is to prevent them from leaving with a lava moat.",
+      iconSrc: "",
+      effects: {
+         multiplicativeWorkerProductionBonus: 0.2
+      },
+      costs: {
+         lorem: 800
+      },
+      unlockRequirements: {
+         totalWorkers: 25
+      },
+      id: 20
    }
 ];

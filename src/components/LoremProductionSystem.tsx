@@ -207,12 +207,18 @@ interface LoremSentenceProps {
    sentence: string;
    meaning: string;
    type: "regular" | "upcoming";
+   showFunc?: (n: number) => boolean;
+   n?: number;
 }
-const LoremSentence = ({ sentence, meaning, type }: LoremSentenceProps) => {
+const LoremSentence = ({ sentence, meaning, type, showFunc, n }: LoremSentenceProps) => {
    const ref = useRef<HTMLElement>(null);
    let tooltip: HTMLElement | null = null;
 
-   const hoverTooltip = (): HTMLElement => {
+   const hoverTooltip = (): void => {
+      if (typeof showFunc !== "undefined" && typeof n !== "undefined") {
+         if (!showFunc(n)) return;
+      }
+
       const buttonBounds = ref.current!.getBoundingClientRect();
       const pos = {
          left: buttonBounds.left + buttonBounds.width * 0.75 + "px",
@@ -220,7 +226,6 @@ const LoremSentence = ({ sentence, meaning, type }: LoremSentenceProps) => {
       }
 
       tooltip = createTooltip(pos, <span><b>Meaning:</b> {meaning}</span>);
-      return tooltip;
    }
 
    const closeTooltip = () => {
@@ -268,6 +273,10 @@ let currentIndex = 0;
 let bufferedContent: Array<JSX.Element> | null = null;
 const LoremProductionSystem = () => {
    const [content, setContent] = useState<Array<JSX.Element> | null>(null);
+
+   const shouldShowTooltip = (n: number): boolean => {
+      return n < bufferedContent!.length;
+   }
 
    useEffect(() => {
       type = (key: string): void => {
@@ -326,13 +335,14 @@ const LoremProductionSystem = () => {
 
          if (currentIndex === 0) {
             bufferedContent?.push(
-               <LoremSentence key={bufferedContent.length} sentence="a" meaning="b" type="regular" />
+               <LoremSentence key={bufferedContent.length} sentence="" meaning="" type="regular" />
             );
          }
 
          const sentencePart = currentSentence.substring(0, currentIndex + 1);
          bufferedContent![bufferedContent!.length - 1] = (
-            <LoremSentence key={bufferedContent!.length} sentence={sentencePart} meaning={currentSentenceMeaning || "none"} type="regular" />
+
+            <LoremSentence key={bufferedContent!.length} sentence={sentencePart} meaning={currentSentenceMeaning || "none"} type="regular" showFunc={shouldShowTooltip} n={bufferedContent!.length} />
          );
          setContent(bufferedContent!.slice());
 
@@ -366,12 +376,12 @@ const LoremProductionSystem = () => {
       const remainingSentence = currentSentence.substring(currentIndex + 1, currentSentence.length);
       if (remainingSentence.length > 0) {
          shownContent.push(
-            <LoremSentence key={shownContent.length + 1} sentence={remainingSentence} meaning={currentSentenceMeaning!} type="upcoming" />
+            <LoremSentence key={shownContent.length + 1} sentence={remainingSentence} meaning={currentSentenceMeaning!} type="upcoming" showFunc={shouldShowTooltip} n={bufferedContent!.length} />
          );
       }
 
       shownContent.push(
-         <LoremSentence key={shownContent.length + 1} sentence={" " + upcomingSentence!} meaning={upcomingSentenceMeaning!} type="upcoming" />
+         <LoremSentence key={shownContent.length + 1} sentence={" " + upcomingSentence!} meaning={upcomingSentenceMeaning!} type="upcoming" showFunc={shouldShowTooltip} n={bufferedContent!.length} />
       );
    }
 

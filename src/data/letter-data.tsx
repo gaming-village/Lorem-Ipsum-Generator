@@ -39,7 +39,7 @@ export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
       requirement: 15
    },
    {
-      name: "Addressing Rumors",
+      name: "Company Policy",
       requirement: 30
    },
    {
@@ -47,20 +47,24 @@ export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
       requirement: 50
    },
    {
-      name: "urgent Matters",
-      requirement: 75
+      name: "Addressing Rumors",
+      requirement: 80
    },
    {
-      name: "Illegal Activities",
+      name: "urgent Matters",
       requirement: 100
    },
    {
-      name: "Social security issue !",
+      name: "Illegal Activities",
       requirement: 200
    },
    {
+      name: "Social security issue !",
+      requirement: 400
+   },
+   {
       name: "Tips with Lorem Corp",
-      requirement: 500
+      requirement: 700
    },
    {
       name: "Order delivery",
@@ -96,6 +100,18 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
       },
       isCloseable: false,
       id: 1
+   },
+   {
+      subject: "Company Policy",
+      from: "Lorem Corp",
+      body: <>
+         <p>Greetings Worker.</p>
+         <p>We may have forgot to mention that you can navigate through tabs using the number keys.</p>
+         <p>In other news, we have updated our Company Policy - any workers which choose not to work will be put into the General Repurposing Facility, where they will learn to appreciate what little things they have in life.</p>
+      </>,
+      folder: "Inbox",
+      isCloseable: false,
+      id: 12
    },
    {
       subject: "Steven Job - free An-Droid",

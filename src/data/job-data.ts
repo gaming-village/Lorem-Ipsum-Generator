@@ -14,43 +14,43 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       requirements: 0,
       salary: "N/A",
       benefits: [
-         "Unlock the Upgrades panel."
+         "The Upgrades panel."
       ],
       baseCost: 10,
       loremProduction: 0.01
    },
    {
-      requirements: 15,
+      requirements: 100,
       salary: "$100",
       benefits: [
-         "Ability to buy workers."
+         "The ability to buy workers."
       ],
       baseCost: 100,
       loremProduction: 0.1
    },
    {
-      requirements: 250,
+      requirements: 1000,
       salary: "$6000",
       benefits: [
          "Access to the start menu",
-         "Career Path section"
+         "Access to the Career Path section"
       ],
       baseCost: 1e3,
-      loremProduction: 0.5
+      loremProduction: 1
    },
    {
-      requirements: 1000,
+      requirements: 1e4,
       salary: "$50000",
       benefits: [],
       baseCost: 1e4,
-      loremProduction: 3
+      loremProduction: 10
    },
    {
-      requirements: 10000,
+      requirements: 1e5,
       salary: "$150000",
       benefits: [],
-      baseCost: 500,
-      loremProduction: 10
+      baseCost: 1e5,
+      loremProduction: 100
    }
 ];
 
