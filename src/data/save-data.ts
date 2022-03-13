@@ -129,8 +129,6 @@ const decToBin = (dec: number): Array<number> => {
 }
 
 const hexToDec = (num: string): string => {
-   if (num === "0") return "0";
-
    // If negative
    if (num[0] === "-") {
       return "-" + hexToDec(num.substring(1, num.length));
@@ -140,6 +138,7 @@ const hexToDec = (num: string): string => {
    while (num[numLeadingZeros] === "0") {
       numLeadingZeros++;
    }
+   const leadingZeros = "0".repeat(numLeadingZeros);
 
    // If the number isn't an integer
    if (num.split("").indexOf(".") !== -1) {
@@ -162,7 +161,10 @@ const hexToDec = (num: string): string => {
 
       result += decUnit * Math.pow(16, num.length - i - 1);
    }
-   return "0".repeat(numLeadingZeros) + result;
+
+   if (result === 0) return leadingZeros;
+
+   return leadingZeros + result;
 }
 
 interface SaveComponent {
