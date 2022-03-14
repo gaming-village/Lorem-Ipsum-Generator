@@ -89,7 +89,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "programmers",
       name: "Programmer",
       benefits: [
-         <>Increases lorem generated from all forms of typing by <b>1.5x.</b></>
+         <>Increases lorem generated from all forms of typing by <b>1.5x</b>.</>
       ],
       description: "Much like a monkey with a keyboard, the common Programmer spends its days aimlessly bashing its calloused fingers into the remnants of what used to be its keyboard.",
       tier: 2
@@ -121,7 +121,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "developers",
       name: "Web Developer",
       benefits: [
-         <>Increases lorem generated from all forms of typing by 2x.</>
+         <>Increases lorem generated from all forms of typing by <b>2x</b>.</>
       ],
       description: "Web Developers work tirelessly to change text alignment and center div's, often working deep into the night to trying to figure out how to make a pull request.",
       previousJobRequirement: ["Programmer"],
