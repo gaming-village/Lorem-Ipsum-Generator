@@ -168,6 +168,6 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       ],
       description: "",
       previousJobRequirement: ["Web Developer", "Technician"],
-      tier: 4
+      tier: 5
    }
 ];

@@ -73,17 +73,6 @@ const getSubordinateCount = (worker: JobInfo): number => {
    return subordinateCount;
 }
 
-/*
-export let individualWorkerProductionBonuses: { [key: string]: { additiveBonus: number, multiplicativeBonus: number } } = JOB_DATA.reduce((previousValue, currentValue) => {
-   return { ...previousValue, [currentValue.id]: { additiveBonus: 0, multiplicativeBonus: 0 } };
-}, {});
-
-export let workerProductionBonuses = {
-   additive: 0,
-   multiplicative: 0
-};
-*/
-
 /**
  * Calculates how much one of a certain worker type would produce
  * @param worker The worker
@@ -106,8 +95,8 @@ const getSingularWorkerProduction = (worker: JobInfo): number => {
    production += workerProductionBonuses.additive;
    production += individualWorkerProductionBonuses[worker.id].additiveBonus;
 
-   production *= 1 + workerProductionBonuses.multiplicative;
-   production *= 1 + individualWorkerProductionBonuses[worker.id].multiplicativeBonus;
+   production *= workerProductionBonuses.multiplicative;
+   production *= individualWorkerProductionBonuses[worker.id].multiplicativeBonus;
    
    if (hasJob("Employee")) {
       production *= 1.5;

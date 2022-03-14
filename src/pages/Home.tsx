@@ -15,13 +15,15 @@ import { setupPrograms } from '../programs';
 import { type } from '../components/LoremProductionSystem';
 import { updateInternMotivation } from '../classes/applications/AchievementTracker';
 import { showExistingPopups } from '../classes/popups/Popup';
+import { calculateProductionBonuses } from '../components/corporate-overview/UpgradeSection';
 
 import '../css/pages/home.css';
 import '../css/popups.css';
 import "../css/applications.css";
 import "../css/command-prompt.css";
 import "../css/taskbar.css";
-import { calculateProductionBonuses } from '../components/corporate-overview/UpgradeSection';
+import "../css/computer.css";
+import "../css/programs.css";
 
 export function focusProgram(program: HTMLElement): void {
    if (program === null) return;

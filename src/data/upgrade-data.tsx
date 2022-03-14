@@ -32,6 +32,8 @@ export interface UpgradeInfo {
       readonly workers?: { [key: number]: number };
    };
    isBought?: boolean;
+   /** The index of the upgrade's icon in the spritesheet */
+   readonly icon?: number;
    /** The upgrade's unique identifier. Doesn't need to be in any pattern or order, just needs to be unique for every upgrade */
    readonly id: number;
 }
@@ -67,6 +69,7 @@ export const MAIN_UPGRADE_DATA: Array<MainUpgradeInfo> = [
          lorem: 10
       },
       tier: 1,
+      icon: 32 * 0 + 0,
       id: 1
    },
 
@@ -201,46 +204,48 @@ export const MAIN_UPGRADE_DATA: Array<MainUpgradeInfo> = [
 export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    {
       name: "'Motivational' Poster",
-      description: <>Each word gives <b>0.1</b> more lorem.</>,
+      description: <>Each word gives <b>0.1</b> more base lorem.</>,
       flavourText: "Give up!",
       iconSrc: "",
       effects: {
          multiplicativeTypingProductionBonus: 0.3
       },
       costs: {
-         lorem: 10
+         lorem: 5
       },
       unlockRequirements: {
-         wordsTyped: 25
+         wordsTyped: 10
       },
+      icon: 32 * 1 + 0,
       id: 11
    },
    {
       name: "Performance Enhancing Substances",
-      description: <>Each word gives <b>0.2</b> more lorem.</>,
+      description: <>Each word gives <b>0.2</b> more base lorem.</>,
       flavourText: "speeEEEEEEEEED",
       iconSrc: "",
       effects: {
          multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
-         lorem: 50
+         lorem: 30
       },
       unlockRequirements: {
-         wordsTyped: 100
+         wordsTyped: 60
       },
+      icon: 32 * 1 + 1,
       id: 13
    },
    {
       name: "Bigger Keys",
-      description: <>You type <b>1.3x</b> faster.</>,
+      description: <>You type <b>1.5x</b> faster.</>,
       flavourText: "Twice the surface area, twice the lorem!",
       iconSrc: "",
       effects: {
-         typingSpeedBonus: 0.3
+         typingSpeedBonus: 0.5
       },
       costs: {
-         lorem: 50
+         lorem: 15
       },
       unlockRequirements: {
          wordsTyped: 50
@@ -249,14 +254,14 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Reinforced Keys",
-      description: <>You type <b>1.3x</b> faster.</>,
+      description: <>You type <b>1.5x</b> faster.</>,
       flavourText: "Titanium keys... ouch.",
       iconSrc: "",
       effects: {
          typingSpeedBonus: 0.5
       },
       costs: {
-         lorem: 250
+         lorem: 100
       },
       unlockRequirements: {
          wordsTyped: 100
@@ -264,8 +269,9 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       id: 18
    },
    {
-      name: "Spring-loaded Keys",
-      description: <>You type <b>1.3x</b> faster.</>,
+      name: "Second keyboard",
+      description: <>You type <b>1.5x</b> faster.</>,
+      flavourText: "Twice the keyboards, twice the carpal tunnelling.",
       iconSrc: "",
       effects: {
          typingSpeedBonus: 0.5
@@ -274,64 +280,114 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          lorem: 1000
       },
       unlockRequirements: {
-         wordsTyped: 250
+         wordsTyped: 300
       },
       id: 21
    },
    {
-      name: "RGB Keys",
-      description: <>You type <b>1.3x</b> faster.</>,
+      name: "Clickier Keys",
+      description: <>You type <b>1.5x</b> faster.</>,
+      flavourText: "click clack",
       iconSrc: "",
       effects: {
-         typingSpeedBonus: 0.3
+         typingSpeedBonus: 0.5
       },
       costs: {
-         lorem: 2500
+         lorem: 5000
       },
       unlockRequirements: {
-         wordsTyped: 500
+         wordsTyped: 600
+      },
+      id: 35
+   },
+   {
+      name: "RGB Keys",
+      description: <>You type <b>1.5x</b> faster.</>,
+      iconSrc: "",
+      effects: {
+         typingSpeedBonus: 0.5
+      },
+      costs: {
+         lorem: 10000
+      },
+      unlockRequirements: {
+         wordsTyped: 900
       },
       id: 22
    },
    {
+      name: "The Polykey",
+      description: <>You type <b>1.5x</b> faster.</>,
+      flavourText: "By combining all your keys into a singular writhing mass of keys, you can increase typing speed significantly!",
+      iconSrc: "",
+      effects: {
+         typingSpeedBonus: 0.5
+      },
+      costs: {
+         lorem: 25000
+      },
+      unlockRequirements: {
+         wordsTyped: 1500
+      },
+      id: 36
+   },
+   {
+      name: "Neural Key Integration",
+      description: <>You type <b>1.5x</b> faster.</>,
+      flavourText: "You now type using your mind.",
+      iconSrc: "",
+      effects: {
+         typingSpeedBonus: 0.5
+      },
+      costs: {
+         lorem: 100000
+      },
+      unlockRequirements: {
+         wordsTyped: 3000
+      },
+      id: 37
+   },
+   {
       name: "Ergonomic chair",
-      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      description: <>Typing generates <b>twice</b> as much lorem.</>,
       flavourText: "Your back will thank you later.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 0.5
+         multiplicativeTypingProductionBonus: 1
       },
       costs: {
-         lorem: 60
+         lorem: 10
       },
       unlockRequirements: {
-         wordsTyped: 150
+         wordsTyped: 50
       },
+      icon: 32 * 2 + 0,
       id: 14
    },
    {
       name: "Wheelie chair",
-      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      description: <>Typing generates <b>twice</b> as much lorem.</>,
       flavourText: "Your chair now has wheels. You can spin around on it. Do you feel cool yet?",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 0.5
+         multiplicativeTypingProductionBonus: 1
       },
       costs: {
-         lorem: 240
+         lorem: 75
       },
       unlockRequirements: {
-         wordsTyped: 250
+         wordsTyped: 100
       },
+      icon: 32 * 2 + 1,
       id: 23
    },
    {
       name: "Extra wheels",
-      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      description: <>Typing generates <b>twice</b> as much lorem.</>,
       flavourText: "wheEEEEEEELS",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 0.5
+         multiplicativeTypingProductionBonus: 1
       },
       costs: {
          lorem: 720
@@ -339,15 +395,16 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 450
       },
+      icon: 32 * 2 + 2,
       id: 24
    },
    {
       name: "Even more wheels",
-      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      description: <>Typing generates <b>twice</b> as much lorem.</>,
       flavourText: "Alright I swear this is the final wheel upgrade. Or IS IT? >:))",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 0.5
+         multiplicativeTypingProductionBonus: 1
       },
       costs: {
          lorem: 1500
@@ -355,15 +412,16 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 700
       },
+      icon: 32 * 2 + 3,
       id: 25
    },
    {
       name: "Recursive wheels",
-      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
+      description: <>Typing generates <b>twice</b> as much lorem.</>,
       flavourText: "Your wheels... have WHEELS! This feels wrong.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 0.5
+         multiplicativeTypingProductionBonus: 1
       },
       costs: {
          lorem: 4000
@@ -371,15 +429,16 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 1000
       },
+      icon: 32 * 2 + 4,
       id: 26
    },
    {
-      name: "Hoverchair",
-      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
-      flavourText: "This upgrade sounds cool, but in reality you just strapped a bunch of large fans to your chair. It looks stupid, but the performance benefits are undeniable.",
+      name: "Gold Plated Chair",
+      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      flavourText: "Fit for a king. Or a really wealthy intern.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 0.5
+         multiplicativeTypingProductionBonus: 1
       },
       costs: {
          lorem: 8000
@@ -387,15 +446,16 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 1300
       },
-      id: 27
+      icon: 32 * 2 + 5,
+      id: 34
    },
    {
-      name: "Uber chair",
-      description: <>Typing generates <b>1.5x</b> as much lorem.</>,
-      flavourText: "By absorbing nearby chairs, your chair grows in power. Be wary.",
+      name: "Hoverchair",
+      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      flavourText: "This upgrade sounds cool, but in reality you just strapped a bunch of large fans to your chair. It looks stupid, but the performance benefits are undeniable.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 0.5
+         multiplicativeTypingProductionBonus: 1
       },
       costs: {
          lorem: 20000
@@ -403,7 +463,71 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 1600
       },
+      id: 27
+   },
+   {
+      name: "Uber chair",
+      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      flavourText: "By absorbing nearby chairs, your chair grows in power. Be wary.",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 1
+      },
+      costs: {
+         lorem: 50000
+      },
+      unlockRequirements: {
+         wordsTyped: 1900
+      },
       id: 28
+   },
+   {
+      name: "Rocket Powered Chair",
+      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      flavourText: "They told you that strapping rockets to your chair would be 'unsafe' and 'stupid'. They weren't wrong, but it sure is cool.",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 1
+      },
+      costs: {
+         lorem: 100000
+      },
+      unlockRequirements: {
+         wordsTyped: 2200
+      },
+      id: 31
+   },
+   {
+      name: "Uranium-235 Powered Chair",
+      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      flavourText: "Uses only the finest unstable isotopes. Side effects include: Extra limbs. Which may not actually be a bad thing.",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 1
+      },
+      costs: {
+         lorem: 250000
+      },
+      unlockRequirements: {
+         wordsTyped: 2500
+      },
+      id: 32
+   },
+   {
+      name: "Inderdimensional Chair Hyperdrive",
+      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      flavourText: "Your chair now exists across dimensions, resulting in unparalleled speeds.",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 1
+      },
+      costs: {
+         lorem: 500000
+      },
+      unlockRequirements: {
+         wordsTyped: 2800
+      },
+      id: 33
    },
    {
       name: "Motivation Gun",
@@ -423,9 +547,24 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       },
       id: 17
    },
-   // {
-   //    name: "Hidden Camera Servailence"
-   // }
+   {
+      name: "Hidden Camera Surveillance",
+      description: <>Workers are <b>twice</b> as effective.</>,
+      flavourText: "Privacy is a social construct.",
+      iconSrc: "",
+      effects: {
+         workerBonuses: {
+            multiplicative: 1
+         }
+      },
+      costs: {
+         lorem: 3000
+      },
+      unlockRequirements: {
+         totalWorkers: 25
+      },
+      id: 38
+   },
    {
       name: "Finger Bracings",
       description: <>Typing is <b>1.5x</b> as effective.</>,
@@ -534,3 +673,44 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       id: 29
    }
 ];
+
+/** Sorts all upgrades (main and minor) by lorem cost */
+const sortUpgradesByLoremCost = (): Array<UpgradeInfo> => {
+   const sortedUpgrades = new Array<UpgradeInfo>();
+   const allUpgrades = [ ...MAIN_UPGRADE_DATA, ...MINOR_UPGRADE_DATA ];
+   for (const upgrade of allUpgrades) {
+      if (typeof upgrade.costs.lorem === "undefined") continue;
+
+      if (sortedUpgrades.length === 0) {
+         sortedUpgrades.push(upgrade);
+      } else {
+         let hasInserted = false;
+         for (let i = 0; i < sortedUpgrades.length; i++) {
+            const upgrade2 = sortedUpgrades[i];
+            if (upgrade2.costs.lorem! >= upgrade.costs.lorem!) {
+               hasInserted = true;
+               sortedUpgrades.splice(i, 0, upgrade);
+               break;
+            }
+         }
+
+         if (!hasInserted) {
+            sortedUpgrades.push(upgrade);
+         }
+      }
+   }
+   return sortedUpgrades;
+}
+
+/** Approximates the path that the user would take when buying upgrades */
+const showUpgradePath = (): void => {
+   const upgrades = sortUpgradesByLoremCost();
+
+   let log = "";
+   for (const upgrade of upgrades) {
+      log += `${upgrade.name} (${upgrade.costs.lorem!} lorem) -> `;
+   }
+
+   console.log(log);
+}
+showUpgradePath();

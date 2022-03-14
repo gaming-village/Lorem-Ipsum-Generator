@@ -265,7 +265,9 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          let i = -1;
          let previousTier = 1;
          for (const job of JOB_DATA) {
-            if (job.tier > Game.userInfo.previousJobs.length) break;
+            if (job.tier > Game.userInfo.previousJobs.length) {
+               break;
+            }
 
             if (job.tier !== previousTier) {
                previousTier = job.tier;

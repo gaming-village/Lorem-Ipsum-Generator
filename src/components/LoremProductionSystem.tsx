@@ -8,7 +8,7 @@ import { createRandomPopup, getPopups } from '../classes/popups/Popup';
 import { createTooltip, removeTooltip } from '../tooltips';
 import { randInt, randItem } from '../utils';
 import { hasJob } from './corporate-overview/CorporateOverview';
-import { additiveTypingProductionBonus, hasUpgrade, multiplicativeTypingProductionBonus, typingSpeedBonus, updateUnlockedTypingUpgrades } from './corporate-overview/UpgradeSection';
+import { additiveTypingProductionBonus, hasUpgrade, multiplicativeTypingProductionBonus, typingSpeedMultiplier, updateUnlockedTypingUpgrades } from './corporate-overview/UpgradeSection';
 
 const applyValueModifiers = (baseValue: number): number => {
    let value = baseValue;
@@ -282,16 +282,10 @@ const LoremProductionSystem = () => {
       type = (key: string): void => {
          if (!canType()) return;
 
-         const charsPerType = 1 + typingSpeedBonus;
-         
-         if (currentSentence !== null && currentIndex >= currentSentence.length) {
-            currentIndex -= currentSentence.length;
-            currentSentence = null;
-         } else {
-            currentIndex += charsPerType;
-         }
+         const BASE_TYPING_SPEED = 1;
+         const charsPerType = BASE_TYPING_SPEED * typingSpeedMultiplier;
 
-         // Open a popup
+         // Randomly open a popup
          typesTilNextPopup -= charsPerType;
          if (typesTilNextPopup <= 0) {
             const POPUP_CHANCE = 0.1;
@@ -310,55 +304,56 @@ const LoremProductionSystem = () => {
             }
          }
 
-         // Create the falling text effect
-         const loremCounter = Game.applications.LoremCounter as LoremCounter;
-         if (loremCounter.createTextEffect !== null) loremCounter.createTextEffect();
-
-         if (currentSentence === null) {
-            // Generate a new sentence
-            if (upcomingSentence === null) {
-               const [sentence, meaning] = getRandomSentence();
-               upcomingSentence = sentence + " ";
-               upcomingSentenceMeaning = meaning;
+         // Type the letters
+         currentIndex += charsPerType;
+         for (let idx = currentIndex - charsPerType; idx < Math.floor(currentIndex); idx++) {
+            if (currentSentence !== null && idx >= currentSentence.length) {
+               idx -= currentSentence.length;
+               currentIndex -= currentSentence.length;
+               currentSentence = null;
             }
 
-            currentSentence = upcomingSentence;
-            currentSentenceMeaning = upcomingSentenceMeaning;
+            if (currentSentence === null) {
+               // Generate a new sentence
+               if (upcomingSentence === null) {
+                  const [sentence, meaning] = getRandomSentence();
+                  upcomingSentence = sentence + " ";
+                  upcomingSentenceMeaning = meaning;
+               }
+   
+               currentSentence = upcomingSentence;
+               currentSentenceMeaning = upcomingSentenceMeaning;
+               
+               {
+                  const [sentence, meaning] = getRandomSentence();
+                  upcomingSentence = sentence + " ";
+                  upcomingSentenceMeaning = meaning;
+               }
+   
+               if (content === null) {
+                  bufferedContent = new Array<JSX.Element>();
+               }
+
+               // Prepare for the next sentence
+               bufferedContent?.push(
+                  <LoremSentence key={bufferedContent.length} sentence="" meaning="" type="regular" />
+               );
+            }
             
-            {
-               const [sentence, meaning] = getRandomSentence();
-               upcomingSentence = sentence + " ";
-               upcomingSentenceMeaning = meaning;
-            }
-
-            if (content === null) {
-               bufferedContent = new Array<JSX.Element>();
-            }
-
-            // Prepare for the next sentence
-            bufferedContent?.push(
-               <LoremSentence key={bufferedContent.length} sentence="" meaning="" type="regular" />
+            // Add the next letter to the content.
+            // e.g. "Lorem ipsu" becomes "Lorem ipsum"
+            const sentencePart = currentSentence!.substring(0, currentIndex);
+            bufferedContent![bufferedContent!.length - 1] = (
+               <LoremSentence key={bufferedContent!.length - 1} sentence={sentencePart} meaning={currentSentenceMeaning || "none"} type="regular" showFunc={shouldShowTooltip} n={bufferedContent!.length} />
             );
-         }
 
-         // Add the next letter to the content.
-         // e.g. "Lorem ipsu" becomes "Lorem ipsum"
-         const sentencePart = currentSentence.substring(0, currentIndex);
-         bufferedContent![bufferedContent!.length - 1] = (
-            <LoremSentence key={bufferedContent!.length} sentence={sentencePart} meaning={currentSentenceMeaning || "none"} type="regular" showFunc={shouldShowTooltip} n={bufferedContent!.length} />
-         );
-         
-         // Update the sentences
-         setContent(bufferedContent!.slice());
-
-         // Check if any words have been completed.
-         for (let idx = currentIndex - charsPerType; idx < currentIndex; idx++) {
-            if (!wordEndingChars.includes(currentSentence[idx]) && wordEndingChars.includes(currentSentence[idx + 1])) {
+            // Check if any words have been completed.
+            if (!wordEndingChars.includes(currentSentence[Math.floor(idx)]) && wordEndingChars.includes(currentSentence[Math.floor(idx) + 1])) {
                // Award lorem based on its value
 
-               const word = findWord(currentSentence, idx);
+               const word = findWord(currentSentence, Math.floor(idx));
             
-               const isCorrectLetter = key.toLowerCase() === currentSentence[idx].toLowerCase();
+               const isCorrectLetter = key.toLowerCase() === currentSentence[Math.floor(idx)].toLowerCase();
                const wordValue = calculateWordValue(word.value, isCorrectLetter);
                
                Game.lorem += wordValue;
@@ -367,6 +362,13 @@ const LoremProductionSystem = () => {
                updateUnlockedTypingUpgrades();
             }
          }
+
+         // Create the falling text effect
+         const loremCounter = Game.applications.LoremCounter as LoremCounter;
+         if (loremCounter.createTextEffect !== null) loremCounter.createTextEffect();
+         
+         // Update the sentences
+         setContent(bufferedContent!.slice());
       }
    });
 

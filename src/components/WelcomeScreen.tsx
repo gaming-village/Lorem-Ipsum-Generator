@@ -98,11 +98,8 @@ const WelcomeScreen = () => {
             </div>
             <div className="nav">
                {sections.map((currentSection, i) => {
-                  let clickEvent;
-                  if (i === section + 1) {
-                     clickEvent = () => {
-                        setSection(section + 1);
-                     }
+                  const clickEvent = (): void => {
+                     setSection(i);
                   }
 
                   return <Button isCentered isFlashing={i === section + 1} className={i !== section ? "dark" : ""} key={i} onClick={clickEvent}>{currentSection.name}</Button>

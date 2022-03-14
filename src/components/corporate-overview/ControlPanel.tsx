@@ -1,7 +1,9 @@
 import Button from "../Button";
 
-import { JobInfo } from "../../data/job-data";
+import { JobInfo, JOB_TIER_DATA } from "../../data/job-data";
 import { sectionData, SectionType } from "./CorporateOverview";
+import { useEffect, useState } from "react";
+import Game from "../../Game";
 
 enum SectionCategories {
    general = "General",
@@ -14,6 +16,22 @@ interface ControlPanelProps {
    changeSectionFunc: (newSection: SectionType) => void;
 }
 const ControlPanel = ({ job, currentSection, changeSectionFunc }: ControlPanelProps) => {
+   const [canPromote, setCanPromote] = useState<boolean>(false);
+
+   const checkPromotionStatus = (): void => {
+      const promotionRequirement = JOB_TIER_DATA[Game.userInfo.job.tier].requirements;
+
+      setCanPromote(Game.lorem >= promotionRequirement);
+   }
+
+   useEffect(() => {
+      Game.createRenderListener(checkPromotionStatus);
+
+      return () => {
+         Game.removeRenderListener(checkPromotionStatus);
+      }
+   }, []);
+
    let key = 0;
    let content = new Array<JSX.Element>();
 
@@ -62,7 +80,7 @@ const ControlPanel = ({ job, currentSection, changeSectionFunc }: ControlPanelPr
             button = <Button onClick={() => changeSectionFunc(section)} className={section === currentSection ? "" : "dark"} key={key++}>{section.name}</Button>;
          } else {
             const tooltip = () => section.tooltipContent!(job);
-            button = <Button tooltipContent={tooltip} onClick={() => changeSectionFunc(section)} className={section === currentSection ? "" : "dark"} key={key++}>{section.name}</Button>;
+            button = <Button tooltipContent={tooltip} onClick={() => changeSectionFunc(section)} className={section === currentSection ? "" : "dark"} isFlashing={section.name === "Profile" && canPromote} key={key++}>{section.name}</Button>;
          }
 
          content.push(button);

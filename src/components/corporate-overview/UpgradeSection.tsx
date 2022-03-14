@@ -7,23 +7,24 @@ import Game from "../../Game";
 import { MAIN_UPGRADE_DATA, MinorUpgradeInfo, MINOR_UPGRADE_DATA, UpgradeInfo } from "../../data/upgrade-data";
 import { JOB_DATA, JOB_TIER_DATA } from "../../data/job-data";
 import { SectionProps } from "./CorporateOverview";
+import Sprite from "../../classes/Sprite";
 
 let addUnlockedUpgrade: ((upgrade: MinorUpgradeInfo) => void) | null = null;
 
-export let typingSpeedBonus: number = 0;
+export let typingSpeedMultiplier: number = 1;
 
 export let additiveTypingProductionBonus: number = 0;
-export let multiplicativeTypingProductionBonus: number = 0;
+export let multiplicativeTypingProductionBonus: number = 1;
 export let additiveWorkerProductionBonus: number = 0;
-export let multiplicativeWorkerProductionBonus: number = 0;
+export let multiplicativeWorkerProductionBonus: number = 1;
 
 export let individualWorkerProductionBonuses: { [key: string]: { additiveBonus: number, multiplicativeBonus: number } } = JOB_DATA.reduce((previousValue, currentValue) => {
-   return { ...previousValue, [currentValue.id]: { additiveBonus: 0, multiplicativeBonus: 0 } };
+   return { ...previousValue, [currentValue.id]: { additiveBonus: 0, multiplicativeBonus: 1 } };
 }, {});
 
 export let workerProductionBonuses = {
    additive: 0,
-   multiplicative: 0
+   multiplicative: 1
 };
 
 /**
@@ -130,7 +131,7 @@ const applyUpgradeProductionBonuses = (upgrade: UpgradeInfo): void => {
       additiveTypingProductionBonus += upgrade.effects.additiveTypingProductionBonus
    }
    if (typeof upgrade.effects?.multiplicativeTypingProductionBonus !== "undefined") {
-      multiplicativeTypingProductionBonus += upgrade.effects.multiplicativeTypingProductionBonus
+      multiplicativeTypingProductionBonus *= 1 + upgrade.effects.multiplicativeTypingProductionBonus
    }
 
    // Worker production bonuses
@@ -138,7 +139,7 @@ const applyUpgradeProductionBonuses = (upgrade: UpgradeInfo): void => {
       additiveWorkerProductionBonus += upgrade.effects.additiveWorkerProductionBonus
    }
    if (typeof upgrade.effects?.multiplicativeWorkerProductionBonus !== "undefined") {
-      multiplicativeWorkerProductionBonus += upgrade.effects.multiplicativeWorkerProductionBonus
+      multiplicativeWorkerProductionBonus *= 1 + upgrade.effects.multiplicativeWorkerProductionBonus
    }
 
    // Individual worker production bonuses
@@ -153,7 +154,7 @@ const applyUpgradeProductionBonuses = (upgrade: UpgradeInfo): void => {
             individualWorkerProductionBonuses[worker.id].additiveBonus += bonuses.additiveBonus;
          }
          if (typeof bonuses.multiplicativeBonus !== "undefined") {
-            individualWorkerProductionBonuses[worker.id].multiplicativeBonus += bonuses.multiplicativeBonus;
+            individualWorkerProductionBonuses[worker.id].multiplicativeBonus *= 1 + bonuses.multiplicativeBonus;
          }
       }
    }
@@ -167,13 +168,13 @@ const applyUpgradeProductionBonuses = (upgrade: UpgradeInfo): void => {
 
       // Multiplicative bonuses
       if (typeof upgrade.effects.workerBonuses.multiplicative !== "undefined") {
-         workerProductionBonuses.multiplicative += upgrade.effects.workerBonuses.multiplicative;
+         workerProductionBonuses.multiplicative *= 1 + upgrade.effects.workerBonuses.multiplicative;
       }
    }
 
    // Typing speed bonus
    if (typeof upgrade.effects?.typingSpeedBonus !== "undefined") {
-      typingSpeedBonus += upgrade.effects.typingSpeedBonus;
+      typingSpeedMultiplier *= 1 + upgrade.effects.typingSpeedBonus;
    }
 }
 
@@ -224,14 +225,17 @@ const MinorUpgrade = ({ upgrade }: MinorUpgradeProps): JSX.Element => {
       iconSrc = require("../../images/icons/questionmark.png").default;
    }
 
+   const sprite = new Sprite(40, 40, "upgrade-icons", upgrade.icon || 0);
+   const icon = sprite.element;
+
    const canAfford = Game.lorem >= upgrade.costs.lorem!;
 
    return <div onClick={canAfford ? () => buyUpgrade(upgrade) : undefined} onMouseEnter={mouseOver} onMouseLeave={mouseOut} className={`minor-upgrade${canAfford ? " can-afford" : ""}`}>
       <div className="formatter">
          <div className="formatter">
-            <div className="icon">
-               <img src={iconSrc} alt={upgrade.iconSrc} />   
-            </div>
+            {typeof upgrade.icon !== "undefined" ? icon : (
+               <img src={iconSrc} alt={upgrade.iconSrc} />
+            )}
 
             <p className="name">{upgrade.name}</p>
          </div>
@@ -242,7 +246,7 @@ const MinorUpgrade = ({ upgrade }: MinorUpgradeProps): JSX.Element => {
       {isHovering ? <>
          <div className="separator"></div>
 
-         <p className="description">{upgrade.description}</p>
+         <p className="description">{typeof upgrade.description === "function" ? upgrade.description() : upgrade.description}</p>
 
          {typeof upgrade.flavourText !== "undefined" ? (
             <p className="flavour-text">{upgrade.flavourText}</p>
@@ -355,8 +359,8 @@ const UpgradeSection = ({ job }: SectionProps) => {
       }
 
       const upgradeRequirements = getUpgradeRequirements(upgrade);
-      const canBuy = canBuyUpgrade(upgrade, lorem);
       const isBought = upgrade.isBought;
+      const canBuy = !isBought && canBuyUpgrade(upgrade, lorem);
 
       upgradeRow.push(
          <div key={key++} className={`upgrade${isBought ? " bought" : ""}`}>
@@ -370,7 +374,7 @@ const UpgradeSection = ({ job }: SectionProps) => {
                }, "")}
             </div>
 
-            <Button onClick={canBuy && !isBought ? () => buyUpgrade(upgrade) : undefined} isFlashing={canBuy && !isBought} isDark={isBought} isCentered>{isBought ? "Bought" : "Purchase"}</Button>
+            <Button onClick={canBuy ? () => buyUpgrade(upgrade) : undefined} isFlashing={canBuy} isDark={isBought} isCentered>{isBought ? "Bought" : "Purchase"}</Button>
          </div>
       );
 

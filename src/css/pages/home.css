@@ -382,3 +382,7 @@
       background-position: 0% 82%;
    }
 }
+
+.sprite-icon {
+   image-rendering: pixelated;
+}
