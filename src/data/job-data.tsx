@@ -57,7 +57,7 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
 export interface JobInfo {
    readonly id: string;
    readonly name: string;
-   readonly benefits: Array<string>;
+   readonly benefits: Array<JSX.Element>;
    readonly description: string;
    /** When present, only the jobs listed will be able to promote into the job */
    readonly previousJobRequirement?: ReadonlyArray<string>;
@@ -69,7 +69,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "interns",
       name: "Intern",
       benefits: [
-         "Nothing, you suck."
+         <>Nothing, you suck.</>
       ],
       description: "The Intern is an exceedingly common species, ripe for exploiting. Having just been admitted into LoremCorp, it knows little of what years of lorem mining await it.",
       tier: 1
@@ -80,7 +80,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "employees",
       name: "Employee",
       benefits: [
-         "Workers generate 1.5x as much lorem."
+         <>Workers generate 1.5x as much lorem.</>
       ],
       description: "Employees have just begun their holy pilgrimage up the sacred Way of Lorem, yet are more valuable than lesser life-forms such as the Intern. Way enough pain and suffering, they too may one day hope to achieve Enlightenment",
       tier: 2
@@ -89,7 +89,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "programmers",
       name: "Programmer",
       benefits: [
-         "Increases lorem generated from typing by 1.5x."
+         <>Increases lorem generated from all forms of typing by <b>1.5x.</b></>
       ],
       description: "Much like a monkey with a keyboard, the common Programmer spends its days aimlessly bashing its calloused fingers into the remnants of what used to be its keyboard.",
       tier: 2
@@ -100,8 +100,8 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "managers",
       name: "Manager",
       benefits: [
-         "Interns generate 2x as much lorem.",
-         "All workers are 10% cheaper."
+         <>Interns generate 2x as much lorem.</>,
+         <>All workers are 10% cheaper.</>
       ],
       description: "The Manager spends its days perusing the lifeless office, ensuring that no soul in its presence enjoys but the slightest sliver of happiness - an exemplary leader.",
       previousJobRequirement: ["Employee"],
@@ -111,7 +111,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "technicians",
       name: "Technician",
       benefits: [
-         "Typing correct characters gives 7x as much lorem."
+         <>Typing correct characters gives 7x as much lorem.</>
       ],
       description: "Despite its simple appearance, the Technician can do much more than plug power cables together - its superior intellect allows it to produce lorem at blistering speeds, with proper training.",
       previousJobRequirement: ["Programmer"],
@@ -121,7 +121,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "developers",
       name: "Web Developer",
       benefits: [
-         "Increases lorem generated from typing by 2x."
+         <>Increases lorem generated from all forms of typing by 2x.</>
       ],
       description: "Web Developers work tirelessly to change text alignment and center div's, often working deep into the night to trying to figure out how to make a pull request.",
       previousJobRequirement: ["Programmer"],
@@ -133,7 +133,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "directors",
       name: "Director",
       benefits: [
-         "Each worker increases the production of its direct subordinates by 2%."
+         <>Each worker increases the production of its direct subordinates by 2%.</>
       ],
       description: "An expert at both major-management and micro-management, the Director has evolved past its former husk of a self, becoming an integral part of the lorem production workflow.",
       previousJobRequirement: ["Manager"],
@@ -143,7 +143,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "test",
       name: "test",
       benefits: [
-         "TODO"
+         <>TODO</>
       ],
       description: "",
       tier: 4
@@ -154,7 +154,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "executives",
       name: "Executive",
       benefits: [
-         ""
+         <></>
       ],
       description: "",
       previousJobRequirement: ["Director"],
@@ -164,7 +164,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "full-stack-developer",
       name: "Full Stack Developer", 
       benefits: [
-         ""
+         <></>
       ],
       description: "",
       previousJobRequirement: ["Web Developer", "Technician"],

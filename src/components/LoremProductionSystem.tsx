@@ -10,12 +10,8 @@ import { randInt, randItem } from '../utils';
 import { hasJob } from './corporate-overview/CorporateOverview';
 import { additiveTypingProductionBonus, hasUpgrade, multiplicativeTypingProductionBonus, typingSpeedMultiplier, updateUnlockedTypingUpgrades } from './corporate-overview/UpgradeSection';
 
-const applyValueModifiers = (baseValue: number): number => {
+const applyJobBonuses = (baseValue: number): number => {
    let value = baseValue;
-
-   value += additiveTypingProductionBonus;
-
-   value *= 1 + multiplicativeTypingProductionBonus;
 
    if (hasJob("Programmer")) value *= 1.5;
    if (hasJob("Web Developer")) value *= 2;
@@ -23,10 +19,22 @@ const applyValueModifiers = (baseValue: number): number => {
    return value;
 }
 
+const applyValueBonuses = (baseValue: number): number => {
+   let value = baseValue;
+
+   value += additiveTypingProductionBonus;
+
+   value *= 1 + multiplicativeTypingProductionBonus;
+
+   value = applyJobBonuses(value);
+
+   return value;
+}
+
 const calculateWordValue = (baseValue: number, isCorrectLetter: boolean): number => {
    let value = baseValue;
    
-   value = applyValueModifiers(value);
+   value = applyValueBonuses(value);
 
    if (isCorrectLetter && hasJob("Technician")) value *= 7;
 
@@ -299,7 +307,7 @@ const LoremProductionSystem = () => {
          if (hasUpgrade("Touch Typing")) {
             if (Math.random() < 0.1) {
                const BASE_VALUE = 0.1;
-               const value = applyValueModifiers(BASE_VALUE);
+               const value = applyJobBonuses(BASE_VALUE);
                Game.lorem += value;
             }
          }
@@ -335,9 +343,27 @@ const LoremProductionSystem = () => {
                }
 
                // Prepare for the next sentence
-               bufferedContent?.push(
-                  <LoremSentence key={bufferedContent.length} sentence="" meaning="" type="regular" />
+               bufferedContent!.push(
+                  <LoremSentence key={bufferedContent!.length} sentence="" meaning="" type="regular" />
                );
+
+               const MAX_SENTENCE_AMOUNT = 50;
+               if (bufferedContent!.length >= MAX_SENTENCE_AMOUNT) {
+                  if (hasUpgrade("Planned Obsolescence")) {
+                     // Reset typing
+                     bufferedContent = new Array<JSX.Element>();
+                     currentSentence = null;
+                     upcomingSentence = null;
+                     currentIndex = 0;
+
+                     // Give lorem
+                     const BASE_VALUE = 50;
+                     const value = applyJobBonuses(BASE_VALUE);
+                     Game.lorem += value;
+
+                     break;
+                  }
+               }
             }
             
             // Add the next letter to the content.

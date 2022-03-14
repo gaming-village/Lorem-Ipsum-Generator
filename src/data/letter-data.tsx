@@ -36,43 +36,43 @@ export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
    },
    {
       name: "Steven Job - free An-Droid",
-      requirement: 15
-   },
-   {
-      name: "Company Policy",
-      requirement: 30
+      requirement: 40
    },
    {
       name: "Invitation",
-      requirement: 50
+      requirement: 75
    },
    {
       name: "Addressing Rumors",
-      requirement: 80
+      requirement: 125
    },
    {
       name: "urgent Matters",
-      requirement: 100
-   },
-   {
-      name: "Illegal Activities",
       requirement: 200
    },
    {
+      name: "Company Policy",
+      requirement: 200
+   },
+   {
+      name: "Illegal Activities",
+      requirement: 500
+   },
+   {
       name: "Social security issue !",
-      requirement: 400
-   },
-   {
-      name: "Tips with Lorem Corp",
-      requirement: 700
-   },
-   {
-      name: "Order delivery",
       requirement: 1000
    },
    {
+      name: "Tips with Lorem Corp",
+      requirement: 2000
+   },
+   {
+      name: "Order delivery",
+      requirement: 5000
+   },
+   {
       name: "Government is here",
-      requirement: 3000
+      requirement: 10000
    }
 ];
 

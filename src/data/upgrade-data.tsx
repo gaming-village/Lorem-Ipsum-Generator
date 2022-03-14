@@ -349,7 +349,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Ergonomic chair",
-      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>twice</b> as much lorem.</>,
       flavourText: "Your back will thank you later.",
       iconSrc: "",
       effects: {
@@ -366,7 +366,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Wheelie chair",
-      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>twice</b> as much lorem.</>,
       flavourText: "Your chair now has wheels. You can spin around on it. Do you feel cool yet?",
       iconSrc: "",
       effects: {
@@ -383,7 +383,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Extra wheels",
-      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>twice</b> as much lorem.</>,
       flavourText: "wheEEEEEEELS",
       iconSrc: "",
       effects: {
@@ -400,7 +400,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Even more wheels",
-      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>twice</b> as much lorem.</>,
       flavourText: "Alright I swear this is the final wheel upgrade. Or IS IT? >:))",
       iconSrc: "",
       effects: {
@@ -417,7 +417,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Recursive wheels",
-      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>twice</b> as much lorem.</>,
       flavourText: "Your wheels... have WHEELS! This feels wrong.",
       iconSrc: "",
       effects: {
@@ -434,7 +434,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Gold Plated Chair",
-      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>twice</b> as much lorem.</>,
       flavourText: "Fit for a king. Or a really wealthy intern.",
       iconSrc: "",
       effects: {
@@ -451,7 +451,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Hoverchair",
-      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>twice</b> as much lorem.</>,
       flavourText: "This upgrade sounds cool, but in reality you just strapped a bunch of large fans to your chair. It looks stupid, but the performance benefits are undeniable.",
       iconSrc: "",
       effects: {
@@ -467,7 +467,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Uber chair",
-      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>twice</b> as much lorem.</>,
       flavourText: "By absorbing nearby chairs, your chair grows in power. Be wary.",
       iconSrc: "",
       effects: {
@@ -483,7 +483,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Rocket Powered Chair",
-      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>twice</b> as much lorem.</>,
       flavourText: "They told you that strapping rockets to your chair would be 'unsafe' and 'stupid'. They weren't wrong, but it sure is cool.",
       iconSrc: "",
       effects: {
@@ -499,7 +499,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Uranium-235 Powered Chair",
-      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>twice</b> as much lorem.</>,
       flavourText: "Uses only the finest unstable isotopes. Side effects include: Extra limbs. Which may not actually be a bad thing.",
       iconSrc: "",
       effects: {
@@ -515,7 +515,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Inderdimensional Chair Hyperdrive",
-      description: <>Typing generates <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>twice</b> as much lorem.</>,
       flavourText: "Your chair now exists across dimensions, resulting in unparalleled speeds.",
       iconSrc: "",
       effects: {
@@ -567,7 +567,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Finger Bracings",
-      description: <>Typing is <b>1.5x</b> as effective.</>,
+      description: <>Words create <b>1.5x</b> as much lorem.</>,
       flavourText: "Protects the most important organs in your body - your fingers.",
       iconSrc: "",
       effects: {
