@@ -66,7 +66,7 @@ export const MAIN_UPGRADE_DATA: Array<MainUpgradeInfo> = [
          multiplicativeTypingProductionBonus: 1
       },
       costs: {
-         lorem: 10
+         lorem: 50
       },
       tier: 1,
       icon: 32 * 0 + 0,
@@ -79,9 +79,9 @@ export const MAIN_UPGRADE_DATA: Array<MainUpgradeInfo> = [
       description: <>Achievements create motivation. Intern production is increased by motivation.</>,
       iconSrc: "",
       costs: {
-         lorem: 20,
+         lorem: 200,
          workers: {
-            1: 5
+            1: 10
          }
       },
       tier: 2,
@@ -92,7 +92,7 @@ export const MAIN_UPGRADE_DATA: Array<MainUpgradeInfo> = [
       description: <>Chance to generate lorem when typing any character, not just words.</>,
       iconSrc: "",
       costs: {
-         lorem: 50
+         lorem: 500
       },
       tier: 2,
       id: 3
@@ -250,6 +250,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 50
       },
+      icon: 32 * 3 + 0,
       id: 12
    },
    {
@@ -266,6 +267,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 100
       },
+      icon: 32 * 3 + 1,
       id: 18
    },
    {
@@ -282,6 +284,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 300
       },
+      icon: 32 * 3 + 2,
       id: 21
    },
    {
@@ -329,6 +332,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 1500
       },
+      icon: 32 * 3 + 5,
       id: 36
    },
    {
@@ -345,6 +349,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 3000
       },
+      icon: 32 * 3 + 6,
       id: 37
    },
    {
@@ -495,6 +500,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 2200
       },
+      icon: 32 * 2 + 8,
       id: 31
    },
    {
@@ -511,6 +517,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 2500
       },
+      icon: 32 * 2 + 9,
       id: 32
    },
    {
@@ -527,6 +534,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       unlockRequirements: {
          wordsTyped: 2800
       },
+      icon: 32 * 2 + 10,
       id: 33
    },
    {
@@ -601,6 +609,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
             1: 5
          }
       },
+      icon: 32 * 0 + 1,
       id: 16
    },
    {

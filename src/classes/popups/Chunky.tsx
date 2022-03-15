@@ -4,10 +4,39 @@ import Button from "../../components/Button";
 import ProgressBar from "../../components/ProgressBar";
 
 import Game from "../../Game";
-import Popup from "./Popup";
-import { clamp, randInt } from "../../utils";
+import Popup, { createPopup } from "./Popup";
+import { clamp, randInt, randItem } from "../../utils";
 
 import WarningImage from "../../images/icons/warning.png";
+import POPUP_DATA, { PopupInfo } from "../../data/popup-data";
+
+/** Gets all unlcked chunky popups */
+const getAvailableChunkyPopups = (): ReadonlyArray<PopupInfo> | null => {
+   const popups = new Array<PopupInfo>();
+
+   for (const popup of POPUP_DATA) {
+      if (popup.isUnlocked && popup.isChunkyPopup && popup.className !== "") {
+         popups.push(popup);
+      }
+   }
+
+   if (popups.length > 0) {
+      return popups;
+   }
+   return null;
+}
+
+const showChunkyPopups = (): void => {
+   const availablePopups = getAvailableChunkyPopups();
+   
+   if (availablePopups !== null) {
+      const POPUP_AMOUNT = randInt(3, 5);
+      for (let i = 0; i < POPUP_AMOUNT; i++) {
+         const popupInfo = randItem(availablePopups);
+         createPopup(popupInfo);
+      }
+   }
+}
 
 enum Mood {
    content = "#00ff0d",
@@ -60,6 +89,8 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
       const newRage = clamp(rage - decreaseAmount, 0, 100);
       chunkyRage = newRage;
       setRage(newRage);
+
+      showChunkyPopups();
 
       clickEvent();
    }, [clickEvent, rage]);

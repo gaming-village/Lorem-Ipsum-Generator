@@ -91,8 +91,25 @@
 }
 
 /* Chunky plantation */
+.popup.chunky-plantation.success .tree {
+   animation: Success 1s linear forwards;
+}
+@keyframes Success {
+   0% {
+      height: 20rem;
+   }
+   100% {
+      height: 0rem;
+   }
+}
 .popup.chunky-plantation .tree {
    height: 20rem;
+}
+.popup.chunky-plantation .success-message {
+   color: #00ff00;
+   text-align: center;
+   font-style: italic;
+   text-shadow: 1px 1px 0 #000;
 }
 .popup.chunky-plantation .remaining-time {
    color: red;

@@ -6,6 +6,7 @@ import BananaImg from "../../images/miscellaneous/banana.png";
 import Popup from "./Popup";
 import Game from "../../Game";
 import { Point, randFloat, randInt, roundNum } from "../../utils";
+import Button from "../../components/Button";
 
 interface BananaElemProps {
    squashFunc: () => void;
@@ -28,9 +29,10 @@ const createBananas = (squashFunc: (banana: JSX.Element) => void): Array<JSX.Ele
 
    const BANANA_COUNT = randInt(10, 20);
    for (let i = 0; i < BANANA_COUNT; i++) {
+      const PADDING = 10;
       const pos = new Point(
-         randFloat(0, 100),
-         randFloat(0, 100)
+         randFloat(PADDING, 100 - PADDING),
+         randFloat(PADDING, 100 - PADDING)
       );
 
       let currentBanana: JSX.Element;
@@ -46,11 +48,15 @@ const createBananas = (squashFunc: (banana: JSX.Element) => void): Array<JSX.Ele
    return newBananas;
 }
 
-let bananaBuffer: Array<JSX.Element> = new Array<JSX.Element>();
 interface ElemProps {
    popup: ChunkyPlantation;
 }
 const Elem = ({ popup }: ElemProps): JSX.Element => {
+   const STARTING_TIME = 15;
+   const [time, setTime] = useState(STARTING_TIME);
+   const [bananas, setBananas] = useState<Array<JSX.Element>>(new Array<JSX.Element>());
+   const [hasSucceeded, setHasSucceeded] = useState<boolean>(false);
+
    const close = useCallback(() => {
       const WAIT_TIME = 2000;
       setTimeout(() => {
@@ -61,29 +67,27 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
    const succeed = (): void => {
       setHasSucceeded(true);
 
-      close();
+      // close();
+
+      const elem = popup.getElem();
+      elem.classList.add("success");
    }
    const fail = useCallback(() => {
       close();
    }, [close]);
 
    const squashBanana = (banana: JSX.Element): void => {
-      bananaBuffer.splice(bananaBuffer.indexOf(banana), 1);
-      setBananas(bananaBuffer.slice());
+      popup.bananaBuffer.splice(popup.bananaBuffer.indexOf(banana), 1);
+      setBananas(popup.bananaBuffer.slice());
 
-      if (bananaBuffer.length === 0) {
+      if (popup.bananaBuffer.length === 0) {
          succeed();
       }
    }
 
-   const STARTING_TIME = 15;
-   const [time, setTime] = useState(STARTING_TIME);
-   const [bananas, setBananas] = useState<Array<JSX.Element>>(new Array<JSX.Element>());
-   const [hasSucceeded, setHasSucceeded] = useState<boolean>(false);
-
    useEffect(() => {
-      bananaBuffer = createBananas(squashBanana);
-      setBananas(bananaBuffer.slice());
+      popup.bananaBuffer = createBananas(squashBanana);
+      setBananas(popup.bananaBuffer.slice());
    // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
@@ -109,9 +113,11 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
    return <>
       <img src={PlantationTree} className="tree" alt="The Tree of Chunk" />
 
-      {hasSucceeded ? (
+      {hasSucceeded ? <>
          <div className="success-message">You gathered all bananas!</div>
-      ) : (
+
+         <Button onClick={() => popup.close()} isCentered>Close</Button>
+      </> : (
          <div className="remaining-time">{roundNum(time, 1, true)} seconds remaining</div>
       )}
 
@@ -120,6 +126,8 @@ const Elem = ({ popup }: ElemProps): JSX.Element => {
 }
 
 class ChunkyPlantation extends Popup {
+   bananaBuffer: Array<JSX.Element> = new Array<JSX.Element>();
+
    protected instantiate(): JSX.Element {
       return <Elem popup={this} />;
    }

@@ -21,7 +21,7 @@ const ControlPanel = ({ job, currentSection, changeSectionFunc }: ControlPanelPr
    const checkPromotionStatus = (): void => {
       const promotionRequirement = JOB_TIER_DATA[Game.userInfo.job.tier].requirements;
 
-      setCanPromote(Game.lorem >= promotionRequirement);
+      setCanPromote(Game.totalLoremTyped >= promotionRequirement);
    }
 
    useEffect(() => {

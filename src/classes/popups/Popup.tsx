@@ -23,7 +23,7 @@ export function showExistingPopups(): void {
    if (popups.length > 0) updateVisiblePopups();
 }
 
-const createPopup = (popupInfo: PopupInfo): void => {
+export function createPopup(popupInfo: PopupInfo): void {
    const popupClass = require("../popups/" + popupInfo.className).default;
    new popupClass(popupInfo);
 }
@@ -38,7 +38,7 @@ let potentialPopups = new Array<PopupInfo>();
 const fillPotentialPopups = (): void => {
    const newPotentialPopups = new Array<PopupInfo>();
    for (const popup of POPUP_DATA) {
-      if (popup.isUnlocked && popup.className !== "") {
+      if (popup.isUnlocked && !popup.isChunkyPopup && popup.className !== "") {
          // Make sure the popup isn't already visible if it's a single popup
          if (popup.elem.isSingleElem) {
             let hasFound = false;
@@ -156,14 +156,14 @@ const PopupElem = ({ info, application, children, closeFunc }: PopupElemInfo) =>
    </WindowsProgram>;
 }
 
-// setTimeout(() => {
-//    const popupClassName = "Visitor";
-//    for (const a of POPUP_DATA) {
-//       if (a.className === popupClassName) {
-//          createPopup(a);
-//       }
-//    }
-// }, 100);
+setTimeout(() => {
+   const popupClassName = "Chunky";
+   for (const a of POPUP_DATA) {
+      if (a.className === popupClassName) {
+         createPopup(a);
+      }
+   }
+}, 100);
 
 abstract class Popup {
    info: PopupInfo;

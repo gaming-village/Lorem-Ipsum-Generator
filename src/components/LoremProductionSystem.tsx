@@ -23,8 +23,7 @@ const applyValueBonuses = (baseValue: number): number => {
    let value = baseValue;
 
    value += additiveTypingProductionBonus;
-
-   value *= 1 + multiplicativeTypingProductionBonus;
+   value *= multiplicativeTypingProductionBonus;
 
    value = applyJobBonuses(value);
 
@@ -305,8 +304,8 @@ const LoremProductionSystem = () => {
          }
 
          if (hasUpgrade("Touch Typing")) {
-            if (Math.random() < 0.1) {
-               const BASE_VALUE = 0.1;
+            if (Math.random() < 0.05) {
+               const BASE_VALUE = 0.15;
                const value = applyJobBonuses(BASE_VALUE);
                Game.lorem += value;
             }
