@@ -34,7 +34,7 @@ enum Stage {
 const getNextJobs = (job: JobInfo): Array<JobInfo> => {
    let nextJobs = new Array<JobInfo>();
    for (const currentJob of JOB_DATA) {
-      if (currentJob.tier < job.tier + 1 || (currentJob.previousJobRequirement && !currentJob.previousJobRequirement.includes(job.name))) continue;
+      if (currentJob.tier < job.tier + 1 || (currentJob.jobOrigins && !currentJob.jobOrigins.includes(job.name))) continue;
       if (currentJob.tier > job.tier + 1) break;
 
       nextJobs.push(currentJob);

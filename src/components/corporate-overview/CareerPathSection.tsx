@@ -34,7 +34,7 @@ const CareerPathSection = () => {
       for (const currentJob of tierJobs) {
          let newNode!: CareerPathNode;
 
-         const isInPath = typeof currentJob.previousJobRequirement === "undefined" || currentJob.previousJobRequirement.includes(job.name);
+         const isInPath = typeof currentJob.jobOrigins === "undefined" || currentJob.jobOrigins.includes(job.name);
          if (!isInPath) continue;
 
          if (i === jobHistory.length - 1) {

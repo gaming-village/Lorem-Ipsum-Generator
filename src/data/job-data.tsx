@@ -21,7 +21,7 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
    },
    {
       requirements: 100,
-      salary: "$100",
+      salary: "$1000",
       benefits: [
          "The ability to buy workers."
       ],
@@ -29,8 +29,8 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       loremProduction: 0.1
    },
    {
-      requirements: 1000,
-      salary: "$6000",
+      requirements: 2500,
+      salary: "$20000",
       benefits: [
          "Access to the start menu",
          "Access to the Career Path section"
@@ -39,15 +39,17 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       loremProduction: 1
    },
    {
-      requirements: 1e4,
-      salary: "$50000",
-      benefits: [],
+      requirements: 1e5,
+      salary: "$100000",
+      benefits: [
+         "The Daily Indoctrination"
+      ],
       baseCost: 1e4,
       loremProduction: 10
    },
    {
-      requirements: 1e5,
-      salary: "$150000",
+      requirements: 2.5e6,
+      salary: "$250000",
       benefits: [],
       baseCost: 1e5,
       loremProduction: 100
@@ -60,7 +62,7 @@ export interface JobInfo {
    readonly benefits: Array<JSX.Element>;
    readonly description: string;
    /** When present, only the jobs listed will be able to promote into the job */
-   readonly previousJobRequirement?: ReadonlyArray<string>;
+   readonly jobOrigins?: ReadonlyArray<string>;
    readonly tier: number;
 }
 export const JOB_DATA: ReadonlyArray<JobInfo> = [
@@ -100,21 +102,11 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       id: "managers",
       name: "Manager",
       benefits: [
-         <>Interns generate 2x as much lorem.</>,
-         <>All workers are 10% cheaper.</>
+         <>Workers generate 2x as much lorem.</>,
+         <>Workers are 10% cheaper.</>
       ],
       description: "The Manager spends its days perusing the lifeless office, ensuring that no soul in its presence enjoys but the slightest sliver of happiness - an exemplary leader.",
-      previousJobRequirement: ["Employee"],
-      tier: 3
-   },
-   {
-      id: "technicians",
-      name: "Technician",
-      benefits: [
-         <>Typing correct characters gives 7x as much lorem.</>
-      ],
-      description: "Despite its simple appearance, the Technician can do much more than plug power cables together - its superior intellect allows it to produce lorem at blistering speeds, with proper training.",
-      previousJobRequirement: ["Programmer"],
+      jobOrigins: ["Employee"],
       tier: 3
    },
    {
@@ -124,7 +116,17 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
          <>Increases lorem generated from all forms of typing by <b>2x</b>.</>
       ],
       description: "Web Developers work tirelessly to change text alignment and center div's, often working deep into the night to trying to figure out how to make a pull request.",
-      previousJobRequirement: ["Programmer"],
+      jobOrigins: ["Programmer"],
+      tier: 3
+   },
+   {
+      id: "help-desk-technicians",
+      name: "Help Desk Technician",
+      benefits: [
+         <>Typing correct characters gives 7x as much lorem.</>
+      ],
+      description: "TODO",
+      jobOrigins: ["Programmer"],
       tier: 3
    },
 
@@ -136,16 +138,47 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
          <>Each worker increases the production of its direct subordinates by 2%.</>
       ],
       description: "An expert at both major-management and micro-management, the Director has evolved past its former husk of a self, becoming an integral part of the lorem production workflow.",
-      previousJobRequirement: ["Manager"],
+      jobOrigins: ["Manager"],
       tier: 4
    },
    {
-      id: "test",
-      name: "test",
+      id: "full-stack-developers",
+      name: "Full Stack Developer", 
       benefits: [
-         <>TODO</>
+         <></>
       ],
-      description: "",
+      description: "TODO",
+      jobOrigins: ["Web Developer"],
+      tier: 4
+   },
+   {
+      id: "it-director",
+      name: "IT Director", 
+      benefits: [
+         <></>
+      ],
+      description: "TODO",
+      jobOrigins: ["Web Developer", "Help Desk Technician"],
+      tier: 4
+   },
+   {
+      id: "technicians",
+      name: "Technician",
+      benefits: [
+         <>Typing correct characters gives 7x as much lorem.</>
+      ],
+      description: "Despite its simple appearance, the Technician can do much more than plug power cables together - its superior intellect allows it to produce lorem at blistering speeds, with proper training.",
+      jobOrigins: ["Help Desk Technician"],
+      tier: 4
+   },
+   {
+      id: "it-support-specialists",
+      name: "IT Support Specialist",
+      benefits: [
+         <>Typing correct characters gives 7x as much lorem.</>
+      ],
+      description: "TODO",
+      jobOrigins: ["Help Desk Technician"],
       tier: 4
    },
 
@@ -157,17 +190,17 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
          <></>
       ],
       description: "",
-      previousJobRequirement: ["Director"],
+      jobOrigins: ["Director"],
       tier: 5
    },
    {
-      id: "full-stack-developer",
-      name: "Full Stack Developer", 
+      id: "board-members",
+      name: "Board Member",
       benefits: [
          <></>
       ],
       description: "",
-      previousJobRequirement: ["Web Developer", "Technician"],
+      jobOrigins: ["Director"],
       tier: 5
    }
 ];

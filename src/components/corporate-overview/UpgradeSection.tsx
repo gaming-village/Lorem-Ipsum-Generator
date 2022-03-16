@@ -4,12 +4,13 @@ import Button from "../Button";
 import TitleBar from "../TitleBar";
 
 import Game from "../../Game";
-import { MAIN_UPGRADE_DATA, MinorUpgradeInfo, MINOR_UPGRADE_DATA, UpgradeInfo } from "../../data/upgrade-data";
+import { MainUpgradeInfo, MAIN_UPGRADE_DATA, MinorUpgradeInfo, MINOR_UPGRADE_DATA, UpgradeInfo } from "../../data/upgrade-data";
 import { JOB_DATA, JOB_TIER_DATA } from "../../data/job-data";
 import { SectionProps } from "./CorporateOverview";
 import Sprite from "../../classes/Sprite";
 
 let addUnlockedUpgrade: ((upgrade: MinorUpgradeInfo) => void) | null = null;
+let addBoughtUpgrade: ((upgrade: MainUpgradeInfo) => void) | null = null;
 
 export let typingSpeedMultiplier: number = 1;
 
@@ -188,6 +189,7 @@ export function calculateProductionBonuses(): void {
 }
 
 const buyUpgrade = (upgrade: UpgradeInfo): void => {
+   console.log(upgrade);
    upgrade.isBought = true;
 
    if (typeof upgrade.costs.lorem !== "undefined") {
@@ -196,12 +198,16 @@ const buyUpgrade = (upgrade: UpgradeInfo): void => {
 
    if (typeof upgrade.costs.workers !== "undefined") {
       for (const [workerTier, workerCount] of Object.entries(upgrade.costs.workers)) {
+         console.log(`Tier ${workerTier} cost: ${workerCount}`);
          const worker = Game.userInfo.previousJobs[Number(workerTier) - 1];
          Game.userInfo.workers[worker.id] -= Number(workerCount);
       }
    }
 
    applyUpgradeProductionBonuses(upgrade);
+   if (upgrade.hasOwnProperty("tier")) {
+      if (addBoughtUpgrade !== null) addBoughtUpgrade(upgrade as MainUpgradeInfo);
+   }
 }
 
 interface MinorUpgradeProps {
@@ -306,9 +312,20 @@ const getBuyableUpgrades = (unlockedUpgrades: Array<MinorUpgradeInfo>): Array<Mi
    return sortedUpgrades;
 }
 
+const getBoughtUpgrades = (): Array<UpgradeInfo> => {
+   const boughtUpgrades = new Array<UpgradeInfo>();
+
+   for (const upgrade of MAIN_UPGRADE_DATA) {
+      if (upgrade.isBought) boughtUpgrades.push(upgrade);
+   }
+
+   return boughtUpgrades;
+}
+
 const UpgradeSection = ({ job }: SectionProps) => {
    const [lorem, setLorem] = useState(Game.lorem);
    const [unlockedUpgrades, setUnlockedUpgrades] = useState<Array<MinorUpgradeInfo>>(getUnlockedUpgrades());
+   const [boughtUpgrades, setBoughtUpgrades] = useState<Array<UpgradeInfo>>(getBoughtUpgrades());
 
    useEffect(() => {
       addUnlockedUpgrade = (upgrade: MinorUpgradeInfo) => {
@@ -319,10 +336,16 @@ const UpgradeSection = ({ job }: SectionProps) => {
          setUnlockedUpgrades(newUnlockedUpgrades);
       }
 
+      addBoughtUpgrade = (upgrade: MainUpgradeInfo) => {
+         const newBoughtUpgrades = boughtUpgrades.slice();
+         newBoughtUpgrades.push(upgrade);
+         setBoughtUpgrades(newBoughtUpgrades);
+      }
+
       return () => {
          addUnlockedUpgrade = null;
       }
-   }, [unlockedUpgrades]);
+   }, [boughtUpgrades, unlockedUpgrades]);
 
    useEffect(() => {
       const updateLoremCount = (): void => {

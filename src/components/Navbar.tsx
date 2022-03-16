@@ -73,33 +73,33 @@ export function setupNavBar(): void {
 export let unlockView: (viewName: string) => void;
 
 const NavBar = () => {
-   const [views, setViews] = useState(getDefaultViews());
+   const [unlockedViews, setUnlockedViews] = useState(getDefaultViews());
 
    const updateViewsArr = useCallback((elemID: string) => {
       Game.currentView = elemID;
 
-      const newViewArr = views.slice();
+      const newViewArr = unlockedViews.slice();
       for (const currentView of newViewArr) {
          currentView.isSelected = currentView.elemID === elemID;
       }
-      setViews(newViewArr);
-   }, [views]);
+      setUnlockedViews(newViewArr);
+   }, [unlockedViews]);
 
    useEffect(() => {
       switchView = (view: number | string) => {
          if (typeof view === "string") {
             updateViewsArr(view);
          } else {
-            if (view + 1 > views.length) return;
-            updateViewsArr(views[view].elemID);
+            if (view + 1 > unlockedViews.length) return;
+            updateViewsArr(unlockedViews[view].elemID);
          }
 
-         updateVisibleViews(views);
+         updateVisibleViews(unlockedViews);
       }
-   }, [updateViewsArr, views]);
+   }, [updateViewsArr, unlockedViews]);
 
    const unlockViewFunc = useCallback((viewName: string) => {
-      const newViewArr = views.slice();
+      const newViewArr = unlockedViews.slice();
 
       let view: ViewInfo | undefined;
       for (const currentView of VIEW_DATA) {
@@ -118,8 +118,8 @@ const NavBar = () => {
       }
       newViewArr.push(view);
 
-      setViews(newViewArr);
-   }, [views]);
+      setUnlockedViews(newViewArr);
+   }, [unlockedViews]);
 
    useEffect(() => {
       unlockView = (viewName: string): void => {
@@ -134,8 +134,9 @@ const NavBar = () => {
       }
    }, [unlockViewFunc]);
 
-   const navButtons = views.map((view, i) => {
-      return <Button onClick={() => switchView(i)} key={i} className={!view.isSelected ? "dark" : ""}>{view.name}</Button>;
+   const navButtons = VIEW_DATA.map((view, i) => {
+      const isUnlocked = unlockedViews.includes(view);
+      return <Button onClick={isUnlocked ? () => switchView(i) : undefined} key={i} className={isUnlocked ? (!view.isSelected ? "dark" : "") : "darker"}>{isUnlocked ? view.name : "???"}</Button>;
    });
 
    return <div id="top-bar">

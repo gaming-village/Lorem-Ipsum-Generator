@@ -506,7 +506,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    {
       name: "Uranium-235 Powered Chair",
       description: <>Words create <b>twice</b> as much lorem.</>,
-      flavourText: "Uses only the finest unstable isotopes. Side effects include: Extra limbs. Which may not actually be a bad thing.",
+      flavourText: "Uses only the finest unstable isotopes. Side effects include: Extra limbs. Which may which allows you to type faster.",
       iconSrc: "",
       effects: {
          multiplicativeTypingProductionBonus: 1
@@ -536,6 +536,23 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       },
       icon: 32 * 2 + 10,
       id: 33
+   },
+   {
+      name: "Antimatter-powered Armwrests",
+      description: <>Words create <b>twice</b> as much lorem.</>,
+      flavourText: "50% chance to explode, 50% chance to travel faster than light",
+      iconSrc: "",
+      effects: {
+         multiplicativeTypingProductionBonus: 1
+      },
+      costs: {
+         lorem: 1
+      },
+      unlockRequirements: {
+         wordsTyped: 3100
+      },
+      // icon: 32 * 2 + 10,
+      id: 39
    },
    {
       name: "Motivation Gun",
@@ -574,12 +591,30 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
       id: 38
    },
    {
+      name: "Extended Shifts",
+      description: <>Workers are <b>twice</b> as effective.</>,
+      flavourText: "Extended shifts results in extended profit margins, scientifically proven.",
+      iconSrc: "",
+      effects: {
+         workerBonuses: {
+            multiplicative: 1
+         }
+      },
+      costs: {
+         lorem: 15000
+      },
+      unlockRequirements: {
+         totalWorkers: 50
+      },
+      id: 40
+   },
+   {
       name: "Finger Bracings",
       description: <>Words create <b>1.5x</b> as much lorem.</>,
       flavourText: "Protects the most important organs in your body - your fingers.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 0.5
+         multiplicativeTypingProductionBonus: 1
       },
       costs: {
          lorem: 1000

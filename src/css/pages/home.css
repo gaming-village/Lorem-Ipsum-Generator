@@ -87,6 +87,14 @@
    border-right-color: #444;
    background-color: #a0a0a0;
 }
+.button.darker {
+   color: #222;
+   font-style: italic;
+   font-weight: bold;
+   background-color: #777;
+   border-color: #999 #222 #222 #999;
+   cursor: not-allowed;
+}
 .button.centered {
    margin-left: 50%;
    transform: translateX(-50%);

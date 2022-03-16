@@ -12,7 +12,7 @@ export const BLACK_MARKET_SHOPS: ReadonlyArray<BlackMarketShop> = [
       name: "Malware",
       description: "Purchase malware and popups to corrupt your device.",
       pageName: "malware",
-      cost: 1,
+      cost: 7.5,
       id: 1
    }
 ];

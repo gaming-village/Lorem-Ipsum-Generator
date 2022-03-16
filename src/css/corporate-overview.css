@@ -303,6 +303,10 @@
 
 
 /* UPGRADES */
+#upgrades {
+   max-height: 100%;
+   overflow-y: auto;
+}
 #upgrades .title-bar span {
    max-width: unset;
    margin-left: 50%;

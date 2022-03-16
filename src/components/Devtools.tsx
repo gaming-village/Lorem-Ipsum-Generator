@@ -101,9 +101,15 @@ const Devtools = () => {
       }
    }
 
+   const stonks = (): void => {
+      Game.wordsTyped += 7342234;
+   }
+
    return isVisible ? (
       <div id="devtools" className="windows-program">
          <TitleBar title="Devtools" iconSrc={DevtoolsIcon} uiButtons={[]} isDraggable={false} />
+
+         <Button onClick={stonks}>stonk moment</Button>
 
          <h2 onClick={() => toggleTab("resources")}>Resources</h2>
 
