@@ -42,7 +42,8 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       requirements: 1e5,
       salary: "$100000",
       benefits: [
-         "The Daily Indoctrination"
+         "The Daily Indoctrination",
+         "Lorem Packs"
       ],
       baseCost: 1e4,
       loremProduction: 10

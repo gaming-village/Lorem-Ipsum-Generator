@@ -354,11 +354,11 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Ergonomic chair",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>50%</b> more lorem.</>,
       flavourText: "Your back will thank you later.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
          lorem: 10
@@ -371,11 +371,11 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Wheelie chair",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>50%</b> more lorem.</>,
       flavourText: "Your chair now has wheels. You can spin around on it. Do you feel cool yet?",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
          lorem: 75
@@ -388,14 +388,14 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Extra wheels",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>50%</b> more lorem.</>,
       flavourText: "wheEEEEEEELS",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
-         lorem: 720
+         lorem: 800
       },
       unlockRequirements: {
          wordsTyped: 450
@@ -405,11 +405,11 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Even more wheels",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>50%</b> more lorem.</>,
       flavourText: "Alright I swear this is the final wheel upgrade. Or IS IT? >:))",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
          lorem: 1500
@@ -422,11 +422,11 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Recursive wheels",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>50%</b> more lorem.</>,
       flavourText: "Your wheels... have WHEELS! This feels wrong.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
          lorem: 4000
@@ -439,11 +439,11 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Gold Plated Chair",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>50%</b> more lorem.</>,
       flavourText: "Fit for a king. Or a really wealthy intern.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
          lorem: 8000
@@ -456,11 +456,11 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Hoverchair",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>1.5x</b> as much lorem.</>,
       flavourText: "This upgrade sounds cool, but in reality you just strapped a bunch of large fans to your chair. It looks stupid, but the performance benefits are undeniable.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
          lorem: 20000
@@ -472,11 +472,11 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Uber chair",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>50%</b> more lorem.</>,
       flavourText: "By absorbing nearby chairs, your chair grows in power. Be wary.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
          lorem: 50000
@@ -488,11 +488,11 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Rocket Powered Chair",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>50%</b> more lorem.</>,
       flavourText: "They told you that strapping rockets to your chair would be 'unsafe' and 'stupid'. They weren't wrong, but it sure is cool.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
          lorem: 100000
@@ -505,11 +505,11 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Uranium-235 Powered Chair",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>50%</b> more lorem.</>,
       flavourText: "Uses only the finest unstable isotopes. Side effects include: Extra limbs. Which may which allows you to type faster.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
          lorem: 250000
@@ -522,14 +522,14 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Inderdimensional Chair Hyperdrive",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>50%</b> more lorem.</>,
       flavourText: "Your chair now exists across dimensions, resulting in unparalleled speeds.",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
-         lorem: 500000
+         lorem: 5e5
       },
       unlockRequirements: {
          wordsTyped: 2800
@@ -539,19 +539,18 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
    },
    {
       name: "Antimatter-powered Armwrests",
-      description: <>Words create <b>twice</b> as much lorem.</>,
+      description: <>Words create <b>50%</b> more lorem.</>,
       flavourText: "50% chance to explode, 50% chance to travel faster than light",
       iconSrc: "",
       effects: {
-         multiplicativeTypingProductionBonus: 1
+         multiplicativeTypingProductionBonus: 0.5
       },
       costs: {
-         lorem: 1
+         lorem: 1e6
       },
       unlockRequirements: {
          wordsTyped: 3100
       },
-      // icon: 32 * 2 + 10,
       id: 39
    },
    {
