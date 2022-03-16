@@ -245,7 +245,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          typingSpeedBonus: 0.5
       },
       costs: {
-         lorem: 15
+         lorem: 100
       },
       unlockRequirements: {
          wordsTyped: 50
@@ -262,7 +262,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          typingSpeedBonus: 0.5
       },
       costs: {
-         lorem: 100
+         lorem: 1000
       },
       unlockRequirements: {
          wordsTyped: 100
@@ -279,7 +279,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          typingSpeedBonus: 0.5
       },
       costs: {
-         lorem: 1000
+         lorem: 10000
       },
       unlockRequirements: {
          wordsTyped: 300
@@ -296,7 +296,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          typingSpeedBonus: 0.5
       },
       costs: {
-         lorem: 5000
+         lorem: 25e4
       },
       unlockRequirements: {
          wordsTyped: 600
@@ -311,7 +311,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          typingSpeedBonus: 0.5
       },
       costs: {
-         lorem: 10000
+         lorem: 1e5
       },
       unlockRequirements: {
          wordsTyped: 900
@@ -327,7 +327,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          typingSpeedBonus: 0.5
       },
       costs: {
-         lorem: 25000
+         lorem: 4e5
       },
       unlockRequirements: {
          wordsTyped: 1500
@@ -344,7 +344,7 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          typingSpeedBonus: 0.5
       },
       costs: {
-         lorem: 100000
+         lorem: 1e6
       },
       unlockRequirements: {
          wordsTyped: 3000

@@ -3,11 +3,14 @@ import { useState, useEffect } from "react";
 import Button from "../Button";
 import TitleBar from "../TitleBar";
 
+import HelpImg from "../../images/icons/questionmark.png";
+
 import Game from "../../Game";
 import { MainUpgradeInfo, MAIN_UPGRADE_DATA, MinorUpgradeInfo, MINOR_UPGRADE_DATA, UpgradeInfo } from "../../data/upgrade-data";
 import { JOB_DATA, JOB_TIER_DATA } from "../../data/job-data";
 import { SectionProps } from "./CorporateOverview";
 import Sprite from "../../classes/Sprite";
+import { createTooltip, removeTooltip } from "../../tooltips";
 
 let addUnlockedUpgrade: ((upgrade: MinorUpgradeInfo) => void) | null = null;
 let addBoughtUpgrade: ((upgrade: MainUpgradeInfo) => void) | null = null;
@@ -422,9 +425,37 @@ const UpgradeSection = ({ job }: SectionProps) => {
 
    const buyableUpgrades = getBuyableUpgrades(unlockedUpgrades);
 
+   let tooltip: HTMLElement | null = null;
+
+   const hoverHelp = (): void => {
+      const e = window.event as MouseEvent;
+
+      // const pos = new Point
+      const pos = {
+         left: e.clientX + "px",
+         top: e.clientY + "px"
+      };
+
+      const content = <>
+         <p><b>Info</b></p>
+         <p>Minor upgrades (the ones in this section) are unlocked randomly as you progress.</p>
+         <p>Main upgrades are unlocked by being promoted and are visible below.</p>
+      </>;
+      tooltip = createTooltip(pos, content);
+   }
+   const unhoverHelp = (): void => {
+      if (tooltip !== null) {
+         removeTooltip(tooltip);
+         tooltip = null;
+      }
+   }
+
    return <div id="upgrades">
       <div id="all-upgrades" className="windows-program">
-         <div className="title-bar" style={{backgroundColor: "rgb(7, 30, 129)"}}>Minor Upgrades</div>
+         <div className="title-bar" style={{backgroundColor: "rgb(7, 30, 129)"}}>
+            <span>Minor Upgrades</span>
+            <img onMouseOver={hoverHelp} onMouseOut={unhoverHelp} src={HelpImg} className="help-icon" alt="" />
+         </div>
 
          {buyableUpgrades.map((upgrade, i) => {
             return <MinorUpgrade upgrade={upgrade} key={i} />
