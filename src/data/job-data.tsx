@@ -20,7 +20,7 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       loremProduction: 0.01
    },
    {
-      requirements: 100,
+      requirements: 15,
       salary: "$1000",
       benefits: [
          "The ability to buy workers."
