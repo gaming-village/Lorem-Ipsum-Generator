@@ -9,11 +9,11 @@ import { JOB_TIER_DATA } from "../../data/job-data";
 import { SectionProps } from "./CorporateOverview";
 
 const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
-   const [totalLoremTyped, setTotalLoremTyped] = useState(Game.totalLoremTyped);
+   const [totalLoremTyped, setTotalLoremTyped] = useState(Game.stats.totalLoremGenerated);
    
    useEffect(() => {
       const updateTotalLoremTyped = () => {
-         setTotalLoremTyped(Game.totalLoremTyped);
+         setTotalLoremTyped(Game.stats.totalLoremGenerated);
       }
       
       Game.createRenderListener(updateTotalLoremTyped);
@@ -23,8 +23,8 @@ const ProfileSection = ({ job, promoteFunc }: SectionProps) => {
       }
    }, []);
    
-   const currentJobRequirements = JOB_TIER_DATA[job.tier - 1].requirements;
-   const nextJobRequirements: number | null = job.tier < JOB_TIER_DATA.length ? JOB_TIER_DATA[job.tier].requirements : null;
+   const currentJobRequirements = JOB_TIER_DATA[job.tier - 1].loremRequirements;
+   const nextJobRequirements: number | null = job.tier < JOB_TIER_DATA.length ? JOB_TIER_DATA[job.tier].loremRequirements : null;
 
    const canPromote = nextJobRequirements !== null ? totalLoremTyped >= nextJobRequirements : false;
    

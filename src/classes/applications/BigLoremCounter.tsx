@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Game from "../../Game";
-import { Point, roundNum, Vector } from "../../utils";
+import { roundNum, Point, Vector } from "../../utils";
 import Application from "./Application";
 
 interface IncrementText {

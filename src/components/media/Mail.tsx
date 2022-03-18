@@ -28,6 +28,13 @@ const FOLDERS: ReadonlyArray<FolderInfo> = [
    }
 ];
 
+export function getLetterBySubject(subject: string): LetterInfo {
+   for (const letter of LETTER_DATA) {
+      if (letter.subject === subject) return letter;
+   }
+   throw new Error(`There is no letter with the subject '${subject}'!`);
+}
+
 export function receiveLetter(letterSubject: string): void {
    // Find the corresponding letter using the letter subject
    let letter!: LetterInfo;
@@ -173,7 +180,7 @@ const Mail = ({ defaultLetter, closeFunc }: MailProps) => {
       newLetter.isOpened = true;
 
       setCurrentLetter(newLetter);
-      setLetterIsClaimed(typeof newLetter.reward !== "undefined" && newLetter.reward.isClaimed);
+      setLetterIsClaimed(typeof newLetter.reward !== "undefined" && typeof newLetter.reward.isClaimed !== "undefined" && newLetter.reward.isClaimed);
    }
 
    /** Claim the current letter's reward */

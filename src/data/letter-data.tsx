@@ -8,7 +8,7 @@ export interface LetterReward {
    readonly items: Array<string>;
    readonly imgSrc: string;
    readonly claimFunc: () => void;
-   isClaimed: boolean;
+   isClaimed?: boolean;
 }
 
 export interface LetterInfo {
@@ -67,12 +67,16 @@ export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
       requirement: 2000
    },
    {
-      name: "Order delivery",
+      name: "The Initiation",
       requirement: 5000
    },
    {
+      name: "Order delivery",
+      requirement: 2.5e4
+   },
+   {
       name: "Government is here",
-      requirement: 10000
+      requirement: 1e5
    }
 ];
 
@@ -95,8 +99,7 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          claimFunc: () => {
             unlockView("Corporate Overview");
             Game.misc.corporateOverviewIsUnlocked = true;
-         },
-         isClaimed: false
+         }
       },
       isCloseable: false,
       id: 1
@@ -183,8 +186,7 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
             Game.misc.blackMarketIsUnlocked = true;
 
             unlockAchievement("Shady Sales");
-         },
-         isClaimed: false
+         }
       },
       isCloseable: false,
       id: 6
@@ -198,6 +200,28 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          <p>figure 1.0: bomb</p>
       </>,
       folder: "Junk Mail",
+      isCloseable: true,
+      id: 7
+   },
+   {
+      subject: "The Initiation",
+      from: "The Church of Lorem",
+      body: <>
+         <p>Greetings disciples.</p>
+         <p>If you have received this letter, it means that you have gained access to the Church of Lorem.</p>
+         <p>You may find Us in the Start Menu.</p>
+         <p>May the Lorem be with you.</p>
+      </>,
+      reward: {
+         items: [
+            "Access to the Church of Lorem"
+         ],
+         imgSrc: "",
+         claimFunc: (): void => {
+
+         }
+      },
+      folder: "Inbox",
       isCloseable: true,
       id: 7
    },

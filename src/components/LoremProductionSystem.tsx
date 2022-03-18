@@ -59,7 +59,7 @@ const findWord = (sentence: string, endIdx: number): Word => {
    
    let word!: Word;
    for (const loremPack of LOREM_PACKS) {
-      if (Game.wordsTyped >= loremPack.requirements.wordsTyped && typeof loremPack.contents.words !== "undefined") {
+      if (Game.stats.wordsTyped >= loremPack.requirements.wordsTyped && typeof loremPack.contents.words !== "undefined") {
          for (const currentWord of loremPack.contents.words) {
             for (const currentCase of currentWord.caseTable) {
                if (currentCase.includes(wordStr.toLowerCase())) {
@@ -110,7 +110,7 @@ const sentenceStructureToEnglish = (sentenceStructure: SentenceStructure): [stri
       // Find the word definition
       let word!: Word;
       for (const loremPack of LOREM_PACKS) {
-         if (Game.wordsTyped >= loremPack.requirements.wordsTyped && typeof loremPack.contents.words !== "undefined") {
+         if (Game.stats.wordsTyped >= loremPack.requirements.wordsTyped && typeof loremPack.contents.words !== "undefined") {
             let hasFound = false;
             for (const currentWord of loremPack.contents.words) {
                if (currentWord.latin === structurePart.latin) {
@@ -190,7 +190,7 @@ const createSentence = (rawSentence: string): string => {
 const getAvailableSentenceStructures = (): Array<SentenceStructure> => {
    let availableSentenceStructures = new Array<SentenceStructure>();
    for (const loremPack of LOREM_PACKS) {
-      if (Game.wordsTyped >= loremPack.requirements.wordsTyped) {
+      if (Game.stats.wordsTyped >= loremPack.requirements.wordsTyped) {
          if (typeof loremPack.contents.sentenceStructures !== "undefined") {
             availableSentenceStructures = availableSentenceStructures.concat(loremPack.contents.sentenceStructures);
          }
@@ -221,6 +221,23 @@ const LoremSentence = ({ sentence, meaning, type, showFunc, n }: LoremSentencePr
    const ref = useRef<HTMLElement>(null);
    let tooltip: HTMLElement | null = null;
 
+   const closeTooltip = () => {
+      if (tooltip !== null) {
+         removeTooltip(tooltip);
+         tooltip = null;
+      }
+   }
+
+   const checkMouse = (): void => {
+      const e = window.event as MouseEvent;
+
+      if (e.target !== ref.current!) {
+         window.removeEventListener("mousemove", checkMouse);
+
+         closeTooltip();
+      }
+   }
+
    const hoverTooltip = (): void => {
       if (typeof showFunc !== "undefined" && typeof n !== "undefined") {
          if (!showFunc(n)) return;
@@ -233,13 +250,8 @@ const LoremSentence = ({ sentence, meaning, type, showFunc, n }: LoremSentencePr
       }
 
       tooltip = createTooltip(pos, <span><b>Meaning:</b> {meaning}</span>);
-   }
 
-   const closeTooltip = () => {
-      if (tooltip !== null) {
-         removeTooltip(tooltip);
-         tooltip = null;
-      }
+      window.addEventListener("mousemove", checkMouse);
    }
 
    useEffect(() => {
@@ -383,7 +395,7 @@ const LoremProductionSystem = () => {
                
                Game.lorem += wordValue;
    
-               Game.wordsTyped++;
+               Game.stats.wordsTyped++;
                updateUnlockedTypingUpgrades();
             }
          }

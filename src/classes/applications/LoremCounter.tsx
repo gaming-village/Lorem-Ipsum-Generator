@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Game from "../../Game";
-import { randInt, randItem, roundNum } from "../../utils";
+import { roundNum, randInt, randItem } from "../../utils";
 import Application from "./Application";
 
 const createEffectText = (container: HTMLElement, isNegative: boolean): void => {

@@ -152,10 +152,24 @@
    position: relative;
    cursor: pointer;
 }
-#taskbar .menu .panel:hover {
+#taskbar .menu .panel.locked {
+   font-style: italic;
+   font-weight: bold;
+   background-color: #666;
+   color: #fff;
+   cursor: not-allowed;
+   box-shadow: 0 0 0 2px red inset;
+}
+#taskbar .menu .panel.locked:hover {
+   background-color: #777;
+}
+#taskbar .menu .panel.locked:active {
+   background-color: #555;
+}
+#taskbar .menu .panel:not(.locked):not(.opened):not(.program-opened):hover {
    background-color: #dadada;
 }
-#taskbar .menu .panel:active {
+#taskbar .menu .panel:not(.locked):not(.opened):not(.program-opened):active {
    background-color: #c0c0c0;
 }
 #taskbar .menu .panel.opened {

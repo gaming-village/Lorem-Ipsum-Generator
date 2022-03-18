@@ -19,14 +19,12 @@ interface UserInfo {
    workers: { [key: string ]: number};
 }
 interface GameType {
-   version: string;
+   readonly version: string;
    currentView: string;
    ticks: number;
    readonly tps: number;
    lorem: number;
-   totalLoremTyped: number;
    previousLorem: number;
-   wordsTyped: number;
    loremAchievements: Array<AchievementInfo>;
    settings: SettingsType;
    applications: { [key: string]: Application };
@@ -51,11 +49,16 @@ interface GameType {
    readonly hasRenderListener: (func: () => void) => boolean;
    readonly blurScreen: () => void;
    readonly unblurScreen: () => void;
+   readonly stats: {
+      totalLoremGenerated: number;
+      wordsTyped: number;
+   }
    readonly misc: {
       internMotivation: number;
       blackMarketIsUnlocked: boolean;
       corporateOverviewIsUnlocked: boolean,
       startMenuIsUnlocked: boolean;
+      loremSpentOnWorkers: number;
    }
 }
 
@@ -73,9 +76,7 @@ const Game: GameType = {
    ticks: 0,
    tps: 20,
    lorem: 0,
-   totalLoremTyped: 0,
    previousLorem: 0,
-   wordsTyped: 0,
    loremAchievements: new Array<AchievementInfo>(),
    settings: [],
    applications: {},
@@ -107,7 +108,7 @@ const Game: GameType = {
          const loremDiff: number = this.lorem - this.previousLorem;
 
          // Add to the total lorem typed
-         if (loremDiff > 0) this.totalLoremTyped += loremDiff;
+         if (loremDiff > 0) this.stats.totalLoremGenerated += loremDiff;
 
          checkLoremLetters();
 
@@ -206,11 +207,16 @@ const Game: GameType = {
    unblurScreen: () => {
       document.body.classList.remove("blurred");
    },
+   stats: {
+      totalLoremGenerated: 0,
+      wordsTyped: 0
+   },
    misc: {
       internMotivation: 0,
       blackMarketIsUnlocked: false,
       corporateOverviewIsUnlocked: false,
-      startMenuIsUnlocked: false
+      startMenuIsUnlocked: false,
+      loremSpentOnWorkers: 0
    }
 };
 

@@ -86,7 +86,7 @@ const canBuyUpgrade = (upgrade: UpgradeInfo, lorem: number): boolean => {
 export function updateUnlockedTypingUpgrades(): void {
    for (const upgrade of MINOR_UPGRADE_DATA) {
       if (typeof upgrade.unlockRequirements.wordsTyped !== "undefined") {
-         if (Game.wordsTyped >= upgrade.unlockRequirements.wordsTyped) {
+         if (Game.stats.wordsTyped >= upgrade.unlockRequirements.wordsTyped) {
             upgrade.isUnlocked = true;
             if (addUnlockedUpgrade !== null) {
                addUnlockedUpgrade(upgrade);

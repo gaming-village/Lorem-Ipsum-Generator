@@ -294,3 +294,152 @@ export function shuffleArr(arr: Array<any>): Array<any> {
 
   return arr;
 }
+
+// NUMBER FORMATTING
+
+const numToWords = (num: number, dpp: number): string => {
+   if (num === 0) return "zero";
+
+   // If the number is a float
+   let decimalPlaces: null | string = null;
+   if (num % 1 !== 0) {
+      const parts = num.toString().split(".");
+      num = Number(parts[0]);
+      const exp = Math.pow(10, dpp);
+      const decimalPlacesNum = Math.round((Number("0." + parts[1]) + Number.EPSILON) * exp) / exp;
+      decimalPlaces = decimalPlacesNum.toString().substring(2, decimalPlacesNum.toString().length);
+   }
+
+   const convertToSections = (num: number): Array<string> => {
+      const wordSections = new Array<string>();
+      num.toString().split("").reverse().forEach((letter, idx) => {
+         if (idx % 3 === 0) {
+            wordSections.unshift(letter);
+         } else {
+            wordSections[0] = letter + wordSections[0];
+         }
+      });
+
+      return wordSections;
+   }
+
+   const wordSections = convertToSections(num);
+
+   const bigSuffixes = ["thousand", "million", "billion", "trillion", "quadrillion", "quintillion", "sextillion", "septillion", "octillion", "nonillion", "decillion"];
+   const units = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+   const teens = ["eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
+   const tens = ["ten", "twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+
+   let result = "";
+   let i = 0;
+   for (let section of wordSections) {
+      while (section.length < 3) section = "0" + section;
+      const parts = section.split("");
+
+      let newSection = "";
+      if (parts[0] !== "0") {
+         newSection += units[parseInt(parts[0]) - 1] + " hundred ";
+         if (parts[1] !== "0" && parts[2] !== "0") newSection += "and ";
+      }
+      if (parseInt(parts[1]) === 1 && parseInt(parts[2]) > 0) {
+         newSection += teens[parseInt(parts[2]) - 1] + " ";
+      } else {
+         if (parts[1] !== "0") {
+            newSection += tens[parseInt(parts[1]) - 1] + " ";
+         }
+         if (parts[2] !== "0") {
+            newSection += units[parseInt(parts[2]) - 1] + " ";
+         }
+      }
+
+      const n = wordSections.length - i - 2;
+      if (n >= 0) {
+         newSection += bigSuffixes[n] + ", ";
+      }
+
+      result += newSection;
+      i++;
+   }
+
+   if (decimalPlaces !== null) {
+      result += "point ";
+      for (const decimal of decimalPlaces.toString().split("")) {
+         if (Number(decimal) === 0) {
+            result += "zero ";
+         } else { 
+            result += units[Number(decimal) - 1] + " ";
+         }
+      }
+   }
+
+   return result;
+};
+const numToSuffix = (num: number, dpp: number): string => {
+   const bigSuffixes = ["million", "billion", "trillion", "quadrillion", "quintillion", "sextillion", "septillion", "octillion", "nonillion", "decillion"];
+
+   const n = Math.floor((Math.floor(num).toString().length - 1) / 3);
+   if (n >= 2) {
+      const suffix = bigSuffixes[n - 2];
+      const newNum = num / Math.pow(1000, n);
+      const exp = Math.pow(10, dpp);
+      const roundedNum = Math.round((newNum + Number.EPSILON) * exp) / exp;
+      return `${roundedNum} ${suffix}`;
+   } else {
+      return num.toLocaleString();
+   }
+};
+const numToLetter = (num: number, dpp: number): string => {
+   const letters = ["m", "b", "t", "q", "Q", "s", "S", "o", "n", "d"];
+
+   const n = Math.floor((Math.floor(num).toString().length - 1) / 3);
+   if (n >= 2) {
+      const suffix = letters[n - 2];
+      const newNum = num / Math.pow(1000, n);
+      const exp = Math.pow(10, dpp);
+      const roundedNum = Math.round((newNum + Number.EPSILON) * exp) / exp;
+      return roundedNum + suffix;
+   } else {
+      return num.toLocaleString();
+   }
+};
+export function formatNum(num: number | string): string {
+   const val: number = Number(num);
+   if (isNaN(val)) {
+      throw new Error(`Tried to format ${num} but resulted in NaN!`);
+   }
+   // const dpp = Number(Game.settings.list.decimalPointPrecision.value);
+   // const displayType = Number(Game.settings.list.displayType.value) + 1;
+
+   /*
+    * (1) Standard: 1.23 million
+    * (2) Letter: 1.23m
+    * (3) Scientific Notation: 1.23e6
+    * (4) Decimal: 1,230,000
+    * (5) Words: One million, two hundred and thirty thousand
+   */
+
+   const displayType: number = 5;
+   const dpp = 2;
+   switch (displayType) {
+      case 1:
+         return numToSuffix(val, dpp);
+      case 2:
+         return numToLetter(val, dpp);
+      case 3:
+         return val.toExponential(dpp);
+      case 4:
+         return val.toLocaleString();
+      case 5: {
+         return numToWords(val, dpp);
+      }
+   }
+   throw new Error("Unknown display type!");
+}
+
+/**
+ * Gets the nth triangular number
+ * @param n The position of the trianglular number
+ */
+export function getTriangularNumber(n: number): number {
+   return (n * n + n) / 2;
+}

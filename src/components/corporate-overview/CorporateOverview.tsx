@@ -10,7 +10,7 @@ import CareerPathSection from "./CareerPathSection";
 
 import Game from "../../Game";
 import { JOB_DATA, JOB_TIER_DATA, JobInfo, } from "../../data/job-data";
-import { getPrefix, randItem, roundNum } from "../../utils";
+import { getPrefix, getTriangularNumber, randItem, roundNum } from "../../utils";
 
 import "../../css/corporate-overview.css";
 
@@ -128,12 +128,33 @@ export function calculateWorkerProduction(): number {
    return totalProduction;
 }
 
-const calculateWorkerCost = (worker: JobInfo, extraAmount?: number): number => {
+
+/**
+ * Calculates the cost of a specified number of workers.
+ * @param worker The worker
+ * @param startCount The amount of workers to start at. If not specified, will begin at the current number of workers.
+ * @param amount The number of additional workers
+ * @returns The total cost of the range of workers
+ */
+export function calculateWorkerCost(worker: JobInfo, start?: number, amount?: number): number {
+   const startN = typeof start !== "undefined" ? start : Game.userInfo.workers[worker.id];
+   const amountN = typeof amount !== "undefined" ? amount : 1;
+
+
    // Fun fact: This is the only place where the "baseCost" property is used.
    const baseCost = JOB_TIER_DATA[worker.tier - 1].baseCost;
-   const count = Game.userInfo.workers[worker.id] + (extraAmount || 0);
+   const count = Game.userInfo.workers[worker.id] + (amount || 0);
 
    let cost = baseCost * Math.pow(1.1, count);
+   const cost2 = baseCost * amountN * Math.pow(1.1, startN + amountN);
+   if (cost2 === Infinity) {
+      console.trace();
+      throw new Error("bad!");
+   }
+   return cost2;
+   console.log(cost, cost2);
+   console.log(baseCost, startN, amountN);
+   console.log("-=-=--=-=-=-=-=-");
 
    if (hasJob("Manager")) {
       cost *= 0.9;
@@ -248,14 +269,14 @@ export const sectionData: ReadonlyArray<SectionType> = [
       category: SectionCategories.general,
       getSection: (job: JobInfo, promoteFunc?: () => void) => <ProfileSection job={job} promoteFunc={promoteFunc} />,
       tooltipContent: (job: JobInfo) => {
-         const jobRequirements = JOB_TIER_DATA[job.tier - 1].requirements;
-         const nextJobRequirements: number | null = job.tier < JOB_TIER_DATA.length ? JOB_TIER_DATA[job.tier].requirements : null;
+         const jobRequirements = JOB_TIER_DATA[job.tier - 1].loremRequirements;
+         const nextJobRequirements: number | null = job.tier < JOB_TIER_DATA.length ? JOB_TIER_DATA[job.tier].loremRequirements : null;
 
          return <>
             <h3>Profile</h3>
             <p>You are currently {getPrefix(job.name)} {job.name}.</p>
             {nextJobRequirements !== null ? (
-               <p>You are {roundNum((Game.totalLoremTyped - jobRequirements) / (nextJobRequirements - jobRequirements) * 100)}% of the way to a promotion.</p>
+               <p>You are {roundNum((Game.stats.totalLoremGenerated - jobRequirements) / (nextJobRequirements - jobRequirements) * 100)}% of the way to a promotion.</p>
             ) : undefined}
          </>;
       }

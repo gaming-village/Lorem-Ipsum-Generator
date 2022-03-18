@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import StartIcon from "../images/start-icon.png";
+import QuestionMark from "../images/icons/questionmark.png";
 
 import Game from "../Game";
-import MENU_DATA, { MenuInfo } from "../data/start-menu-data";
+import START_MENU_DATA, { MenuInfo } from "../data/start-menu-data";
 import Program from "../classes/programs/Program";
 import ReactDOM from "react-dom";
-import { Point } from "../utils";
+import { roundNum, Point } from "../utils";
 import { createTooltip, removeTooltip } from "../tooltips";
+import { getLetterBySubject } from "./media/Mail";
 
 export let showStartMenu: () => void;
 
@@ -26,6 +28,32 @@ START MENU
   -> Panel
 
 */
+
+const startMenuSectionIsUnlocked = (menu: MenuInfo): boolean => {
+   if (menu.isUnlocked) return true;
+
+   if (typeof menu.unlockRequirements !== "undefined") {
+      if (typeof menu.unlockRequirements.wordsTyped !== "undefined") {
+         if (Game.stats.wordsTyped < menu.unlockRequirements.wordsTyped) return false;
+      }
+
+      if (typeof menu.unlockRequirements.totalLoremGenerated !== "undefined") {
+         if (Game.stats.totalLoremGenerated < menu.unlockRequirements.totalLoremGenerated) return false;
+      }
+
+      if (typeof menu.unlockRequirements.letterRewardIsClaimed !== "undefined") {
+         const letter = getLetterBySubject(menu.unlockRequirements.letterRewardIsClaimed);
+         if (typeof letter.reward === "undefined") {
+            throw new Error("Requested letter doesn't have a reward!");
+         }
+         return typeof letter.reward.isClaimed === "undefined" ? false : letter.reward.isClaimed;
+      }
+
+      menu.isUnlocked = true;
+      return true;
+   }
+   throw new Error("Menu wasn't unlocked but didn't had requirements");
+}
 
 const createError = (): void => {
    const event = window.event as MouseEvent;
@@ -57,6 +85,38 @@ const getProgramVisibility = (programName: string): boolean => {
    return program.isOpened;
 }
 
+const getMenuRequirementsJSX = (menu: MenuInfo): JSX.Element => {
+   if (typeof menu.unlockRequirements === "undefined") {
+      throw new Error("Tried to create requirements JSX but was undefined!");
+   }
+
+   return <ul>
+      {Object.entries(menu.unlockRequirements).map(([requirementName, val], i) => {
+         let content!: JSX.Element;
+         switch (requirementName) {
+            case "wordsTyped": {
+               const colour = Game.stats.wordsTyped >= Number(val) ? "green" : "red";
+               content = <>Words typed: <span style={{color: colour}}>{Game.stats.wordsTyped} / {val}</span></>;
+               break;
+            }
+            case "totalLoremGenerated": {
+               const colour = Game.stats.totalLoremGenerated >= Number(val) ? "green" : "red";
+               content = <>Total lorem generated: <span style={{color: colour}}>{roundNum(Game.stats.totalLoremGenerated)} / {val}</span></>;
+               break;
+            }
+            case "letterRewardIsClaimed": {
+               const isUnlocked = getLetterBySubject(val as string).reward!.isClaimed || false;
+               const colour = isUnlocked ? "green" : "red";
+               content = <>{val}: <span style={{color: colour}}>{isUnlocked ? "Claimed" : "Unclaimed"}</span></>;
+               break;
+            }
+         }
+
+         return <li key={i}>{content}</li>
+      })}
+   </ul>;
+}
+
 interface PanelProps {
    menu: MenuInfo;
    openFunc: (menu: MenuInfo, position: Point) => void;
@@ -65,6 +125,7 @@ interface PanelProps {
 const Panel = ({ menu, openFunc, isOpened }: PanelProps): JSX.Element => {
    const panelRef = useRef<HTMLDivElement | null>(null);
    const [programIsOpened, setProgramIsOpened] = useState<boolean>(typeof menu.tree === "string" ? getProgramVisibility(menu.tree) : false);
+   const tooltip = useRef<HTMLElement | null>(null);
 
    const toggleProgramVisibility = (programName: string): void => {
       const program = Game.programs[programName] as Program;
@@ -76,6 +137,7 @@ const Panel = ({ menu, openFunc, isOpened }: PanelProps): JSX.Element => {
    const clickEvent = (): void => {
       if (typeof menu.tree === "object" && menu.tree !== null) {
          const panel = panelRef.current!;
+         console.log(panel);
 
          // Calculate the position of the new menu
          const left = panel.offsetLeft + panel.offsetWidth + 2;
@@ -90,10 +152,38 @@ const Panel = ({ menu, openFunc, isOpened }: PanelProps): JSX.Element => {
             toggleProgramVisibility(menu.tree as string);
          } else {
             // If the program doesn't exist, show an error message
-            console.log("err");
             createError();
          }
       }
+   }
+
+   const deleteTooltip = (): void => {
+      if (tooltip.current !== null) {
+         removeTooltip(tooltip.current);
+      }
+   }
+
+   useEffect(() => {
+      return () => {
+         deleteTooltip();
+      }
+   }, []);
+
+   const showLockedTooltip = (): void => {
+      const bounds = panelRef.current!.getBoundingClientRect();
+
+      const position = {
+         left: bounds.x + bounds.width/2 + "px",
+         top: bounds.y + bounds.height/2 + "px"
+      };
+
+      const content = <>
+         <p><b>You haven't unlocked this panel yet!</b></p>
+
+         {getMenuRequirementsJSX(menu)}
+      </>;
+
+      tooltip.current = createTooltip(position, content);
    }
 
    let iconSrc!: string;
@@ -103,13 +193,29 @@ const Panel = ({ menu, openFunc, isOpened }: PanelProps): JSX.Element => {
       iconSrc = require("../images/icons/questionmark.png").default;
    }
 
-   return <div onClick={clickEvent} className={`panel${isOpened ? " opened" : ""}${programIsOpened ? " program-opened" : ""}`} ref={panelRef}>
-      <img src={iconSrc} alt="" />
-      <p>{menu.name}</p>
+   const isUnlocked = startMenuSectionIsUnlocked(menu);
 
-      { typeof menu.tree === "object" && menu.tree !== null ? (
-         <div className="arrow"></div>
-      ) : undefined }
+   let className = "panel";
+   if (isUnlocked) {
+      if (isOpened) className += " opened";
+      if (programIsOpened) className += " program-opened";
+   } else {
+      className += " locked";
+   }
+
+   return <div onClick={isUnlocked ? clickEvent : undefined} className={className} ref={panelRef} onMouseEnter={!isUnlocked ? showLockedTooltip : undefined} onMouseLeave={!isUnlocked ? deleteTooltip : undefined}>
+      {isUnlocked ? <>
+         <img src={iconSrc} alt="" />
+         <p>{menu.name}</p>
+
+         { typeof menu.tree === "object" && menu.tree !== null ? (
+            <div className="arrow"></div>
+            ) : undefined }
+      </> : <>
+         <img src={QuestionMark} alt="" />
+
+         <p>???</p>
+      </>}
    </div>;
 }
 
@@ -130,8 +236,8 @@ const Menu = ({ panels, position }: MenuProps): JSX.Element => {
       };
    } else {
       style = {
-         left: position.x,
-         bottom: Math.max(position.y, -2)
+         left: position.x + "px",
+         bottom: Math.max(position.y, -2) + "px"
       }
    }
 
@@ -190,7 +296,7 @@ const StartMenu = (): JSX.Element => {
    useEffect(() => {
       openStartMenu = (): void => {
          const parent = document.getElementById("taskbar")!;
-         createMenu(MENU_DATA.slice(), parent);
+         createMenu(START_MENU_DATA.slice(), parent);
 
          window.addEventListener("mousemove", mouseMove);
       }

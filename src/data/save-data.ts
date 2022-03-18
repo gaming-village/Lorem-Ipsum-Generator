@@ -198,10 +198,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         return decToHex(Game.totalLoremTyped);
+         return decToHex(Game.stats.totalLoremGenerated);
       },
       loadEvent: (savedValue: string) => {
-         Game.totalLoremTyped = Number(hexToDec(savedValue));
+         Game.stats.totalLoremGenerated = Number(hexToDec(savedValue));
       }
    },
    {
@@ -476,10 +476,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         return decToHex(Game.wordsTyped);
+         return decToHex(Game.stats.wordsTyped);
       },
       loadEvent: (savedValue: string) => {
-         Game.wordsTyped = Number(hexToDec(savedValue));
+         Game.stats.wordsTyped = Number(hexToDec(savedValue));
       }
    },
    {

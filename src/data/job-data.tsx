@@ -1,6 +1,6 @@
 interface JobTierInfo {
    /** How much lorem is required to be able to promote to the job */
-   readonly requirements: number;
+   readonly loremRequirements: number;
    /** How much (theoretical) money the job pays */
    readonly salary: string;
    readonly benefits: Array<string>;
@@ -11,7 +11,7 @@ interface JobTierInfo {
 }
 export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
    {
-      requirements: 0,
+      loremRequirements: 0,
       salary: "N/A",
       benefits: [
          "The Upgrades panel."
@@ -20,7 +20,7 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       loremProduction: 0.01
    },
    {
-      requirements: 15,
+      loremRequirements: 15,
       salary: "$1000",
       benefits: [
          "The ability to buy workers."
@@ -29,7 +29,7 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       loremProduction: 0.1
    },
    {
-      requirements: 2500,
+      loremRequirements: 1000,
       salary: "$20000",
       benefits: [
          "Access to the start menu",
@@ -39,7 +39,7 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       loremProduction: 1
    },
    {
-      requirements: 1e5,
+      loremRequirements: 1e6,
       salary: "$100000",
       benefits: [
          "The Daily Indoctrination",
@@ -49,11 +49,18 @@ export const JOB_TIER_DATA: ReadonlyArray<JobTierInfo> = [
       loremProduction: 10
    },
    {
-      requirements: 2.5e6,
+      loremRequirements: 1e10,
       salary: "$250000",
       benefits: [],
       baseCost: 1e5,
       loremProduction: 100
+   },
+   {
+      loremRequirements: 1e15,
+      salary: "$1,000,000",
+      benefits: [],
+      baseCost: 1e6,
+      loremProduction: 1000
    }
 ];
 
@@ -85,7 +92,7 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       benefits: [
          <>Workers generate 1.5x as much lorem.</>
       ],
-      description: "Employees have just begun their holy pilgrimage up the sacred Way of Lorem, yet are more valuable than lesser life-forms such as the Intern. Way enough pain and suffering, they too may one day hope to achieve Enlightenment",
+      description: "Employees have just begun their holy pilgrimage up the sacred Way of Lorem, yet are more valuable than lesser life-forms such as the Intern. With enough pain and suffering, they too may one day hope to achieve Enlightenment.",
       tier: 2
    },
    {
@@ -203,5 +210,17 @@ export const JOB_DATA: ReadonlyArray<JobInfo> = [
       description: "",
       jobOrigins: ["Director"],
       tier: 5
+   },
+
+   /** TIER 6 */
+   {
+      id: "ceos",
+      name: "CEO",
+      benefits: [
+         <></>
+      ],
+      description: "",
+      jobOrigins: ["Executive", "Board Member"],
+      tier: 6
    }
 ];
