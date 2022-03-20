@@ -1,57 +1,126 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import "../css/navbar.css";
 import { getElem } from "../utils";
 import Game from "../Game";
+import { Link } from "react-router-dom";
+import ReactDOM from "react-dom";
 
 export let switchView!: (view: number | string) => void;
 
 interface ViewInfo {
-   elemID: string;
-   name: string;
+   readonly name: string;
+   readonly type: "element" | "page";
+   readonly tooltipContent: JSX.Element | null;
    isSelected: boolean;
-   isUnlockable?: boolean;
+   readonly isUnlockable?: boolean;
 }
-const VIEW_DATA: ReadonlyArray<ViewInfo> = [
+
+interface ElementView extends ViewInfo {
+   readonly elemID: string;
+}
+interface PageView extends ViewInfo {
+   readonly pageUrl: string;
+}
+
+const VIEW_DATA: ReadonlyArray<ElementView | PageView> = [
    {
-      elemID: "computer",
       name: "Computer",
+      type: "element",
+      tooltipContent: null,
+      elemID: "computer",
       isSelected: true
    },
    {
-      elemID: "media",
       name: "Media",
+      type: "element",
+      tooltipContent: null,
+      elemID: "media",
       isSelected: false
    },
    {
-      elemID: "corporate-overview",
       name: "Corporate Overview",
+      type: "element",
+      tooltipContent: null,
+      elemID: "corporate-overview",
       isSelected: false,
       isUnlockable: true
    },
    {
-      elemID: "black-market",
       name: "Black Market",
+      type: "element",
+      tooltipContent: null,
+      elemID: "black-market",
       isSelected: false,
       isUnlockable: true
+   },
+   {
+      name: "Prestige",
+      type: "page",
+      tooltipContent: <>
+         <p>testing123!!</p>
+         <p>I am gaming right now</p>
+      </>,
+      pageUrl: "/prestige-tree",
+      isSelected: false,
+      isUnlockable: false
    }
 ];
 
-const updateVisibleViews = (views: ReadonlyArray<ViewInfo>) => {
-   for (const view of views) {
-      const elem = getElem(view.elemID);
-      if (!view.isSelected) {
-         elem.classList.add("hidden");
-      } else {
-         elem.classList.remove("hidden");
+interface NavbarTooltipProps {
+   button: HTMLButtonElement;
+   content: JSX.Element;
+   removeFunc: () => void;
+}
+const NavbarTooltip = ({ button, content, removeFunc }: NavbarTooltipProps): JSX.Element => {
+   const [xPos, setXPos] = useState((window.event as MouseEvent).clientX);
+
+   const mouseMove = useCallback((): void => {
+      const event = window.event as MouseEvent;
+
+      if (event.target !== button) {
+         removeFunc();
+         return;
       }
+
+      // Update pos
+      setXPos(event.clientX);
+   }, [button, removeFunc]);
+
+   useEffect(() => {
+      window.addEventListener("mousemove", mouseMove);
+
+      return () => {
+         window.removeEventListener("mousemove", mouseMove);
+      }
+   }, [mouseMove]);
+
+   const style: React.CSSProperties = {
+      left: xPos + "px"
+   };
+
+   return <div style={style} className="navbar-tooltip">
+      {content}
+   </div>;
+}
+
+const createNavbarTooltip = (button: HTMLButtonElement, content: JSX.Element): void => {
+   const container = document.createElement("div");
+   document.getElementById("computer")!.appendChild(container);
+
+   const removeFunc = (): void => {
+      ReactDOM.unmountComponentAtNode(container);
+      container.remove();
    }
+
+   const tooltip = <NavbarTooltip button={button} content={content} removeFunc={removeFunc} />
+   ReactDOM.render(tooltip, container);
 }
 
 /**
- * Gets all views available by default (a.k.a)
+ * Gets all views available by default
  */
-const getDefaultViews = (): Array<ViewInfo> => {
+ const getDefaultUnlockedViews = (): Array<ViewInfo> => {
    let defaultViews = VIEW_DATA.slice();
 
    // Remove the black market
@@ -66,40 +135,115 @@ const getDefaultViews = (): Array<ViewInfo> => {
    return defaultViews;
 }
 
+/**
+ * Shows the currently selected view and hides all others
+ * @param views The view array
+ */
+const updateVisibleViews = (views: ReadonlyArray<ViewInfo>) => {
+   for (const view of views) {
+      if (view.type !== "element") continue;
+
+      const elem = getElem((view as ElementView).elemID);
+      if (view.isSelected) {
+         elem.classList.remove("hidden");
+      } else {
+         elem.classList.add("hidden");
+      }
+   }
+}
+
 export function setupNavBar(): void {
    updateVisibleViews(VIEW_DATA);
 }
 
 export let unlockView: (viewName: string) => void;
 
-const NavBar = () => {
-   const [unlockedViews, setUnlockedViews] = useState(getDefaultViews());
+interface NavbarButtonProps {
+   view: ViewInfo;
+   isUnlocked: boolean;
+}
+const NavbarButton = ({ view, isUnlocked }: NavbarButtonProps) => {
+   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-   const updateViewsArr = useCallback((elemID: string) => {
-      Game.currentView = elemID;
-
-      const newViewArr = unlockedViews.slice();
-      for (const currentView of newViewArr) {
-         currentView.isSelected = currentView.elemID === elemID;
-      }
-      setUnlockedViews(newViewArr);
-   }, [unlockedViews]);
+   const mouseOver = useCallback((): void => {
+      const button = buttonRef.current!;
+      createNavbarTooltip(button, view.tooltipContent!);
+   }, [view.tooltipContent]);
 
    useEffect(() => {
-      switchView = (view: number | string) => {
-         if (typeof view === "string") {
-            updateViewsArr(view);
+      const button = buttonRef.current!;
+
+      if (view.tooltipContent !== null) {
+         button.addEventListener("mouseover", mouseOver);
+      }
+
+      return () => {
+         button.removeEventListener("mouseover", mouseOver);
+      }
+   }, [mouseOver, view.tooltipContent]);
+
+   if (!isUnlocked) {
+      return <Button ref={buttonRef} className="darker">???</Button>;
+   }
+
+   switch (view.type) {
+      case "element": {
+         return <Button ref={buttonRef} onClick={() => switchView(view.name)} isDark={!view.isSelected}>{view.name}</Button>;
+      }
+      case "page": {
+         return <Link to={(view as PageView).pageUrl}>
+            <Button ref={buttonRef} isDark={!view.isSelected}>{view.name}</Button>
+         </Link>;
+      }
+      default: {
+         return null;
+      }
+   }
+}
+
+const Navbar = () => {
+   const [views, setViews] = useState<Array<ViewInfo>>(VIEW_DATA.slice());
+   const [unlockedViews, setUnlockedViews] = useState<Array<ViewInfo>>(getDefaultUnlockedViews());
+
+   const updateSelectedView = useCallback((view: ViewInfo) => {
+      if (view.hasOwnProperty("elemID")) {
+         Game.currentView = (view as ElementView).elemID;
+      }
+
+      const newViewArr = views.slice();
+      for (const currentView of newViewArr) {
+         currentView.isSelected = currentView === view;
+      }
+      setViews(newViewArr);
+   }, [views]);
+
+   useEffect(() => {
+      switchView = (viewIdentifier: number | string) => {
+         if (typeof viewIdentifier === "string") {
+            // Find the corresponding view
+            let view!: ViewInfo;
+            for (const currentView of VIEW_DATA) {
+               if (currentView.name === viewIdentifier) {
+                  view = currentView;
+                  break;
+               }
+            }
+            if (typeof view === "undefined") {
+               throw new Error(`Couldn't find a view with the name '${viewIdentifier}'!`);
+            }
+
+            updateSelectedView(view);
          } else {
-            if (view + 1 > unlockedViews.length) return;
-            updateViewsArr(unlockedViews[view].elemID);
+            if (viewIdentifier + 1 > views.length) return;
+            updateSelectedView(views[viewIdentifier]);
          }
 
-         updateVisibleViews(unlockedViews);
+         updateVisibleViews(views);
       }
-   }, [updateViewsArr, unlockedViews]);
+   }, [updateSelectedView, views]);
 
    const unlockViewFunc = useCallback((viewName: string) => {
-      const newViewArr = unlockedViews.slice();
+      const newUnlockedViews = unlockedViews.slice();
 
       let view: ViewInfo | undefined;
       for (const currentView of VIEW_DATA) {
@@ -108,17 +252,16 @@ const NavBar = () => {
             break;
          }
       }
-      
       if (typeof view === "undefined") {
          throw new Error(`View with name ${viewName} doesn't exist!`);
       }
 
-      if (newViewArr.indexOf(view) !== -1) {
+      if (newUnlockedViews.indexOf(view) !== -1) {
          return;
       }
-      newViewArr.push(view);
+      newUnlockedViews.push(view);
 
-      setUnlockedViews(newViewArr);
+      setUnlockedViews(newUnlockedViews);
    }, [unlockedViews]);
 
    useEffect(() => {
@@ -136,7 +279,7 @@ const NavBar = () => {
 
    const navButtons = VIEW_DATA.map((view, i) => {
       const isUnlocked = unlockedViews.includes(view);
-      return <Button onClick={isUnlocked ? () => switchView(i) : undefined} key={i} className={isUnlocked ? (!view.isSelected ? "dark" : "") : "darker"}>{isUnlocked ? view.name : "???"}</Button>;
+      return <NavbarButton view={view} isUnlocked={isUnlocked} key={i} />
    });
 
    return <div id="top-bar">
@@ -146,4 +289,4 @@ const NavBar = () => {
    </div>;
 }
 
-export default NavBar;
+export default Navbar;

@@ -11,3 +11,17 @@
 #top-bar button {
    margin: 0 0.5rem;
 }
+
+/* For page views */
+#top-bar a {
+   text-decoration: none;
+}
+
+.navbar-tooltip {
+   min-width: 10rem;
+   background-color: #222;
+   display: inline-block;
+   position: absolute;
+   top: 0;
+   transform: translateX(calc(-50% + 2.5rem));
+}

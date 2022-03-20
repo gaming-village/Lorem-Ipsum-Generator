@@ -2,7 +2,7 @@ import { roundNum, getElem, getCurrentTime } from "./utils";
 import { updateSave } from "./save";
 import achievements, { AchievementInfo } from "./data/achievement-data";
 import { unlockAchievement } from "./classes/applications/AchievementTracker";
-import { LOREM_LETTERS } from "./data/letter-data";
+import LETTER_DATA, { LetterInfo } from "./data/letter-data";
 import { SettingsType } from "./classes/programs/Settings";
 import { JOB_DATA, JobInfo } from "./data/job-data";
 import { calculateWorkerProduction } from "./components/corporate-overview/CorporateOverview";
@@ -62,10 +62,21 @@ interface GameType {
    }
 }
 
+const createLoremLetters = (): ReadonlyArray<LetterInfo> => {
+   const loremLetters = new Array<LetterInfo>();
+   for (const letter of LETTER_DATA) {
+      if (typeof letter.unlockConditions.lorem !== "undefined") {
+         loremLetters.push(letter);
+      }
+   }
+   return loremLetters;
+}
+
+const loremLetters = createLoremLetters();
 export function checkLoremLetters(): void {
-   for (const letter of LOREM_LETTERS) {
-      if (Game.lorem >= letter.requirement) {
-         receiveLetter(letter.name);
+   for (const letter of loremLetters) {
+      if (Game.lorem >= letter.unlockConditions!.lorem!) {
+         receiveLetter(letter);
       }
    }
 }

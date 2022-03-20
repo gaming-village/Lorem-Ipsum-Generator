@@ -714,6 +714,31 @@ export const MINOR_UPGRADE_DATA: ReadonlyArray<MinorUpgradeInfo> = [
          }
       },
       id: 29
+   },
+   {
+      name: "Window Removal",
+      description: () => {
+         const tier2WorkerName = Game.userInfo.previousJobs[1].name;
+         return <>{tier2WorkerName}s are <b>1.5x</b> as effective.</>
+      },
+      flavourText: "By removing all windows, employees will have less distractions such as 'the outside world'",
+      iconSrc: "",
+      effects: {
+         individualWorkerBonuses: {
+            2: {
+               multiplicativeBonus: 0.5
+            }
+         }
+      },
+      costs: {
+         lorem: 1000
+      },
+      unlockRequirements: {
+         workers: {
+            2: 10
+         }
+      },
+      id: 41
    }
 ];
 

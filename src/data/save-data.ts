@@ -349,7 +349,13 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
          return "0";
       },
       updateValue: () => {
-         let resultArr = new Array<number>(LETTER_DATA.length);
+         const letterPartData = new Array<number>(LETTER_DATA.length);
+
+         // Fill the array with 0's
+         for (let i = 0; i < LETTER_DATA.length; i++) {
+            letterPartData[i] = 0;
+         }
+         
          for (const letter of LETTER_DATA) {
             let part = 0;
             if (letter.isReceived) {
@@ -361,10 +367,10 @@ const SAVE_COMPONENTS: ReadonlyArray<SaveComponent> = [
                   }
                }
             }
-            resultArr[letter.id - 1] = part;
+            letterPartData[letter.id - 1] = part;
          }
 
-         let result = resultArr.map(num => num.toString()).join("");
+         let result = letterPartData.map(num => num.toString()).join("");
          
          // Remove trailing 0's
          let numTrailingZeros = 0;

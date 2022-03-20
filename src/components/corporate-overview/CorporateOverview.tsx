@@ -10,7 +10,7 @@ import CareerPathSection from "./CareerPathSection";
 
 import Game from "../../Game";
 import { JOB_DATA, JOB_TIER_DATA, JobInfo, } from "../../data/job-data";
-import { getPrefix, getTriangularNumber, randItem, roundNum } from "../../utils";
+import { getPrefix, randItem, roundNum } from "../../utils";
 
 import "../../css/corporate-overview.css";
 

@@ -4,6 +4,7 @@ import SAVE_COMPONENTS from "./data/save-data";
 
 import APPLICATION_DATA from "./data/application-data";
 import { MAIN_UPGRADE_DATA, MINOR_UPGRADE_DATA } from "./data/upgrade-data";
+import { PRESTIGE_UPGRADES } from "./data/prestige-data";
 
 const getCookie = (cname: string): string | null => {
    var name = cname + "=";
@@ -115,5 +116,6 @@ const validateSaveObject = (objectName: string, saveObject: SaveObject): void =>
 export function validateSaveData(): void {
    validateSaveObject("Application Data", APPLICATION_DATA);
    const allUpgrades = [ ...MAIN_UPGRADE_DATA, ...MINOR_UPGRADE_DATA ];
-   validateSaveObject("All Upgrades", allUpgrades);
+   validateSaveObject("Upgrades", allUpgrades);
+   validateSaveObject("Prestige upgrades", PRESTIGE_UPGRADES);
 }

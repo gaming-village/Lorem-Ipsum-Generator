@@ -35,16 +35,7 @@ export function getLetterBySubject(subject: string): LetterInfo {
    throw new Error(`There is no letter with the subject '${subject}'!`);
 }
 
-export function receiveLetter(letterSubject: string): void {
-   // Find the corresponding letter using the letter subject
-   let letter!: LetterInfo;
-   for (const currentLetter of LETTER_DATA) {
-      if (currentLetter.subject === letterSubject) {
-         letter = currentLetter;
-         break;
-      }
-   }
-
+export function receiveLetter(letter: LetterInfo): void {
    if (!letter.isReceived) {
       letter.isReceived = true;
 

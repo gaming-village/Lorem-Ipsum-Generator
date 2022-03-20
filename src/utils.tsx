@@ -435,11 +435,3 @@ export function formatNum(num: number | string): string {
    }
    throw new Error("Unknown display type!");
 }
-
-/**
- * Gets the nth triangular number
- * @param n The position of the trianglular number
- */
-export function getTriangularNumber(n: number): number {
-   return (n * n + n) / 2;
-}

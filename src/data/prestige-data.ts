@@ -16,11 +16,16 @@ Base tokens comes from total lorem generated
 Multiplied by:
 - Workforce (number of workers)
 
+First prestige upgrade:
+- Company policy
+- Description: "Unlocks legacy points. Each legacy point increases your lorem prodution by 1%."
+
 */
 
 interface PrestigeUpgrade {
    readonly name: string;
    readonly description: string;
+   readonly flavourText: string;
 }
 
 interface CompanyPolicyInfo extends PrestigeUpgrade {
@@ -43,23 +48,34 @@ interface PrestigeBundle {
    readonly id: number;
 }
 
-export const COMPANY_POLICIES: ReadonlyArray<PrestigeBundle> = [
+export const PRESTIGE_UPGRADES: ReadonlyArray<PrestigeBundle> = [
    {
-      baseCost: 10,
+      baseCost: 1,
       screenPosition: {
          x: 0,
          y: 0
       },
       companyPolicy: {
-         name: "The Eternal Ordeal",
-         description: "Gain access to "
-      },
-      binary: {
-         name: "",
-         description: ""
+         name: "The Beginning",
+         description: "Unlocks legacy points. Each legacy point increases your lorem prodution by 1%.",
+         flavourText: "Your time has come."
       },
       origins: null,
       id: 1
+   },
+   {
+      baseCost: 5,
+      screenPosition: {
+         x: 0,
+         y: 0
+      },
+      companyPolicy: {
+         name: "Advanced Accounting",
+         description: "Gain various advanced options for purchasing workers.",
+         flavourText: ""
+      },
+      origins: [1],
+      id: 6
    },
    {
       baseCost: 500,
@@ -69,7 +85,8 @@ export const COMPANY_POLICIES: ReadonlyArray<PrestigeBundle> = [
       },
       companyPolicy: {
          name: "Software Update 1",
-         description: "Enhances your virtual machine's software to run on Windows 95."
+         description: "Enhances your virtual machine's software to run on Windows 95.",
+         flavourText: ""
       },
       origins: [1],
       id: 2
@@ -82,7 +99,8 @@ export const COMPANY_POLICIES: ReadonlyArray<PrestigeBundle> = [
       },
       companyPolicy: {
          name: "Software Update 2",
-         description: "Enhances your virtual machine's software to run on Windows XP."
+         description: "Enhances your virtual machine's software to run on Windows XP.",
+         flavourText: ""
       },
       origins: [2],
       id: 3
@@ -95,7 +113,8 @@ export const COMPANY_POLICIES: ReadonlyArray<PrestigeBundle> = [
       },
       companyPolicy: {
          name: "Software Update 3",
-         description: "Enhances your virtual machine's software to run on Windows 10."
+         description: "Enhances your virtual machine's software to run on Windows 10.",
+         flavourText: ""
       },
       origins: [3],
       id: 4
@@ -108,9 +127,43 @@ export const COMPANY_POLICIES: ReadonlyArray<PrestigeBundle> = [
       },
       binary: {
          name: "Third Eye",
-         description: "Allows you to view prestige upgrades without having to prestige."
+         description: "Allows you to view prestige upgrades without having to prestige.",
+         flavourText: ""
       },
       origins: [1],
       id: 5
+   },
+   {
+      baseCost: 1000,
+      screenPosition: {
+         x: 0,
+         y: 0
+      },
+      companyPolicy: {
+         name: "Mass Surveillance",
+         description: "",
+         flavourText: ""
+      },
+      binary: {
+         name: "Civil Unrest",
+         description: "",
+         flavourText: "",
+      },
+      origins: [1],
+      id: 7
+   },
+   {
+      baseCost: 1000,
+      screenPosition: {
+         x: 0,
+         y: 0
+      },
+      binary: {
+         name: "Inside Connections",
+         description: "",
+         flavourText: ""
+      },
+      origins: [1],
+      id: 8
    }
 ];

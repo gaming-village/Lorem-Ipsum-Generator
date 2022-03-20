@@ -17,68 +17,15 @@ export interface LetterInfo {
    readonly body: JSX.Element;
    readonly folder: string;
    readonly reward?: LetterReward;
+   readonly unlockConditions: {
+      readonly lorem?: number;
+   }
    readonly isCloseable: boolean;
    isReceived?: boolean;
    isOpened?: boolean;
    /** The letter's unique identifier. Doesn't need to be in any order, just needs to be unique for every letter */
    readonly id: number;
 }
-
-interface LoremLetter {
-   name: string;
-   requirement: number;
-}
-
-export const LOREM_LETTERS: ReadonlyArray<LoremLetter> = [
-   {
-      name: "Corporate Overview",
-      requirement: 3
-   },
-   {
-      name: "Steven Job - free An-Droid",
-      requirement: 40
-   },
-   {
-      name: "Invitation",
-      requirement: 75
-   },
-   {
-      name: "Addressing Rumors",
-      requirement: 125
-   },
-   {
-      name: "urgent Matters",
-      requirement: 200
-   },
-   {
-      name: "Company Policy",
-      requirement: 200
-   },
-   {
-      name: "Illegal Activities",
-      requirement: 500
-   },
-   {
-      name: "Social security issue !",
-      requirement: 1000
-   },
-   {
-      name: "Tips with Lorem Corp",
-      requirement: 2000
-   },
-   {
-      name: "The Initiation",
-      requirement: 5000
-   },
-   {
-      name: "Order delivery",
-      requirement: 2.5e4
-   },
-   {
-      name: "Government is here",
-      requirement: 1e5
-   }
-];
 
 const LETTER_DATA: ReadonlyArray<LetterInfo> = [
    {
@@ -101,6 +48,9 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
             Game.misc.corporateOverviewIsUnlocked = true;
          }
       },
+      unlockConditions: {
+         lorem: 3
+      },
       isCloseable: false,
       id: 1
    },
@@ -113,6 +63,9 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          <p>In other news, we have updated our Company Policy - any workers which choose not to work will be put into the General Repurposing Facility, where they will learn to appreciate what little things they have in life.</p>
       </>,
       folder: "Inbox",
+      unlockConditions: {
+         lorem: 200
+      },
       isCloseable: false,
       id: 12
    },
@@ -127,6 +80,9 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          <p>an queen Of England</p>
       </>,
       folder: "Junk Mail",
+      unlockConditions: {
+         lorem: 40
+      },
       isCloseable: false,
       id: 2
    },
@@ -143,20 +99,11 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          </List>
       </>,
       folder: "Inbox",
+      unlockConditions: {
+         lorem: 2000
+      },
       isCloseable: false,
       id: 3
-   },
-   {
-      subject: "Motivational Letter",
-      from: "Lorem Corp",
-      body: <>
-         <p>Greetings employees.</p>
-         <p>The Motivational Department of Lorem Corp would like to send a reminder that any suspicious activity will result in your immediate termination.</p>
-         <p>We have also implemented a Lorem Quota. Those who meet the quota shall be rewarded.</p>
-      </>,
-      folder: "Inbox",
-      isCloseable: false,
-      id: 4
    },
    {
       subject: "Addressing Rumors",
@@ -166,6 +113,9 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          <p>It has come to our attention that there are several fallacious claims of 'malware-infected' computers. Disregard them - our system is perfect and flawless.</p>
       </>,
       folder: "Inbox",
+      unlockConditions: {
+         lorem: 125
+      },
       isCloseable: false,
       id: 5
    },
@@ -188,6 +138,9 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
             unlockAchievement("Shady Sales");
          }
       },
+      unlockConditions: {
+         lorem: 75
+      },
       isCloseable: false,
       id: 6
    },
@@ -200,6 +153,9 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          <p>figure 1.0: bomb</p>
       </>,
       folder: "Junk Mail",
+      unlockConditions: {
+         lorem: 200
+      },
       isCloseable: true,
       id: 7
    },
@@ -222,6 +178,9 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          }
       },
       folder: "Inbox",
+      unlockConditions: {
+         lorem: 5000
+      },
       isCloseable: true,
       id: 7
    },
@@ -235,6 +194,9 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          <p>I am apoligized for your inconvenience,,</p>
       </>,
       folder: "Junk Mail",
+      unlockConditions: {
+         lorem: 1000
+      },
       isCloseable: true,
       id: 8
    },
@@ -250,6 +212,9 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          <p>If you believe that this order is an error, please give me your money.</p>
       </>,
       folder: "Junk Mail",
+      unlockConditions: {
+         lorem: 2.5e4
+      },
       isCloseable: true,
       id: 9
    },
@@ -262,6 +227,9 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          <p>Pelase cotnact this page if you are in a confusion.</p>
       </>,
       folder: "Junk Mail",
+      unlockConditions: {
+         lorem: 1e5
+      },
       isCloseable: true,
       id: 10
    },
@@ -274,6 +242,9 @@ const LETTER_DATA: ReadonlyArray<LetterInfo> = [
          <p>Any individual who is found to have ties to this extremist group will forfeit their time both in LoremCorp and on Earth. Consider this your first warning.</p>
       </>,
       folder: "Inbox",
+      unlockConditions: {
+         lorem: 500
+      },
       isCloseable: true,
       id: 11
    }
