@@ -143,19 +143,16 @@ export function calculateWorkerCost(worker: JobInfo, start?: number, amount?: nu
 
    // Fun fact: This is the only place where the "baseCost" property is used.
    const baseCost = JOB_TIER_DATA[worker.tier - 1].baseCost;
-   const count = Game.userInfo.workers[worker.id] + (amount || 0);
 
-   let cost = baseCost * Math.pow(1.1, count);
-   const cost2 = baseCost * amountN * Math.pow(1.1, startN + amountN);
-   if (cost2 === Infinity) {
-      console.trace();
-      throw new Error("bad!");
+   let sum = 0;
+   let mult = 1;
+   for (let i = 0; i < amountN; i++) {
+      sum += mult;
+      mult *= 1.1;
    }
-   return cost2;
-   console.log(cost, cost2);
-   console.log(baseCost, startN, amountN);
-   console.log("-=-=--=-=-=-=-=-");
 
+   let cost = baseCost * Math.pow(1.1, startN) * sum;
+   
    if (hasJob("Manager")) {
       cost *= 0.9;
    }
@@ -176,6 +173,7 @@ const calculateAffordAmount = (worker: JobInfo): number => {
       affordAmount++;
       totalCost += cost;
    }
+
    return affordAmount;
 }
 
@@ -204,15 +202,15 @@ const WorkerSection = ({ job: worker }: SectionProps) => {
    const singleCost = calculateWorkerCost(worker);
    const affordAmount = calculateAffordAmount(worker);
    
-   const buyWorker = (num: number): void => {
-      for (let i = 0; i < num; i++) {
-         const cost = calculateWorkerCost(worker, i);
-         
-         Game.lorem -= cost;
-      }
+   const buyWorker = (amount: number): void => {
+      // Take away lorem
+      const cost = calculateWorkerCost(worker, undefined, amount);
+      Game.lorem -= cost;
 
-      Game.userInfo.workers[worker.id] += num;
+      // Add workers
+      Game.userInfo.workers[worker.id] += amount;
 
+      // Check if any upgrades require workers to be unlocked
       updateUnlockedWorkerUpgrades();
    }
 
