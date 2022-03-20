@@ -74,6 +74,7 @@ interface NavbarTooltipProps {
 }
 const NavbarTooltip = ({ button, content, removeFunc }: NavbarTooltipProps): JSX.Element => {
    const [xPos, setXPos] = useState((window.event as MouseEvent).clientX);
+   const navbarHeight = useRef(document.getElementById("top-bar")!.offsetHeight);
 
    const mouseMove = useCallback((): void => {
       const event = window.event as MouseEvent;
@@ -96,7 +97,8 @@ const NavbarTooltip = ({ button, content, removeFunc }: NavbarTooltipProps): JSX
    }, [mouseMove]);
 
    const style: React.CSSProperties = {
-      left: xPos + "px"
+      left: xPos + "px",
+      top: navbarHeight.current + "px"
    };
 
    return <div style={style} className="navbar-tooltip">
@@ -106,7 +108,7 @@ const NavbarTooltip = ({ button, content, removeFunc }: NavbarTooltipProps): JSX
 
 const createNavbarTooltip = (button: HTMLButtonElement, content: JSX.Element): void => {
    const container = document.createElement("div");
-   document.getElementById("computer")!.appendChild(container);
+   document.body.appendChild(container);
 
    const removeFunc = (): void => {
       ReactDOM.unmountComponentAtNode(container);
